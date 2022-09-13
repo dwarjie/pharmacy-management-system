@@ -7,10 +7,10 @@ import {
 
 const TopNavigation = () => {
 	return (
-		<nav className="navbar navbar-dark bg-light w-auto">
+		<nav className="navbar bg-light w-auto simple-shadow">
 			<div className="container-fluid">
 				<button
-					className="navbar-toggler bg-dark"
+					className="navbar-toggler"
 					data-bs-toggle="collapse"
 					data-bs-target="#navbar-toggle-content"
 					aria-controls="navbar-toggle-content"

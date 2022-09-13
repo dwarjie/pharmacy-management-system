@@ -1,3 +1,14 @@
+/* NAVBAR TOGGLER */
+.nav-default {
+	border: none;
+	color: #e63946;
+}
+
+/* SHADOW */
+.simple-shadow {
+	box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* ICONS */
 .icon-size-sm {
 	width: 1.5rem;
