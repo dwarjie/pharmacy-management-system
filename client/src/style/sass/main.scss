@@ -1,0 +1,33 @@
+// This sass file will customize the bootstrap default theme
+
+// override variables value
+// $h1-font-size:  
+// $h2-font-size:                $font-size-base * 2;
+// $h3-font-size:                $font-size-base * 1.75;
+// $h4-font-size:                $font-size-base * 1.5;
+// $h5-font-size:                $font-size-base * 1.25;
+// $h6-font-size:                $font-size-base;
+
+// add the functions and variables in order to add more maps values
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
+// Spacing utilities
+$custom-spacers: (
+  6: $spacer * 5,
+  7: $spacer * 6.25,
+  8: $spacer * 9.37,
+);
+
+$spacers: map-merge($custom-spacers, $spacers);
+
+// import the main boostrap
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+// import the google font
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// then change the base font of the whole site
+:root {
+  --bs-body-font-family: 'Inter', sans-serif;
+}
