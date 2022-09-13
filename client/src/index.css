@@ -1,3 +1,19 @@
+/* ICONS */
+.icon-size-sm {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+/* BUTTONS */
+.button-font-md {
+	font-size: 1rem;
+}
+
+.button-padding-md {
+	padding-top: 0.9rem;
+	padding-bottom: 0.9rem;
+}
+
 /* FORMS COMPONENTS */
 
 .form-input {

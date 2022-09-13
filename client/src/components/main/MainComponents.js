@@ -1,5 +1,14 @@
 import React from "react";
 
-const MainComponent = () => {};
+// components
+import TopNavigation from "./navigation/TopNavigation";
+
+const MainComponent = () => {
+	return (
+		<div>
+			<TopNavigation />
+		</div>
+	);
+};
 
 export default MainComponent;
