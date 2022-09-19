@@ -13,9 +13,9 @@ const TopNavigation = (props) => {
 					<span className="navbar-toggler-icon"></span>
 				</button>
 				<div className="d-flex flex-row gap-3">
-					<BellFill className="icon-size-sm" />
-					<ExclamationTriangleFill className="icon-size-sm" />
-					<PersonCircle className="icon-size-sm" />
+					<BellFill className="icon-size-md" />
+					<ExclamationTriangleFill className="icon-size-md" />
+					<PersonCircle className="icon-size-md" />
 				</div>
 			</div>
 		</nav>
