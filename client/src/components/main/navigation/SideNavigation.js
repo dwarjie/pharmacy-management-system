@@ -1,7 +1,7 @@
 // This component containers the SideNavigation Bar
 // Hidden by default in mobile and Tablet
 import { Link } from "react-router-dom";
-import { HouseFill } from "react-bootstrap-icons";
+import { HouseFill, PeopleFill, Cart4, Receipt } from "react-bootstrap-icons";
 
 const SideNavigation = () => {
 	return (
@@ -19,6 +19,8 @@ const SideNavigation = () => {
 						</span>{" "}
 						Dashboard
 					</Link>
+
+					{/* PATIENT */}
 					<div className="dropdown">
 						<button
 							className="btn dropdown-toggle btn-side-navigation"
@@ -27,7 +29,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<PeopleFill className="icon-size-sm" />
 							</span>{" "}
 							Patient
 						</button>
@@ -44,6 +46,7 @@ const SideNavigation = () => {
 							</li>
 						</ul>
 					</div>
+
 					{/* MANUFACTURER */}
 					<div className="dropdown">
 						<button
@@ -53,7 +56,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<PeopleFill className="icon-size-sm" />
 							</span>{" "}
 							Manufacturer
 						</button>
@@ -143,7 +146,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<Cart4 className="icon-size-sm" />
 							</span>{" "}
 							Purchase
 						</button>
@@ -170,7 +173,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<Receipt className="icon-size-sm" />
 							</span>{" "}
 							Invoice
 						</button>
