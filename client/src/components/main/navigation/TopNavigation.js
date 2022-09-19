@@ -5,18 +5,11 @@ import {
 	BellFill,
 } from "react-bootstrap-icons";
 
-const TopNavigation = () => {
+const TopNavigation = (props) => {
 	return (
-		<nav className="navbar bg-light w-auto simple-shadow">
+		<nav className="navbar bg-light w-auto top-navigation simple-shadow">
 			<div className="container-fluid">
-				<button
-					className="navbar-toggler"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbar-toggle-content"
-					aria-controls="navbar-toggle-content"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
+				<button id="top-navbar-toggler" onClick={props.toggleSideNavigation}>
 					<span className="navbar-toggler-icon"></span>
 				</button>
 				<div className="d-flex flex-row gap-3">

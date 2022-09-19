@@ -3,9 +3,12 @@
 
 const SideNavigation = () => {
 	return (
-		<nav className="position-absolute top-0 start-0 navbar bg-light w-50 height-auto">
-			<div className="container-fluid">
-				<h2>ActiveCare Home Health Solution Inc.</h2>
+		<nav
+			className="collapse navbar navbar-expand d-flex flex-column align-item-start bg-light h-100 side-navigation"
+			id="sideNavigation"
+		>
+			<div className="container-fluid pt-3">
+				<h2 className="text-center">ActiveCare Home Health Solution Inc.</h2>
 			</div>
 		</nav>
 	);

@@ -1,3 +1,49 @@
+/* whole page */
+body {
+	width: 100vw;
+	height: 100vh;
+}
+
+.App {
+	width: 100vw;
+	height: 100vh;
+}
+
+/* CONTENT CONTAINER */
+.content-container {
+	transition: 0.4s;
+}
+
+/* Sizing */
+.width-10 {
+	width: 10%;
+}
+
+.height-10 {
+	height: 10%;
+}
+
+/* NAVIGATION */
+.top-navigation {
+	height: 5rem;
+}
+
+.side-navigation {
+	position: fixed;
+	width: 15rem;
+	margin-left: -15rem;
+	transition: 0.4s;
+}
+
+/* SIDE NAVIGATION & CONTENT CONTAINER TOGGLE */
+.active-nav {
+	margin-left: 0;
+}
+
+.active-content-container {
+	margin-left: 15rem;
+}
+
 /* NAVBAR TOGGLER */
 .nav-default {
 	border: none;
