@@ -5,16 +5,22 @@ import { Routes, Route } from "react-router-dom";
 import TopNavigation from "./navigation/TopNavigation";
 import AddPatient from "./navigation/patient/AddPatient";
 import AddCategory from "./navigation/category/AddCategory";
+import CategoryList from "./navigation/category/CategoryList";
+import AddType from "./navigation/type/AddType";
+import TypeList from "./navigation/type/TypeList";
 
 const ContentContainer = (props) => {
 	return (
-		<div className="content-container" id="content-container">
+		<div className="content-container h-100" id="content-container">
 			<TopNavigation toggleSideNavigation={props.toggleSideNavigation} />
 
-			<div className="container-fluid mt-5">
+			<div className="container-fluid mt-5 h-auto">
 				<Routes>
 					<Route path="/patient/add-patient" element={<AddPatient />} />
 					<Route path="/medicine/add-category" element={<AddCategory />} />
+					<Route path="/medicine/category-list" element={<CategoryList />} />
+					<Route path="/medicine/add-type" element={<AddType />} />
+					<Route path="/medicine/type-list" element={<TypeList />} />
 				</Routes>
 			</div>
 		</div>

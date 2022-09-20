@@ -106,37 +106,58 @@ const SideNavigation = () => {
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/category-list"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/category-list"}
+									className="dropdown-item"
+								>
 									Category List
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/add-type"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/add-type"}
+									className="dropdown-item"
+								>
 									Add Type
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/type-list"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/type-list"}
+									className="dropdown-item"
+								>
 									Type List
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/add-unit"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/add-unit"}
+									className="dropdown-item"
+								>
 									Add Unit
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/unit-list"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/unit-list"}
+									className="dropdown-item"
+								>
 									Unit List
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/add-medicine"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/add-medicine"}
+									className="dropdown-item"
+								>
 									Add Medicine
 								</Link>
 							</li>
 							<li>
-								<Link to={"/medicine/medicine-list"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/medicine/medicine-list"}
+									className="dropdown-item"
+								>
 									Medicine List
 								</Link>
 							</li>
