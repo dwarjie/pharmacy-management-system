@@ -8,6 +8,8 @@ import AddCategory from "./navigation/category/AddCategory";
 import CategoryList from "./navigation/category/CategoryList";
 import AddType from "./navigation/type/AddType";
 import TypeList from "./navigation/type/TypeList";
+import AddUnit from "./navigation/unit/AddUnit";
+import UnitList from "./navigation/unit/UnitList";
 
 const ContentContainer = (props) => {
 	return (
@@ -21,6 +23,8 @@ const ContentContainer = (props) => {
 					<Route path="/medicine/category-list" element={<CategoryList />} />
 					<Route path="/medicine/add-type" element={<AddType />} />
 					<Route path="/medicine/type-list" element={<TypeList />} />
+					<Route path="/medicine/add-unit" element={<AddUnit />} />
+					<Route path="/medicine/unit-list" element={<UnitList />} />
 				</Routes>
 			</div>
 		</div>
