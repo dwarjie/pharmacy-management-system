@@ -10,7 +10,7 @@ const SideNavigation = () => {
 			id="sideNavigation"
 		>
 			<div className="container-fluid flex-column gap-4 p-3">
-				<h2 className="text-center">ActiveCare Home Health Solution Inc.</h2>
+				<h5 className="text-center">ActiveCare Home Health Solution Inc.</h5>
 				<div className="d-flex flex-column gap-1 w-100">
 					{/* DASHBOARD */}
 					<Link to={"/dashboard"} className="btn btn-side-navigation">
