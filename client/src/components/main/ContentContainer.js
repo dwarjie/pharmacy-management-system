@@ -10,6 +10,8 @@ import AddType from "./navigation/type/AddType";
 import TypeList from "./navigation/type/TypeList";
 import AddUnit from "./navigation/unit/AddUnit";
 import UnitList from "./navigation/unit/UnitList";
+import AddManufacturer from "./navigation/manufacturer/AddManufacturer";
+import ManufacturerList from "./navigation/manufacturer/ManufacturerList";
 
 const ContentContainer = (props) => {
 	return (
@@ -25,6 +27,14 @@ const ContentContainer = (props) => {
 					<Route path="/medicine/type-list" element={<TypeList />} />
 					<Route path="/medicine/add-unit" element={<AddUnit />} />
 					<Route path="/medicine/unit-list" element={<UnitList />} />
+					<Route
+						path="/manufacturer/add-manufacturer"
+						element={<AddManufacturer />}
+					/>
+					<Route
+						path="/manufacturer/manufacturer-list"
+						element={<ManufacturerList />}
+					/>
 				</Routes>
 			</div>
 		</div>
