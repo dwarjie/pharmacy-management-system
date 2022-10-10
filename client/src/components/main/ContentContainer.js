@@ -11,6 +11,7 @@ import AddType from "./navigation/type/AddType";
 import TypeList from "./navigation/type/TypeList";
 import AddUnit from "./navigation/unit/AddUnit";
 import UnitList from "./navigation/unit/UnitList";
+import AddMedicine from "./navigation/medicine/AddMedicine";
 import AddManufacturer from "./navigation/manufacturer/AddManufacturer";
 import ManufacturerList from "./navigation/manufacturer/ManufacturerList";
 
@@ -37,6 +38,7 @@ const ContentContainer = (props) => {
 						path="/manufacturer/manufacturer-list"
 						element={<ManufacturerList />}
 					/>
+					<Route path="/medicine/add-medicine" element={<AddMedicine />} />
 				</Routes>
 			</div>
 		</div>
