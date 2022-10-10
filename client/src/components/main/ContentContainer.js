@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 // components
 import TopNavigation from "./navigation/TopNavigation";
 import AddPatient from "./navigation/patient/AddPatient";
+import PatientList from "./navigation/patient/PatientList";
 import AddCategory from "./navigation/category/AddCategory";
 import CategoryList from "./navigation/category/CategoryList";
 import AddType from "./navigation/type/AddType";
@@ -21,6 +22,7 @@ const ContentContainer = (props) => {
 			<div className="container-fluid col-12 col-md-10 mt-5 h-auto">
 				<Routes>
 					<Route path="/patient/add-patient" element={<AddPatient />} />
+					<Route path="/patient/patient-list" element={<PatientList />} />
 					<Route path="/medicine/add-category" element={<AddCategory />} />
 					<Route path="/medicine/category-list" element={<CategoryList />} />
 					<Route path="/medicine/add-type" element={<AddType />} />
