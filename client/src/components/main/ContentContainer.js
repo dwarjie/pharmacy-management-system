@@ -12,6 +12,7 @@ import TypeList from "./navigation/type/TypeList";
 import AddUnit from "./navigation/unit/AddUnit";
 import UnitList from "./navigation/unit/UnitList";
 import AddMedicine from "./navigation/medicine/AddMedicine";
+import MedicineList from "./navigation/medicine/MedicineList";
 import AddManufacturer from "./navigation/manufacturer/AddManufacturer";
 import ManufacturerList from "./navigation/manufacturer/ManufacturerList";
 
@@ -30,6 +31,8 @@ const ContentContainer = (props) => {
 					<Route path="/medicine/type-list" element={<TypeList />} />
 					<Route path="/medicine/add-unit" element={<AddUnit />} />
 					<Route path="/medicine/unit-list" element={<UnitList />} />
+					<Route path="/medicine/add-medicine" element={<AddMedicine />} />
+					<Route path="/medicine/medicine-list" element={<MedicineList />} />
 					<Route
 						path="/manufacturer/add-manufacturer"
 						element={<AddManufacturer />}
@@ -38,7 +41,6 @@ const ContentContainer = (props) => {
 						path="/manufacturer/manufacturer-list"
 						element={<ManufacturerList />}
 					/>
-					<Route path="/medicine/add-medicine" element={<AddMedicine />} />
 				</Routes>
 			</div>
 		</div>
