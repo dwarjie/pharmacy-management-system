@@ -167,6 +167,39 @@ const SideNavigation = () => {
 						</ul>
 					</div>
 
+					{/* HANDLERS */}
+					<div className="dropdown">
+						<button
+							className="btn dropdown-toggle btn-side-navigation"
+							id="dropdownMenuButton1"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							<span className="px-2">
+								<HouseFill className="icon-size-sm" />
+							</span>{" "}
+							NCM/Doctors
+						</button>
+						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+							<li>
+								<Link
+									to={"/pharmacy/handler/add-handler"}
+									className="dropdown-item"
+								>
+									Add User
+								</Link>
+							</li>
+							<li>
+								<Link
+									to={"/pharmacy/handler/handler-list"}
+									className="dropdown-item"
+								>
+									Handler List
+								</Link>
+							</li>
+						</ul>
+					</div>
+
 					{/* PURCHASE */}
 					<div className="dropdown">
 						<button
