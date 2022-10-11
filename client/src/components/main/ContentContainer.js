@@ -23,6 +23,7 @@ import AddUser from "./navigation/user/AddUser";
 import UserList from "./navigation/user/UserList";
 // Handler Tab
 import AddHandler from "./navigation/handler/AddHandler";
+import HandlerList from "./navigation/handler/HandlerList";
 
 const ContentContainer = (props) => {
 	return (
@@ -50,6 +51,7 @@ const ContentContainer = (props) => {
 						element={<ManufacturerList />}
 					/>
 					<Route path="/handler/add-handler" element={<AddHandler />} />
+					<Route path="/handler/handler-list" element={<HandlerList />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
 					<Route path="/utilities/user-list" element={<UserList />} />
 				</Routes>
