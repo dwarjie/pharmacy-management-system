@@ -344,22 +344,34 @@ const SideNavigation = () => {
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
-								<Link to={"/utilities/add-user"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/utilities/add-user"}
+									className="dropdown-item"
+								>
 									Add User
 								</Link>
 							</li>
 							<li>
-								<Link to={"/utilities/user-list"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/utilities/user-list"}
+									className="dropdown-item"
+								>
 									User List
 								</Link>
 							</li>
 							<li>
-								<Link to={"/utilities/backup"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/utilities/backup"}
+									className="dropdown-item"
+								>
 									Download Backup
 								</Link>
 							</li>
 							<li>
-								<Link to={"/utilities/restore"} className="dropdown-item">
+								<Link
+									to={"/pharmacy/utilities/restore"}
+									className="dropdown-item"
+								>
 									Restose Database
 								</Link>
 							</li>

@@ -3,8 +3,10 @@ import { Routes, Route } from "react-router-dom";
 
 // components
 import TopNavigation from "./navigation/TopNavigation";
+// Patient Tab
 import AddPatient from "./navigation/patient/AddPatient";
 import PatientList from "./navigation/patient/PatientList";
+// Medicine Tab
 import AddCategory from "./navigation/category/AddCategory";
 import CategoryList from "./navigation/category/CategoryList";
 import AddType from "./navigation/type/AddType";
@@ -13,8 +15,12 @@ import AddUnit from "./navigation/unit/AddUnit";
 import UnitList from "./navigation/unit/UnitList";
 import AddMedicine from "./navigation/medicine/AddMedicine";
 import MedicineList from "./navigation/medicine/MedicineList";
+// Manufacturer Tab
 import AddManufacturer from "./navigation/manufacturer/AddManufacturer";
 import ManufacturerList from "./navigation/manufacturer/ManufacturerList";
+// Utilities Tab
+import AddUser from "./navigation/user/AddUser";
+import UserList from "./navigation/user/UserList";
 
 const ContentContainer = (props) => {
 	return (
@@ -41,6 +47,8 @@ const ContentContainer = (props) => {
 						path="/manufacturer/manufacturer-list"
 						element={<ManufacturerList />}
 					/>
+					<Route path="/utilities/add-user" element={<AddUser />} />
+					<Route path="/utilities/user-list" element={<UserList />} />
 				</Routes>
 			</div>
 		</div>
