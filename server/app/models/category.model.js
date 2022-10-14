@@ -3,6 +3,7 @@ module.exports = (sequelize, Sequelize) => {
 	const Category = sequelize.define("category", {
 		CategoryName: {
 			type: Sequelize.STRING,
+			allowNull: false,
 		},
 	});
 
