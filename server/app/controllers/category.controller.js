@@ -41,7 +41,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 
-	Category.find(id)
+	Category.findByPk(id)
 		.then((data) => {
 			if (!data) {
 				res.status(400).send({
