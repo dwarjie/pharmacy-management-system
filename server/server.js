@@ -18,6 +18,23 @@ app.use(express.json());
 // parse request of content type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
+// import all models
+// sync the database
+const db = require("./app/models");
+db.sequelize
+	.sync()
+	.then(() => {
+		console.log("Synced database");
+	})
+	.catch((err) => {
+		console.log("Failed to sync database: " + err.message);
+	});
+
+// FOR DEVELOPMENT ONLY, DROP THE DATABASE AND RE-SYNC THE DATABASE
+db.sequelize.sync({ force: true }).then(() => {
+	console.log("Drop and re-sync database");
+});
+
 // sample route
 app.get("/", function (req, res) {
 	res.json({ message: "Hello" });
