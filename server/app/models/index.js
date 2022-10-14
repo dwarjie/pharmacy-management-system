@@ -17,6 +17,8 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 const db = {}; // create an object for the database
 
+db.category = require("./category.model")(sequelize, Sequelize);
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
