@@ -4,7 +4,7 @@ const AddUnit = () => {
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Add Unit</h4>
+				<h4>Add Unit of Measure</h4>
 				<hr />
 			</div>
 			<div className="p-3">

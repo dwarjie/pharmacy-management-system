@@ -34,21 +34,14 @@ const ContentContainer = (props) => {
 				<Routes>
 					<Route path="/patient/add-patient" element={<AddPatient />} />
 					<Route path="/patient/patient-list" element={<PatientList />} />
-					<Route path="/medicine/add-category" element={<AddCategory />} />
-					<Route path="/medicine/category-list" element={<CategoryList />} />
-					<Route path="/medicine/add-type" element={<AddType />} />
-					<Route path="/medicine/type-list" element={<TypeList />} />
-					<Route path="/medicine/add-unit" element={<AddUnit />} />
-					<Route path="/medicine/unit-list" element={<UnitList />} />
-					<Route path="/medicine/add-medicine" element={<AddMedicine />} />
+					<Route path="/maintenance/category" element={<AddCategory />} />
+					<Route path="/maintenance/type" element={<AddType />} />
+					<Route path="/maintenance/unit" element={<AddUnit />} />
+					<Route path="/maintenance/add-medicine" element={<AddMedicine />} />
 					<Route path="/medicine/medicine-list" element={<MedicineList />} />
 					<Route
-						path="/manufacturer/add-manufacturer"
+						path="/maintenance/manufacturer"
 						element={<AddManufacturer />}
-					/>
-					<Route
-						path="/manufacturer/manufacturer-list"
-						element={<ManufacturerList />}
 					/>
 					<Route path="/handler/add-handler" element={<AddHandler />} />
 					<Route path="/handler/handler-list" element={<HandlerList />} />

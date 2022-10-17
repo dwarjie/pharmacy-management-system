@@ -53,7 +53,7 @@ const SideNavigation = () => {
 						</ul>
 					</div>
 
-					{/* MANUFACTURER */}
+					{/* FILE MAINTENANCE*/}
 					<div className="dropdown">
 						<button
 							className="btn dropdown-toggle btn-side-navigation"
@@ -64,93 +64,65 @@ const SideNavigation = () => {
 							<span className="px-2">
 								<PeopleFill className="icon-size-sm" />
 							</span>{" "}
-							Manufacturer
+							File Maintenance
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
 								<Link
-									to={"/pharmacy/manufacturer/add-manufacturer"}
+									to={"/pharmacy/maintenance/category"}
 									className="dropdown-item"
 								>
-									Add Manufacturer
+									Category
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/manufacturer/manufacturer-list"}
+									to={"/pharmacy/maintenance/manufacturer"}
 									className="dropdown-item"
 								>
-									Manufacturer List
-								</Link>
-							</li>
-						</ul>
-					</div>
-
-					{/* MEDICINE */}
-					<div className="dropdown">
-						<button
-							className="btn dropdown-toggle btn-side-navigation"
-							id="dropdownMenuButton1"
-							data-bs-toggle="dropdown"
-							aria-expanded="false"
-						>
-							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
-							</span>{" "}
-							Medicine
-						</button>
-						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-							<li>
-								<Link
-									to={"/pharmacy/medicine/add-category"}
-									className="dropdown-item"
-								>
-									Add Category
+									Manufacturer
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/medicine/category-list"}
+									to={"/pharmacy/maintenance/vat"}
 									className="dropdown-item"
 								>
-									Category List
+									VAT
+								</Link>
+							</li>
+							<li>
+								<Link to={"/pharmacy/maintenance/or"} className="dropdown-item">
+									OR
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/medicine/add-type"}
+									to={"/pharmacy/maintenance/discount"}
 									className="dropdown-item"
 								>
-									Add Type
+									Discount
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/medicine/type-list"}
+									to={"/pharmacy/maintenance/type"}
 									className="dropdown-item"
 								>
-									Type List
+									Type
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/medicine/add-unit"}
+									to={"/pharmacy/maintenance/unit"}
 									className="dropdown-item"
 								>
-									Add Unit
+									UOM
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/medicine/unit-list"}
-									className="dropdown-item"
-								>
-									Unit List
-								</Link>
-							</li>
-							<li>
-								<Link
-									to={"/pharmacy/medicine/add-medicine"}
+									to={"/pharmacy/maintenance/add-medicine"}
 									className="dropdown-item"
 								>
 									Add Medicine
@@ -200,7 +172,7 @@ const SideNavigation = () => {
 						</ul>
 					</div>
 
-					{/* PURCHASE */}
+					{/* INVENTORY */}
 					<div className="dropdown">
 						<button
 							className="btn dropdown-toggle btn-side-navigation"
@@ -211,23 +183,53 @@ const SideNavigation = () => {
 							<span className="px-2">
 								<Cart4 className="icon-size-sm" />
 							</span>{" "}
-							Purchase
+							Inventory
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
-								<Link to={"/purchase/add-purchase"} className="dropdown-item">
-									Add Purchase
+								<Link
+									to={"pharmacy/inventory/purchase-order"}
+									className="dropdown-item"
+								>
+									Purchase Order
 								</Link>
 							</li>
 							<li>
-								<Link to={"/purchase/purchase-list"} className="dropdown-item">
-									Purchase List
+								<Link
+									to={"pharmacy/inventory/receive-purchase-order"}
+									className="dropdown-item"
+								>
+									Receive Purchase Order
+								</Link>
+							</li>
+							<li>
+								<Link
+									to={"pharmacy/inventory/back-order"}
+									className="dropdown-item"
+								>
+									Back Order
+								</Link>
+							</li>
+							<li>
+								<Link
+									to={"pharmacy/inventory/receive-back-order"}
+									className="dropdown-item"
+								>
+									Receive Back Order
+								</Link>
+							</li>
+							<li>
+								<Link
+									to={"pharmacy/inventory/stock-adjustment"}
+									className="dropdown-item"
+								>
+									Stock Adjustment
 								</Link>
 							</li>
 						</ul>
 					</div>
 
-					{/* INVOICE */}
+					{/* SALES */}
 					<div className="dropdown">
 						<button
 							className="btn dropdown-toggle btn-side-navigation"
@@ -238,31 +240,28 @@ const SideNavigation = () => {
 							<span className="px-2">
 								<Receipt className="icon-size-sm" />
 							</span>{" "}
-							Invoice
+							Sales
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
-								<Link to={"/invoice/add-invoice"} className="dropdown-item">
-									Add Invoice
+								<Link to={"pharmacy/sales/pos"} className="dropdown-item">
+									POS
 								</Link>
 							</li>
 							<li>
-								<Link to={"/invoice/invoice-list"} className="dropdown-item">
-									Invoice List
+								<Link to={"pharmacy/sales/credit"} className="dropdown-item">
+									Credit
+								</Link>
+							</li>
+							<li>
+								<Link to={"pharmacy/sales/return"} className="dropdown-item">
+									Return
 								</Link>
 							</li>
 						</ul>
 					</div>
 
-					{/* POS */}
-					<Link to={"/pos"} className="btn btn-side-navigation">
-						<span className="px-2">
-							<HouseFill className="icon-size-sm" />
-						</span>{" "}
-						POS
-					</Link>
-
-					{/* STOCK */}
+					{/* REPORT */}
 					<div className="dropdown">
 						<button
 							className="btn dropdown-toggle btn-side-navigation"
@@ -273,90 +272,39 @@ const SideNavigation = () => {
 							<span className="px-2">
 								<HouseFill className="icon-size-sm" />
 							</span>{" "}
-							Stock
+							Report
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
-								<Link to={"/stock/stock-report"} className="dropdown-item">
+								<Link
+									to={"pharmacy/report/stock-report"}
+									className="dropdown-item"
+								>
 									Stock Report
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/stock/stock-report-batch"}
+									to={"pharmacy/report/master-list"}
 									className="dropdown-item"
 								>
-									Stock Report (Batch)
-								</Link>
-							</li>
-							<li>
-								<Link to={"/stock/stock-list"} className="dropdown-item">
-									Stock List
-								</Link>
-							</li>
-						</ul>
-					</div>
-
-					{/* REPORTS */}
-					<div className="dropdown">
-						<button
-							className="btn dropdown-toggle btn-side-navigation"
-							id="dropdownMenuButton1"
-							data-bs-toggle="dropdown"
-							aria-expanded="false"
-						>
-							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
-							</span>{" "}
-							Reports
-						</button>
-						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-							<li>
-								<Link
-									to={"/report/sales-report-category"}
-									className="dropdown-item"
-								>
-									Sales Report (Category)
+									Master List
 								</Link>
 							</li>
 							<li>
 								<Link
-									to={"/report/sales-report-product"}
+									to={"pharmacy/report/sales-report"}
 									className="dropdown-item"
 								>
-									Sales Report (Product)
+									Sales Report
 								</Link>
 							</li>
 							<li>
-								<Link to={"/report/purchase-report"} className="dropdown-item">
+								<Link
+									to={"pharmacy/report/purchase-report"}
+									className="dropdown-item"
+								>
 									Purchase Report
-								</Link>
-							</li>
-						</ul>
-					</div>
-
-					{/* SUPPLIER */}
-					<div className="dropdown">
-						<button
-							className="btn dropdown-toggle btn-side-navigation"
-							id="dropdownMenuButton1"
-							data-bs-toggle="dropdown"
-							aria-expanded="false"
-						>
-							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
-							</span>{" "}
-							Supplier
-						</button>
-						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-							<li>
-								<Link to={"/supplier/add-supplier"} className="dropdown-item">
-									Add Supplier
-								</Link>
-							</li>
-							<li>
-								<Link to={"/supplier/supplier-list"} className="dropdown-item">
-									Supplier List
 								</Link>
 							</li>
 						</ul>

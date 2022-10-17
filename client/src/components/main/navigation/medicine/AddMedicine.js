@@ -11,11 +11,11 @@ const AddMedicine = () => {
 				<form className="pb-5">
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="barCode">Bar Code:</label>
+							<label htmlFor="productCode">Product Code:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="barCode"
+								id="productCode"
 								required
 							/>
 						</div>
@@ -31,20 +31,20 @@ const AddMedicine = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="medicineName">Medicine Name:</label>
+							<label htmlFor="productName">Product Name:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="medicineName"
+								id="productName"
 								required
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="medicineDetails">Medicine Details:</label>
+							<label htmlFor="productDetails">Product Details:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="medicineDetails"
+								id="productDetails"
 								required
 							/>
 						</div>
@@ -60,11 +60,11 @@ const AddMedicine = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="price">Price:</label>
+							<label htmlFor="sellingPrice">Selling Price:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="price"
+								id="sellingPrice"
 								required
 							/>
 						</div>
@@ -110,17 +110,18 @@ const AddMedicine = () => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="unit">Unit:</label>
+							<label htmlFor="unitOfMeasure">Unit of Measure:</label>
 							<select
-								name="unit"
-								id="unit"
+								name="unitOfMeasure"
+								id="unitOfMeasure"
 								className="form-select form-input"
 								required
 							>
-								<option value="ml" selected>
-									ml
+								<option value="pack" selected>
+									Pack
 								</option>
-								<option value="mg">mg</option>
+								<option value="piece">Piece</option>
+								<option value="table">Table</option>
 							</select>
 						</div>
 					</div>
