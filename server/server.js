@@ -21,19 +21,19 @@ app.use(express.urlencoded({ extended: true }));
 // import all models
 // sync the database
 const db = require("./app/models");
-// db.sequelize
-// 	.sync()
-// 	.then(() => {
-// 		console.log("Synced database");
-// 	})
-// 	.catch((err) => {
-// 		console.log("Failed to sync database: " + err.message);
-// 	});
+db.sequelize
+	.sync()
+	.then(() => {
+		console.log("Synced database");
+	})
+	.catch((err) => {
+		console.log("Failed to sync database: " + err.message);
+	});
 
 // FOR DEVELOPMENT ONLY, DROP THE DATABASE AND RE-SYNC THE DATABASE
-db.sequelize.sync({ force: true }).then(() => {
-	console.log("Drop and re-sync database");
-});
+// db.sequelize.sync({ force: true }).then(() => {
+// 	console.log("Drop and re-sync database");
+// });
 
 // sample route
 app.get("/", function (req, res) {
@@ -42,6 +42,9 @@ app.get("/", function (req, res) {
 
 // server routes for the controllers
 require("./app/routes/category.routes")(app);
+require("./app/routes/manufacturer.routes")(app);
+require("./app/routes/type.routes")(app);
+require("./app/routes/unit.routes")(app);
 
 // set the server port and listen for requests
 const PORT = process.env.PORT || 8080;

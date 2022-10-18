@@ -249,8 +249,11 @@ const SideNavigation = () => {
 								</Link>
 							</li>
 							<li>
-								<Link to={"pharmacy/sales/credit"} className="dropdown-item">
-									Credit
+								<Link
+									to={"pharmacy/sales/charge-to-account"}
+									className="dropdown-item"
+								>
+									Charge to Account
 								</Link>
 							</li>
 							<li>
