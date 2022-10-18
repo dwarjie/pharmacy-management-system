@@ -30,7 +30,7 @@ const ContentContainer = (props) => {
 		<div className="content-container h-100" id="content-container">
 			<TopNavigation toggleSideNavigation={props.toggleSideNavigation} />
 
-			<div className="container-fluid col-12 col-md-10 mt-5 h-auto">
+			<div className="container-fluid col-12 col-md-10 mt-5 pb-3 h-auto">
 				<Routes>
 					<Route path="/patient/add-patient" element={<AddPatient />} />
 					<Route path="/patient/patient-list" element={<PatientList />} />

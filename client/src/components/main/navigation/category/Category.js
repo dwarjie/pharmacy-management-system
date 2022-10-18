@@ -3,6 +3,13 @@ import { useState, useEffect } from "react";
 import CategoryService from "../../../../services/CategoryService";
 
 const Category = () => {
+	// initial state for a category when creating new category
+	const initialCategory = {
+		id: null,
+		CategoryName: "",
+	};
+
+	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
 	const [currentCategory, setCurrentCategory] = useState(null);
 
@@ -22,6 +29,41 @@ const Category = () => {
 			});
 	};
 
+	// create a new category
+	const createCategory = () => {
+		let data = {
+			CategoryName: category.CategoryName,
+		};
+
+		// call the service in order to send the data to database
+		CategoryService.createCategory(data)
+			.then((response) => {
+				setCategory({
+					id: response.data.id,
+					CategoryName: response.data.CategoryName,
+				});
+				refreshList();
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// handle the input change event for the form
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setCategory({ ...category, [name]: value });
+	};
+
+	// refresh the page into initial state
+	const refreshList = () => {
+		setCategories([]);
+		getAllCategory();
+		setCurrentCategory(null);
+		setCategory(initialCategory);
+	};
+
 	return (
 		<div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow">
@@ -31,10 +73,22 @@ const Category = () => {
 				</div>
 				<div className="p-3">
 					<form className="col-10 pb-5">
-						<label htmlFor="category">Category Name:</label>
-						<input type="text" className="form-control" id="category" />
+						<label htmlFor="CategoryName">Category Name:</label>
+						<input
+							type="text"
+							className="form-control"
+							id="CategoryName"
+							name="CategoryName"
+							value={category.CategoryName}
+							onChange={handleInputChange}
+						/>
 					</form>
-					<button className="btn btn-primary simple-shadow">Save</button>
+					<button
+						className="btn btn-primary simple-shadow"
+						onClick={createCategory}
+					>
+						Save
+					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">

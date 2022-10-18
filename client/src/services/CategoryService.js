@@ -6,8 +6,13 @@ const getAllCategory = () => {
 	return http.get("/category");
 };
 
+const createCategory = (data) => {
+	return http.post("/category", data);
+};
+
 const CategoryService = {
 	getAllCategory,
+	createCategory,
 };
 
 export default CategoryService;
