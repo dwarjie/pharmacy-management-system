@@ -9,6 +9,10 @@ body {
 	height: 100vh;
 }
 
+.cursor-pointer {
+	cursor: pointer;
+}
+
 /* CONTENT CONTAINER */
 .content-container {
 	transition: 0.4s;
@@ -106,4 +110,10 @@ label {
 
 .form-sm-label {
 	font-size: 1rem;
+}
+
+/* TABLE LIST */
+.table-active {
+	background-color: #e63946;
+	color: white;
 }

@@ -12,6 +12,7 @@ const Category = () => {
 	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
 	const [currentCategory, setCurrentCategory] = useState(null);
+	const [currentIndex, setCurrentIndex] = useState(-1);
 
 	// once the page loaded, run this function
 	useEffect(() => {
@@ -23,6 +24,7 @@ const Category = () => {
 		CategoryService.getAllCategory()
 			.then((response) => {
 				setCategories(response.data);
+				console.log(response.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -48,6 +50,12 @@ const Category = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const setActiveCategory = (category, index) => {
+		setCurrentCategory(category);
+		setCurrentIndex(index);
+		setCategory(category);
 	};
 
 	// handle the input change event for the form
@@ -106,7 +114,14 @@ const Category = () => {
 						<tbody>
 							{categories &&
 								categories.map((category, index) => (
-									<tr key={index}>
+									<tr
+										key={index}
+										className={
+											"cursor-pointer " +
+											(index === currentIndex ? "table-active" : "")
+										}
+										onClick={() => setActiveCategory(category, index)}
+									>
 										<td>{category.CategoryName}</td>
 									</tr>
 								))}

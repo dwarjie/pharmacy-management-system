@@ -10,9 +10,14 @@ const createCategory = (data) => {
 	return http.post("/category", data);
 };
 
+const updateCategory = (id, data) => {
+	return http.put(`/category/${id}`, data);
+};
+
 const CategoryService = {
 	getAllCategory,
 	createCategory,
+	updateCategory,
 };
 
 export default CategoryService;
