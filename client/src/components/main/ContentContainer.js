@@ -25,6 +25,9 @@ import UserList from "./navigation/user/UserList";
 import AddHandler from "./navigation/handler/AddHandler";
 import HandlerList from "./navigation/handler/HandlerList";
 
+// layout
+import LoadingLayout from "../layout/loading.layout";
+
 const ContentContainer = (props) => {
 	return (
 		<div className="content-container h-100" id="content-container">
@@ -47,6 +50,12 @@ const ContentContainer = (props) => {
 					<Route path="/handler/handler-list" element={<HandlerList />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
 					<Route path="/utilities/user-list" element={<UserList />} />
+
+					<Route
+						exact
+						path="/maintenance/category/:id"
+						element={<LoadingLayout />}
+					/>
 				</Routes>
 			</div>
 		</div>

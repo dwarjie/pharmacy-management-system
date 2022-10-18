@@ -11,7 +11,7 @@ module.exports = (app) => {
 	// retrieve one category
 	router.get("/:id", category.findOne);
 	// update category
-	router.put("/:id", category.update);
+	router.put("/", category.update);
 	// delete category
 	router.delete("/:id", category.delete);
 
