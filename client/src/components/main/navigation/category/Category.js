@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryService from "../../../../services/CategoryService";
 
+// Icons
+import { FaEdit } from "react-icons/fa";
+import { AiFillDelete } from "react-icons/ai";
+
 const Category = () => {
 	// initial state for a category when creating new category
 	const initialCategory = {
@@ -13,7 +17,6 @@ const Category = () => {
 
 	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
-	const [currentIndex, setCurrentIndex] = useState(-1);
 
 	// once the page loaded, run this function
 	useEffect(() => {
@@ -53,8 +56,9 @@ const Category = () => {
 			});
 	};
 
-	const setActiveCategory = (category, index) => {
-		setCurrentIndex(index);
+	// delete a category
+
+	const setActiveCategory = (category) => {
 		setCategory(category.CategoryName);
 		navigate(`/pharmacy/maintenance/category/${category.id}`, {
 			state: {
@@ -119,20 +123,25 @@ const Category = () => {
 						<thead>
 							<tr>
 								<th scope="col">Name</th>
+								<th scope="col">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							{categories &&
 								categories.map((category, index) => (
-									<tr
-										key={index}
-										className={
-											"cursor-pointer " +
-											(index === currentIndex ? "table-active" : "")
-										}
-										onClick={() => setActiveCategory(category, index)}
-									>
+									<tr key={index}>
 										<td>{category.CategoryName}</td>
+										<td>
+											<span className="px-2">
+												<FaEdit
+													className="icon-size-sm cursor-pointer"
+													onClick={() => setActiveCategory(category, index)}
+												/>
+											</span>
+											<span className="px-2">
+												<AiFillDelete className="icon-size-sm cursor-pointer" />
+											</span>
+										</td>
 									</tr>
 								))}
 						</tbody>
