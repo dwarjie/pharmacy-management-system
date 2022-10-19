@@ -1,5 +1,6 @@
 // This component is responsible for adding new medicine category
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import CategoryService from "../../../../services/CategoryService";
 
 const Category = () => {
@@ -8,10 +9,10 @@ const Category = () => {
 		id: null,
 		CategoryName: "",
 	};
+	let navigate = useNavigate();
 
 	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
-	const [currentCategory, setCurrentCategory] = useState(null);
 	const [currentIndex, setCurrentIndex] = useState(-1);
 
 	// once the page loaded, run this function
@@ -52,21 +53,14 @@ const Category = () => {
 			});
 	};
 
-	// update the current category
-	const updateCategory = () => {
-		CategoryService.updateCategory(category)
-			.then((response) => {
-				console.log(response.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
 	const setActiveCategory = (category, index) => {
-		setCurrentCategory(category);
 		setCurrentIndex(index);
-		setCategory(category);
+		setCategory(category.CategoryName);
+		navigate(`/pharmacy/maintenance/category/${category.id}`, {
+			state: {
+				category: category,
+			},
+		});
 	};
 
 	// handle the input change event for the form
@@ -79,7 +73,6 @@ const Category = () => {
 	const refreshList = () => {
 		setCategories([]);
 		getAllCategory();
-		setCurrentCategory(null);
 		setCategory(initialCategory);
 	};
 

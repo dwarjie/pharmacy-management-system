@@ -60,19 +60,18 @@ exports.findOne = (req, res) => {
 
 // Update a single category
 exports.update = (req, res) => {
-	const id = req.body.id;
+	const id = req.params.id;
 
-	Category.update(req.body.CategoryName, { where: { id: id } })
+	Category.update(req.body, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is not equals to 1
-			console.log(req.body.CategoryName);
-			if (row != 1) {
+			if (row == 1) {
 				res.send({
-					message: `Cannot update category ${id}`,
+					message: `Category was updated successfully`,
 				});
 			} else {
 				res.send({
-					message: `Category was updated successfully`,
+					message: `Cannot update category ${id}`,
 				});
 			}
 		})
