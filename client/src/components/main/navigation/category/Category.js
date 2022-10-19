@@ -1,6 +1,5 @@
 // This component is responsible for adding new medicine category
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import CategoryService from "../../../../services/CategoryService";
 
 const Category = () => {
@@ -9,13 +8,11 @@ const Category = () => {
 		id: null,
 		CategoryName: "",
 	};
-	let navigate = useNavigate();
 
 	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
 	const [currentCategory, setCurrentCategory] = useState(null);
 	const [currentIndex, setCurrentIndex] = useState(-1);
-	const [state, setState] = useState("add");
 
 	// once the page loaded, run this function
 	useEffect(() => {
@@ -67,11 +64,9 @@ const Category = () => {
 	};
 
 	const setActiveCategory = (category, index) => {
-		setState("update");
 		setCurrentCategory(category);
 		setCurrentIndex(index);
 		setCategory(category);
-		navigate(`/pharmacy/maintenance/category/${category.id}`);
 	};
 
 	// handle the input change event for the form
@@ -86,14 +81,13 @@ const Category = () => {
 		getAllCategory();
 		setCurrentCategory(null);
 		setCategory(initialCategory);
-		setState("add");
 	};
 
 	return (
 		<div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow">
 				<div className="p-3">
-					<h4>{state === "add" ? "Add " : "Update "}Category</h4>
+					<h4>Add Category</h4>
 					<hr />
 				</div>
 				<div className="p-3">
@@ -110,9 +104,9 @@ const Category = () => {
 					</form>
 					<button
 						className="btn btn-primary simple-shadow me-3"
-						onClick={state === "add" ? createCategory : updateCategory}
+						onClick={createCategory}
 					>
-						{state === "add" ? "Save" : "Update"}
+						Save
 					</button>
 					<button
 						className="btn btn-secondary simple-shadow"
