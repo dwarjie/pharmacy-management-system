@@ -5,7 +5,6 @@ import CategoryService from "../../../../services/CategoryService";
 
 // Icons
 import { FaEdit } from "react-icons/fa";
-import { AiFillDelete } from "react-icons/ai";
 
 const Category = () => {
 	// initial state for a category when creating new category
@@ -55,8 +54,6 @@ const Category = () => {
 				console.log(err);
 			});
 	};
-
-	// delete a category
 
 	const setActiveCategory = (category) => {
 		setCategory(category.CategoryName);
@@ -137,9 +134,6 @@ const Category = () => {
 													className="icon-size-sm cursor-pointer"
 													onClick={() => setActiveCategory(category, index)}
 												/>
-											</span>
-											<span className="px-2">
-												<AiFillDelete className="icon-size-sm cursor-pointer" />
 											</span>
 										</td>
 									</tr>

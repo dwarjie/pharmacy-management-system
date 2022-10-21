@@ -14,10 +14,15 @@ const updateCategory = (id, data) => {
 	return http.put(`/category/${id}`, data);
 };
 
+const deleteCategory = (id) => {
+	return http.delete(`/category/${id}`);
+};
+
 const CategoryService = {
 	getAllCategory,
 	createCategory,
 	updateCategory,
+	deleteCategory,
 };
 
 export default CategoryService;

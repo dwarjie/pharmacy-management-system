@@ -37,6 +37,18 @@ const UpdateCategory = () => {
 		checkSucess();
 	};
 
+	// delete the category
+	const deleteCategory = () => {
+		CategoryService.deleteCategory(newCategory.id)
+			.then((response) => {
+				console.log(response.data);
+				navigate("/pharmacy/maintenance/category");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	// check if update is successful,
 	// if it is, go back to the category page, else stay
 	const checkSucess = () => {
@@ -89,10 +101,16 @@ const UpdateCategory = () => {
 						Update
 					</button>
 					<button
-						className="btn btn-secondary simple-shadow"
+						className="btn btn-secondary simple-shadow me-3"
 						onClick={cancelUpdate}
 					>
 						Cancel
+					</button>
+					<button
+						className="btn btn-danger simple-shadow"
+						onClick={deleteCategory}
+					>
+						Delete
 					</button>
 				</div>
 			</div>

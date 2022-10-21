@@ -1,6 +1,7 @@
 // This module contains the category controllers
 
 const db = require("../models");
+const { QueryTypes } = db.Sequelize;
 const Category = db.category;
 
 // Create a new category

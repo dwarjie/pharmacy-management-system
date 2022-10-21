@@ -9,7 +9,7 @@ module.exports = (app) => {
 	// retrieves category
 	router.get("/", category.findAll);
 	// retrieve one category
-	router.get("/:id", category.findOne);
+	router.get("/", category.findOne);
 	// update category
 	router.put("/:id", category.update);
 	// delete category
