@@ -14,7 +14,7 @@ const UpdateCategory = () => {
 	let oldCategory = location.state.category;
 
 	const [newCategory, setNewCategory] = useState(initialCategory);
-	const [success, setSucess] = useState(true);
+	const [success, setSuccess] = useState(true);
 
 	useEffect(() => {
 		setNewCategory({
@@ -29,10 +29,11 @@ const UpdateCategory = () => {
 		CategoryService.updateCategory(newCategory.id, newCategory)
 			.then((response) => {
 				console.log(response.data);
+				setSuccess(true);
 			})
 			.catch((err) => {
 				console.log(err);
-				setSucess(false);
+				setSuccess(false);
 			});
 		checkSucess();
 	};
@@ -57,7 +58,7 @@ const UpdateCategory = () => {
 			return;
 		}
 
-		navigate("/pharmacy/maintenance/category");
+		navigate(-1);
 	};
 
 	// handle the input change event for the form

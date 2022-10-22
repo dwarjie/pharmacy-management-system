@@ -1,5 +1,5 @@
 // This module is responsible for adding sub category
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import CategoryService from "../../../../services/CategoryService";
@@ -9,6 +9,7 @@ import { FaEdit } from "react-icons/fa";
 
 const AddSubCategory = () => {
 	let location = useLocation();
+	let navigate = useNavigate();
 
 	const initialSubCategory = {
 		id: null,
@@ -49,6 +50,15 @@ const AddSubCategory = () => {
 			});
 	};
 
+	// edit a sub category
+	const editSubCategory = (subCategory) => {
+		navigate(`/pharmacy/maintenance/category/sub-category/${subCategory.id}`, {
+			state: {
+				subCategory: subCategory,
+			},
+		});
+	};
+
 	// handle the on change event for the form
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -65,7 +75,7 @@ const AddSubCategory = () => {
 		<div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow">
 				<div className="p-3">
-					<h4>{location.state.category.CategoryName}</h4>
+					<h4>Add Sub Category</h4>
 					<hr />
 				</div>
 				<div className="p-3">
@@ -115,7 +125,12 @@ const AddSubCategory = () => {
 					>
 						Add
 					</button>
-					<button className="btn btn-secondary simple-shadow">Cancel</button>
+					<button
+						className="btn btn-secondary simple-shadow"
+						onClick={() => navigate(-1)}
+					>
+						Cancel
+					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
@@ -142,7 +157,10 @@ const AddSubCategory = () => {
 										<td>{subCategory.MarkUpUnit}</td>
 										<td>
 											<span className="px-2">
-												<FaEdit className="icon-size-sm cursor-pointer" />
+												<FaEdit
+													className="icon-size-sm cursor-pointer"
+													onClick={() => editSubCategory(subCategory)}
+												/>
 											</span>
 										</td>
 									</tr>
