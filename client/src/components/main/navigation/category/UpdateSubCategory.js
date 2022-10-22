@@ -41,6 +41,20 @@ const UpdateSubCategory = () => {
 		checkSuccess();
 	};
 
+	// delete the subCategory
+	const deleteSubCategory = () => {
+		SubCategoryService.deleteCategory(subCategory.id)
+			.then((response) => {
+				console.log(response.data);
+				setSuccess(true);
+			})
+			.catch((err) => {
+				console.log(err);
+				setSuccess(false);
+			});
+		checkSuccess();
+	};
+
 	// handle the on change event in forms
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -111,10 +125,16 @@ const UpdateSubCategory = () => {
 					Update
 				</button>
 				<button
-					className="btn btn-secondary simple-shadow"
+					className="btn btn-secondary simple-shadow me-3"
 					onClick={() => navigate(-1)}
 				>
 					Cancel
+				</button>
+				<button
+					className="btn btn-danger simple-shadow"
+					onClick={deleteSubCategory}
+				>
+					Delete
 				</button>
 			</div>
 		</div>
