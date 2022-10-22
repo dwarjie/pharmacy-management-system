@@ -16,13 +16,21 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 });
 
 const db = {}; // create an object for the database
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
 db.category = require("./category.model")(sequelize, Sequelize);
 db.manufacturer = require("./manufacturer.model")(sequelize, Sequelize);
 db.unit = require("./unit.model")(sequelize, Sequelize);
 db.type = require("./type.model")(sequelize, Sequelize);
+db.subCategory = require("./subCategory.model")(sequelize, Sequelize);
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+// define model relationships
+db.category.hasMany(db.subCategory, { as: "subCategory" });
+db.subCategory.belongsTo(db.category, {
+	foreignKey: {
+		allowNull: false,
+	},
+});
 
 module.exports = db; // export the db object
