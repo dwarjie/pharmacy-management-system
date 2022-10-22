@@ -40,17 +40,17 @@ exports.findAll = (req, res) => {
 
 // Retrieve a single category
 exports.findOne = (req, res) => {
-	const id = req.params.id;
+	const id = req.body.categoryId;
 
-	Category.findByPk(id)
+	Category.findByPk(id, { include: ["subCategory"] })
 		.then((data) => {
-			if (!data) {
+			if (data) {
+				res.send(data);
+			} else {
 				res.status(400).send({
 					message: `Cannot find category ${id}`,
 				});
 			}
-
-			res.send(data);
 		})
 		.catch((err) => {
 			res.status(500).send({

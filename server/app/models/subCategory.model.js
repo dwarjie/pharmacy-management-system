@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.FLOAT,
 			allowNull: false,
 		},
+		MarkUpUnit: {
+			type: Sequelize.STRING,
+			allowNull: false,
+		},
 	});
 
 	return SubCategory;

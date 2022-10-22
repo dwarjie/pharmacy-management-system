@@ -8,6 +8,7 @@ exports.create = (req, res) => {
 	const subCategory = {
 		SubCategoryName: req.body.SubCategoryName,
 		MarkUp: req.body.MarkUp,
+		MarkUpUnit: req.body.MarkUpUnit,
 		categoryId: req.body.categoryId,
 	};
 

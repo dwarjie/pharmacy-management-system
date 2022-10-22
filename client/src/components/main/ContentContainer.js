@@ -44,7 +44,7 @@ const ContentContainer = (props) => {
 						element={<UpdateCategory />}
 					/>
 					<Route
-						path="/maintenance/category/:id/sub-category"
+						path="/maintenance/category/sub-category"
 						element={<AddSubCategory />}
 					/>
 					<Route path="/maintenance/type" element={<AddType />} />

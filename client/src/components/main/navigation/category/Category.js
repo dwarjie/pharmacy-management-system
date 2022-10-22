@@ -66,7 +66,7 @@ const Category = () => {
 	};
 
 	const addSubCategory = (category) => {
-		navigate(`/pharmacy/maintenance/category/${category.id}/sub-category`, {
+		navigate(`/pharmacy/maintenance/category/sub-category`, {
 			state: {
 				category: category,
 			},

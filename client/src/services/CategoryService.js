@@ -18,11 +18,16 @@ const deleteCategory = (id) => {
 	return http.delete(`/category/${id}`);
 };
 
+const getSubCategory = (data) => {
+	return http.post(`/category/sub-category`, data);
+};
+
 const CategoryService = {
 	getAllCategory,
 	createCategory,
 	updateCategory,
 	deleteCategory,
+	getSubCategory,
 };
 
 export default CategoryService;

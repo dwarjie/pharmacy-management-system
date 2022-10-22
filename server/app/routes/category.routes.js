@@ -9,7 +9,7 @@ module.exports = (app) => {
 	// retrieves category
 	router.get("/", category.findAll);
 	// retrieve one category
-	router.get("/", category.findOne);
+	router.post("/sub-category", category.findOne);
 	// update category
 	router.put("/:id", category.update);
 	// delete category

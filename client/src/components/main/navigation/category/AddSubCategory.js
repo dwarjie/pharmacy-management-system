@@ -1,18 +1,65 @@
 // This module is responsible for adding sub category
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SubCategoryService from "../../../../services/SubCategoryService";
+import CategoryService from "../../../../services/CategoryService";
+
+// icons
+import { FaEdit } from "react-icons/fa";
 
 const AddSubCategory = () => {
+	let location = useLocation();
+
 	const initialSubCategory = {
 		id: null,
 		SubCategoryName: "",
 		MarkUp: 0,
-		categoryId: null,
+		MarkUpUnit: "%",
+		categoryId: location.state.category.id,
 	};
 
-	let location = useLocation();
 	const [subCategory, setSubCategory] = useState(initialSubCategory);
-	const [markUpUnit, setMarkUpUnit] = useState("%");
+	const [subCategories, setSubCategories] = useState([]);
+
+	useEffect(() => {
+		getSubCategory();
+	}, []);
+
+	// get all the sub categories
+	const getSubCategory = () => {
+		CategoryService.getSubCategory(subCategory)
+			.then((response) => {
+				setSubCategories(response.data.subCategory);
+				console.log(response.data.subCategory);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// create a new SubCategory
+	const createSubCategory = () => {
+		SubCategoryService.createSubCategory(subCategory)
+			.then((response) => {
+				console.log(response.data);
+				refreshList();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// handle the on change event for the form
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setSubCategory({ ...subCategory, [name]: value });
+	};
+
+	// refresh the sub category list
+	const refreshList = () => {
+		setSubCategory(initialSubCategory);
+		getSubCategory();
+	};
 
 	return (
 		<div>
@@ -29,25 +76,32 @@ const AddSubCategory = () => {
 							className="form-control form-input"
 							id="SubCategoryName"
 							name="SubCategoryName"
+							value={subCategory.SubCategoryName}
+							onChange={handleInputChange}
+							required
 						/>
 						<div className="row mt-3">
 							<div className="col-sm-12 col-md">
 								<label htmlFor="MarkUp">Markup:</label>
 								<input
-									type="text"
+									type="number"
 									className="form-control form-input"
+									name="MarkUp"
 									id="MarkUp"
+									value={subCategory.MarkUp}
+									onChange={handleInputChange}
 									required
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="markUpUnit">Unit:</label>
+								<label htmlFor="MarkUpUnit">Unit:</label>
 								<select
-									name="markUpUnit"
-									id="markUpUnit"
+									name="MarkUpUnit"
+									id="MarkUpUnit"
 									className="form-select form-input"
 									required
-									defaultValue={markUpUnit}
+									value={subCategory.MarkUpUnit}
+									onChange={handleInputChange}
 								>
 									<option value="amount">Amount</option>
 									<option value="%">%</option>
@@ -55,7 +109,12 @@ const AddSubCategory = () => {
 							</div>
 						</div>
 					</form>
-					<button className="btn btn-primary simple-shadow me-3">Add</button>
+					<button
+						className="btn btn-primary simple-shadow me-3"
+						onClick={createSubCategory}
+					>
+						Add
+					</button>
 					<button className="btn btn-secondary simple-shadow">Cancel</button>
 				</div>
 			</div>
@@ -69,10 +128,26 @@ const AddSubCategory = () => {
 						<thead>
 							<tr>
 								<th scope="col">Name</th>
+								<th scope="col">Markup</th>
+								<th scope="col">Unit</th>
 								<th scope="col">Actions</th>
 							</tr>
 						</thead>
-						<tbody></tbody>
+						<tbody>
+							{subCategories &&
+								subCategories.map((subCategory, index) => (
+									<tr key={index}>
+										<td>{subCategory.SubCategoryName}</td>
+										<td>{subCategory.MarkUp}</td>
+										<td>{subCategory.MarkUpUnit}</td>
+										<td>
+											<span className="px-2">
+												<FaEdit className="icon-size-sm cursor-pointer" />
+											</span>
+										</td>
+									</tr>
+								))}
+						</tbody>
 					</table>
 				</div>
 			</div>
