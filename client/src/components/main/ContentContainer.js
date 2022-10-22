@@ -9,6 +9,7 @@ import PatientList from "./navigation/patient/PatientList";
 // Medicine Tab
 import Category from "./navigation/category/Category";
 import UpdateCategory from "./navigation/category/UpdateCategory";
+import AddSubCategory from "./navigation/category/AddSubCategory";
 import AddType from "./navigation/type/AddType";
 import TypeList from "./navigation/type/TypeList";
 import AddUnit from "./navigation/unit/AddUnit";
@@ -41,6 +42,10 @@ const ContentContainer = (props) => {
 					<Route
 						path="/maintenance/category/:id"
 						element={<UpdateCategory />}
+					/>
+					<Route
+						path="/maintenance/category/:id/sub-category"
+						element={<AddSubCategory />}
 					/>
 					<Route path="/maintenance/type" element={<AddType />} />
 					<Route path="/maintenance/unit" element={<AddUnit />} />

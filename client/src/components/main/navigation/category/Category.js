@@ -5,6 +5,7 @@ import CategoryService from "../../../../services/CategoryService";
 
 // Icons
 import { FaEdit } from "react-icons/fa";
+import { MdOutlineAddBox } from "react-icons/md";
 
 const Category = () => {
 	// initial state for a category when creating new category
@@ -64,6 +65,14 @@ const Category = () => {
 		});
 	};
 
+	const addSubCategory = (category) => {
+		navigate(`/pharmacy/maintenance/category/${category.id}/sub-category`, {
+			state: {
+				category: category,
+			},
+		});
+	};
+
 	// handle the input change event for the form
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -100,7 +109,7 @@ const Category = () => {
 						className="btn btn-primary simple-shadow me-3"
 						onClick={createCategory}
 					>
-						Save
+						Add
 					</button>
 					<button
 						className="btn btn-secondary simple-shadow"
@@ -133,6 +142,12 @@ const Category = () => {
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
 													onClick={() => setActiveCategory(category, index)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdOutlineAddBox
+													className="icon-size-sm cursor-pointer"
+													onClick={() => addSubCategory(category)}
 												/>
 											</span>
 										</td>
