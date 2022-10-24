@@ -94,7 +94,7 @@ const Category = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-10 pb-5">
+					<form className="col-12 col-lg-10 pb-5 mx-auto">
 						<label htmlFor="CategoryName">Category Name:</label>
 						<input
 							type="text"
@@ -125,6 +125,14 @@ const Category = () => {
 					<hr />
 				</div>
 				<div className="p-3">
+					<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+						<label htmlFor="manufacturer-search">Search:</label>
+						<input
+							type="text"
+							className="form-control form-input"
+							id="manufacturer-search"
+						/>
+					</form>
 					<table className="table">
 						<thead>
 							<tr>

@@ -11,15 +11,17 @@ import Category from "./navigation/category/Category";
 import UpdateCategory from "./navigation/category/UpdateCategory";
 import AddSubCategory from "./navigation/category/AddSubCategory";
 import UpdateSubCategory from "./navigation/category/UpdateSubCategory";
+
 import AddType from "./navigation/type/AddType";
-import TypeList from "./navigation/type/TypeList";
-import AddUnit from "./navigation/unit/AddUnit";
-import UnitList from "./navigation/unit/UnitList";
+
+import Unit from "./navigation/unit/Unit";
+
 import AddMedicine from "./navigation/medicine/AddMedicine";
 import MedicineList from "./navigation/medicine/MedicineList";
 // Manufacturer Tab
 import AddManufacturer from "./navigation/manufacturer/AddManufacturer";
-import ManufacturerList from "./navigation/manufacturer/ManufacturerList";
+import UpdateManufacturer from "./navigation/manufacturer/UpdateManufacturer";
+
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
 import UserList from "./navigation/user/UserList";
@@ -53,12 +55,16 @@ const ContentContainer = (props) => {
 						element={<UpdateSubCategory />}
 					/>
 					<Route path="/maintenance/type" element={<AddType />} />
-					<Route path="/maintenance/unit" element={<AddUnit />} />
+					<Route path="/maintenance/unit" element={<Unit />} />
 					<Route path="/maintenance/add-medicine" element={<AddMedicine />} />
 					<Route path="/medicine/medicine-list" element={<MedicineList />} />
 					<Route
 						path="/maintenance/manufacturer"
 						element={<AddManufacturer />}
+					/>
+					<Route
+						path="/maintenance/manufacturer/:id"
+						element={<UpdateManufacturer />}
 					/>
 					<Route path="/handler/add-handler" element={<AddHandler />} />
 					<Route path="/handler/handler-list" element={<HandlerList />} />

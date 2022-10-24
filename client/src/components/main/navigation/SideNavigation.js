@@ -117,7 +117,7 @@ const SideNavigation = () => {
 									to={"/pharmacy/maintenance/unit"}
 									className="dropdown-item"
 								>
-									UOM
+									Unit of Measure
 								</Link>
 							</li>
 							<li>

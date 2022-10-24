@@ -8,7 +8,7 @@ const AddPatient = () => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="pb-5">
+				<form className="col-12 col-lg-10 pb-5 mx-auto">
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label htmlFor="firstName">First Name:</label>
