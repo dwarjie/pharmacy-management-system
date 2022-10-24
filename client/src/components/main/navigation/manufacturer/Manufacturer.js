@@ -6,7 +6,7 @@ import ManufacturerService from "../../../../services/ManufacturerService";
 // icons
 import { FaEdit } from "react-icons/fa";
 
-const AddManufacturer = () => {
+const Manufacturer = () => {
 	const initialManufacturer = {
 		id: null,
 		ManufacturerName: "",
@@ -208,4 +208,4 @@ const AddManufacturer = () => {
 	);
 };
 
-export default AddManufacturer;
+export default Manufacturer;

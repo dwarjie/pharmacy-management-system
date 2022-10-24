@@ -3,10 +3,12 @@ import { Routes, Route } from "react-router-dom";
 
 // components
 import TopNavigation from "./navigation/TopNavigation";
+
 // Patient Tab
 import AddPatient from "./navigation/patient/AddPatient";
 import PatientList from "./navigation/patient/PatientList";
-// Medicine Tab
+
+// Maintenance Tab
 import Category from "./navigation/category/Category";
 import UpdateCategory from "./navigation/category/UpdateCategory";
 import AddSubCategory from "./navigation/category/AddSubCategory";
@@ -19,9 +21,12 @@ import UpdateUnit from "./navigation/unit/UpdateUnit";
 
 import AddMedicine from "./navigation/medicine/AddMedicine";
 import MedicineList from "./navigation/medicine/MedicineList";
-// Manufacturer Tab
-import AddManufacturer from "./navigation/manufacturer/AddManufacturer";
+
+import Manufacturer from "./navigation/manufacturer/Manufacturer";
 import UpdateManufacturer from "./navigation/manufacturer/UpdateManufacturer";
+
+import Discount from "./navigation/discount/Discount";
+import UpdateDiscount from "./navigation/discount/UpdateDiscount";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -57,13 +62,15 @@ const ContentContainer = (props) => {
 					<Route path="/maintenance/unit/:id" element={<UpdateUnit />} />
 					<Route path="/maintenance/add-medicine" element={<AddMedicine />} />
 					<Route path="/medicine/medicine-list" element={<MedicineList />} />
-					<Route
-						path="/maintenance/manufacturer"
-						element={<AddManufacturer />}
-					/>
+					<Route path="/maintenance/manufacturer" element={<Manufacturer />} />
 					<Route
 						path="/maintenance/manufacturer/:id"
 						element={<UpdateManufacturer />}
+					/>
+					<Route path="/maintenance/discount" element={<Discount />} />
+					<Route
+						path="/maintenance/discount/:id"
+						element={<UpdateDiscount />}
 					/>
 					<Route path="/handler/add-handler" element={<AddHandler />} />
 					<Route path="/handler/handler-list" element={<HandlerList />} />
