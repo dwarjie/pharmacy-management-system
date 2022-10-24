@@ -21,10 +21,47 @@ const UnitList = () => {
 		});
 	}, []);
 
+	// update the unit
+	const updateUnitOfMeasure = () => {
+		UnitOfMeasureService.updateUnitOfMeasure(unit.id, unit)
+			.then((response) => {
+				console.log(response.data);
+				setSuccess(true);
+			})
+			.catch((err) => {
+				console.log(err);
+				setSuccess(false);
+			});
+		checkSuccess();
+	};
+
+	// delete the unit
+	const deleteUnitOfMeasure = () => {
+		UnitOfMeasureService.deleteUnitOfMeasure(unit.id)
+			.then((response) => {
+				console.log(response.data);
+				setSuccess(true);
+			})
+			.catch((err) => {
+				console.log(err);
+				setSuccess(false);
+			});
+		checkSuccess();
+	};
+
 	// handle input change event for form
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
 		setUnit({ ...unit, [name]: value });
+	};
+
+	// check if the update is success, if yes go back, else stay
+	const checkSuccess = () => {
+		if (!success) {
+			return;
+		}
+
+		navigate(-1);
 	};
 
 	return (
@@ -41,13 +78,29 @@ const UnitList = () => {
 						className="form-control form-input"
 						id="UnitName"
 						name="UnitName"
-						value={newUnit.UnitName}
+						value={unit.UnitName}
 						onChange={handleInputChange}
 						required
 					/>
 				</form>
-				<button className="btn btn-primary simple-shadow me-3">Update</button>
-				<button className="btn btn-secondary simple-shadow">Cancel</button>
+				<button
+					className="btn btn-primary simple-shadow me-3"
+					onClick={updateUnitOfMeasure}
+				>
+					Update
+				</button>
+				<button
+					className="btn btn-secondary simple-shadow me-3"
+					onClick={() => navigate(-1)}
+				>
+					Cancel
+				</button>
+				<button
+					className="btn btn-danger simple-shadow"
+					onClick={deleteUnitOfMeasure}
+				>
+					Delete
+				</button>
 			</div>
 		</div>
 	);

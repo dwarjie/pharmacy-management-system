@@ -48,6 +48,15 @@ const AddUnit = () => {
 			});
 	};
 
+	// update a unit
+	const updateUnitOfMeasure = (unit) => {
+		navigate(`/pharmacy/maintenance/unit/${unit.id}`, {
+			state: {
+				unit: unit,
+			},
+		});
+	};
+
 	// handle input change events for forms
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -117,7 +126,10 @@ const AddUnit = () => {
 										<td>{unit.UnitName}</td>
 										<td>
 											<span className="px-2">
-												<FaEdit className="icon-size-sm cursor-pointer" />
+												<FaEdit
+													className="icon-size-sm cursor-pointer"
+													onClick={() => updateUnitOfMeasure(unit)}
+												/>
 											</span>
 										</td>
 									</tr>

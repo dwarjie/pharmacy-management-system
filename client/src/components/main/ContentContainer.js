@@ -15,6 +15,7 @@ import UpdateSubCategory from "./navigation/category/UpdateSubCategory";
 import AddType from "./navigation/type/AddType";
 
 import Unit from "./navigation/unit/Unit";
+import UpdateUnit from "./navigation/unit/UpdateUnit";
 
 import AddMedicine from "./navigation/medicine/AddMedicine";
 import MedicineList from "./navigation/medicine/MedicineList";
@@ -56,6 +57,7 @@ const ContentContainer = (props) => {
 					/>
 					<Route path="/maintenance/type" element={<AddType />} />
 					<Route path="/maintenance/unit" element={<Unit />} />
+					<Route path="/maintenance/unit/:id" element={<UpdateUnit />} />
 					<Route path="/maintenance/add-medicine" element={<AddMedicine />} />
 					<Route path="/medicine/medicine-list" element={<MedicineList />} />
 					<Route
