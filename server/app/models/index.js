@@ -24,6 +24,7 @@ db.manufacturer = require("./manufacturer.model")(sequelize, Sequelize);
 db.unit = require("./unit.model")(sequelize, Sequelize);
 db.type = require("./type.model")(sequelize, Sequelize);
 db.subCategory = require("./subCategory.model")(sequelize, Sequelize);
+db.discount = require("./discount.model")(sequelize, Sequelize);
 
 // define model relationships
 db.category.hasMany(db.subCategory, { as: "subCategory" });

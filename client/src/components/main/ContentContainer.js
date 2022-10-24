@@ -30,9 +30,6 @@ import UserList from "./navigation/user/UserList";
 import AddHandler from "./navigation/handler/AddHandler";
 import HandlerList from "./navigation/handler/HandlerList";
 
-// layout
-import LoadingLayout from "../layout/loading.layout";
-
 const ContentContainer = (props) => {
 	return (
 		<div className="content-container h-100" id="content-container">
