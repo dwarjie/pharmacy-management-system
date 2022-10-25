@@ -25,6 +25,8 @@ import MedicineList from "./navigation/medicine/MedicineList";
 import Manufacturer from "./navigation/manufacturer/Manufacturer";
 import UpdateManufacturer from "./navigation/manufacturer/UpdateManufacturer";
 
+import VAT from "./navigation/vat/VAT";
+
 import Discount from "./navigation/discount/Discount";
 import UpdateDiscount from "./navigation/discount/UpdateDiscount";
 
@@ -72,6 +74,7 @@ const ContentContainer = (props) => {
 						path="/maintenance/discount/:id"
 						element={<UpdateDiscount />}
 					/>
+					<Route path="/maintenance/vat" element={<VAT />} />
 					<Route path="/handler/add-handler" element={<AddHandler />} />
 					<Route path="/handler/handler-list" element={<HandlerList />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
