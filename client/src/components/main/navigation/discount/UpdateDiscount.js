@@ -17,6 +17,7 @@ const UpdateDiscount = () => {
 	const [success, setSuccess] = useState(true);
 
 	useEffect(() => {
+		console.log(location.state);
 		setDiscounts({
 			id: location.state.discount.id,
 			DiscountName: location.state.discount.DiscountName,

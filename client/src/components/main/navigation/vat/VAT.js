@@ -16,6 +16,7 @@ const VAT = () => {
 
 	const [vats, setVats] = useState([]);
 	const [newVAT, setNewVAT] = useState(initialVat);
+	const [tryState, setTryState] = useState();
 
 	useEffect(() => {
 		getAllVATs();
@@ -48,6 +49,19 @@ const VAT = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	// delete vat
+	const selectVat = (vat) => {
+		setTryState({
+			id: vat.id,
+			service: VatService.deleteVAT,
+		});
+		navigate(`/pharmacy/maintenance/vat/${vat.id}`, {
+			state: {
+				data: tryState,
+			},
+		});
 	};
 
 	// handle input change event for forms
@@ -126,7 +140,10 @@ const VAT = () => {
 										<td>{vat.VatAmount}</td>
 										<td>
 											<span className="px-2">
-												<FaEdit className="icon-size-sm cursor-pointer" />
+												<FaEdit
+													className="icon-size-sm cursor-pointer"
+													onClick={() => selectVat(vat)}
+												/>
 											</span>
 										</td>
 									</tr>
