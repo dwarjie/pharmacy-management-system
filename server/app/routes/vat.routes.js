@@ -5,7 +5,7 @@ module.exports = (app) => {
 
 	router.post("/", vat.create);
 	router.get("/", vat.findAll);
-	router.delete("/:id", vat.delete);
+	router.put("/", vat.delete);
 
 	app.use("/api/vat", router);
 };

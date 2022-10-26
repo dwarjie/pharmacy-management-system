@@ -36,7 +36,8 @@ exports.findAll = (req, res) => {
 
 // delete a vat
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const id = req.body.id;
+	console.log(id);
 
 	VAT.destroy({
 		where: {

@@ -10,8 +10,8 @@ const getAllVAT = () => {
 	return http.get("/vat");
 };
 
-const deleteVAT = (id) => {
-	return http.delete(`/vat/${id}`);
+const deleteVAT = (data) => {
+	return http.put(`/vat`, data);
 };
 
 const VatService = {

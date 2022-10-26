@@ -11,16 +11,6 @@ const LoadingLayout = () => {
 		// deleteVAT();
 	}, []);
 
-	// const deleteVAT = () => {
-	// 	ModelService.deleteVAT(location.state.data.id)
-	// 		.then((response) => {
-	// 			console.log(response.data);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// };
-
 	return (
 		<div className="container-fluid">
 			<h1>Loading . . .</h1>

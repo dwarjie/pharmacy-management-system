@@ -16,7 +16,6 @@ const VAT = () => {
 
 	const [vats, setVats] = useState([]);
 	const [newVAT, setNewVAT] = useState(initialVat);
-	const [tryState, setTryState] = useState();
 
 	useEffect(() => {
 		getAllVATs();
@@ -51,17 +50,19 @@ const VAT = () => {
 			});
 	};
 
-	// delete vat
-	const selectVat = (vat) => {
-		setTryState({
+	const deleteVAT = (vat) => {
+		let data = {
 			id: vat.id,
-			service: VatService.deleteVAT,
-		});
-		navigate(`/pharmacy/maintenance/vat/${vat.id}`, {
-			state: {
-				data: tryState,
-			},
-		});
+		};
+		console.log(data);
+		VatService.deleteVAT(data)
+			.then((response) => {
+				console.log(response.data);
+				refreshList();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	// handle input change event for forms
@@ -142,7 +143,7 @@ const VAT = () => {
 											<span className="px-2">
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
-													onClick={() => selectVat(vat)}
+													onClick={() => deleteVAT(vat)}
 												/>
 											</span>
 										</td>
