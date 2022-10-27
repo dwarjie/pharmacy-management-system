@@ -26,10 +26,42 @@ db.type = require("./type.model")(sequelize, Sequelize);
 db.subCategory = require("./subCategory.model")(sequelize, Sequelize);
 db.discount = require("./discount.model")(sequelize, Sequelize);
 db.vat = require("./vat.model")(sequelize, Sequelize);
+db.medicine = require("./medicine.model")(sequelize, Sequelize);
 
 // define model relationships
+
+// CATEGORY
+// add relationships for category and sub categories
 db.category.hasMany(db.subCategory, { as: "subCategory" });
 db.subCategory.belongsTo(db.category, {
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// MEDICINE
+// add relationships for medicine and manufacturers
+db.manufacturer.hasMany(db.medicine);
+db.medicine.belongsTo(db.manufacturer, {
+	as: "manufacturer",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationships for medicine and unit of measure
+db.unit.hasMany(db.medicine);
+db.medicine.belongsTo(db.unit, {
+	as: "unit",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationships for medicine and sub-category
+db.subCategory.hasMany(db.medicine);
+db.medicine.belongsTo(db.subCategory, {
+	as: "subCategory",
 	foreignKey: {
 		allowNull: false,
 	},

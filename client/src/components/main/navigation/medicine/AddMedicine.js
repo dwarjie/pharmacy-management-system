@@ -1,6 +1,32 @@
 // this module is responsible for adding new medicines
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import MedicineService from "../../../../services/MedicineService";
 
 const AddMedicine = () => {
+	const initialMedicine = {
+		id: null,
+		ProductCode: "",
+		ProductName: "",
+		ProductDetails: "",
+		GenericName: "",
+		ManufacturerPrice: "",
+		SellingPrice: "",
+		Quantity: "",
+		Status: "",
+		manufacturerId: null,
+		unitId: null,
+		subCategoryId: null,
+	};
+	let navigate = useNavigate();
+
+	const [medicine, setMedicine] = useState(initialMedicine);
+
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setMedicine({ ...medicine, [name]: value });
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -11,56 +37,64 @@ const AddMedicine = () => {
 				<form className="pb-5">
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="productCode">Product Code:</label>
+							<label htmlFor="ProductCode">Product Code:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="productCode"
+								name="ProductCode"
+								id="ProductCode"
+								value={medicine.ProductCode}
+								onChange={handleInputChange}
 								required
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="genericName">Generic Name:</label>
+							<label htmlFor="GenericName">Generic Name:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="genericName"
-								required
-							/>
-						</div>
-					</div>
-					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
-							<label htmlFor="productName">Product Name:</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								id="productName"
-								required
-							/>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="productDetails">Product Details:</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								id="productDetails"
-								required
+								name="GenericName"
+								id="GenericName"
+								value={medicine.GenericName}
+								onChange={handleInputChange}
 							/>
 						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="category">Category:</label>
+							<label htmlFor="ProductName">Product Name:</label>
+							<input
+								type="text"
+								className="form-control form-input"
+								name="ProductName"
+								id="ProductName"
+								value={medicine.ProductName}
+								onChange={handleInputChange}
+								required
+							/>
+						</div>
+						<div className="col-sm-12 col-md">
+							<label htmlFor="ProductDetails">Product Details:</label>
+							<input
+								type="text"
+								className="form-control form-input"
+								name="ProductDetails"
+								id="ProductDetails"
+								value={medicine.ProductDetails}
+								onChange={handleInputChange}
+							/>
+						</div>
+					</div>
+					<div className="row mb-3">
+						<div className="col-sm-12 col-md">
+							<label htmlFor="subCategoryId">Category:</label>
 							<select
-								name="category"
-								id="category"
+								name="subCategoryId"
+								id="subCategoryId"
 								className="form-select form-input"
 								required
 							>
-								<option value="cat_1" selected>
-									Category 1
-								</option>
+								<option value="cat_1">Category 1</option>
 								<option value="cat_2">Category 2</option>
 							</select>
 						</div>
@@ -74,73 +108,74 @@ const AddMedicine = () => {
 							/>
 						</div> */}
 						<div className="col-sm-12 col-md">
-							<label htmlFor="sellingPrice">Selling Price:</label>
+							<label htmlFor="SellingPrice">Selling Price:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								id="sellingPrice"
+								name="SellingPrice"
+								id="SellingPrice"
+								value={medicine.SellingPrice}
+								onChange={handleInputChange}
+								disabled
 								required
 							/>
 						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="manufacturer">Manufacturer:</label>
+							<label htmlFor="manufacturerId">Manufacturer:</label>
 							<select
-								name="manufacturer"
-								id="manufacturer"
+								name="manufacturerId"
+								id="manufacturerId"
 								className="form-select form-input"
 								required
 							>
-								<option value="Manufacturer_1" selected>
-									Manufacturer 1
-								</option>
+								<option value="Manufacturer_1">Manufacturer 1</option>
 								<option value="Manufacturer_2">Manufacturer 2</option>
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="manufacturerPrice">Manufacturer Price:</label>
+							<label htmlFor="ManufacturerPrice">Manufacturer Price:</label>
 							<input
 								type="number"
 								className="form-control form-input"
-								id="manufacturerPrice"
+								name="ManufacturerPrice"
+								id="ManufacturerPrice"
+								value={medicine.ManufacturerPrice}
+								onChange={handleInputChange}
 								required
 							/>
 						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="status">Status:</label>
+							<label htmlFor="Status">Status:</label>
 							<select
-								name="status"
-								id="status"
+								name="Status"
+								id="Status"
 								className="form-select form-input"
 								required
 							>
-								<option value="active" selected>
-									Active
-								</option>
+								<option value="active">Active</option>
 								<option value="inactive">Inactive</option>
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="unitOfMeasure">Unit of Measure:</label>
+							<label htmlFor="unitId">Unit of Measure:</label>
 							<select
-								name="unitOfMeasure"
-								id="unitOfMeasure"
+								name="unitId"
+								id="unitId"
 								className="form-select form-input"
 								required
 							>
-								<option value="pack" selected>
-									Pack
-								</option>
+								<option value="pack">Pack</option>
 								<option value="piece">Piece</option>
 								<option value="table">Table</option>
 							</select>
 						</div>
 					</div>
-					<div className="row mb-3">
-						{/* <div className="col-sm-12 col-md">
+					{/* <div className="row mb-3">
+						<div className="col-sm-12 col-md">
 							<label htmlFor="type">Medicine Type:</label>
 							<select
 								name="type"
@@ -153,8 +188,8 @@ const AddMedicine = () => {
 								</option>
 								<option value="suspension">Suspension</option>
 							</select>
-						</div> */}
-					</div>
+						</div>
+					</div> */}
 				</form>
 			</div>
 		</div>
