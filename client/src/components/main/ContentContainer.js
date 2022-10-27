@@ -82,9 +82,6 @@ const ContentContainer = (props) => {
 					<Route path="/handler/handler-list" element={<HandlerList />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
 					<Route path="/utilities/user-list" element={<UserList />} />
-
-					{/* Loading Layout */}
-					<Route path="/maintenance/vat/:id" element={<LoadingLayout />} />
 				</Routes>
 			</div>
 		</div>

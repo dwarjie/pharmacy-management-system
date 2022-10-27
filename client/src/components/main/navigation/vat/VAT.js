@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import VatService from "../../../../services/VatService";
 
 // icons
-import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const VAT = () => {
 	const initialVat = {
@@ -141,7 +141,7 @@ const VAT = () => {
 										<td>{vat.VatAmount}</td>
 										<td>
 											<span className="px-2">
-												<FaEdit
+												<MdDelete
 													className="icon-size-sm cursor-pointer"
 													onClick={() => deleteVAT(vat)}
 												/>

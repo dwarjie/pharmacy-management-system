@@ -51,6 +51,20 @@ const AddMedicine = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
+							<label htmlFor="category">Category:</label>
+							<select
+								name="category"
+								id="category"
+								className="form-select form-input"
+								required
+							>
+								<option value="cat_1" selected>
+									Category 1
+								</option>
+								<option value="cat_2">Category 2</option>
+							</select>
+						</div>
+						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="strength">Strength:</label>
 							<input
 								type="text"
@@ -58,7 +72,7 @@ const AddMedicine = () => {
 								id="strength"
 								required
 							/>
-						</div>
+						</div> */}
 						<div className="col-sm-12 col-md">
 							<label htmlFor="sellingPrice">Selling Price:</label>
 							<input
@@ -96,17 +110,17 @@ const AddMedicine = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="category">Category:</label>
+							<label htmlFor="status">Status:</label>
 							<select
-								name="category"
-								id="category"
+								name="status"
+								id="status"
 								className="form-select form-input"
 								required
 							>
-								<option value="cat_1" selected>
-									Category 1
+								<option value="active" selected>
+									Active
 								</option>
-								<option value="cat_2">Category 2</option>
+								<option value="inactive">Inactive</option>
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
@@ -126,21 +140,7 @@ const AddMedicine = () => {
 						</div>
 					</div>
 					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
-							<label htmlFor="status">Status:</label>
-							<select
-								name="status"
-								id="status"
-								className="form-select form-input"
-								required
-							>
-								<option value="active" selected>
-									Active
-								</option>
-								<option value="inactive">Inactive</option>
-							</select>
-						</div>
-						<div className="col-sm-12 col-md">
+						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="type">Medicine Type:</label>
 							<select
 								name="type"
@@ -153,7 +153,7 @@ const AddMedicine = () => {
 								</option>
 								<option value="suspension">Suspension</option>
 							</select>
-						</div>
+						</div> */}
 					</div>
 				</form>
 			</div>
