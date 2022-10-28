@@ -22,6 +22,20 @@ const AddMedicine = () => {
 
 	const [medicine, setMedicine] = useState(initialMedicine);
 
+	useEffect(() => {
+		getOtherModel();
+	}, []);
+
+	const getOtherModel = () => {
+		MedicineService.getOtherModel()
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
 		setMedicine({ ...medicine, [name]: value });
