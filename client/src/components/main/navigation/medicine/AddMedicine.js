@@ -21,6 +21,7 @@ const AddMedicine = () => {
 	let navigate = useNavigate();
 
 	const [medicine, setMedicine] = useState(initialMedicine);
+	const [extraModel, setExtraModel] = useState([]);
 
 	useEffect(() => {
 		getOtherModel();
@@ -29,7 +30,8 @@ const AddMedicine = () => {
 	const getOtherModel = () => {
 		MedicineService.getOtherModel()
 			.then((response) => {
-				console.log(response.data);
+				console.log(response.data.category);
+				setExtraModel(response.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -108,8 +110,12 @@ const AddMedicine = () => {
 								className="form-select form-input"
 								required
 							>
-								<option value="cat_1">Category 1</option>
-								<option value="cat_2">Category 2</option>
+								{extraModel.category &&
+									extraModel.category.map((item, index) => (
+										<option value={item.id} key={index}>
+											{item.CategoryName}
+										</option>
+									))}
 							</select>
 						</div>
 						{/* <div className="col-sm-12 col-md">
@@ -144,8 +150,12 @@ const AddMedicine = () => {
 								className="form-select form-input"
 								required
 							>
-								<option value="Manufacturer_1">Manufacturer 1</option>
-								<option value="Manufacturer_2">Manufacturer 2</option>
+								{extraModel.manufacturer &&
+									extraModel.manufacturer.map((item, index) => (
+										<option value={item.id} key={index}>
+											{item.ManufacturerName}
+										</option>
+									))}
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
@@ -182,9 +192,12 @@ const AddMedicine = () => {
 								className="form-select form-input"
 								required
 							>
-								<option value="pack">Pack</option>
-								<option value="piece">Piece</option>
-								<option value="table">Table</option>
+								{extraModel.unit &&
+									extraModel.unit.map((item, index) => (
+										<option value={item.id} key={index}>
+											{item.UnitName}
+										</option>
+									))}
 							</select>
 						</div>
 					</div>
