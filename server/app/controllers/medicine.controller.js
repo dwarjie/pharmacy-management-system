@@ -1,6 +1,7 @@
 // This module contains all the medicine controllers
 const db = require("../models");
 const Medicine = db.medicine;
+const Category = db.category;
 const { QueryTypes } = db.Sequelize;
 
 exports.create = (req, res) => {
@@ -34,32 +35,40 @@ exports.create = (req, res) => {
 // manufacturer
 // and unit of measure in order to show in medicine
 exports.getOtherModel = async (req, res) => {
-	let data = {};
-	try {
-		let category = []; // container for the data
-		let manufacturer = [];
-		let unit = [];
+	Category.findAll({ include: ["subCategory"] })
+		.then((data) => {
+			let info = {}; // the data will be stored here
 
-		category = await db.sequelize.query(`SELECT * FROM categories`, {
-			type: QueryTypes.SELECT,
+			info = {
+				category: data,
+			};
+
+			return info;
+		})
+		.then(async (data) => {
+			try {
+				let manufacturer = [];
+				let unit = [];
+
+				manufacturer = await db.sequelize.query(`SELECT * FROM manufacturers`, {
+					type: QueryTypes.SELECT,
+				});
+
+				unit = await db.sequelize.query(`SELECT * FROM units`, {
+					type: QueryTypes.SELECT,
+				});
+
+				data.manufacturer = manufacturer;
+				data.unit = unit;
+
+				return res.status(200).json(data);
+			} catch (err) {
+				console.log(err);
+			}
+		})
+		.catch((err) => {
+			return res.status(500).send({
+				message: err.message || `Some error occurred while processing data`,
+			});
 		});
-
-		manufacturer = await db.sequelize.query(`SELECT * FROM manufacturers`, {
-			type: QueryTypes.SELECT,
-		});
-
-		unit = await db.sequelize.query(`SELECT * FROM units`, {
-			type: QueryTypes.SELECT,
-		});
-
-		data.category = category;
-		data.manufacturer = manufacturer;
-		data.unit = unit;
-
-		return res.status(200).json(data);
-	} catch (err) {
-		return res.status(500).send({
-			message: err.message || `Some error occurred while processing data`,
-		});
-	}
 };

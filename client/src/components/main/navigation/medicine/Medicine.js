@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
 
-const AddMedicine = () => {
+const Medicine = () => {
 	const initialMedicine = {
 		id: null,
 		ProductCode: "",
@@ -30,7 +30,7 @@ const AddMedicine = () => {
 	const getOtherModel = () => {
 		MedicineService.getOtherModel()
 			.then((response) => {
-				console.log(response.data.category);
+				console.log(response.data);
 				setExtraModel(response.data);
 			})
 			.catch((err) => {
@@ -118,15 +118,36 @@ const AddMedicine = () => {
 									))}
 							</select>
 						</div>
-						{/* <div className="col-sm-12 col-md">
-							<label htmlFor="strength">Strength:</label>
+						<div className="col-sm-12 col-md">
+							<label htmlFor="subCategoryId">Sub Category:</label>
+							<select
+								name="subCategoryId"
+								id="subCategoryId"
+								className="form-select form-input"
+								required
+							>
+								{extraModel.category &&
+									extraModel.category.map((item, index) => (
+										<option value={item.id} key={index}>
+											{item.CategoryName}
+										</option>
+									))}
+							</select>
+						</div>
+					</div>
+					<div className="row mb-3">
+						<div className="col-sm-12 col-md">
+							<label htmlFor="ManufacturerPrice">Manufacturer Price:</label>
 							<input
-								type="text"
+								type="number"
 								className="form-control form-input"
-								id="strength"
+								name="ManufacturerPrice"
+								id="ManufacturerPrice"
+								value={medicine.ManufacturerPrice}
+								onChange={handleInputChange}
 								required
 							/>
-						</div> */}
+						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="SellingPrice">Selling Price:</label>
 							<input
@@ -159,32 +180,6 @@ const AddMedicine = () => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="ManufacturerPrice">Manufacturer Price:</label>
-							<input
-								type="number"
-								className="form-control form-input"
-								name="ManufacturerPrice"
-								id="ManufacturerPrice"
-								value={medicine.ManufacturerPrice}
-								onChange={handleInputChange}
-								required
-							/>
-						</div>
-					</div>
-					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
-							<label htmlFor="Status">Status:</label>
-							<select
-								name="Status"
-								id="Status"
-								className="form-select form-input"
-								required
-							>
-								<option value="active">Active</option>
-								<option value="inactive">Inactive</option>
-							</select>
-						</div>
-						<div className="col-sm-12 col-md">
 							<label htmlFor="unitId">Unit of Measure:</label>
 							<select
 								name="unitId"
@@ -201,26 +196,24 @@ const AddMedicine = () => {
 							</select>
 						</div>
 					</div>
-					{/* <div className="row mb-3">
-						<div className="col-sm-12 col-md">
-							<label htmlFor="type">Medicine Type:</label>
+					<div className="row mb-3">
+						<div className="col-sm-12 col-md-6">
+							<label htmlFor="Status">Status:</label>
 							<select
-								name="type"
-								id="type"
+								name="Status"
+								id="Status"
 								className="form-select form-input"
 								required
 							>
-								<option value="painKiller" selected>
-									Pain Killer
-								</option>
-								<option value="suspension">Suspension</option>
+								<option value="active">Active</option>
+								<option value="inactive">Inactive</option>
 							</select>
 						</div>
-					</div> */}
+					</div>
 				</form>
 			</div>
 		</div>
 	);
 };
 
-export default AddMedicine;
+export default Medicine;
