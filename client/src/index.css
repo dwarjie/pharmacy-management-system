@@ -88,6 +88,10 @@ body {
 	background-color: #e63946;
 }
 
+.btn-dropdown {
+	width: 100%;
+}
+
 /* FORMS COMPONENTS */
 
 .form-input {

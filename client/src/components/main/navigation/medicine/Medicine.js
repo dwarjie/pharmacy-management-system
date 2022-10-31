@@ -22,6 +22,8 @@ const Medicine = () => {
 
 	const [medicine, setMedicine] = useState(initialMedicine);
 	const [extraModel, setExtraModel] = useState([]);
+	const [category, setCategory] = useState("Product Category");
+	const [subCategory, setSubCategory] = useState([]);
 
 	useEffect(() => {
 		getOtherModel();
@@ -36,6 +38,11 @@ const Medicine = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const setActiveCategory = (subCategory) => {
+		setCategory(subCategory.CategoryName);
+		setSubCategory(subCategory.subCategory);
 	};
 
 	const handleInputChange = (event) => {
@@ -103,7 +110,7 @@ const Medicine = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="subCategoryId">Category:</label>
+							{/* <label htmlFor="subCategoryId">Category:</label>
 							<select
 								name="subCategoryId"
 								id="subCategoryId"
@@ -112,11 +119,37 @@ const Medicine = () => {
 							>
 								{extraModel.category &&
 									extraModel.category.map((item, index) => (
-										<option value={item.id} key={index}>
-											{item.CategoryName}
+										<option
+											onClick={() => console.log(item)}
+											value={item.id}
+											key={index}
+										>
 										</option>
 									))}
-							</select>
+							</select> */}
+							<label htmlFor="category">Category:</label>
+							<div className="dropdown w-auto">
+								<button
+									className="btn dropdown-toggle w-100 form-input"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									{category}
+								</button>
+								<ul className="dropdown-menu">
+									{extraModel.category &&
+										extraModel.category.map((item, index) => (
+											<li
+												className="dropdown-item w-auto"
+												key={item.id}
+												onClick={() => setActiveCategory(item)}
+											>
+												{item.CategoryName}
+											</li>
+										))}
+								</ul>
+							</div>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="subCategoryId">Sub Category:</label>
@@ -126,10 +159,10 @@ const Medicine = () => {
 								className="form-select form-input"
 								required
 							>
-								{extraModel.category &&
-									extraModel.category.map((item, index) => (
+								{subCategory &&
+									subCategory.map((item, index) => (
 										<option value={item.id} key={index}>
-											{item.CategoryName}
+											{item.SubCategoryName}
 										</option>
 									))}
 							</select>
