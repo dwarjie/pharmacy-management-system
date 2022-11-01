@@ -18,12 +18,20 @@ const Medicine = () => {
 		unitId: null,
 		subCategoryId: null,
 	};
+	// this is for the status drop down
+	const unitList = ["Active", "Inactive"];
 	let navigate = useNavigate();
 
 	const [medicine, setMedicine] = useState(initialMedicine);
-	const [extraModel, setExtraModel] = useState([]);
+	const [extraModel, setExtraModel] = useState([]); // this state is for other models that are needed for drop downs
 	const [category, setCategory] = useState("Product Category");
 	const [subCategory, setSubCategory] = useState([]);
+	const [activeSubCategory, setActiveSubCategory] = useState("Choose Category");
+	const [activeManufacturer, setActiveManufacturer] = useState(
+		"Choose Manufacturer"
+	);
+	const [activeUnit, setActiveUnit] = useState("Choose Unit");
+	const [activeStatus, setActiveStatus] = useState(unitList[0]);
 
 	useEffect(() => {
 		getOtherModel();
@@ -40,9 +48,11 @@ const Medicine = () => {
 			});
 	};
 
-	const setActiveCategory = (subCategory) => {
-		setCategory(subCategory.CategoryName);
-		setSubCategory(subCategory.subCategory);
+	// this will set the current category
+	// and will also set it's sub categories
+	const setActiveCategory = (category) => {
+		setCategory(category.CategoryName);
+		setSubCategory(category.subCategory);
 	};
 
 	const handleInputChange = (event) => {
@@ -110,23 +120,6 @@ const Medicine = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							{/* <label htmlFor="subCategoryId">Category:</label>
-							<select
-								name="subCategoryId"
-								id="subCategoryId"
-								className="form-select form-input"
-								required
-							>
-								{extraModel.category &&
-									extraModel.category.map((item, index) => (
-										<option
-											onClick={() => console.log(item)}
-											value={item.id}
-											key={index}
-										>
-										</option>
-									))}
-							</select> */}
 							<label htmlFor="category">Category:</label>
 							<div className="dropdown w-auto">
 								<button
@@ -134,15 +127,16 @@ const Medicine = () => {
 									type="button"
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
+									required
 								>
 									{category}
 								</button>
-								<ul className="dropdown-menu">
+								<ul className="dropdown-menu w-100">
 									{extraModel.category &&
 										extraModel.category.map((item, index) => (
 											<li
-												className="dropdown-item w-auto"
-												key={item.id}
+												className="dropdown-item"
+												key={index}
 												onClick={() => setActiveCategory(item)}
 											>
 												{item.CategoryName}
@@ -153,19 +147,31 @@ const Medicine = () => {
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="subCategoryId">Sub Category:</label>
-							<select
-								name="subCategoryId"
-								id="subCategoryId"
-								className="form-select form-input"
-								required
-							>
-								{subCategory &&
-									subCategory.map((item, index) => (
-										<option value={item.id} key={index}>
-											{item.SubCategoryName}
-										</option>
-									))}
-							</select>
+							<div className="dropdown w-auto">
+								<button
+									className="btn dropdown-toggle w-100 form-input"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+									required
+								>
+									{activeSubCategory}
+								</button>
+								<ul className="dropdown-menu w-100">
+									{subCategory &&
+										subCategory.map((item, index) => (
+											<li
+												className="dropdown-item"
+												key={index}
+												onClick={() =>
+													setActiveSubCategory(item.SubCategoryName)
+												}
+											>
+												{item.SubCategoryName}
+											</li>
+										))}
+								</ul>
+							</div>
 						</div>
 					</div>
 					<div className="row mb-3">
@@ -198,49 +204,82 @@ const Medicine = () => {
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label htmlFor="manufacturerId">Manufacturer:</label>
-							<select
-								name="manufacturerId"
-								id="manufacturerId"
-								className="form-select form-input"
-								required
-							>
-								{extraModel.manufacturer &&
-									extraModel.manufacturer.map((item, index) => (
-										<option value={item.id} key={index}>
-											{item.ManufacturerName}
-										</option>
-									))}
-							</select>
+							<div className="dropdown w-auto">
+								<button
+									className="btn dropdown-toggle w-100 form-input"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									{activeManufacturer}
+								</button>
+								<ul className="dropdown-menu w-100">
+									{extraModel.manufacturer &&
+										extraModel.manufacturer.map((item, index) => (
+											<li
+												className="dropdown-item"
+												key={index}
+												onClick={() =>
+													setActiveManufacturer(item.ManufacturerName)
+												}
+											>
+												{item.ManufacturerName}
+											</li>
+										))}
+								</ul>
+							</div>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="unitId">Unit of Measure:</label>
-							<select
-								name="unitId"
-								id="unitId"
-								className="form-select form-input"
-								required
-							>
-								{extraModel.unit &&
-									extraModel.unit.map((item, index) => (
-										<option value={item.id} key={index}>
-											{item.UnitName}
-										</option>
-									))}
-							</select>
+							<div className="dropdown w-auto">
+								<button
+									className="btn dropdown-toggle w-100 form-input"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									{activeUnit}
+								</button>
+								<ul className="dropdown-menu w-100">
+									{extraModel.unit &&
+										extraModel.unit.map((item, index) => (
+											<li
+												className="dropdown-item"
+												key={index}
+												onClick={() => setActiveUnit(item.UnitName)}
+											>
+												{item.UnitName}
+											</li>
+										))}
+								</ul>
+							</div>
 						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Status">Status:</label>
-							<select
-								name="Status"
-								id="Status"
-								className="form-select form-input"
-								required
-							>
-								<option value="active">Active</option>
-								<option value="inactive">Inactive</option>
-							</select>
+							<div className="dropdown w-auto">
+								<button
+									className="btn dropdown-toggle w-100 form-input"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									{activeStatus}
+								</button>
+								<ul className="dropdown-menu w-100">
+									{unitList &&
+										unitList.map((item, index) => (
+											<li
+												className="dropdown-item"
+												key={index}
+												onClick={() => setActiveStatus(item)}
+											>
+												{item}
+											</li>
+										))}
+								</ul>
+							</div>
 						</div>
 					</div>
 				</form>
