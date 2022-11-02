@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
 
 const Medicine = () => {
+	// this is for the status drop down
+	const unitList = ["Active", "Inactive"];
+
 	const initialMedicine = {
 		id: null,
 		ProductCode: "",
@@ -18,13 +21,21 @@ const Medicine = () => {
 		unitId: null,
 		subCategoryId: null,
 	};
-	// this is for the status drop down
-	const unitList = ["Active", "Inactive"];
+
+	// this initial is for the dropdowns
+	const initialDropDowns = {
+		category: "Choose Category",
+		subCategoryId: "Choose Sub Category",
+		manufacturerId: "Choose Manufacturer",
+		unitId: "Choose Unit",
+		status: unitList[0],
+	};
 	let navigate = useNavigate();
 
 	const [medicine, setMedicine] = useState(initialMedicine);
 	const [extraModel, setExtraModel] = useState([]); // this state is for other models that are needed for drop downs
-	const [category, setCategory] = useState("Product Category");
+	const [activeDropDownValue, setActiveDropDownValue] =
+		useState(initialDropDowns);
 	const [subCategory, setSubCategory] = useState([]);
 	const [activeSubCategory, setActiveSubCategory] = useState("Choose Category");
 	const [activeManufacturer, setActiveManufacturer] = useState(
@@ -50,9 +61,12 @@ const Medicine = () => {
 
 	// this will set the current category
 	// and will also set it's sub categories
-	const setActiveCategory = (category) => {
-		setCategory(category.CategoryName);
-		setSubCategory(category.subCategory);
+	const setActiveCategory = (activeCategory) => {
+		setActiveDropDownValue({
+			...activeDropDownValue,
+			category: activeCategory.CategoryName,
+		});
+		setSubCategory(activeCategory.subCategory);
 	};
 
 	const handleInputChange = (event) => {
@@ -129,7 +143,7 @@ const Medicine = () => {
 									aria-expanded="false"
 									required
 								>
-									{category}
+									{activeDropDownValue.category}
 								</button>
 								<ul className="dropdown-menu w-100">
 									{extraModel.category &&
@@ -155,7 +169,7 @@ const Medicine = () => {
 									aria-expanded="false"
 									required
 								>
-									{activeSubCategory}
+									{activeDropDownValue.subCategoryId}
 								</button>
 								<ul className="dropdown-menu w-100">
 									{subCategory &&
@@ -164,7 +178,10 @@ const Medicine = () => {
 												className="dropdown-item"
 												key={index}
 												onClick={() =>
-													setActiveSubCategory(item.SubCategoryName)
+													setActiveDropDownValue({
+														...activeDropDownValue,
+														subCategoryId: item.SubCategoryName,
+													})
 												}
 											>
 												{item.SubCategoryName}
@@ -211,7 +228,7 @@ const Medicine = () => {
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
 								>
-									{activeManufacturer}
+									{activeDropDownValue.manufacturerId}
 								</button>
 								<ul className="dropdown-menu w-100">
 									{extraModel.manufacturer &&
@@ -220,7 +237,10 @@ const Medicine = () => {
 												className="dropdown-item"
 												key={index}
 												onClick={() =>
-													setActiveManufacturer(item.ManufacturerName)
+													setActiveDropDownValue({
+														...activeDropDownValue,
+														manufacturerId: item.ManufacturerName,
+													})
 												}
 											>
 												{item.ManufacturerName}
@@ -238,7 +258,7 @@ const Medicine = () => {
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
 								>
-									{activeUnit}
+									{activeDropDownValue.unitId}
 								</button>
 								<ul className="dropdown-menu w-100">
 									{extraModel.unit &&
@@ -246,7 +266,12 @@ const Medicine = () => {
 											<li
 												className="dropdown-item"
 												key={index}
-												onClick={() => setActiveUnit(item.UnitName)}
+												onClick={() =>
+													setActiveDropDownValue({
+														...activeDropDownValue,
+														unitId: item.UnitName,
+													})
+												}
 											>
 												{item.UnitName}
 											</li>
@@ -265,7 +290,7 @@ const Medicine = () => {
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
 								>
-									{activeStatus}
+									{activeDropDownValue.status}
 								</button>
 								<ul className="dropdown-menu w-100">
 									{unitList &&
@@ -273,7 +298,12 @@ const Medicine = () => {
 											<li
 												className="dropdown-item"
 												key={index}
-												onClick={() => setActiveStatus(item)}
+												onClick={() =>
+													setActiveDropDownValue({
+														...activeDropDownValue,
+														status: item,
+													})
+												}
 											>
 												{item}
 											</li>
