@@ -394,7 +394,7 @@ const Medicine = () => {
 					className="btn btn-primary simple-shadow me-3"
 					onClick={createProduct}
 				>
-					Add
+					Save
 				</button>
 			</div>
 		</div>

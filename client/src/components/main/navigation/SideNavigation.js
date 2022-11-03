@@ -130,7 +130,7 @@ const SideNavigation = () => {
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/medicine/medicine-list"}
+									to={"/pharmacy/maintenance/medicine/medicine-list"}
 									className="dropdown-item"
 								>
 									Medicine List

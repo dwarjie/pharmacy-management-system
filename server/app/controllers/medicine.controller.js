@@ -30,6 +30,42 @@ exports.create = (req, res) => {
 		});
 };
 
+exports.findAll = (req, res) => {
+	Medicine.findAll({ include: ["subCategory", "manufacturer", "unit"] })
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message:
+					err.message || `Some error occurred while retrieving Medicines`,
+			});
+		});
+};
+
+exports.update = (req, res) => {
+	const id = req.params.id;
+
+	Medicine.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is not equals to 1
+			if (row != 1) {
+				res.send({
+					message: `Cannot update ${id}`,
+				});
+			}
+
+			res.send({
+				message: `Medicine was updated successfully`,
+			});
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error updating medicine ${id}`,
+			});
+		});
+};
+
 // this function will get the
 // category and subCategory
 // manufacturer
