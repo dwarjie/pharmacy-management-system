@@ -5,6 +5,7 @@ module.exports = (app) => {
 	var router = require("express").Router();
 
 	router.get("/", medicine.getOtherModel);
+	router.post("/", medicine.create);
 
 	app.use("/api/medicine", router);
 };

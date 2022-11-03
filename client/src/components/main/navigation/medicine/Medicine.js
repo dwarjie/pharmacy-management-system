@@ -4,18 +4,17 @@ import MedicineService from "../../../../services/MedicineService";
 
 const Medicine = () => {
 	// this is for the status drop down
-	const unitList = ["Active", "Inactive"];
+	const statusList = ["Active", "Inactive"];
 
 	const initialMedicine = {
-		id: null,
 		ProductCode: "",
 		ProductName: "",
 		ProductDetails: "",
 		GenericName: "",
 		ManufacturerPrice: 0,
 		SellingPrice: 0,
-		Quantity: "",
-		Status: "",
+		Quantity: 0,
+		Status: 1,
 		manufacturerId: null,
 		unitId: null,
 		subCategoryId: null,
@@ -27,7 +26,7 @@ const Medicine = () => {
 		subCategoryId: "Choose Sub Category",
 		manufacturerId: "Choose Manufacturer",
 		unitId: "Choose Unit",
-		status: unitList[0],
+		status: statusList[0],
 	};
 
 	const [medicine, setMedicine] = useState(initialMedicine);
@@ -51,6 +50,33 @@ const Medicine = () => {
 			resetSubCategory();
 		}
 	}, [activeDropDownValue.category]);
+
+	// create new product
+	const createProduct = () => {
+		let product = {
+			ProductCode: medicine.ProductCode,
+			ProductName: medicine.ProductName,
+			ProductDetails: medicine.ProductDetails,
+			GenericName: medicine.GenericName,
+			ManufacturerPrice: medicine.ManufacturerPrice,
+			SellingPrice: medicine.SellingPrice,
+			Quantity: 0,
+			Status: medicine.Status,
+			manufacturerId: medicine.manufacturerId,
+			unitId: medicine.unitId,
+			subCategoryId: medicine.subCategoryId,
+		};
+		MedicineService.createMedicine(product)
+			.then((response) => {
+				console.log(response.data);
+				// reset the form
+				setMedicine(initialMedicine);
+				setActiveDropDownValue(initialDropDowns);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const getOtherModel = () => {
 		MedicineService.getOtherModel()
@@ -226,6 +252,7 @@ const Medicine = () => {
 														...activeDropDownValue,
 														subCategoryId: item,
 													});
+													setMedicine({ ...medicine, subCategoryId: item.id });
 												}}
 											>
 												{item.SubCategoryName}
@@ -280,12 +307,13 @@ const Medicine = () => {
 											<li
 												className="dropdown-item"
 												key={index}
-												onClick={() =>
+												onClick={() => {
 													setActiveDropDownValue({
 														...activeDropDownValue,
 														manufacturerId: item.ManufacturerName,
-													})
-												}
+													});
+													setMedicine({ ...medicine, manufacturerId: item.id });
+												}}
 											>
 												{item.ManufacturerName}
 											</li>
@@ -310,12 +338,13 @@ const Medicine = () => {
 											<li
 												className="dropdown-item"
 												key={index}
-												onClick={() =>
+												onClick={() => {
 													setActiveDropDownValue({
 														...activeDropDownValue,
 														unitId: item.UnitName,
-													})
-												}
+													});
+													setMedicine({ ...medicine, unitId: item.id });
+												}}
 											>
 												{item.UnitName}
 											</li>
@@ -337,17 +366,21 @@ const Medicine = () => {
 									{activeDropDownValue.status}
 								</button>
 								<ul className="dropdown-menu w-100">
-									{unitList &&
-										unitList.map((item, index) => (
+									{statusList &&
+										statusList.map((item, index) => (
 											<li
 												className="dropdown-item"
 												key={index}
-												onClick={() =>
+												onClick={() => {
 													setActiveDropDownValue({
 														...activeDropDownValue,
 														status: item,
-													})
-												}
+													});
+													setMedicine({
+														...medicine,
+														Status: item === "Active" ? 1 : 0,
+													});
+												}}
 											>
 												{item}
 											</li>
@@ -357,6 +390,12 @@ const Medicine = () => {
 						</div>
 					</div>
 				</form>
+				<button
+					className="btn btn-primary simple-shadow me-3"
+					onClick={createProduct}
+				>
+					Add
+				</button>
 			</div>
 		</div>
 	);
