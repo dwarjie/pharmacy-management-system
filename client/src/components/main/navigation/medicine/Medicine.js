@@ -1,6 +1,5 @@
 // this module is responsible for adding new medicines
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
 
 const Medicine = () => {
@@ -13,8 +12,8 @@ const Medicine = () => {
 		ProductName: "",
 		ProductDetails: "",
 		GenericName: "",
-		ManufacturerPrice: "",
-		SellingPrice: "",
+		ManufacturerPrice: 0,
+		SellingPrice: 0,
 		Quantity: "",
 		Status: "",
 		manufacturerId: null,
@@ -30,23 +29,28 @@ const Medicine = () => {
 		unitId: "Choose Unit",
 		status: unitList[0],
 	};
-	let navigate = useNavigate();
 
 	const [medicine, setMedicine] = useState(initialMedicine);
 	const [extraModel, setExtraModel] = useState([]); // this state is for other models that are needed for drop downs
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDowns);
 	const [subCategory, setSubCategory] = useState([]);
-	const [activeSubCategory, setActiveSubCategory] = useState("Choose Category");
-	const [activeManufacturer, setActiveManufacturer] = useState(
-		"Choose Manufacturer"
-	);
-	const [activeUnit, setActiveUnit] = useState("Choose Unit");
-	const [activeStatus, setActiveStatus] = useState(unitList[0]);
 
 	useEffect(() => {
 		getOtherModel();
 	}, []);
+
+	// everytime the subcategory changes, compute sellingprice
+	useEffect(() => {
+		setSellingPrice();
+	}, [activeDropDownValue.subCategoryId, medicine.ManufacturerPrice]);
+
+	// reset subcategory everytime category changes
+	useEffect(() => {
+		if (typeof activeDropDownValue.subCategoryId === "object") {
+			resetSubCategory();
+		}
+	}, [activeDropDownValue.category]);
 
 	const getOtherModel = () => {
 		MedicineService.getOtherModel()
@@ -57,6 +61,35 @@ const Medicine = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	// this function will get the markup amount
+	// then use the formula Manufacturer price + markup amount in order to compute for selling price
+	const setSellingPrice = () => {
+		// check if there is a chosen subCategory
+		let price = computeSellingPrice();
+		setMedicine({ ...medicine, SellingPrice: price });
+	};
+
+	const computeSellingPrice = () => {
+		let manufacturerPrice = parseFloat(medicine.ManufacturerPrice);
+		if (manufacturerPrice === 0) return 0;
+
+		// check if the type is amount or percentage
+		let price = 0;
+		let subCategory = activeDropDownValue.subCategoryId;
+		if (subCategory.MarkUpUnit === "%") {
+			let percentage = 0; // if the type is percentage
+			percentage = subCategory.MarkUp / manufacturerPrice;
+			price = manufacturerPrice + percentage;
+		} else {
+			// if amount
+			price = manufacturerPrice + subCategory.MarkUp;
+		}
+
+		// check if price is NaN
+		if (isNaN(price)) return 0;
+		return price;
 	};
 
 	// this will set the current category
@@ -72,6 +105,15 @@ const Medicine = () => {
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
 		setMedicine({ ...medicine, [name]: value });
+	};
+
+	// reset sub categories and selling price once category changed
+	const resetSubCategory = () => {
+		setActiveDropDownValue({
+			...activeDropDownValue,
+			subCategoryId: initialDropDowns.subCategoryId,
+		});
+		setMedicine({ ...medicine, SellingPrice: 0 });
 	};
 
 	return (
@@ -169,7 +211,9 @@ const Medicine = () => {
 									aria-expanded="false"
 									required
 								>
-									{activeDropDownValue.subCategoryId}
+									{activeDropDownValue.subCategoryId.SubCategoryName
+										? activeDropDownValue.subCategoryId.SubCategoryName
+										: activeDropDownValue.subCategoryId}
 								</button>
 								<ul className="dropdown-menu w-100">
 									{subCategory &&
@@ -177,12 +221,12 @@ const Medicine = () => {
 											<li
 												className="dropdown-item"
 												key={index}
-												onClick={() =>
+												onClick={() => {
 													setActiveDropDownValue({
 														...activeDropDownValue,
-														subCategoryId: item.SubCategoryName,
-													})
-												}
+														subCategoryId: item,
+													});
+												}}
 											>
 												{item.SubCategoryName}
 											</li>
