@@ -21,6 +21,7 @@ import UpdateUnit from "./navigation/unit/UpdateUnit";
 
 import Medicine from "./navigation/medicine/Medicine";
 import MedicineList from "./navigation/medicine/MedicineList";
+import UpdateMedicine from "./navigation/medicine/UpdateMedicine";
 
 import Manufacturer from "./navigation/manufacturer/Manufacturer";
 import UpdateManufacturer from "./navigation/manufacturer/UpdateManufacturer";
@@ -36,9 +37,6 @@ import UserList from "./navigation/user/UserList";
 // Handler Tab
 import AddHandler from "./navigation/handler/AddHandler";
 import HandlerList from "./navigation/handler/HandlerList";
-
-// Layout
-import LoadingLayout from "../layout/loading.layout";
 
 const ContentContainer = (props) => {
 	return (
@@ -69,6 +67,10 @@ const ContentContainer = (props) => {
 					<Route
 						path="/maintenance/medicine/medicine-list"
 						element={<MedicineList />}
+					/>
+					<Route
+						path="/maintenance/medicine/:id"
+						element={<UpdateMedicine />}
 					/>
 					<Route path="/maintenance/manufacturer" element={<Manufacturer />} />
 					<Route

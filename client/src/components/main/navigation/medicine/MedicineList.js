@@ -8,6 +8,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const MedicineList = () => {
+	let navigate = useNavigate();
 	const [medicines, setMedicines] = useState([]);
 
 	useEffect(() => {
@@ -23,6 +24,14 @@ const MedicineList = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const updateMedicine = (medicine) => {
+		navigate(`/pharmacy/maintenance/medicine/${medicine.id}`, {
+			state: {
+				medicine: medicine,
+			},
+		});
 	};
 
 	return (
@@ -62,7 +71,10 @@ const MedicineList = () => {
 									<td>{medicine.ProductDetails}</td>
 									<td>
 										<span className="px-2">
-											<FaEdit className="icon-size-sm cursor-pointer" />
+											<FaEdit
+												className="icon-size-sm cursor-pointer"
+												onClick={() => updateMedicine(medicine)}
+											/>
 										</span>
 										<span className="px-2">
 											<MdDelete className="icon-size-sm cursor-pointer" />

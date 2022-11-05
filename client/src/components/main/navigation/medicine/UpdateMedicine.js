@@ -1,31 +1,36 @@
-// this module is responsible for adding new medicines
+// this module is responsible for updating new medicines
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
 
-const Medicine = () => {
+const UpdateMedicine = () => {
+	let navigate = useNavigate();
+	let location = useLocation();
+	let currentMedicine = location.state.medicine;
+
 	// this is for the status drop down
 	const statusList = ["Active", "Inactive"];
 
 	const initialMedicine = {
-		ProductCode: "",
-		ProductName: "",
-		ProductDetails: "",
-		GenericName: "",
-		ManufacturerPrice: 0,
-		SellingPrice: 0,
-		Quantity: 0,
-		Status: 1,
-		manufacturerId: null,
-		unitId: null,
-		subCategoryId: null,
+		id: currentMedicine.id,
+		ProductCode: currentMedicine.ProductCode,
+		ProductName: currentMedicine.ProductName,
+		ProductDetails: currentMedicine.ProductDetails,
+		GenericName: currentMedicine.GenericName,
+		ManufacturerPrice: currentMedicine.ManufacturerPrice,
+		SellingPrice: currentMedicine.SellingPrice,
+		Status: currentMedicine.Status,
+		manufacturerId: currentMedicine.manufacturerId,
+		unitId: currentMedicine.unitId,
+		subCategoryId: currentMedicine.subCategoryId,
 	};
 
 	// this initial is for the dropdowns
 	const initialDropDowns = {
-		category: "",
-		subCategoryId: "",
-		manufacturerId: "",
-		unitId: "",
+		category: "Choose Category",
+		subCategoryId: "Choose Sub Category",
+		manufacturerId: "Choose Manufacturer",
+		unitId: "Choose Unit",
 		status: statusList[0],
 	};
 
@@ -37,6 +42,7 @@ const Medicine = () => {
 
 	useEffect(() => {
 		getOtherModel();
+		console.log(medicine);
 	}, []);
 
 	// everytime the subcategory changes, compute sellingprice
@@ -46,35 +52,10 @@ const Medicine = () => {
 
 	// reset subcategory everytime category changes
 	useEffect(() => {
-		resetSubCategory();
+		if (typeof activeDropDownValue.subCategoryId === "object") {
+			resetSubCategory();
+		}
 	}, [activeDropDownValue.category]);
-
-	// create new product
-	const createProduct = () => {
-		let product = {
-			ProductCode: medicine.ProductCode,
-			ProductName: medicine.ProductName,
-			ProductDetails: medicine.ProductDetails,
-			GenericName: medicine.GenericName,
-			ManufacturerPrice: medicine.ManufacturerPrice,
-			SellingPrice: medicine.SellingPrice,
-			Quantity: 0,
-			Status: medicine.Status,
-			manufacturerId: medicine.manufacturerId,
-			unitId: medicine.unitId,
-			subCategoryId: medicine.subCategoryId,
-		};
-		MedicineService.createMedicine(product)
-			.then((response) => {
-				console.log(response.data);
-				// reset the form
-				setMedicine(initialMedicine);
-				setActiveDropDownValue(initialDropDowns);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
 
 	const getOtherModel = () => {
 		MedicineService.getOtherModel()
@@ -135,9 +116,9 @@ const Medicine = () => {
 	const resetSubCategory = () => {
 		setActiveDropDownValue({
 			...activeDropDownValue,
-			subCategoryId: "",
+			subCategoryId: initialDropDowns.subCategoryId,
 		});
-		setMedicine({ ...medicine, SellingPrice: 0, subCategoryId: 0 });
+		setMedicine({ ...medicine, SellingPrice: 0 });
 	};
 
 	return (
@@ -201,33 +182,7 @@ const Medicine = () => {
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label htmlFor="category">Category:</label>
-							<select
-								name="category"
-								id="category"
-								className="form-select form-input"
-								defaultValue={""}
-								// set the sub category
-								onChange={(event) => {
-									let data = JSON.parse(event.target.value);
-									console.log(data);
-									setActiveCategory(data);
-								}}
-							>
-								<option disabled={true} hidden value="">
-									Select category
-								</option>
-								{extraModel.category &&
-									extraModel.category.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={JSON.stringify(item)}
-										>
-											{item.CategoryName}
-										</option>
-									))}
-							</select>
-							{/* <div className="dropdown w-auto">
+							<div className="dropdown w-auto">
 								<button
 									className="btn dropdown-toggle w-100 form-input"
 									type="button"
@@ -249,44 +204,11 @@ const Medicine = () => {
 											</li>
 										))}
 								</ul>
-							</div> */}
+							</div>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="subCategoryId">Sub Category:</label>
-							<select
-								name="subCategoryId"
-								id="subCategoryId"
-								className="form-select form-input"
-								value={activeDropDownValue.subCategoryId}
-								onChange={(event) => {
-									let sample = JSON.parse(
-										event.target[event.target.selectedIndex].getAttribute(
-											"data-item"
-										)
-									);
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										subCategoryId: sample.SubCategoryName,
-									});
-									setMedicine({ ...medicine, subCategoryId: sample.id });
-								}}
-							>
-								<option disabled hidden value="">
-									Select Sub category
-								</option>
-								{subCategory &&
-									subCategory.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={item.SubCategoryName}
-											data-item={JSON.stringify(item)}
-										>
-											{item.SubCategoryName}
-										</option>
-									))}
-							</select>
-							{/* <div className="dropdown w-auto">
+							<div className="dropdown w-auto">
 								<button
 									className="btn dropdown-toggle w-100 form-input"
 									type="button"
@@ -316,7 +238,7 @@ const Medicine = () => {
 											</li>
 										))}
 								</ul>
-							</div> */}
+							</div>
 						</div>
 					</div>
 					<div className="row mb-3">
@@ -349,38 +271,22 @@ const Medicine = () => {
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label htmlFor="manufacturerId">Manufacturer:</label>
-							{/* <div className="dropdown w-auto">
-								<button
-									className="btn dropdown-toggle w-100 form-input"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								>
-									{activeDropDownValue.manufacturerId}
-								</button>
-								<ul className="dropdown-menu w-100">
-									{extraModel.manufacturer &&
-										extraModel.manufacturer.map((item, index) => (
-											<li
-												className="dropdown-item"
-												key={index}
-												onClick={() => {
-													setActiveDropDownValue({
-														...activeDropDownValue,
-														manufacturerId: item.ManufacturerName,
-													});
-													setMedicine({ ...medicine, manufacturerId: item.id });
-												}}
-											>
-												{item.ManufacturerName}
-											</li>
-										))}
-								</ul>
-							</div> */}
+							<select
+								name="manufacturer"
+								className="form-select form-input"
+								onClick={(event) => console.log(event.target.value)}
+							>
+								{extraModel.manufacturer &&
+									extraModel.manufacturer.map((item, index) => (
+										<option value={item.id} key={index}>
+											{item.ManufacturerName}
+										</option>
+									))}
+							</select>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="unitId">Unit of Measure:</label>
-							{/* <div className="dropdown w-auto">
+							<div className="dropdown w-auto">
 								<button
 									className="btn dropdown-toggle w-100 form-input"
 									type="button"
@@ -407,13 +313,13 @@ const Medicine = () => {
 											</li>
 										))}
 								</ul>
-							</div> */}
+							</div>
 						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Status">Status:</label>
-							{/* <div className="dropdown w-auto">
+							<div className="dropdown w-auto">
 								<button
 									className="btn dropdown-toggle w-100 form-input"
 									type="button"
@@ -443,19 +349,14 @@ const Medicine = () => {
 											</li>
 										))}
 								</ul>
-							</div> */}
+							</div>
 						</div>
 					</div>
 				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={createProduct}
-				>
-					Save
-				</button>
+				<button className="btn btn-primary simple-shadow me-3">Save</button>
 			</div>
 		</div>
 	);
 };
 
-export default Medicine;
+export default UpdateMedicine;
