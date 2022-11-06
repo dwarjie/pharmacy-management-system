@@ -2,38 +2,17 @@
 import { useState, useEffect } from "react";
 import MedicineService from "../../../../services/MedicineService";
 
-const Medicine = () => {
+const Medicine = (props) => {
 	// this is for the status drop down
 	const statusList = ["Active", "Inactive"];
 
-	const initialMedicine = {
-		ProductCode: "",
-		ProductName: "",
-		ProductDetails: "",
-		GenericName: "",
-		ManufacturerPrice: 0,
-		SellingPrice: 0,
-		Quantity: 0,
-		Status: 1,
-		manufacturerId: null,
-		unitId: null,
-		subCategoryId: null,
-	};
-
-	// this initial is for the dropdowns
-	const initialDropDowns = {
-		category: "",
-		subCategoryId: "",
-		manufacturerId: "",
-		unitId: "",
-		status: statusList[0],
-	};
-
-	const [medicine, setMedicine] = useState(initialMedicine);
+	const [medicine, setMedicine] = useState(props.initialMedicine);
 	const [extraModel, setExtraModel] = useState([]); // this state is for other models that are needed for drop downs
-	const [activeDropDownValue, setActiveDropDownValue] =
-		useState(initialDropDowns);
-	const [subCategory, setSubCategory] = useState([]);
+	const [activeDropDownValue, setActiveDropDownValue] = useState(
+		props.initialDropDownValue
+	);
+	const [status, setStatus] = useState(props.status);
+	const [subCategory, setSubCategory] = useState(props.subCategory);
 
 	useEffect(() => {
 		getOtherModel();
@@ -68,8 +47,8 @@ const Medicine = () => {
 			.then((response) => {
 				console.log(response.data);
 				// reset the form
-				setMedicine(initialMedicine);
-				setActiveDropDownValue(initialDropDowns);
+				setMedicine(props.initialMedicine);
+				setActiveDropDownValue("");
 			})
 			.catch((err) => {
 				console.log(err);
@@ -101,7 +80,7 @@ const Medicine = () => {
 
 		// check if the type is amount or percentage
 		let price = 0;
-		let subCategory = activeDropDownValue.subCategoryId;
+		let subCategory = activeDropDownValue.subCategoryItem;
 		if (subCategory.MarkUpUnit === "%") {
 			let percentage = 0; // if the type is percentage
 			percentage = subCategory.MarkUp / manufacturerPrice;
@@ -141,6 +120,7 @@ const Medicine = () => {
 		setActiveDropDownValue({
 			...activeDropDownValue,
 			subCategoryId: "",
+			subCategoryItem: "",
 		});
 		setMedicine({ ...medicine, SellingPrice: 0, subCategoryId: 0 });
 	};
@@ -247,8 +227,14 @@ const Medicine = () => {
 								className="form-select form-input"
 								value={activeDropDownValue.subCategoryId}
 								onChange={(event) => {
+									// handle the value for subCategoryId name
+									// and also add the subcategory items
 									let data = parseDropdownValue(event);
-									handleSelectChange(event);
+									setActiveDropDownValue({
+										...activeDropDownValue,
+										subCategoryId: event.target.value,
+										subCategoryItem: data,
+									});
 									setMedicine({ ...medicine, subCategoryId: data.id });
 								}}
 							>
@@ -303,7 +289,6 @@ const Medicine = () => {
 								name="manufacturerId"
 								id="manufacturerId"
 								className="form-select form-input"
-								defaultValue={""}
 								value={activeDropDownValue.manufacturerId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -333,7 +318,6 @@ const Medicine = () => {
 								name="unitId"
 								id="unitId"
 								className="form-select form-input"
-								defaultValue={""}
 								value={activeDropDownValue.unitId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -365,11 +349,10 @@ const Medicine = () => {
 								className="form-select form-input"
 								name="status"
 								id="status"
-								defaultValue={""}
-								value={activeDropDownValue.status}
+								value={status}
 								onChange={(event) => {
 									let data = event.target.value;
-									handleSelectChange(event);
+									setStatus(data);
 									setMedicine({
 										...medicine,
 										Status: data === "Active" ? 1 : 0,
