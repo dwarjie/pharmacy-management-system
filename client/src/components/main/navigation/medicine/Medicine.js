@@ -140,6 +140,13 @@ const Medicine = () => {
 		setMedicine({ ...medicine, SellingPrice: 0, subCategoryId: 0 });
 	};
 
+	// parse the dropdown value into JSON and return it
+	const parseDropdownValue = (event) => {
+		return JSON.parse(
+			event.target[event.target.selectedIndex].getAttribute("data-value")
+		);
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -209,7 +216,6 @@ const Medicine = () => {
 								// set the sub category
 								onChange={(event) => {
 									let data = JSON.parse(event.target.value);
-									console.log(data);
 									setActiveCategory(data);
 								}}
 							>
@@ -227,29 +233,6 @@ const Medicine = () => {
 										</option>
 									))}
 							</select>
-							{/* <div className="dropdown w-auto">
-								<button
-									className="btn dropdown-toggle w-100 form-input"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-									required
-								>
-									{activeDropDownValue.category}
-								</button>
-								<ul className="dropdown-menu w-100">
-									{extraModel.category &&
-										extraModel.category.map((item, index) => (
-											<li
-												className="dropdown-item"
-												key={index}
-												onClick={() => setActiveCategory(item)}
-											>
-												{item.CategoryName}
-											</li>
-										))}
-								</ul>
-							</div> */}
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="subCategoryId">Sub Category:</label>
@@ -259,16 +242,12 @@ const Medicine = () => {
 								className="form-select form-input"
 								value={activeDropDownValue.subCategoryId}
 								onChange={(event) => {
-									let sample = JSON.parse(
-										event.target[event.target.selectedIndex].getAttribute(
-											"data-item"
-										)
-									);
+									let data = parseDropdownValue(event);
 									setActiveDropDownValue({
 										...activeDropDownValue,
-										subCategoryId: sample.SubCategoryName,
+										subCategoryId: data.SubCategoryName,
 									});
-									setMedicine({ ...medicine, subCategoryId: sample.id });
+									setMedicine({ ...medicine, subCategoryId: data.id });
 								}}
 							>
 								<option disabled hidden value="">
@@ -280,43 +259,12 @@ const Medicine = () => {
 											className="dropdown-item"
 											key={index}
 											value={item.SubCategoryName}
-											data-item={JSON.stringify(item)}
+											data-value={JSON.stringify(item)}
 										>
 											{item.SubCategoryName}
 										</option>
 									))}
 							</select>
-							{/* <div className="dropdown w-auto">
-								<button
-									className="btn dropdown-toggle w-100 form-input"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-									required
-								>
-									{activeDropDownValue.subCategoryId.SubCategoryName
-										? activeDropDownValue.subCategoryId.SubCategoryName
-										: activeDropDownValue.subCategoryId}
-								</button>
-								<ul className="dropdown-menu w-100">
-									{subCategory &&
-										subCategory.map((item, index) => (
-											<li
-												className="dropdown-item"
-												key={index}
-												onClick={() => {
-													setActiveDropDownValue({
-														...activeDropDownValue,
-														subCategoryId: item,
-													});
-													setMedicine({ ...medicine, subCategoryId: item.id });
-												}}
-											>
-												{item.SubCategoryName}
-											</li>
-										))}
-								</ul>
-							</div> */}
 						</div>
 					</div>
 					<div className="row mb-3">
@@ -349,101 +297,99 @@ const Medicine = () => {
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label htmlFor="manufacturerId">Manufacturer:</label>
-							{/* <div className="dropdown w-auto">
-								<button
-									className="btn dropdown-toggle w-100 form-input"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								>
-									{activeDropDownValue.manufacturerId}
-								</button>
-								<ul className="dropdown-menu w-100">
-									{extraModel.manufacturer &&
-										extraModel.manufacturer.map((item, index) => (
-											<li
-												className="dropdown-item"
-												key={index}
-												onClick={() => {
-													setActiveDropDownValue({
-														...activeDropDownValue,
-														manufacturerId: item.ManufacturerName,
-													});
-													setMedicine({ ...medicine, manufacturerId: item.id });
-												}}
-											>
-												{item.ManufacturerName}
-											</li>
-										))}
-								</ul>
-							</div> */}
+							<select
+								name="manufacturerId"
+								id="manufacturerId"
+								className="form-select form-input"
+								defaultValue={""}
+								value={activeDropDownValue.manufacturerId}
+								onChange={(event) => {
+									let data = parseDropdownValue(event);
+									setActiveDropDownValue({
+										...activeDropDownValue,
+										manufacturerId: data.ManufacturerName,
+									});
+									setMedicine({ ...medicine, manufacturerId: data.id });
+								}}
+							>
+								<option disabled hidden value="">
+									Select manufacturer
+								</option>
+								{extraModel.manufacturer &&
+									extraModel.manufacturer.map((item, index) => (
+										<option
+											className="dropdown-item"
+											key={index}
+											value={item.ManufacturerName}
+											data-value={JSON.stringify(item)}
+										>
+											{item.ManufacturerName}
+										</option>
+									))}
+							</select>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="unitId">Unit of Measure:</label>
-							{/* <div className="dropdown w-auto">
-								<button
-									className="btn dropdown-toggle w-100 form-input"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								>
-									{activeDropDownValue.unitId}
-								</button>
-								<ul className="dropdown-menu w-100">
-									{extraModel.unit &&
-										extraModel.unit.map((item, index) => (
-											<li
-												className="dropdown-item"
-												key={index}
-												onClick={() => {
-													setActiveDropDownValue({
-														...activeDropDownValue,
-														unitId: item.UnitName,
-													});
-													setMedicine({ ...medicine, unitId: item.id });
-												}}
-											>
-												{item.UnitName}
-											</li>
-										))}
-								</ul>
-							</div> */}
+							<select
+								name="unitId"
+								id="unitId"
+								className="form-select form-input"
+								defaultValue={""}
+								value={activeDropDownValue.unitId}
+								onChange={(event) => {
+									let data = parseDropdownValue(event);
+									setActiveDropDownValue({
+										...activeDropDownValue,
+										unitId: data.UnitName,
+									});
+									setMedicine({ ...medicine, unitId: data.id });
+								}}
+							>
+								<option disabled hidden value="">
+									Select Unit
+								</option>
+								{extraModel.unit &&
+									extraModel.unit.map((item, index) => (
+										<option
+											className="dropdown-item"
+											key={index}
+											value={item.UnitName}
+											data-value={JSON.stringify(item)}
+										>
+											{item.UnitName}
+										</option>
+									))}
+							</select>
 						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Status">Status:</label>
-							{/* <div className="dropdown w-auto">
-								<button
-									className="btn dropdown-toggle w-100 form-input"
-									type="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								>
-									{activeDropDownValue.status}
-								</button>
-								<ul className="dropdown-menu w-100">
-									{statusList &&
-										statusList.map((item, index) => (
-											<li
-												className="dropdown-item"
-												key={index}
-												onClick={() => {
-													setActiveDropDownValue({
-														...activeDropDownValue,
-														status: item,
-													});
-													setMedicine({
-														...medicine,
-														Status: item === "Active" ? 1 : 0,
-													});
-												}}
-											>
-												{item}
-											</li>
-										))}
-								</ul>
-							</div> */}
+							<select
+								className="form-select form-input"
+								name="Status"
+								id="Status"
+								defaultValue={""}
+								value={activeDropDownValue.status}
+								onChange={(event) => {
+									let data = event.target.value;
+									setActiveDropDownValue({
+										...activeDropDownValue,
+										status: data,
+									});
+									setMedicine({
+										...medicine,
+										Status: data === "Active" ? 1 : 0,
+									});
+								}}
+							>
+								{statusList &&
+									statusList.map((item, index) => (
+										<option className="dropdown-item" key={index} value={item}>
+											{item}
+										</option>
+									))}
+							</select>
 						</div>
 					</div>
 				</form>
