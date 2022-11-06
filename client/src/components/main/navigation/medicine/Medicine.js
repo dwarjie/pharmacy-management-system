@@ -131,6 +131,11 @@ const Medicine = () => {
 		setMedicine({ ...medicine, [name]: value });
 	};
 
+	const handleSelectChange = (event) => {
+		const { name, value } = event.target;
+		setActiveDropDownValue({ ...activeDropDownValue, [name]: value });
+	};
+
 	// reset sub categories and selling price once category changed
 	const resetSubCategory = () => {
 		setActiveDropDownValue({
@@ -243,10 +248,7 @@ const Medicine = () => {
 								value={activeDropDownValue.subCategoryId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										subCategoryId: data.SubCategoryName,
-									});
+									handleSelectChange(event);
 									setMedicine({ ...medicine, subCategoryId: data.id });
 								}}
 							>
@@ -305,10 +307,7 @@ const Medicine = () => {
 								value={activeDropDownValue.manufacturerId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										manufacturerId: data.ManufacturerName,
-									});
+									handleSelectChange(event);
 									setMedicine({ ...medicine, manufacturerId: data.id });
 								}}
 							>
@@ -338,10 +337,7 @@ const Medicine = () => {
 								value={activeDropDownValue.unitId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										unitId: data.UnitName,
-									});
+									handleSelectChange(event);
 									setMedicine({ ...medicine, unitId: data.id });
 								}}
 							>
@@ -364,19 +360,16 @@ const Medicine = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
-							<label htmlFor="Status">Status:</label>
+							<label htmlFor="status">Status:</label>
 							<select
 								className="form-select form-input"
-								name="Status"
-								id="Status"
+								name="status"
+								id="status"
 								defaultValue={""}
 								value={activeDropDownValue.status}
 								onChange={(event) => {
 									let data = event.target.value;
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										status: data,
-									});
+									handleSelectChange(event);
 									setMedicine({
 										...medicine,
 										Status: data === "Active" ? 1 : 0,
