@@ -15,6 +15,18 @@ const Medicine = (props) => {
 	const [subCategory, setSubCategory] = useState(props.subCategory);
 
 	useEffect(() => {
+		setMedicine(props.initialMedicine);
+		setActiveDropDownValue(props.initialDropDownValue);
+		setStatus(props.status);
+		setSubCategory(props.subCategory);
+	}, [
+		props.initialMedicine,
+		props.initialDropDownValue,
+		props.status,
+		props.subCategory,
+	]);
+
+	useEffect(() => {
 		getOtherModel();
 	}, []);
 
@@ -69,7 +81,7 @@ const Medicine = (props) => {
 	// this function will get the markup amount
 	// then use the formula Manufacturer price + markup amount in order to compute for selling price
 	const setSellingPrice = () => {
-		// check if there is a chosen subCategory
+		// check if props already have SellingPrice
 		let price = computeSellingPrice();
 		setMedicine({ ...medicine, SellingPrice: price });
 	};
@@ -135,7 +147,7 @@ const Medicine = (props) => {
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Add Medicine</h4>
+				<h4>{props.title}</h4>
 				<hr />
 			</div>
 			<div className="p-3">
@@ -197,16 +209,22 @@ const Medicine = (props) => {
 								name="category"
 								id="category"
 								className="form-select form-input"
-								defaultValue={""}
+								defaultValue={activeDropDownValue.category}
 								// set the sub category
 								onChange={(event) => {
 									let data = JSON.parse(event.target.value);
 									setActiveCategory(data);
 								}}
 							>
-								<option disabled={true} hidden value="">
-									Select category
-								</option>
+								{/* check if props category has value
+									if yes, don't show the default value */}
+								{props.initialDropDownValue.category === "" ? (
+									<option disabled={true} hidden value="">
+										Select category
+									</option>
+								) : (
+									""
+								)}
 								{extraModel.category &&
 									extraModel.category.map((item, index) => (
 										<option
@@ -238,9 +256,16 @@ const Medicine = (props) => {
 									setMedicine({ ...medicine, subCategoryId: data.id });
 								}}
 							>
-								<option disabled hidden value="">
-									Select Sub category
-								</option>
+								{/* check if props subCategory has value
+									if yes, don't show the default value */}
+								{props.subCategory === "" ||
+								activeDropDownValue.subCategoryId === "" ? (
+									<option disabled={true} hidden value="">
+										Select Sub category
+									</option>
+								) : (
+									""
+								)}
 								{subCategory &&
 									subCategory.map((item, index) => (
 										<option

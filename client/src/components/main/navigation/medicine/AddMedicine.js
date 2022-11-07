@@ -26,6 +26,7 @@ const AddMedicine = () => {
 
 	return (
 		<Medicine
+			title={"Add Medicine"}
 			initialMedicine={initialMedicine}
 			initialDropDownValue={initialDropDownValue}
 			status={"Active"}

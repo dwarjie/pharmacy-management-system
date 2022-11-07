@@ -22,12 +22,18 @@ const getSubCategory = (data) => {
 	return http.post(`/category/sub-category`, data);
 };
 
+// for retrieving category when updating medicine
+const getOneCategory = (id, data) => {
+	return http.put(`/medicine/${id}`, data);
+};
+
 const CategoryService = {
 	getAllCategory,
 	createCategory,
 	updateCategory,
 	deleteCategory,
 	getSubCategory,
+	getOneCategory,
 };
 
 export default CategoryService;
