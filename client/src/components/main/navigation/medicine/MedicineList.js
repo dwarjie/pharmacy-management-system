@@ -34,6 +34,17 @@ const MedicineList = () => {
 		});
 	};
 
+	const deleteMedicine = (medicine) => {
+		MedicineService.deleteMedicine(medicine)
+			.then((response) => {
+				console.log(response.data);
+				getAllMedicine();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -77,7 +88,10 @@ const MedicineList = () => {
 											/>
 										</span>
 										<span className="px-2">
-											<MdDelete className="icon-size-sm cursor-pointer" />
+											<MdDelete
+												className="icon-size-sm cursor-pointer"
+												onClick={() => deleteMedicine(medicine)}
+											/>
 										</span>
 									</td>
 								</tr>

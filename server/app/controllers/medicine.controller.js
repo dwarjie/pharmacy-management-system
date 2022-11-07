@@ -66,6 +66,33 @@ exports.update = (req, res) => {
 		});
 };
 
+// delete a medicine
+exports.delete = (req, res) => {
+	const id = req.body.id;
+
+	Medicine.destroy({
+		where: {
+			id: id,
+		},
+	})
+		.then((row) => {
+			if (row != 1) {
+				res.send({
+					message: `Cannot delete medicine ${id}`,
+				});
+			}
+
+			res.send({
+				message: `medicine was deleted successfully`,
+			});
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: `Error deleting medicine ${id}`,
+			});
+		});
+};
+
 // this function will get the
 // category and subCategory
 // manufacturer

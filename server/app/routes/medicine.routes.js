@@ -8,6 +8,7 @@ module.exports = (app) => {
 	router.get("/medicine-list", medicine.findAll);
 	router.get("/", medicine.getOtherModel);
 	router.post("/", medicine.create);
+	router.put("/medicine-list", medicine.delete);
 
 	// retrieve category for updating medicine
 	router.put("/:id", category.findOne);

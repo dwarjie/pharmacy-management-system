@@ -10,6 +10,10 @@ const getAllMedicine = () => {
 	return http.get("/medicine/medicine-list");
 };
 
+const deleteMedicine = (data) => {
+	return http.put("/medicine/medicine-list", data);
+};
+
 // get data from category, manufacturer, and unit
 const getOtherModel = () => {
 	return http.get("/medicine");
@@ -17,6 +21,7 @@ const getOtherModel = () => {
 
 const MedicineService = {
 	createMedicine,
+	deleteMedicine,
 	getAllMedicine,
 	getOtherModel,
 };
