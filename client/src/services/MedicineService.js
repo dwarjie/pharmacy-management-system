@@ -6,6 +6,10 @@ const createMedicine = (data) => {
 	return http.post("/medicine", data);
 };
 
+const updateMedicine = (id, data) => {
+	return http.put(`/medicine/${id}`, data);
+};
+
 const getAllMedicine = () => {
 	return http.get("/medicine/medicine-list");
 };
@@ -21,6 +25,7 @@ const getOtherModel = () => {
 
 const MedicineService = {
 	createMedicine,
+	updateMedicine,
 	deleteMedicine,
 	getAllMedicine,
 	getOtherModel,

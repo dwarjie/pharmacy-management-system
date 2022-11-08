@@ -1,5 +1,6 @@
 // this module is responsible for adding new medicines
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
 
 const Medicine = (props) => {
@@ -25,6 +26,8 @@ const Medicine = (props) => {
 		props.status,
 		props.subCategory,
 	]);
+
+	let navigate = useNavigate();
 
 	useEffect(() => {
 		getOtherModel();
@@ -61,6 +64,18 @@ const Medicine = (props) => {
 				// reset the form
 				setMedicine(props.initialMedicine);
 				setActiveDropDownValue("");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// update medicine
+	const updateMedicine = () => {
+		MedicineService.updateMedicine(medicine.id, medicine)
+			.then((response) => {
+				console.log(response.data);
+				navigate(-1);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -396,9 +411,11 @@ const Medicine = (props) => {
 				</form>
 				<button
 					className="btn btn-primary simple-shadow me-3"
-					onClick={createProduct}
+					onClick={() =>
+						props.mode === "update" ? updateMedicine() : createProduct()
+					}
 				>
-					Save
+					{props.mode === "update" ? "Update" : "Save"}
 				</button>
 			</div>
 		</div>

@@ -44,7 +44,11 @@ const UpdateMedicine = () => {
 
 	// get the category data based from oldMedicine category id
 	const getOneCategory = () => {
-		CategoryService.getOneCategory(oldMedicine.id, oldMedicine.subCategory)
+		console.log(oldMedicine);
+		CategoryService.getOneCategory(
+			oldMedicine.id,
+			oldMedicine.subCategory.categoryId
+		)
 			.then((response) => {
 				categoryData = response.data;
 				setDropDownValue({
@@ -75,6 +79,7 @@ const UpdateMedicine = () => {
 			initialDropDownValue={dropDownValue}
 			status={checkStatus}
 			subCategory={subCategory}
+			mode={"update"}
 		/>
 	);
 };

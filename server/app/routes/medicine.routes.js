@@ -5,13 +5,14 @@ module.exports = (app) => {
 	const category = require("../controllers/category.controller");
 	var router = require("express").Router();
 
+	router.post("/", medicine.create);
+	router.put("/:id", medicine.update);
 	router.get("/medicine-list", medicine.findAll);
 	router.get("/", medicine.getOtherModel);
-	router.post("/", medicine.create);
 	router.put("/medicine-list", medicine.delete);
 
 	// retrieve category for updating medicine
-	router.put("/:id", category.findOne);
+	router.get("/:id", category.findOne);
 
 	app.use("/api/medicine", router);
 };

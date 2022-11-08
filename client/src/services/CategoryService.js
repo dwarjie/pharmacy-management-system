@@ -23,8 +23,8 @@ const getSubCategory = (data) => {
 };
 
 // for retrieving category when updating medicine
-const getOneCategory = (id, data) => {
-	return http.put(`/medicine/${id}`, data);
+const getOneCategory = (id, categoryId) => {
+	return http.get(`/medicine/${id}?categoryId=${categoryId}`);
 };
 
 const CategoryService = {

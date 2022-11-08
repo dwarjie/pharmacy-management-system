@@ -40,7 +40,7 @@ exports.findAll = (req, res) => {
 
 // Retrieve a single category
 exports.findOne = (req, res) => {
-	const id = req.body.categoryId;
+	const id = req.query.categoryId;
 
 	Category.findByPk(id, { include: ["subCategory"] })
 		.then((data) => {
