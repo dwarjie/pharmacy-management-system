@@ -19,14 +19,14 @@ const AddHandler = () => {
 								required
 							/>
 						</div>
-						<div className="col-sm-12 col-md">
+						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="middleName">Middle Name:</label>
 							<input
 								type="text"
 								id="middleName"
 								className="form-control form-input"
 							/>
-						</div>
+						</div> */}
 						<div className="col-sm-12 col-md">
 							<label htmlFor="lastName">Last Name:</label>
 							<input
@@ -76,14 +76,14 @@ const AddHandler = () => {
 								className="form-control form-input"
 							/>
 						</div>
-						<div className="col-sm-12 col-md">
+						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="state">State:</label>
 							<input
 								type="text"
 								id="state"
 								className="form-control form-input"
 							/>
-						</div>
+						</div> */}
 						<div className="col-sm-12 col-md">
 							<label htmlFor="zip">ZIP:</label>
 							<input type="text" id="zip" className="form-control form-input" />
@@ -100,16 +100,16 @@ const AddHandler = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="email">Email:</label>
+							<label htmlFor="mobile">Mobile:</label>
 							<input
-								type="email"
-								id="email"
+								type="text"
+								id="mobile"
 								className="form-control form-input"
 							/>
 						</div>
 					</div>
 					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
+						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="phone">Phone:</label>
 							<input
 								type="text"
@@ -117,12 +117,12 @@ const AddHandler = () => {
 								className="form-control form-input"
 								required
 							/>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="mobile">Mobile:</label>
+						</div> */}
+						<div className="col-sm-12 col-md-6">
+							<label htmlFor="email">Email:</label>
 							<input
-								type="text"
-								id="mobile"
+								type="email"
+								id="email"
 								className="form-control form-input"
 							/>
 						</div>

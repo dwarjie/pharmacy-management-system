@@ -28,6 +28,7 @@ db.discount = require("./discount.model")(sequelize, Sequelize);
 db.vat = require("./vat.model")(sequelize, Sequelize);
 db.medicine = require("./medicine.model")(sequelize, Sequelize);
 db.patient = require("./patient.model")(sequelize, Sequelize);
+db.handler = require("./handler.model")(sequelize, Sequelize);
 
 // define model relationships
 
