@@ -56,6 +56,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
+		FirstVisit: {
+			type: Sequelize.DATE,
+			allowNull: false,
+		},
 		Mobile: {
 			type: Sequelize.STRING,
 			allowNull: false,
@@ -64,7 +68,7 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		Remarks: {
+		Note: {
 			type: Sequelize.STRING,
 			allowNull: true,
 		},
