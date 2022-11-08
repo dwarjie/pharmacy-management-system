@@ -27,6 +27,7 @@ db.subCategory = require("./subCategory.model")(sequelize, Sequelize);
 db.discount = require("./discount.model")(sequelize, Sequelize);
 db.vat = require("./vat.model")(sequelize, Sequelize);
 db.medicine = require("./medicine.model")(sequelize, Sequelize);
+db.patient = require("./patient.model")(sequelize, Sequelize);
 
 // define model relationships
 
