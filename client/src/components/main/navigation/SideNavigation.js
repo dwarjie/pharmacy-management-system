@@ -155,7 +155,7 @@ const SideNavigation = () => {
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
 								<Link
-									to={"/pharmacy/handler/add-handler"}
+									to={"/pharmacy/maintenance/handler"}
 									className="dropdown-item"
 								>
 									Add User
@@ -163,7 +163,7 @@ const SideNavigation = () => {
 							</li>
 							<li>
 								<Link
-									to={"/pharmacy/handler/handler-list"}
+									to={"/pharmacy/maintenance/handler-list"}
 									className="dropdown-item"
 								>
 									Handler List

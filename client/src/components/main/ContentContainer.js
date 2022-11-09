@@ -83,8 +83,8 @@ const ContentContainer = (props) => {
 						element={<UpdateDiscount />}
 					/>
 					<Route path="/maintenance/vat" element={<VAT />} />
-					<Route path="/handler/add-handler" element={<AddHandler />} />
-					<Route path="/handler/handler-list" element={<HandlerList />} />
+					<Route path="/maintenance/handler" element={<AddHandler />} />
+					<Route path="/maintenance/handler-list" element={<HandlerList />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
 					<Route path="/utilities/user-list" element={<UserList />} />
 				</Routes>
