@@ -16,18 +16,7 @@ const AddHandler = () => {
 		Email: "",
 	};
 
-	// set onClick function for button to trigger
-	const createHandler = (data) => {
-		console.log(data);
-	};
-
-	return (
-		<Handler
-			title="Add Handlers"
-			initialHandler={initialHandler}
-			createHandler={createHandler}
-		/>
-	);
+	return <Handler title="Add Handlers" initialHandler={initialHandler} />;
 };
 
 export default AddHandler;

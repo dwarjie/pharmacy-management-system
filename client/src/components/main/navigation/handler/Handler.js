@@ -1,11 +1,25 @@
 // this module is responsible for adding new NCM/Doctors
 import { useEffect, useState } from "react";
+import HandlerService from "../../../../services/HandlerService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 
 const Handler = (props) => {
-	const { title, mode, initialHandler, createHandler } = props;
+	const { title, mode, initialHandler } = props;
 
 	const [handler, setHandler] = useState(initialHandler);
+
+	// set onClick function for button to trigger
+	const createHandler = (data) => {
+		console.log(data);
+		HandlerService.createHandler(data)
+			.then((response) => {
+				console.log(response.data);
+				setHandler(initialHandler);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const handleChangeEvent = (event) => {
 		const { name, value } = event.target;
@@ -61,7 +75,7 @@ const Handler = (props) => {
 								name="Category"
 								id="Category"
 								className="form-select form-input"
-								defaultValue={handler.Category}
+								value={handler.Category}
 								onChange={handleChangeEvent}
 								required
 							>
@@ -76,7 +90,7 @@ const Handler = (props) => {
 								name="Sex"
 								id="Sex"
 								className="form-select form-input"
-								defaultValue={handler.Sex}
+								value={handler.Sex}
 								onChange={handleChangeEvent}
 								required
 							>
