@@ -7,7 +7,7 @@ const createHandler = (data) => {
 };
 
 const getAllHandler = () => {
-	return http.get("/handler-list");
+	return http.get("/handler/handler-list");
 };
 
 const updateHandler = (id, data) => {

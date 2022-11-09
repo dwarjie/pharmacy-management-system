@@ -4,7 +4,7 @@ module.exports = (app) => {
 	var router = require("express").Router();
 
 	router.post("/", handler.create);
-	router.get("/", handler.findAll);
+	router.get("/handler-list", handler.findAll);
 	router.put("/:id", handler.update);
 	router.delete("/:id", handler.delete);
 

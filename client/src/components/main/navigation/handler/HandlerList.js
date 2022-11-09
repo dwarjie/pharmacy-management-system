@@ -1,6 +1,29 @@
 // this module is responsible for listing all the handlers
+import { useState, useEffect } from "react";
+import HandlerService from "../../../../services/HandlerService";
+
+// icons
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const HandlerList = () => {
+	const [handlers, setHandlers] = useState([]);
+
+	useEffect(() => {
+		getAllHandler();
+	}, []);
+
+	const getAllHandler = () => {
+		HandlerService.getAllHandler()
+			.then((response) => {
+				console.log(response.data);
+				setHandlers(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -12,6 +35,28 @@ const HandlerList = () => {
 					<label htmlFor="handler-search">Search:</label>
 					<input type="text" className="form-control" id="handler-search" />
 				</form>
+				<table className="table">
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Category</th>
+							<th scope="col">Address</th>
+							<th scope="col">Mobile</th>
+							<th scope="col">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{handlers &&
+							handlers.map((handler, index) => (
+								<tr key={index}>
+									<td>{`${handler.FirstName} ${handler.LastName}`}</td>
+									<td>{handler.Category}</td>
+									<td>{handler.Address}</td>
+									<td>{handler.Mobile}</td>
+								</tr>
+							))}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);
