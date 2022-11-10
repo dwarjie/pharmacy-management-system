@@ -14,8 +14,8 @@ const getAllMedicine = () => {
 	return http.get("/medicine/medicine-list");
 };
 
-const deleteMedicine = (data) => {
-	return http.put("/medicine/medicine-list", data);
+const deleteMedicine = (id) => {
+	return http.delete(`/medicine/medicine-list?medicineId=${id}`);
 };
 
 // get data from category, manufacturer, and unit

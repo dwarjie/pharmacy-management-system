@@ -35,7 +35,7 @@ const MedicineList = () => {
 	};
 
 	const deleteMedicine = (medicine) => {
-		MedicineService.deleteMedicine(medicine)
+		MedicineService.deleteMedicine(medicine.id)
 			.then((response) => {
 				console.log(response.data);
 				getAllMedicine();

@@ -68,7 +68,7 @@ exports.update = (req, res) => {
 
 // delete a medicine
 exports.delete = (req, res) => {
-	const id = req.body.id;
+	const id = req.query.medicineId;
 
 	Medicine.destroy({
 		where: {

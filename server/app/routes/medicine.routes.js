@@ -9,7 +9,7 @@ module.exports = (app) => {
 	router.put("/:id", medicine.update);
 	router.get("/medicine-list", medicine.findAll);
 	router.get("/", medicine.getOtherModel);
-	router.put("/medicine-list", medicine.delete);
+	router.delete("/medicine-list", medicine.delete);
 
 	// retrieve category for updating medicine
 	router.get("/:id", category.findOne);
