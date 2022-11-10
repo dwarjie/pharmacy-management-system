@@ -1,20 +1,33 @@
 // this module is responsible for adding new NCM/Doctors
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HandlerService from "../../../../services/HandlerService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 
 const Handler = (props) => {
 	const { title, mode, initialHandler } = props;
+	const navigate = useNavigate();
 
 	const [handler, setHandler] = useState(initialHandler);
 
 	// set onClick function for button to trigger
-	const createHandler = (data) => {
-		console.log(data);
-		HandlerService.createHandler(data)
+	const createHandler = () => {
+		HandlerService.createHandler(handler)
 			.then((response) => {
 				console.log(response.data);
 				setHandler(initialHandler);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// update handler
+	const updateHandler = () => {
+		HandlerService.updateHandler(handler.id, handler)
+			.then((response) => {
+				console.log(response.data);
+				navigate(-1);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -183,7 +196,9 @@ const Handler = (props) => {
 				</form>
 				<button
 					className="btn btn-primary simple-shadow me-3"
-					onClick={() => createHandler(handler)}
+					onClick={() =>
+						mode === "update" ? updateHandler() : createHandler()
+					}
 				>
 					{mode === "update" ? "Update" : "Save"}
 				</button>

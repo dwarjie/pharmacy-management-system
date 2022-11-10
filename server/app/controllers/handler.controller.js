@@ -46,7 +46,7 @@ exports.update = (req, res) => {
 
 	Handler.update(req.body, { where: { id: id } })
 		.then((row) => {
-			if (row !== 1) {
+			if (row != 1) {
 				res.send({
 					message: `Cannot update handler ${id}`,
 				});

@@ -1,5 +1,6 @@
 // this module is responsible for listing all the handlers
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import HandlerService from "../../../../services/HandlerService";
 
 // icons
@@ -8,6 +9,7 @@ import { MdDelete } from "react-icons/md";
 
 const HandlerList = () => {
 	const [handlers, setHandlers] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		getAllHandler();
@@ -22,6 +24,14 @@ const HandlerList = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const updateHandler = (handler) => {
+		navigate(`/pharmacy/maintenance/handler/${handler.id}`, {
+			state: {
+				handler: handler,
+			},
+		});
 	};
 
 	return (
@@ -55,7 +65,10 @@ const HandlerList = () => {
 									<td>{handler.Mobile}</td>
 									<td>
 										<span className="px-2">
-											<FaEdit className="icon-size-sm cursor-pointer" />
+											<FaEdit
+												className="icon-size-sm cursor-pointer"
+												onClick={() => updateHandler(handler)}
+											/>
 										</span>
 										<span className="px-2">
 											<MdDelete className="icon-size-sm cursor-pointer" />

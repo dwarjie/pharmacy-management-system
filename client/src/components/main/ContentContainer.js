@@ -36,6 +36,7 @@ import AddUser from "./navigation/user/AddUser";
 import UserList from "./navigation/user/UserList";
 // Handler Tab
 import AddHandler from "./navigation/handler/AddHandler";
+import UpdateHandler from "./navigation/handler/UpdateHandler";
 import HandlerList from "./navigation/handler/HandlerList";
 
 const ContentContainer = (props) => {
@@ -88,6 +89,7 @@ const ContentContainer = (props) => {
 						path="/maintenance/handler/handler-list"
 						element={<HandlerList />}
 					/>
+					<Route path="/maintenance/handler/:id" element={<UpdateHandler />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
 					<Route path="/utilities/user-list" element={<UserList />} />
 				</Routes>
