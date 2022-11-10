@@ -28,7 +28,7 @@ const AddSubCategory = () => {
 
 	// get all the sub categories
 	const getSubCategory = () => {
-		CategoryService.getSubCategory(subCategory)
+		CategoryService.getSubCategory(subCategory.categoryId)
 			.then((response) => {
 				setSubCategories(response.data.subCategory);
 				console.log(response.data.subCategory);

@@ -53,6 +53,14 @@ const HandlerList = () => {
 									<td>{handler.Category}</td>
 									<td>{handler.Address}</td>
 									<td>{handler.Mobile}</td>
+									<td>
+										<span className="px-2">
+											<FaEdit className="icon-size-sm cursor-pointer" />
+										</span>
+										<span className="px-2">
+											<MdDelete className="icon-size-sm cursor-pointer" />
+										</span>
+									</td>
 								</tr>
 							))}
 					</tbody>

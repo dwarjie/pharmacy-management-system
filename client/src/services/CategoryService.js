@@ -18,8 +18,8 @@ const deleteCategory = (id) => {
 	return http.delete(`/category/${id}`);
 };
 
-const getSubCategory = (data) => {
-	return http.post(`/category/sub-category`, data);
+const getSubCategory = (categoryId) => {
+	return http.post(`/category/sub-category?categoryId=${categoryId}`);
 };
 
 // for retrieving category when updating medicine
