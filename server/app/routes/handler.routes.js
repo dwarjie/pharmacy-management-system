@@ -6,7 +6,7 @@ module.exports = (app) => {
 	router.post("/", handler.create);
 	router.get("/handler-list", handler.findAll);
 	router.put("/:id", handler.update);
-	router.delete("/:id", handler.delete);
+	router.delete("/handler-list", handler.delete);
 
 	app.use("/api/handler", router);
 };

@@ -34,6 +34,17 @@ const HandlerList = () => {
 		});
 	};
 
+	const deleteHandler = (handler) => {
+		HandlerService.deleteHandler(handler.id)
+			.then((response) => {
+				console.log(response.data);
+				getAllHandler();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -71,7 +82,10 @@ const HandlerList = () => {
 											/>
 										</span>
 										<span className="px-2">
-											<MdDelete className="icon-size-sm cursor-pointer" />
+											<MdDelete
+												className="icon-size-sm cursor-pointer"
+												onClick={() => deleteHandler(handler)}
+											/>
 										</span>
 									</td>
 								</tr>

@@ -65,13 +65,13 @@ exports.update = (req, res) => {
 
 // delete handler
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const id = req.query.handlerId;
 
 	Handler.destroy({ where: { id: id } })
 		.then((row) => {
 			if (row !== 1) {
 				res.send({
-					message: `Cannot delet handler ${id}`,
+					message: `Cannot delete handler ${id}`,
 				});
 			}
 

@@ -14,10 +14,15 @@ const updateHandler = (id, data) => {
 	return http.put(`/handler/${id}`, data);
 };
 
+const deleteHandler = (id) => {
+	return http.delete(`/handler/handler-list?handlerId=${id}`);
+};
+
 const HandlerService = {
 	createHandler,
 	getAllHandler,
 	updateHandler,
+	deleteHandler,
 };
 
 export default HandlerService;
