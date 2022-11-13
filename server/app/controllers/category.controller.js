@@ -11,10 +11,23 @@ exports.create = (req, res) => {
 		CategoryName: req.body.CategoryName,
 	};
 
-	// save the category in the database
-	Category.create(category)
-		.then((data) => {
-			res.send(data);
+	// check if category already exists,
+	// else create a new category
+	Category.findOrCreate({
+		where: { ...category },
+		defaults: { ...category },
+	})
+		.then((data, created) => {
+			if (created) {
+				res.send({
+					message: `Successfully created category`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Category already exists`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({
@@ -22,6 +35,16 @@ exports.create = (req, res) => {
 					err.message || "Some error occurred while creating the category.",
 			});
 		});
+	// Category.create(category)
+	// 	.then((data) => {
+	// 		res.send(data);
+	// 	})
+	// 	.catch((err) => {
+	// 		res.status(500).send({
+	// 			message:
+	// 				err.message || "Some error occurred while creating the category.",
+	// 		});
+	// 	});
 };
 
 //  Retrieve all categories
