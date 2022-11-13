@@ -6,6 +6,7 @@ import CategoryService from "../../../../services/CategoryService";
 // Icons
 import { FaEdit } from "react-icons/fa";
 import { MdOutlineAddBox } from "react-icons/md";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const Category = () => {
 	// initial state for a category when creating new category
@@ -37,6 +38,9 @@ const Category = () => {
 
 	// create a new category
 	const createCategory = () => {
+		// confirm the user if they want to proceed
+		if (!AlertPrompt()) return;
+
 		let data = {
 			CategoryName: category.CategoryName,
 		};

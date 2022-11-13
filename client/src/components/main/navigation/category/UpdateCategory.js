@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import CategoryService from "../../../../services/CategoryService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const UpdateCategory = () => {
 	const initialCategory = {
@@ -25,7 +26,6 @@ const UpdateCategory = () => {
 
 	// update the current category
 	const updateCategory = () => {
-		console.log(newCategory);
 		CategoryService.updateCategory(newCategory.id, newCategory)
 			.then((response) => {
 				console.log(response.data);
@@ -40,6 +40,9 @@ const UpdateCategory = () => {
 
 	// delete the category
 	const deleteCategory = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		CategoryService.deleteCategory(newCategory.id)
 			.then((response) => {
 				console.log(response.data);
