@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DiscountService from "../../../../services/DiscountService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -24,6 +25,9 @@ const Discount = () => {
 
 	// add new discount
 	const createDiscount = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		let data = {
 			DiscountName: newDiscount.DiscountName,
 			DiscountAmount: newDiscount.DiscountAmount,

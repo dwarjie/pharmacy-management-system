@@ -12,9 +12,23 @@ exports.create = (req, res) => {
 		DiscountType: req.body.DiscountType,
 	};
 
-	Discount.create(discount)
-		.then((data) => {
-			res.send(data);
+	// check if discount already exists
+	// else create a new Discount
+	Discount.findOrCreate({
+		where: { DiscountName: discount.DiscountName },
+		defaults: { ...discount },
+	})
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Record already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({

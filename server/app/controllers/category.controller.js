@@ -1,8 +1,8 @@
 // This module contains the category controllers
-
 const db = require("../models");
 const { QueryTypes } = db.Sequelize;
 const Category = db.category;
+const duplicate = require("../util/CheckDuplicate");
 
 // Create a new category
 exports.create = (req, res) => {
@@ -79,14 +79,19 @@ exports.update = async (req, res) => {
 
 	// check if category already exists before updating
 	try {
-		row = await db.sequelize.query(
-			`SELECT COUNT(*) AS count FROM categories WHERE CategoryName = "${req.body.CategoryName}"`
+		// row = await db.sequelize.query(
+		// 	`SELECT COUNT(*) AS count FROM categories WHERE CategoryName = "${req.body.CategoryName}"`
+		// );
+		row = await duplicate.checkDuplicate(
+			"categories",
+			"CategoryName",
+			req.body.CategoryName
 		);
 	} catch (err) {
 		console.log(err);
 	}
 
-	// if row is !== 0, category does not exist yet
+	// if row is == 0, category does not exist yet
 	if (row[0][0].count == 0) {
 		Category.update(req.body, { where: { id: id } })
 			.then((row) => {
