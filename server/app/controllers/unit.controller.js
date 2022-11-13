@@ -2,6 +2,7 @@
 
 const db = require("../models");
 const Unit = db.unit;
+const duplicate = require("../util/CheckDuplicate");
 
 // Create a new unit
 exports.create = (req, res) => {
@@ -10,10 +11,23 @@ exports.create = (req, res) => {
 		UnitName: req.body.UnitName,
 	};
 
-	// save the unit in the database
-	Unit.create(unit)
-		.then((data) => {
-			res.send(data);
+	// check if unit already
+	// else create a new unit
+	Unit.findOrCreate({
+		where: { ...unit },
+		defaults: { ...unit },
+	})
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Record already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({
@@ -57,27 +71,46 @@ exports.findOne = (req, res) => {
 };
 
 // Update a single unit
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = req.params.id;
+	let row = 0;
 
-	Unit.update(req.body, { where: { id: id } })
-		.then((row) => {
-			// check if affected row is not equals to 1
-			if (row != 1) {
-				res.send({
-					message: `Cannot update unit ${id}`,
+	// check if unit already exists before updating
+	try {
+		row = await duplicate.checkDuplicate(
+			"units",
+			"UnitName",
+			req.body.UnitName
+		);
+	} catch (err) {
+		console.log(err);
+	}
+
+	// if row == 0, unit does not exists yet
+	if (row[0][0].count == 0) {
+		Unit.update(req.body, { where: { id: id } })
+			.then((row) => {
+				// check if affected row is not equals to 1
+				if (row == 1) {
+					res.send({
+						message: `Updated successfully.`,
+					});
+				} else {
+					res.send({
+						message: `Cannot update unit.`,
+					});
+				}
+			})
+			.catch((err) => {
+				res.status(500).send({
+					message: `Error updating unit ${id}`,
 				});
-			}
-
-			res.send({
-				message: `Unit was updated successfully`,
 			});
-		})
-		.catch((err) => {
-			res.status(500).send({
-				message: `Error updating unit ${id}`,
-			});
+	} else {
+		res.send({
+			message: `Record already exists.`,
 		});
+	}
 };
 
 // Delete a unit

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const UnitList = () => {
 	const initialUnit = {
@@ -23,6 +24,9 @@ const UnitList = () => {
 
 	// update the unit
 	const updateUnitOfMeasure = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		UnitOfMeasureService.updateUnitOfMeasure(unit.id, unit)
 			.then((response) => {
 				console.log(response.data);

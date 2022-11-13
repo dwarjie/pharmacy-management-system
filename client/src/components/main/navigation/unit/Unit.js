@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icon
 import { FaEdit } from "react-icons/fa";
@@ -35,6 +36,9 @@ const AddUnit = () => {
 
 	// add a new unit
 	const createUnitOfMeasure = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		let data = {
 			UnitName: newUnit.UnitName,
 		};
@@ -51,6 +55,9 @@ const AddUnit = () => {
 
 	// delete the unit
 	const deleteUnitOfMeasure = (unit) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		UnitOfMeasureService.deleteUnitOfMeasure(unit.id)
 			.then((response) => {
 				console.log(response.data);
