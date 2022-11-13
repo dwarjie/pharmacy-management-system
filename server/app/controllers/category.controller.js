@@ -17,15 +17,15 @@ exports.create = (req, res) => {
 		where: { ...category },
 		defaults: { ...category },
 	})
-		.then((data, created) => {
+		.then(([data, created]) => {
 			if (created) {
 				res.send({
-					message: `Successfully created category`,
+					message: `Created successfully.`,
 					data,
 				});
 			} else {
 				res.send({
-					message: `Category already exists`,
+					message: `Record already exists.`,
 				});
 			}
 		})

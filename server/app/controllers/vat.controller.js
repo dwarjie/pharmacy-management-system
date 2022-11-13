@@ -10,9 +10,24 @@ exports.create = (req, res) => {
 		VatAmount: req.body.VatAmount,
 	};
 
-	VAT.create(vat)
-		.then((data) => {
-			res.send(data);
+	// check if vat already exists,
+	// else create a new vat
+	VAT.findOrCreate({
+		where: { VatName: vat.VatName },
+		defaults: { ...vat },
+	})
+		.then(([data, created]) => {
+			console.log(created);
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Record already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({

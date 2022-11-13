@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import VatService from "../../../../services/VatService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { MdDelete } from "react-icons/md";
@@ -23,11 +24,13 @@ const VAT = () => {
 
 	// create a new VAT
 	const createVAT = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		let data = {
 			VatName: newVAT.VatName,
 			VatAmount: newVAT.VatAmount,
 		};
-
 		VatService.createVAT(data)
 			.then((response) => {
 				console.log(response.data);
@@ -51,6 +54,9 @@ const VAT = () => {
 	};
 
 	const deleteVAT = (vat) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		let data = {
 			id: vat.id,
 		};
@@ -101,7 +107,7 @@ const VAT = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="VATAmount">Amount (Percentage):</label>
+								<label htmlFor="VATAmount">Percentage:</label>
 								<input
 									type="number"
 									className="form-control form-input"
