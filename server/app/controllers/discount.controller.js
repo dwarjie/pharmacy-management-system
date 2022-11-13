@@ -1,8 +1,8 @@
 // This module contains the discount controllers
 
-const { response } = require("express");
 const db = require("../models");
 const Discount = db.discount;
+const duplicate = require("../util/CheckDuplicate");
 
 // create a new Discount
 exports.create = (req, res) => {
@@ -53,27 +53,45 @@ exports.findAll = (req, res) => {
 };
 
 // update the discount
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = req.params.id;
+	let row = 0;
 
-	Discount.update(req.body, { where: { id: id } })
-		.then((row) => {
-			if (row != 1) {
-				res.send({
-					message: `Cannot update discount ${id}`,
+	// check if record already exists before updating
+	try {
+		row = await duplicate.checkDuplicate(
+			"discounts",
+			"DiscountName",
+			req.body.DiscountName
+		);
+	} catch (err) {
+		console.log(err);
+	}
+
+	// if row == 0, discount does not exists yet
+	if (row[0][0].count == 0) {
+		Discount.update(req.body, { where: { id: id } })
+			.then((row) => {
+				if (row == 1) {
+					res.send({
+						message: `Updated successfully.`,
+					});
+				} else {
+					res.send({
+						message: `Cannot update discount`,
+					});
+				}
+			})
+			.catch((err) => {
+				res.status(500).send({
+					message: `Error updating discount`,
 				});
-			}
-
-			res.send({
-				message: `Discount updated successfully.`,
 			});
-		})
-		.catch((err) => {
-			res.status(500).send({
-				message:
-					err.message || `some error occurred while updating the discount`,
-			});
+	} else {
+		res.send({
+			message: `Record already exists.`,
 		});
+	}
 };
 
 // delete the discount

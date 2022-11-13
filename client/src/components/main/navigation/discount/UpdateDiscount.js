@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DiscountService from "../../../../services/DiscountService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const UpdateDiscount = () => {
 	const initialDiscount = {
@@ -17,7 +18,6 @@ const UpdateDiscount = () => {
 	const [success, setSuccess] = useState(true);
 
 	useEffect(() => {
-		console.log(location.state);
 		setDiscounts({
 			id: location.state.discount.id,
 			DiscountName: location.state.discount.DiscountName,
@@ -42,6 +42,9 @@ const UpdateDiscount = () => {
 
 	// delete the discount
 	const deleteDiscount = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		DiscountService.deleteDiscount(discount.id)
 			.then((response) => {
 				console.log(response.data);

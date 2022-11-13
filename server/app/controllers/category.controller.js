@@ -79,9 +79,6 @@ exports.update = async (req, res) => {
 
 	// check if category already exists before updating
 	try {
-		// row = await db.sequelize.query(
-		// 	`SELECT COUNT(*) AS count FROM categories WHERE CategoryName = "${req.body.CategoryName}"`
-		// );
 		row = await duplicate.checkDuplicate(
 			"categories",
 			"CategoryName",
@@ -102,7 +99,7 @@ exports.update = async (req, res) => {
 					});
 				} else {
 					res.send({
-						message: `Cannot update category ${id}`,
+						message: `Cannot update category`,
 					});
 				}
 			})
@@ -113,7 +110,7 @@ exports.update = async (req, res) => {
 			});
 	} else {
 		res.send({
-			message: `Category already exists`,
+			message: `Record already exists`,
 		});
 	}
 };
