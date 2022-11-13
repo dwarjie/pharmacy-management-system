@@ -12,7 +12,7 @@ module.exports = (app) => {
 	// update a single unit
 	router.put("/:id", unit.update);
 	// delete a single unit
-	router.delete("/:id", unit.delete);
+	router.delete("/", unit.delete);
 
 	app.use("/api/unit", router);
 };

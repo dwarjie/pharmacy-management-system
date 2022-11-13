@@ -15,8 +15,8 @@ const updateUnitOfMeasure = (id, data) => {
 	return http.put(`/unit/${id}`, data);
 };
 
-const deleteUnitOfMeasure = (id) => {
-	return http.delete(`/unit/${id}`);
+const deleteUnitOfMeasure = (unitId) => {
+	return http.delete(`/unit?unitId=${unitId}`);
 };
 
 const UnitOfMeasureService = {

@@ -5,6 +5,7 @@ import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
 
 // icon
 import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const AddUnit = () => {
 	const initialUnit = {
@@ -39,6 +40,18 @@ const AddUnit = () => {
 		};
 
 		UnitOfMeasureService.createUnitOfMeasure(data)
+			.then((response) => {
+				console.log(response.data);
+				refreshList();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// delete the unit
+	const deleteUnitOfMeasure = (unit) => {
+		UnitOfMeasureService.deleteUnitOfMeasure(unit.id)
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
@@ -129,6 +142,12 @@ const AddUnit = () => {
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
 													onClick={() => updateUnitOfMeasure(unit)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdDelete
+													className="icon-size-sm cursor-pointer"
+													onClick={() => deleteUnitOfMeasure(unit)}
 												/>
 											</span>
 										</td>

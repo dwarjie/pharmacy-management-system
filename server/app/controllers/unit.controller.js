@@ -82,7 +82,7 @@ exports.update = (req, res) => {
 
 // Delete a unit
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const id = req.query.unitId;
 
 	Unit.destroy({
 		where: { id: id },

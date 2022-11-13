@@ -35,20 +35,6 @@ const UnitList = () => {
 		checkSuccess();
 	};
 
-	// delete the unit
-	const deleteUnitOfMeasure = () => {
-		UnitOfMeasureService.deleteUnitOfMeasure(unit.id)
-			.then((response) => {
-				console.log(response.data);
-				setSuccess(true);
-			})
-			.catch((err) => {
-				console.log(err);
-				setSuccess(false);
-			});
-		checkSuccess();
-	};
-
 	// handle input change event for form
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -94,12 +80,6 @@ const UnitList = () => {
 					onClick={() => navigate(-1)}
 				>
 					Cancel
-				</button>
-				<button
-					className="btn btn-danger simple-shadow"
-					onClick={deleteUnitOfMeasure}
-				>
-					Delete
 				</button>
 			</div>
 		</div>
