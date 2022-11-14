@@ -2,6 +2,7 @@
 
 const db = require("../models");
 const SubCategory = db.subCategory;
+const duplicate = require("../util/CheckDuplicate");
 
 // Creating a new SubCategory
 exports.create = (req, res) => {
@@ -12,9 +13,23 @@ exports.create = (req, res) => {
 		categoryId: req.body.categoryId,
 	};
 
-	SubCategory.create(subCategory)
-		.then((data) => {
-			res.send(data);
+	// check if category already exists
+	// else create new category
+	SubCategory.findOrCreate({
+		where: { SubCategoryName: subCategory.SubCategoryName },
+		defaults: { ...subCategory },
+	})
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Record already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({
@@ -24,27 +39,46 @@ exports.create = (req, res) => {
 };
 
 // Update a SubCategory
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = req.params.id;
+	let row = 0;
 
-	SubCategory.update(req.body, { where: { id: id } })
-		.then((row) => {
-			// check if affected row is not equals to 1
-			if (row != 1) {
-				res.send({
-					message: `Cannot update subcategory ${id}`,
+	// check if category already exists before updating
+	try {
+		row = await duplicate.checkDuplicate(
+			"sub_categories",
+			"SubCategoryName",
+			req.body.SubCategoryName
+		);
+	} catch (err) {
+		console.log(err);
+	}
+
+	// ! If row == 0, category does not exist yet
+	if (row[0][0].count === 0) {
+		SubCategory.update(req.body, { where: { id: id } })
+			.then((row) => {
+				// check if affected row is not equals to 1
+				if (row == 1) {
+					res.send({
+						message: `Updated successfully.`,
+					});
+				} else {
+					res.send({
+						message: `Updated successfully.`,
+					});
+				}
+			})
+			.catch((err) => {
+				res.status(500).send({
+					message: `Error updating subcategory ${id} `,
 				});
-			}
-
-			res.send({
-				message: `Subcategory was updated successfully`,
 			});
-		})
-		.catch((err) => {
-			res.status(500).send({
-				message: `Error updating subcategory ${id} `,
-			});
+	} else {
+		res.send({
+			message: `Record already exists.`,
 		});
+	}
 };
 
 // Delete a SubCategory

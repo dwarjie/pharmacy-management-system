@@ -79,7 +79,7 @@ const AddSubCategory = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-10 pb-5">
+					<form className="col-12 col-lg-10 pb-5 mx-auto">
 						<label htmlFor="SubCategoryName">Sub-Category Name:</label>
 						<input
 							type="text"
