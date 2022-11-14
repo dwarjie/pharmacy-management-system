@@ -23,8 +23,8 @@ import AddMedicine from "./navigation/medicine/AddMedicine";
 import MedicineList from "./navigation/medicine/MedicineList";
 import UpdateMedicine from "./navigation/medicine/UpdateMedicine";
 
-import Manufacturer from "./navigation/manufacturer/Manufacturer";
-import UpdateManufacturer from "./navigation/manufacturer/UpdateManufacturer";
+import Supplier from "./navigation/supplier/Supplier";
+import UpdateSupplier from "./navigation/supplier/UpdateSupplier";
 
 import VAT from "./navigation/vat/VAT";
 
@@ -73,10 +73,10 @@ const ContentContainer = (props) => {
 						path="/maintenance/medicine/:id"
 						element={<UpdateMedicine />}
 					/>
-					<Route path="/maintenance/manufacturer" element={<Manufacturer />} />
+					<Route path="/maintenance/supplier" element={<Supplier />} />
 					<Route
-						path="/maintenance/manufacturer/:id"
-						element={<UpdateManufacturer />}
+						path="/maintenance/supplier/:id"
+						element={<UpdateSupplier />}
 					/>
 					<Route path="/maintenance/discount" element={<Discount />} />
 					<Route

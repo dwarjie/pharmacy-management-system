@@ -6,7 +6,7 @@ import ManufacturerService from "../../../../services/ManufacturerService";
 // icons
 import { FaEdit } from "react-icons/fa";
 
-const Manufacturer = () => {
+const Supplier = () => {
 	const initialManufacturer = {
 		id: null,
 		ManufacturerName: "",
@@ -83,14 +83,14 @@ const Manufacturer = () => {
 		<div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow">
 				<div className="p-3">
-					<h4>Add Manufacturer</h4>
+					<h4>Add Supplier</h4>
 					<hr />
 				</div>
 				<div className="p-3">
 					<form className="col-12 col-lg-10 pb-5 mx-auto">
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="ManufacturerName">Manufacturer Name:</label>
+								<label htmlFor="ManufacturerName">Supplier Name:</label>
 								<input
 									type="text"
 									className="form-control form-input"
@@ -162,7 +162,7 @@ const Manufacturer = () => {
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
 				<div className="p-3">
-					<h4>Manufacturer List</h4>
+					<h4>Supplier List</h4>
 					<hr />
 				</div>
 				<div className="p-3">
@@ -208,4 +208,4 @@ const Manufacturer = () => {
 	);
 };
 
-export default Manufacturer;
+export default Supplier;

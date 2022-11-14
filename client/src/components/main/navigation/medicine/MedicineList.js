@@ -66,9 +66,9 @@ const MedicineList = () => {
 							<th scope="col">Product Name</th>
 							<th scope="col">Generic Name</th>
 							<th scope="col">Category</th>
-							<th scope="col">Manufacturer</th>
+							<th scope="col">Supplier</th>
 							<th scope="col">Price</th>
-							<th scope="col">Manufacturer Price</th>
+							<th scope="col">Unit Price</th>
 							<th scope="col">Details</th>
 							<th scope="col">Actions</th>
 						</tr>

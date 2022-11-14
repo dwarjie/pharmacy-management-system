@@ -301,7 +301,7 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="ManufacturerPrice">Manufacturer Price:</label>
+							<label htmlFor="ManufacturerPrice">Unit Price:</label>
 							<input
 								type="number"
 								className="form-control form-input"
@@ -328,7 +328,7 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="manufacturerId">Manufacturer:</label>
+							<label htmlFor="manufacturerId">Supplier:</label>
 							<select
 								name="manufacturerId"
 								id="manufacturerId"
@@ -341,7 +341,7 @@ const Medicine = (props) => {
 								}}
 							>
 								<option disabled hidden value="">
-									Select manufacturer
+									Select supplier
 								</option>
 								{extraModel.manufacturer &&
 									extraModel.manufacturer.map((item, index) => (
