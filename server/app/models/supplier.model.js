@@ -1,7 +1,7 @@
 // This module is responsible for the model of manufacturer table
 module.exports = (sequelize, Sequelize) => {
-	const Manufacturer = sequelize.define("manufacturer", {
-		ManufacturerName: {
+	const Supplier = sequelize.define("supplier", {
+		SupplierName: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
@@ -23,5 +23,5 @@ module.exports = (sequelize, Sequelize) => {
 		},
 	});
 
-	return Manufacturer;
+	return Supplier;
 };

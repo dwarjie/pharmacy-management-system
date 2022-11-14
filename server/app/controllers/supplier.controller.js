@@ -1,42 +1,41 @@
-// This module contains the manufacturer controller
+// This module contains the supplier controller
 
 const db = require("../models");
-const Manufacturer = db.manufacturer;
+const Supplier = db.supplier;
 
-// Create a new Manufacturer
+// Create a new Supplier
 exports.create = (req, res) => {
-	// create a new Manufacturer
-	const manufacturer = {
-		ManufacturerName: req.body.ManufacturerName,
+	// create a new Supplier
+	const supplier = {
+		SupplierName: req.body.SupplierName,
 		Address: req.body.Address,
 		Mobile: req.body.Mobile,
 		Phone: req.body.Phone,
 		Email: req.body.Email,
 	};
 
-	// save the manufacturer to the database
-	Manufacturer.create(manufacturer)
+	// save the supplier to the database
+	Supplier.create(supplier)
 		.then((data) => {
 			res.send(data);
 		})
 		.catch((err) => {
 			res.status(500).send({
 				message:
-					err.message || `Some error occurred while creating the Manufacturer`,
+					err.message || `Some error occurred while creating the Supplier`,
 			});
 		});
 };
 
-// Retrieve all Manufacturer
+// Retrieve all Supplier
 exports.findAll = (req, res) => {
-	Manufacturer.findAll()
+	Supplier.findAll()
 		.then((data) => {
 			res.send(data);
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message:
-					err.message || `Some error occurred while retrieving manufacturer`,
+				message: err.message || `Some error occurred while retrieving supplier`,
 			});
 		});
 };
@@ -44,11 +43,11 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 
-	Manufacturer.findByPk(id)
+	Supplier.findByPk(id)
 		.then((data) => {
 			if (!data) {
 				res.status(400).send({
-					message: `Cannot find manufacturer ${id}`,
+					message: `Cannot find supplier ${id}`,
 				});
 			}
 
@@ -56,26 +55,26 @@ exports.findOne = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message: `Error fetching manufacturer ${id}`,
+				message: `Error fetching supplier ${id}`,
 			});
 		});
 };
 
-// Update a single manufacturer
+// Update a single supplier
 exports.update = (req, res) => {
 	const id = req.params.id;
 
-	Manufacturer.update(req.body, { where: { id: id } })
+	Supplier.update(req.body, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is not equals to 1
 			if (row != 1) {
 				res.send({
-					message: `Cannot update manufacturer ${id}`,
+					message: `Cannot update supplier ${id}`,
 				});
 			}
 
 			res.send({
-				message: `Manufacturer was updated successfully`,
+				message: `Supplier was updated successfully`,
 			});
 		})
 		.catch((err) => {
@@ -85,27 +84,27 @@ exports.update = (req, res) => {
 		});
 };
 
-// Delete a manufacturer
+// Delete a supplier
 exports.delete = (req, res) => {
 	const id = req.params.id;
 
-	Manufacturer.destroy({
+	Supplier.destroy({
 		where: { id: id },
 	})
 		.then((row) => {
 			if (row != 1) {
 				res.send({
-					message: `Cannot delete manufacturer ${id}`,
+					message: `Cannot delete supplier ${id}`,
 				});
 			}
 
 			res.send({
-				message: `Manufacturer was deleted successfully`,
+				message: `Supplier was deleted successfully`,
 			});
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message: `Error deleting manufacturer ${id}`,
+				message: `Error deleting supplier ${id}`,
 			});
 		});
 };

@@ -1,15 +1,15 @@
 // this module is responsible for adding new manufacturer
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ManufacturerService from "../../../../services/ManufacturerService";
+import SupplierService from "../../../../services/SupplierService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
 
 const Supplier = () => {
-	const initialManufacturer = {
+	const initialSupplier = {
 		id: null,
-		ManufacturerName: "",
+		SupplierName: "",
 		Address: "",
 		Mobile: "",
 		Phone: "",
@@ -17,19 +17,19 @@ const Supplier = () => {
 	};
 	let navigate = useNavigate();
 
-	const [manufacturers, setManufacturers] = useState([]);
-	const [newManufacturer, setNewManufacturer] = useState(initialManufacturer);
+	const [suppliers, setSuppliers] = useState([]);
+	const [newSupplier, setNewSupplier] = useState(initialSupplier);
 
 	// once the page is loaded, run this
 	useEffect(() => {
-		getAllManufacturers();
+		getAllSuppliers();
 	}, []);
 
-	// get all the manufacturer in the database
-	const getAllManufacturers = () => {
-		ManufacturerService.getManufacturer()
+	// get all the supplier in the database
+	const getAllSuppliers = () => {
+		SupplierService.getSupplier()
 			.then((response) => {
-				setManufacturers(response.data);
+				setSuppliers(response.data);
 				console.log(response.data);
 			})
 			.catch((err) => {
@@ -37,17 +37,17 @@ const Supplier = () => {
 			});
 	};
 
-	// create a new manufacturer
-	const createManufacturer = () => {
+	// create a new Supplier
+	const createSupplier = () => {
 		let data = {
-			ManufacturerName: newManufacturer.ManufacturerName,
-			Address: newManufacturer.Address,
-			Mobile: newManufacturer.Mobile,
-			Phone: newManufacturer.Phone,
-			Email: newManufacturer.Email,
+			SupplierName: newSupplier.SupplierName,
+			Address: newSupplier.Address,
+			Mobile: newSupplier.Mobile,
+			Phone: newSupplier.Phone,
+			Email: newSupplier.Email,
 		};
 
-		ManufacturerService.createManufacturer(data)
+		SupplierService.createSupplier(data)
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
@@ -57,11 +57,11 @@ const Supplier = () => {
 			});
 	};
 
-	// update manufacturer
-	const updateManufacturer = (manufacturer) => {
-		navigate(`/pharmacy/maintenance/manufacturer/${manufacturer.id}`, {
+	// update supplier
+	const updateSupplier = (supplier) => {
+		navigate(`/pharmacy/maintenance/supplier/${supplier.id}`, {
 			state: {
-				manufacturer: manufacturer,
+				supplier: supplier,
 			},
 		});
 	};
@@ -69,14 +69,14 @@ const Supplier = () => {
 	// handle the on change event for the forms
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
-		setNewManufacturer({ ...newManufacturer, [name]: value });
+		setNewSupplier({ ...newSupplier, [name]: value });
 	};
 
 	// refresh the list
 	const refreshList = () => {
-		setNewManufacturer(initialManufacturer);
-		setManufacturers([]);
-		getAllManufacturers();
+		setNewSupplier(initialSupplier);
+		setSuppliers([]);
+		getAllSuppliers();
 	};
 
 	return (
@@ -90,13 +90,13 @@ const Supplier = () => {
 					<form className="col-12 col-lg-10 pb-5 mx-auto">
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="ManufacturerName">Supplier Name:</label>
+								<label htmlFor="SupplierName">Supplier Name:</label>
 								<input
 									type="text"
 									className="form-control form-input"
-									name="ManufacturerName"
-									id="ManufacturerName"
-									value={newManufacturer.ManufacturerName}
+									name="SupplierName"
+									id="SupplierName"
+									value={newSupplier.SupplierName}
 									onChange={handleInputChange}
 									required
 								/>
@@ -108,7 +108,7 @@ const Supplier = () => {
 									className="form-control form-input"
 									name="Mobile"
 									id="Mobile"
-									value={newManufacturer.Mobile}
+									value={newSupplier.Mobile}
 									onChange={handleInputChange}
 									required
 								/>
@@ -122,7 +122,7 @@ const Supplier = () => {
 									className="form-control form-input"
 									name="Address"
 									id="Address"
-									value={newManufacturer.Address}
+									value={newSupplier.Address}
 									onChange={handleInputChange}
 									required
 								/>
@@ -134,7 +134,7 @@ const Supplier = () => {
 									className="form-control form-input"
 									name="Phone"
 									id="Phone"
-									value={newManufacturer.Phone}
+									value={newSupplier.Phone}
 									onChange={handleInputChange}
 								/>
 							</div>
@@ -145,7 +145,7 @@ const Supplier = () => {
 									className="form-control form-input"
 									name="Email"
 									id="Email"
-									value={newManufacturer.Email}
+									value={newSupplier.Email}
 									onChange={handleInputChange}
 									required
 								/>
@@ -154,7 +154,7 @@ const Supplier = () => {
 					</form>
 					<button
 						className="btn btn-primary simple-shadow"
-						onClick={createManufacturer}
+						onClick={createSupplier}
 					>
 						Add
 					</button>
@@ -167,11 +167,11 @@ const Supplier = () => {
 				</div>
 				<div className="p-3">
 					<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
-						<label htmlFor="manufacturer-search">Search:</label>
+						<label htmlFor="supplier-search">Search:</label>
 						<input
 							type="text"
 							className="form-control form-input"
-							id="manufacturer-search"
+							id="supplier-search"
 						/>
 					</form>
 					<table className="table">
@@ -184,17 +184,17 @@ const Supplier = () => {
 							</tr>
 						</thead>
 						<tbody>
-							{manufacturers &&
-								manufacturers.map((manufacturer, index) => (
+							{suppliers &&
+								suppliers.map((supplier, index) => (
 									<tr key={index}>
-										<td>{manufacturer.ManufacturerName}</td>
-										<td>{manufacturer.Mobile}</td>
-										<td>{manufacturer.Address}</td>
+										<td>{supplier.SupplierName}</td>
+										<td>{supplier.Mobile}</td>
+										<td>{supplier.Address}</td>
 										<td>
 											<span className="px-2">
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
-													onClick={() => updateManufacturer(manufacturer)}
+													onClick={() => updateSupplier(supplier)}
 												/>
 											</span>
 										</td>

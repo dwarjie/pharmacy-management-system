@@ -20,7 +20,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.category = require("./category.model")(sequelize, Sequelize);
-db.manufacturer = require("./manufacturer.model")(sequelize, Sequelize);
+db.supplier = require("./supplier.model")(sequelize, Sequelize);
 db.unit = require("./unit.model")(sequelize, Sequelize);
 db.type = require("./type.model")(sequelize, Sequelize);
 db.subCategory = require("./subCategory.model")(sequelize, Sequelize);
@@ -42,10 +42,10 @@ db.subCategory.belongsTo(db.category, {
 });
 
 // MEDICINE
-// add relationships for medicine and manufacturers
-db.manufacturer.hasMany(db.medicine);
-db.medicine.belongsTo(db.manufacturer, {
-	as: "manufacturer",
+// add relationships for medicine and supplier
+db.supplier.hasMany(db.medicine);
+db.medicine.belongsTo(db.supplier, {
+	as: "supplier",
 	foreignKey: {
 		allowNull: false,
 	},

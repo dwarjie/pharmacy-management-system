@@ -1,12 +1,12 @@
-// This module is responsible for updated the manufacturer
+// This module is responsible for updated the supplier
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import ManufacturerService from "../../../../services/ManufacturerService";
+import SupplierService from "../../../../services/SupplierService";
 
-const UpdateManufacturer = () => {
-	const initialManufacturer = {
+const UpdateSupplier = () => {
+	const initialSupplier = {
 		id: null,
-		ManufacturerName: "",
+		SupplierName: "",
 		Address: "",
 		Mobile: "",
 		Phone: "",
@@ -15,23 +15,23 @@ const UpdateManufacturer = () => {
 	let navigate = useNavigate();
 	let location = useLocation();
 
-	const [manufacturer, setManufacturer] = useState(initialManufacturer);
+	const [supplier, setSupplier] = useState(initialSupplier);
 	const [success, setSuccess] = useState(true);
 
 	useEffect(() => {
-		setManufacturer({
-			id: location.state.manufacturer.id,
-			ManufacturerName: location.state.manufacturer.ManufacturerName,
-			Address: location.state.manufacturer.Address,
-			Mobile: location.state.manufacturer.Mobile,
-			Phone: location.state.manufacturer.Phone,
-			Email: location.state.manufacturer.Email,
+		setSupplier({
+			id: location.state.supplier.id,
+			SupplierName: location.state.supplier.SupplierName,
+			Address: location.state.supplier.Address,
+			Mobile: location.state.supplier.Mobile,
+			Phone: location.state.supplier.Phone,
+			Email: location.state.supplier.Email,
 		});
 	}, []);
 
-	// update the manufacturer
-	const updateManufacturer = () => {
-		ManufacturerService.updateManufacturer(manufacturer.id, manufacturer)
+	// update the supplier
+	const updateSupplier = () => {
+		SupplierService.updateSupplier(supplier.id, supplier)
 			.then((response) => {
 				console.log(response.data);
 				setSuccess(true);
@@ -43,9 +43,9 @@ const UpdateManufacturer = () => {
 		checkSuccess();
 	};
 
-	// delete the manufacturer
-	const deleteManufacturer = () => {
-		ManufacturerService.deleteManufacturer(manufacturer.id)
+	// delete the supplier
+	const deleteSupplier = () => {
+		SupplierService.deleteSupplier(supplier.id)
 			.then((response) => {
 				console.log(response.data);
 				setSuccess(true);
@@ -60,7 +60,7 @@ const UpdateManufacturer = () => {
 	// handle the input change of the forms
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
-		setManufacturer({ ...manufacturer, [name]: value });
+		setSupplier({ ...supplier, [name]: value });
 	};
 
 	// check if the update is success, if yes go back, else stay
@@ -75,20 +75,20 @@ const UpdateManufacturer = () => {
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Update Manufacturer</h4>
+				<h4>Update Supplier</h4>
 				<hr />
 			</div>
 			<div className="p-3">
 				<form className="col-12 col-lg-10 pb-5 mx-auto">
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="ManufacturerName">Manufacturer Name:</label>
+							<label htmlFor="SupplierName">Supplier Name:</label>
 							<input
 								type="text"
 								className="form-control form-input"
-								name="ManufacturerName"
-								id="ManufacturerName"
-								value={manufacturer.ManufacturerName}
+								name="SupplierName"
+								id="SupplierName"
+								value={supplier.SupplierName}
 								onChange={handleInputChange}
 								required
 							/>
@@ -100,7 +100,7 @@ const UpdateManufacturer = () => {
 								className="form-control form-input"
 								name="Mobile"
 								id="Mobile"
-								value={manufacturer.Mobile}
+								value={supplier.Mobile}
 								onChange={handleInputChange}
 								required
 							/>
@@ -114,7 +114,7 @@ const UpdateManufacturer = () => {
 								className="form-control form-input"
 								name="Address"
 								id="Address"
-								value={manufacturer.Address}
+								value={supplier.Address}
 								onChange={handleInputChange}
 								required
 							/>
@@ -126,7 +126,7 @@ const UpdateManufacturer = () => {
 								className="form-control form-input"
 								name="Phone"
 								id="Phone"
-								value={manufacturer.Phone}
+								value={supplier.Phone}
 								onChange={handleInputChange}
 							/>
 						</div>
@@ -137,7 +137,7 @@ const UpdateManufacturer = () => {
 								className="form-control form-input"
 								name="Email"
 								id="Email"
-								value={manufacturer.Email}
+								value={supplier.Email}
 								onChange={handleInputChange}
 								required
 							/>
@@ -146,7 +146,7 @@ const UpdateManufacturer = () => {
 				</form>
 				<button
 					className="btn btn-primary simple-shadow me-3"
-					onClick={updateManufacturer}
+					onClick={updateSupplier}
 				>
 					Update
 				</button>
@@ -158,7 +158,7 @@ const UpdateManufacturer = () => {
 				</button>
 				<button
 					className="btn btn-danger simple-shadow"
-					onClick={deleteManufacturer}
+					onClick={deleteSupplier}
 				>
 					Delete
 				</button>
@@ -167,4 +167,4 @@ const UpdateManufacturer = () => {
 	);
 };
 
-export default UpdateManufacturer;
+export default UpdateSupplier;

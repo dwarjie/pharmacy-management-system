@@ -41,7 +41,7 @@ app.get("/", function (req, res) {
 
 // server routes for the controllers
 require("./app/routes/category.routes")(app);
-require("./app/routes/manufacturer.routes")(app);
+require("./app/routes/supplier.routes")(app);
 require("./app/routes/type.routes")(app);
 require("./app/routes/unit.routes")(app);
 require("./app/routes/subCategory.routes")(app);
