@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryService from "../../../../services/CategoryService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // Icons
 import { FaEdit } from "react-icons/fa";
 import { MdOutlineAddBox } from "react-icons/md";
-import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const Category = () => {
 	// initial state for a category when creating new category

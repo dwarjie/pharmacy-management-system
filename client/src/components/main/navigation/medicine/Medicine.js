@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const Medicine = (props) => {
 	// this is for the status drop down
@@ -45,6 +46,9 @@ const Medicine = (props) => {
 
 	// create new product
 	const createProduct = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		let product = {
 			ProductCode: medicine.ProductCode,
 			ProductName: medicine.ProductName,
@@ -63,7 +67,7 @@ const Medicine = (props) => {
 				console.log(response.data);
 				// reset the form
 				setMedicine(props.initialMedicine);
-				setActiveDropDownValue("");
+				setActiveDropDownValue(props.initialDropDownValue);
 			})
 			.catch((err) => {
 				console.log(err);

@@ -2,6 +2,7 @@
 const db = require("../models");
 const Medicine = db.medicine;
 const Category = db.category;
+const duplicate = require("../util/CheckDuplicate");
 const { QueryTypes } = db.Sequelize;
 
 exports.create = (req, res) => {
@@ -19,9 +20,25 @@ exports.create = (req, res) => {
 		subCategoryId: req.body.subCategoryId,
 	};
 
-	Medicine.create(medicine)
-		.then((data) => {
-			res.send(data);
+	// check if product already exists,
+	// else create new product
+	Medicine.findOrCreate({
+		where: {
+			ProductName: req.body.ProductName,
+		},
+		defaults: { ...medicine },
+	})
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Product already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({
@@ -43,27 +60,46 @@ exports.findAll = (req, res) => {
 		});
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = req.params.id;
+	let row = 0;
 
-	Medicine.update(req.body, { where: { id: id } })
-		.then((row) => {
-			// check if affected row is not equals to 1
-			if (row != 1) {
+	// ! check if medicine already exists
+	try {
+		row = await duplicate.checkDuplicate(
+			"medicines",
+			"ProductName",
+			req.body.ProductName
+		);
+	} catch (err) {
+		console.log(err);
+	}
+
+	// if row == 0, category does not exist yet
+	if (row[0][0].count === 0) {
+		Medicine.update(req.body, { where: { id: id } })
+			.then((row) => {
+				// check if affected row is not equals to 1
+				if (row != 1) {
+					res.send({
+						message: `Cannot update medicine`,
+					});
+				}
+
 				res.send({
-					message: `Cannot update ${id}`,
+					message: `Updated successfully`,
 				});
-			}
-
-			res.send({
-				message: `Medicine was updated successfully`,
+			})
+			.catch((err) => {
+				res.status(500).send({
+					message: err.message || `Error updating medicine ${id}`,
+				});
 			});
-		})
-		.catch((err) => {
-			res.status(500).send({
-				message: err.message || `Error updating medicine ${id}`,
-			});
+	} else {
+		res.send({
+			message: `Record already exists.`,
 		});
+	}
 };
 
 // delete a medicine

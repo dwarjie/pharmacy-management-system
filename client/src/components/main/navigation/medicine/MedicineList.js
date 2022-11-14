@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MedicineService from "../../../../services/MedicineService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -35,6 +36,9 @@ const MedicineList = () => {
 	};
 
 	const deleteMedicine = (medicine) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		MedicineService.deleteMedicine(medicine.id)
 			.then((response) => {
 				console.log(response.data);
