@@ -10,8 +10,8 @@ const updateSubCategory = (id, data) => {
 	return http.put(`/sub-category/${id}`, data);
 };
 
-const deleteCategory = (id) => {
-	return http.delete(`/sub-category/${id}`);
+const deleteCategory = (subCategoryId) => {
+	return http.delete(`/sub-category?subCategoryId=${subCategoryId}`);
 };
 
 const SubCategoryService = {

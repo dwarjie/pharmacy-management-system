@@ -60,7 +60,6 @@ const VAT = () => {
 		let data = {
 			id: vat.id,
 		};
-		console.log(data);
 		VatService.deleteVAT(data)
 			.then((response) => {
 				console.log(response.data);

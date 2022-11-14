@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import CategoryService from "../../../../services/CategoryService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const AddSubCategory = () => {
 	let location = useLocation();
@@ -40,7 +42,25 @@ const AddSubCategory = () => {
 
 	// create a new SubCategory
 	const createSubCategory = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		SubCategoryService.createSubCategory(subCategory)
+			.then((response) => {
+				console.log(response.data);
+				refreshList();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// delete the subCategory
+	const deleteSubCategory = (subCategory) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
+		SubCategoryService.deleteCategory(subCategory.id)
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
@@ -160,6 +180,12 @@ const AddSubCategory = () => {
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
 													onClick={() => editSubCategory(subCategory)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdDelete
+													className="icon-size-sm cursor-pointer"
+													onClick={() => deleteSubCategory(subCategory)}
 												/>
 											</span>
 										</td>

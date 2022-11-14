@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SubCategoryService from "../../../../services/SubCategoryService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const UpdateSubCategory = () => {
 	let location = useLocation();
@@ -30,20 +31,6 @@ const UpdateSubCategory = () => {
 	// update the subCategory
 	const updateSubCategory = () => {
 		SubCategoryService.updateSubCategory(subCategory.id, subCategory)
-			.then((response) => {
-				console.log(response.data);
-				setSuccess(true);
-			})
-			.catch((err) => {
-				console.log(err);
-				setSuccess(false);
-			});
-		checkSuccess();
-	};
-
-	// delete the subCategory
-	const deleteSubCategory = () => {
-		SubCategoryService.deleteCategory(subCategory.id)
 			.then((response) => {
 				console.log(response.data);
 				setSuccess(true);
@@ -130,12 +117,12 @@ const UpdateSubCategory = () => {
 				>
 					Cancel
 				</button>
-				<button
+				{/* <button
 					className="btn btn-danger simple-shadow"
 					onClick={deleteSubCategory}
 				>
 					Delete
-				</button>
+				</button> */}
 			</div>
 		</div>
 	);

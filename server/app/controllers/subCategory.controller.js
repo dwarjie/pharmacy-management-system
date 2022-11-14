@@ -83,7 +83,7 @@ exports.update = async (req, res) => {
 
 // Delete a SubCategory
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const id = req.query.subCategoryId;
 
 	SubCategory.destroy({ where: { id: id } }).then((row) => {
 		if (row != 1) {

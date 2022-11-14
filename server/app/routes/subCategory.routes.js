@@ -8,7 +8,7 @@ module.exports = (app) => {
 	// update sub category
 	router.put("/:id", subCategory.update);
 	// delete sub category
-	router.delete("/:id", subCategory.delete);
+	router.delete("/", subCategory.delete);
 
 	app.use("/api/sub-category", router);
 };
