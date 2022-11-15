@@ -11,7 +11,16 @@ const OR = () => {
 	const [valueOR, setValueOR] = useState(initialOR);
 	const [editMode, setEditMode] = useState(false);
 
-	const handleInputChange = () => {};
+	// set the edit mode to true
+	// enable the forms and update button
+	const enableEditMode = () => {
+		setEditMode(!editMode);
+	};
+
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setValueOR({ ...valueOR, [name]: value });
+	};
 
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
@@ -30,6 +39,8 @@ const OR = () => {
 								name="StartOR"
 								id="StartOR"
 								disabled={editMode === true ? false : true}
+								value={valueOR.StartOR}
+								onChange={handleInputChange}
 								required
 							/>
 						</div>
@@ -43,6 +54,8 @@ const OR = () => {
 								name="MaxOR"
 								id="MaxOR"
 								disabled={editMode === true ? false : true}
+								value={valueOR.MaxOR}
+								onChange={handleInputChange}
 								required
 							/>
 						</div>
@@ -56,12 +69,25 @@ const OR = () => {
 								name="CurrentOR"
 								id="CurrentOR"
 								disabled={editMode === true ? false : true}
+								value={valueOR.CurrentOR}
+								onChange={handleInputChange}
 								required
 							/>
 						</div>
 					</div>
-					<button type="submit" className="btn btn-primary simple-shadow mt-3">
+					<button
+						type="button"
+						className="btn btn-primary simple-shadow mt-3 me-3"
+						onClick={enableEditMode}
+					>
 						Edit
+					</button>
+					<button
+						type="submit"
+						className="btn btn-primary simple-shadow mt-3"
+						disabled={!editMode}
+					>
+						Update
 					</button>
 				</form>
 			</div>
