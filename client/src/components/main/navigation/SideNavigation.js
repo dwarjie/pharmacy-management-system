@@ -58,7 +58,7 @@ const SideNavigation = () => {
 					{/* FILE MAINTENANCE*/}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
@@ -144,7 +144,7 @@ const SideNavigation = () => {
 					{/* HANDLERS */}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
@@ -177,7 +177,7 @@ const SideNavigation = () => {
 					{/* INVENTORY */}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
@@ -234,7 +234,7 @@ const SideNavigation = () => {
 					{/* SALES */}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
@@ -269,7 +269,7 @@ const SideNavigation = () => {
 					{/* REPORT */}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
@@ -318,7 +318,7 @@ const SideNavigation = () => {
 					{/* UTILITIES */}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"

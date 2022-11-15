@@ -50,9 +50,13 @@ body {
 }
 
 /* NAVBAR TOGGLER */
-.nav-default {
-	border: none;
+.burger {
 	color: #e63946;
+}
+
+.btn-toggler {
+	border: none !important;
+	background-color: transparent !important;
 }
 
 /* SHADOW */
@@ -61,6 +65,11 @@ body {
 }
 
 /* ICONS */
+.icon-size-lg {
+	width: 1.8rem;
+	height: 1.8rem;
+}
+
 .icon-size-md {
 	width: 1.5rem;
 	height: 1.5rem;
@@ -74,6 +83,10 @@ body {
 /* BUTTONS */
 .btn {
 	color: white;
+}
+
+.btn-primary:hover {
+	color: white !important;
 }
 
 .button-font-md {

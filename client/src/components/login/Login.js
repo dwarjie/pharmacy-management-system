@@ -26,7 +26,7 @@ const Login = () => {
 						id="password"
 						placeholder="at least 6 characters"
 					/>
-					<button className="btn btn-primary mx-auto w-100 button-font-md button-padding-md">
+					<button className="btn btn-secondary mx-auto w-100 button-font-md button-padding-md">
 						Login
 					</button>
 				</form>
