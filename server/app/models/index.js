@@ -26,6 +26,7 @@ db.type = require("./type.model")(sequelize, Sequelize);
 db.subCategory = require("./subCategory.model")(sequelize, Sequelize);
 db.discount = require("./discount.model")(sequelize, Sequelize);
 db.vat = require("./vat.model")(sequelize, Sequelize);
+db.or = require("./OR.model")(sequelize, Sequelize);
 db.medicine = require("./medicine.model")(sequelize, Sequelize);
 db.patient = require("./patient.model")(sequelize, Sequelize);
 db.handler = require("./handler.model")(sequelize, Sequelize);

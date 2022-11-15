@@ -28,6 +28,8 @@ import UpdateSupplier from "./navigation/supplier/UpdateSupplier";
 
 import VAT from "./navigation/vat/VAT";
 
+import OR from "./navigation/OR/OR";
+
 import Discount from "./navigation/discount/Discount";
 import UpdateDiscount from "./navigation/discount/UpdateDiscount";
 
@@ -84,6 +86,7 @@ const ContentContainer = (props) => {
 						element={<UpdateDiscount />}
 					/>
 					<Route path="/maintenance/vat" element={<VAT />} />
+					<Route path="/maintenance/or" element={<OR />} />
 					<Route path="/maintenance/handler" element={<AddHandler />} />
 					<Route
 						path="/maintenance/handler/handler-list"
