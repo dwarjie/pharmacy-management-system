@@ -1,5 +1,6 @@
 // This component is responsible for viewing the start, end, and current OR for the system
 import { useState, useEffect } from "react";
+import ORService from "../../../../services/ORService";
 
 const OR = () => {
 	const initialOR = {
@@ -10,6 +11,35 @@ const OR = () => {
 
 	const [valueOR, setValueOR] = useState(initialOR);
 	const [editMode, setEditMode] = useState(false);
+
+	// get current OR every load
+	useEffect(() => {
+		getCurrentOR();
+	}, []);
+
+	// get the current OR value from database
+	const getCurrentOR = () => {
+		ORService.getCurrentOR()
+			.then((response) => {
+				console.log(response.data);
+				setValueOR(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// update current OR
+	const updateCurrentOR = () => {
+		ORService.updateCurrentOR(valueOR)
+			.then((response) => {
+				console.log(response.data);
+				getCurrentOR();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	// set the edit mode to true
 	// enable the forms and update button
@@ -80,11 +110,12 @@ const OR = () => {
 						className="btn btn-primary simple-shadow mt-3 me-3"
 						onClick={enableEditMode}
 					>
-						Edit
+						{editMode ? "Cancel" : "Edit"}
 					</button>
 					<button
 						type="submit"
 						className="btn btn-primary simple-shadow mt-3"
+						onClick={updateCurrentOR}
 						disabled={!editMode}
 					>
 						Update
