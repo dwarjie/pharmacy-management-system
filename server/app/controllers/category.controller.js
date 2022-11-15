@@ -92,7 +92,7 @@ exports.update = async (req, res) => {
 	if (row[0][0].count == 0) {
 		Category.update(req.body, { where: { id: id } })
 			.then((row) => {
-				// check if affected row is not equals to 1
+				// check if affected row is equals to 1
 				if (row == 1) {
 					res.send({
 						message: `Updated successfully`,
