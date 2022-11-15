@@ -8,11 +8,11 @@ const AddMedicine = () => {
 		ProductName: "",
 		ProductDetails: "",
 		GenericName: "",
-		ManufacturerPrice: 0,
+		SupplierPrice: 0,
 		SellingPrice: 0,
 		Quantity: 0,
 		Status: 1,
-		manufacturerId: null,
+		supplierId: null,
 		unitId: null,
 		subCategoryId: null,
 	};
@@ -20,7 +20,7 @@ const AddMedicine = () => {
 		category: "",
 		subCategoryId: "",
 		subCategoryItem: "",
-		manufacturerId: "",
+		supplierId: "",
 		unitId: "",
 	};
 

@@ -14,10 +14,23 @@ exports.create = (req, res) => {
 		Email: req.body.Email,
 	};
 
-	// save the supplier to the database
-	Supplier.create(supplier)
-		.then((data) => {
-			res.send(data);
+	// !check if supplier already exists
+	// !if not, create a new supplier
+	Supplier.findOrCreate({
+		where: { SupplierName: supplier.SupplierName },
+		defaults: { ...supplier },
+	})
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Record already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({
@@ -86,7 +99,7 @@ exports.update = (req, res) => {
 
 // Delete a supplier
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const id = req.query.supplierId;
 
 	Supplier.destroy({
 		where: { id: id },
@@ -99,7 +112,7 @@ exports.delete = (req, res) => {
 			}
 
 			res.send({
-				message: `Supplier was deleted successfully`,
+				message: `Deleted successfully`,
 			});
 		})
 		.catch((err) => {

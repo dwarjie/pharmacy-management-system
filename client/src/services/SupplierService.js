@@ -15,8 +15,8 @@ const updateSupplier = (id, data) => {
 	return http.put(`/supplier/${id}`, data);
 };
 
-const deleteSupplier = (id) => {
-	return http.delete(`/supplier/${id}`);
+const deleteSupplier = (supplierId) => {
+	return http.delete(`/supplier?supplierId=${supplierId}`);
 };
 
 const SupplierService = {

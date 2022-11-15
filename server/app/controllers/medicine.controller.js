@@ -11,11 +11,11 @@ exports.create = (req, res) => {
 		ProductName: req.body.ProductName,
 		ProductDetails: req.body.ProductDetails,
 		GenericName: req.body.GenericName,
-		ManufacturerPrice: req.body.ManufacturerPrice,
+		SupplierPrice: req.body.SupplierPrice,
 		SellingPrice: req.body.SellingPrice,
 		Quantity: req.body.Quantity,
 		Status: req.body.Status,
-		manufacturerId: req.body.manufacturerId,
+		supplierId: req.body.supplierId,
 		unitId: req.body.unitId,
 		subCategoryId: req.body.subCategoryId,
 	};
@@ -48,7 +48,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-	Medicine.findAll({ include: ["subCategory", "manufacturer", "unit"] })
+	Medicine.findAll({ include: ["subCategory", "supplier", "unit"] })
 		.then((data) => {
 			res.send(data);
 		})
@@ -131,7 +131,7 @@ exports.delete = (req, res) => {
 
 // this function will get the
 // category and subCategory
-// manufacturer
+// supplier
 // and unit of measure in order to show in medicine
 exports.getOtherModel = async (req, res) => {
 	Category.findAll({ include: ["subCategory"] })
@@ -146,10 +146,10 @@ exports.getOtherModel = async (req, res) => {
 		})
 		.then(async (data) => {
 			try {
-				let manufacturer = [];
+				let supplier = [];
 				let unit = [];
 
-				manufacturer = await db.sequelize.query(`SELECT * FROM manufacturers`, {
+				supplier = await db.sequelize.query(`SELECT * FROM suppliers`, {
 					type: QueryTypes.SELECT,
 				});
 
@@ -157,7 +157,7 @@ exports.getOtherModel = async (req, res) => {
 					type: QueryTypes.SELECT,
 				});
 
-				data.manufacturer = manufacturer;
+				data.supplier = supplier;
 				data.unit = unit;
 
 				return res.status(200).json(data);

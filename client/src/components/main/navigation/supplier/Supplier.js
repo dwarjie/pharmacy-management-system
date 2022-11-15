@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SupplierService from "../../../../services/SupplierService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const Supplier = () => {
 	const initialSupplier = {
@@ -39,6 +41,9 @@ const Supplier = () => {
 
 	// create a new Supplier
 	const createSupplier = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		let data = {
 			SupplierName: newSupplier.SupplierName,
 			Address: newSupplier.Address,
@@ -48,6 +53,21 @@ const Supplier = () => {
 		};
 
 		SupplierService.createSupplier(data)
+			.then((response) => {
+				console.log(response.data);
+				refreshList();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// delete the supplier
+	const deleteSupplier = (supplier) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
+		SupplierService.deleteSupplier(supplier.id)
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
@@ -195,6 +215,12 @@ const Supplier = () => {
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
 													onClick={() => updateSupplier(supplier)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdDelete
+													className="icon-size-sm cursor-pointer"
+													onClick={() => deleteSupplier(supplier)}
 												/>
 											</span>
 										</td>

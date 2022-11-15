@@ -80,9 +80,9 @@ const MedicineList = () => {
 									<td>{medicine.ProductName}</td>
 									<td>{medicine.GenericName}</td>
 									<td>{medicine.subCategory.SubCategoryName}</td>
-									<td>{medicine.manufacturer.ManufacturerName}</td>
+									<td>{medicine.supplier.SupplierName}</td>
 									<td>{medicine.SellingPrice}</td>
-									<td>{medicine.ManufacturerPrice}</td>
+									<td>{medicine.SupplierPrice}</td>
 									<td>{medicine.ProductDetails}</td>
 									<td>
 										<span className="px-2">

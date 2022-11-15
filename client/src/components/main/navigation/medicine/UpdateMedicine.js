@@ -16,11 +16,11 @@ const UpdateMedicine = () => {
 		ProductName: oldMedicine.ProductName,
 		ProductDetails: oldMedicine.ProductDetails,
 		GenericName: oldMedicine.GenericName,
-		ManufacturerPrice: oldMedicine.ManufacturerPrice,
+		SupplierPrice: oldMedicine.SupplierPrice,
 		SellingPrice: oldMedicine.SellingPrice,
 		Quantity: 0,
 		Status: oldMedicine.Status,
-		manufacturerId: oldMedicine.manufacturerId,
+		supplierId: oldMedicine.supplierId,
 		unitId: oldMedicine.unitId,
 		subCategoryId: oldMedicine.subCategoryId,
 	});
@@ -29,7 +29,7 @@ const UpdateMedicine = () => {
 		category: "",
 		subCategoryId: "",
 		subCategoryItem: {},
-		manufacturerId: "",
+		supplierId: "",
 		unitId: "",
 	};
 
@@ -56,7 +56,7 @@ const UpdateMedicine = () => {
 					category: categoryData.CategoryName,
 					subCategoryId: oldMedicine.subCategory.SubCategoryName,
 					subCategoryItem: oldMedicine.subCategory,
-					manufacturerId: oldMedicine.manufacturer.ManufacturerName,
+					supplierId: oldMedicine.supplier.SupplierName,
 					unitId: oldMedicine.unit.UnitName,
 				});
 				setSubCategory(categoryData.subCategory);

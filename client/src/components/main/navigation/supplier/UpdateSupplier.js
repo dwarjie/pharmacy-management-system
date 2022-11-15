@@ -43,20 +43,6 @@ const UpdateSupplier = () => {
 		checkSuccess();
 	};
 
-	// delete the supplier
-	const deleteSupplier = () => {
-		SupplierService.deleteSupplier(supplier.id)
-			.then((response) => {
-				console.log(response.data);
-				setSuccess(true);
-			})
-			.catch((err) => {
-				console.log(err);
-				setSuccess(false);
-			});
-		checkSuccess();
-	};
-
 	// handle the input change of the forms
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -155,12 +141,6 @@ const UpdateSupplier = () => {
 					onClick={() => navigate(-1)}
 				>
 					Cancel
-				</button>
-				<button
-					className="btn btn-danger simple-shadow"
-					onClick={deleteSupplier}
-				>
-					Delete
 				</button>
 			</div>
 		</div>

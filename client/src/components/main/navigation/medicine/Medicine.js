@@ -37,7 +37,7 @@ const Medicine = (props) => {
 	// everytime the subcategory changes, compute sellingprice
 	useEffect(() => {
 		setSellingPrice();
-	}, [activeDropDownValue.subCategoryId, medicine.ManufacturerPrice]);
+	}, [activeDropDownValue.subCategoryId, medicine.SupplierPrice]);
 
 	// reset subcategory everytime category changes
 	useEffect(() => {
@@ -54,11 +54,11 @@ const Medicine = (props) => {
 			ProductName: medicine.ProductName,
 			ProductDetails: medicine.ProductDetails,
 			GenericName: medicine.GenericName,
-			ManufacturerPrice: medicine.ManufacturerPrice,
+			SupplierPrice: medicine.SupplierPrice,
 			SellingPrice: medicine.SellingPrice,
 			Quantity: 0,
 			Status: medicine.Status,
-			manufacturerId: medicine.manufacturerId,
+			supplierId: medicine.supplierId,
 			unitId: medicine.unitId,
 			subCategoryId: medicine.subCategoryId,
 		};
@@ -98,7 +98,7 @@ const Medicine = (props) => {
 	};
 
 	// this function will get the markup amount
-	// then use the formula Manufacturer price + markup amount in order to compute for selling price
+	// then use the formula Supplier price + markup amount in order to compute for selling price
 	const setSellingPrice = () => {
 		// check if props already have SellingPrice
 		let price = computeSellingPrice();
@@ -106,19 +106,19 @@ const Medicine = (props) => {
 	};
 
 	const computeSellingPrice = () => {
-		let manufacturerPrice = parseFloat(medicine.ManufacturerPrice);
-		if (manufacturerPrice === 0) return 0;
+		let supplierPrice = parseFloat(medicine.SupplierPrice);
+		if (supplierPrice === 0) return 0;
 
 		// check if the type is amount or percentage
 		let price = 0;
 		let subCategory = activeDropDownValue.subCategoryItem;
 		if (subCategory.MarkUpUnit === "%") {
 			let percentage = 0; // if the type is percentage
-			percentage = subCategory.MarkUp / manufacturerPrice;
-			price = manufacturerPrice + percentage;
+			percentage = subCategory.MarkUp / supplierPrice;
+			price = supplierPrice + percentage;
 		} else {
 			// if amount
-			price = manufacturerPrice + subCategory.MarkUp;
+			price = supplierPrice + subCategory.MarkUp;
 		}
 
 		// check if price is NaN
@@ -301,13 +301,13 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="ManufacturerPrice">Unit Price:</label>
+							<label htmlFor="SupplierPrice">Unit Price:</label>
 							<input
 								type="number"
 								className="form-control form-input"
-								name="ManufacturerPrice"
-								id="ManufacturerPrice"
-								value={medicine.ManufacturerPrice}
+								name="SupplierPrice"
+								id="SupplierPrice"
+								value={medicine.SupplierPrice}
 								onChange={handleInputChange}
 								required
 							/>
@@ -328,30 +328,30 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="manufacturerId">Supplier:</label>
+							<label htmlFor="supplierId">Supplier:</label>
 							<select
-								name="manufacturerId"
-								id="manufacturerId"
+								name="supplierId"
+								id="supplierId"
 								className="form-select form-input"
-								value={activeDropDownValue.manufacturerId}
+								value={activeDropDownValue.supplierId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
 									handleSelectChange(event);
-									setMedicine({ ...medicine, manufacturerId: data.id });
+									setMedicine({ ...medicine, supplierId: data.id });
 								}}
 							>
 								<option disabled hidden value="">
 									Select supplier
 								</option>
-								{extraModel.manufacturer &&
-									extraModel.manufacturer.map((item, index) => (
+								{extraModel.supplier &&
+									extraModel.supplier.map((item, index) => (
 										<option
 											className="dropdown-item"
 											key={index}
-											value={item.ManufacturerName}
+											value={item.SupplierName}
 											data-value={JSON.stringify(item)}
 										>
-											{item.ManufacturerName}
+											{item.SupplierName}
 										</option>
 									))}
 							</select>
@@ -421,6 +421,16 @@ const Medicine = (props) => {
 				>
 					{props.mode === "update" ? "Update" : "Save"}
 				</button>
+				{props.mode === "update" ? (
+					<button
+						className="btn btn-secondary simple-shadow me-3"
+						onClick={() => navigate(-1)}
+					>
+						Back
+					</button>
+				) : (
+					""
+				)}
 			</div>
 		</div>
 	);
