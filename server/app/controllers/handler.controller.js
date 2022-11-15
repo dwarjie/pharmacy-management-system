@@ -16,9 +16,23 @@ exports.create = (req, res) => {
 		Email: req.body.Email,
 	};
 
-	Handler.create(handler)
-		.then((data) => {
-			res.send(data);
+	// check if handler already exists
+	// else create new handler
+	Handler.findOrCreate({
+		where: { FirstName: req.body.FirstName, LastName: req.body.LastName },
+		defaults: { ...handler },
+	})
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: `Created successfully.`,
+					data,
+				});
+			} else {
+				res.send({
+					message: `Record already exists.`,
+				});
+			}
 		})
 		.catch((err) => {
 			res.status(500).send({

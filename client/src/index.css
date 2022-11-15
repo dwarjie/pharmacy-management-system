@@ -33,6 +33,7 @@ body {
 }
 
 .side-navigation {
+	background-color: #1d3557;
 	position: fixed;
 	width: 15rem;
 	margin-left: -15rem;
@@ -71,6 +72,10 @@ body {
 }
 
 /* BUTTONS */
+.btn {
+	color: white;
+}
+
 .button-font-md {
 	font-size: 1rem;
 }
@@ -85,7 +90,11 @@ body {
 	color: white;
 	font-weight: 600;
 	text-align: left;
-	background-color: #e63946;
+}
+
+.btn-side-navigation:hover {
+	color: white !important;
+	background-color: #e63946 !important;
 }
 
 .btn-dropdown {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HandlerService from "../../../../services/HandlerService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const Handler = (props) => {
 	const { title, mode, initialHandler } = props;
@@ -12,6 +13,9 @@ const Handler = (props) => {
 
 	// set onClick function for button to trigger
 	const createHandler = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		HandlerService.createHandler(handler)
 			.then((response) => {
 				console.log(response.data);

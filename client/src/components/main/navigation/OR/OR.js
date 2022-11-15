@@ -1,6 +1,7 @@
 // This component is responsible for viewing the start, end, and current OR for the system
 import { useState, useEffect } from "react";
 import ORService from "../../../../services/ORService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const OR = () => {
 	const initialOR = {
@@ -31,6 +32,9 @@ const OR = () => {
 
 	// update current OR
 	const updateCurrentOR = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		ORService.updateCurrentOR(valueOR)
 			.then((response) => {
 				console.log(response.data);

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HandlerService from "../../../../services/HandlerService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -35,6 +36,9 @@ const HandlerList = () => {
 	};
 
 	const deleteHandler = (handler) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
 		HandlerService.deleteHandler(handler.id)
 			.then((response) => {
 				console.log(response.data);

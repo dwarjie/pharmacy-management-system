@@ -6,11 +6,13 @@ import { HouseFill, PeopleFill, Cart4, Receipt } from "react-bootstrap-icons";
 const SideNavigation = () => {
 	return (
 		<nav
-			className="collapse navbar navbar-expand d-flex flex-column align-item-start bg-light h-100 side-navigation"
+			className="collapse navbar navbar-expand d-flex flex-column align-item-start bg-dark h-100 side-navigation"
 			id="sideNavigation"
 		>
 			<div className="container-fluid flex-column gap-4 p-3">
-				<h5 className="text-center">ActiveCare Home Health Solution Inc.</h5>
+				<h5 className="text-center text-light">
+					ActiveCare Home Health Solution Inc.
+				</h5>
 				<div className="d-flex flex-column gap-1 w-100">
 					{/* DASHBOARD */}
 					<Link to={"/dashboard"} className="btn btn-side-navigation">
@@ -23,7 +25,7 @@ const SideNavigation = () => {
 					{/* PATIENT */}
 					<div className="dropdown">
 						<button
-							className="btn dropdown-toggle btn-side-navigation"
+							className="btn dropdown-toggle btn-side-navigation text-light"
 							id="dropdownMenuButton1"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
