@@ -67,7 +67,7 @@ exports.update = (req, res) => {
 			}
 
 			res.send({
-				message: `Handler successfully updated`,
+				message: `Updated successfully.`,
 			});
 		})
 		.catch((err) => {
