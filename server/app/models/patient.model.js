@@ -64,8 +64,9 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		Senior: {
+		isSenior: {
 			type: Sequelize.BOOLEAN,
+			defaultValue: false,
 			allowNull: false,
 		},
 		SeniorId: {

@@ -18,11 +18,17 @@ const deletePatient = (patientId) => {
 	return http.delete(`/patient?patientId=${patientId}`);
 };
 
+// * get all the handlers for adding patient dropdown
+const getAllHandler = () => {
+	return http.get(`/patient`);
+};
+
 const PatientService = {
 	createPatient,
 	getAllPatient,
 	updatePatient,
 	deletePatient,
+	getAllHandler,
 };
 
 export default PatientService;

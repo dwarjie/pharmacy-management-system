@@ -1,6 +1,7 @@
 // This reusable component will be used for adding and updating patient information
 import { useState, useEffect } from "react";
 import PatientService from "../../../../services/PatientService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import CheckBox from "../../../layout/CheckBox";
 
 const Patient = (props) => {
@@ -8,7 +9,37 @@ const Patient = (props) => {
 	const { title, mode, initialPatient } = props;
 
 	const [newPatient, setNewPatient] = useState(initialPatient);
+	const [handlers, sethandlers] = useState([]);
 	const [checked, setChecked] = useState(false); // for the checkbox of PWD/Senior
+
+	useEffect(() => {
+		getAllHandler();
+	}, []);
+
+	const getAllHandler = () => {
+		PatientService.getAllHandler()
+			.then((response) => {
+				console.log(response.data);
+				sethandlers(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// create a new patient
+	const createPatient = () => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
+		PatientService.createPatient(newPatient)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	// handle change event for the forms
 	const handleInputChange = (event) => {
@@ -18,6 +49,8 @@ const Patient = (props) => {
 
 	const handleChecked = () => {
 		setChecked(!checked);
+		// ! set isSenior based on the checkbox value
+		setNewPatient({ ...newPatient, isSenior: checked });
 	};
 
 	return (
@@ -153,11 +186,16 @@ const Patient = (props) => {
 								className="form-select form-input"
 								required
 							>
-								<option value="doctor1" selected>
-									Doctor 1
-								</option>
-								<option value="doctor2">Doctor 2</option>
-								<option value="ncm1">NCM 1</option>
+								{handlers &&
+									handlers.map((handler, index) => (
+										<option
+											className="dropdown-item"
+											value={handler.FirstName}
+											key={index}
+										>
+											{handler.FirstName}
+										</option>
+									))}
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
@@ -207,10 +245,13 @@ const Patient = (props) => {
 							</div>
 						</div>
 					</div>
+					<button
+						className="btn btn-primary simple-shadow mt-3"
+						onClick={createPatient}
+					>
+						{mode === "update" ? "Update" : "Save"}
+					</button>
 				</form>
-				<button className="btn btn-primary simple-shadow">
-					{mode === "update" ? "Update" : "Save"}
-				</button>
 			</div>
 		</div>
 	);
