@@ -70,4 +70,13 @@ db.medicine.belongsTo(db.subCategory, {
 	},
 });
 
+// add relationship for handlers and patient
+db.handler.hasMany(db.patient);
+db.patient.belongsTo(db.handler, {
+	as: "handler",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
 module.exports = db; // export the db object

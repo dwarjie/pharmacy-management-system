@@ -28,10 +28,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		MiddleName: {
-			type: Sequelize.STRING,
-			allowNull: true,
-		},
+		// MiddleName: {
+		// 	type: Sequelize.STRING,
+		// 	allowNull: true,
+		// },
 		LastName: {
 			type: Sequelize.STRING,
 			allowNull: false,

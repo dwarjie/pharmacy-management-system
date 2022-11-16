@@ -7,7 +7,6 @@ const Patient = db.patient;
 exports.create = (req, res) => {
 	const patient = {
 		FirstName: req.body.FirstName,
-		MiddleName: req.body.MiddleName,
 		LastName: req.body.LastName,
 		Sex: req.body.Sex,
 		DateOfBirth: req.body.DateOfBirth,
@@ -18,6 +17,7 @@ exports.create = (req, res) => {
 		Mobile: req.body.Mobile,
 		EmergencyContact: req.body.EmergencyContact,
 		Note: req.body.Note,
+		handlerId: req.body.handlerId,
 	};
 
 	// !check if patient already exists
