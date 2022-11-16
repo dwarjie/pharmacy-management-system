@@ -1,5 +1,6 @@
 // This reusable component will be used for adding and updating patient information
 import { useState, useEffect } from "react";
+import PatientService from "../../../../services/PatientService";
 import CheckBox from "../../../layout/CheckBox";
 
 const Patient = (props) => {

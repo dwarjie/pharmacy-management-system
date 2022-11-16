@@ -16,7 +16,7 @@ const MainComponent = () => {
 	};
 
 	return (
-		<div className="w-100 h-100">
+		<div>
 			<SideNavigation />
 			<ContentContainer toggleSideNavigation={toggleSideNavigation} />
 		</div>
