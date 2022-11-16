@@ -102,7 +102,7 @@ const Category = () => {
 						<label htmlFor="CategoryName">Category Name:</label>
 						<input
 							type="text"
-							className="form-control"
+							className="form-control form-input"
 							id="CategoryName"
 							name="CategoryName"
 							value={category.CategoryName}

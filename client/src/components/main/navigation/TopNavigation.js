@@ -20,9 +20,9 @@ const TopNavigation = (props) => {
 					</span>
 				</button>
 				<div className="d-flex flex-row gap-3">
-					<BellFill className="icon-size-md" />
-					<ExclamationTriangleFill className="icon-size-md" />
-					<PersonCircle className="icon-size-md" />
+					<BellFill className="icon-size-md text-dark" />
+					<ExclamationTriangleFill className="icon-size-md text-dark" />
+					<PersonCircle className="icon-size-md text-dark" />
 				</div>
 			</div>
 		</nav>

@@ -1,7 +1,19 @@
+/* VARIABLES */
+:root {
+	--darker-blue: #1d3557;
+	--dark-blue: #457b9d;
+	--light-blue: #a8dadc;
+	--cherry: #e63946;
+	--success: #28a745;
+	--smoke-white: #f1faee;
+	--input-border: #6f6f6f;
+}
+
 /* whole page */
 body {
 	width: 100vw;
 	height: 100vh;
+	color: #1d3557;
 }
 
 .App {
@@ -33,7 +45,7 @@ body {
 }
 
 .side-navigation {
-	background-color: #1d3557;
+	background-color: var(--darker-blue);
 	position: fixed;
 	width: 15rem;
 	margin-left: -15rem;
@@ -51,7 +63,7 @@ body {
 
 /* NAVBAR TOGGLER */
 .burger {
-	color: #e63946;
+	color: var(--cherry);
 }
 
 .btn-toggler {
@@ -107,7 +119,7 @@ body {
 
 .btn-side-navigation:hover {
 	color: white !important;
-	background-color: #e63946 !important;
+	background-color: var(--cherry) !important;
 }
 
 .btn-dropdown {
@@ -118,9 +130,9 @@ body {
 
 .form-input {
 	background-color: white;
-	border: 1px solid #6f6f6f;
+	border: 1px solid var(--input-border);
 	border-radius: 5px;
-	color: #6f6f6f;
+	color: var(--input-border);
 	padding: 0.5rem 1rem;
 	font-size: 1.1rem;
 }
@@ -140,6 +152,6 @@ label {
 
 /* TABLE LIST */
 .table-active {
-	background-color: #e63946;
+	background-color: var(--cherry);
 	color: white;
 }
