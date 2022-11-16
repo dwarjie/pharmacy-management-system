@@ -14,6 +14,8 @@ const AddPatient = () => {
 		FirstVisit: "",
 		Mobile: "",
 		EmergencyContact: "",
+		Senior: 0,
+		SeniorId: "",
 		Note: "",
 		handlerId: null,
 	};

@@ -201,6 +201,7 @@ const Patient = (props) => {
 									value={newPatient.SeniorId}
 									onChange={handleInputChange}
 									disabled={!checked}
+									required={checked}
 								/>
 							</div>
 						</div>

@@ -28,10 +28,6 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		// MiddleName: {
-		// 	type: Sequelize.STRING,
-		// 	allowNull: true,
-		// },
 		LastName: {
 			type: Sequelize.STRING,
 			allowNull: false,
@@ -67,6 +63,14 @@ module.exports = (sequelize, Sequelize) => {
 		EmergencyContact: {
 			type: Sequelize.STRING,
 			allowNull: false,
+		},
+		Senior: {
+			type: Sequelize.BOOLEAN,
+			allowNull: false,
+		},
+		SeniorId: {
+			type: Sequelize.STRING,
+			allowNull: true,
 		},
 		Note: {
 			type: Sequelize.STRING,
