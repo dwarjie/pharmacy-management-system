@@ -16,7 +16,7 @@ exports.create = (req, res) => {
 		FirstVisit: req.body.FirstVisit,
 		Mobile: req.body.Mobile,
 		EmergencyContact: req.body.EmergencyContact,
-		Senior: req.body.Senior,
+		isSenior: req.body.isSenior,
 		SeniorId: req.body.SeniorId,
 		Note: req.body.Note,
 		handlerId: req.body.handlerId,

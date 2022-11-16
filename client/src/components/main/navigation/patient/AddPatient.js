@@ -20,7 +20,17 @@ const AddPatient = () => {
 		handlerId: null,
 	};
 
-	return <Patient title="Add Patient" initialPatient={initialPatient} />;
+	const initialDropDownValue = {
+		handlerId: "",
+	};
+
+	return (
+		<Patient
+			title="Add Patient"
+			initialPatient={initialPatient}
+			initialDropDownValue={initialDropDownValue}
+		/>
+	);
 };
 
 export default AddPatient;

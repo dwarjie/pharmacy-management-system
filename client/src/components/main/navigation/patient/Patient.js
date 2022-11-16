@@ -3,13 +3,17 @@ import { useState, useEffect } from "react";
 import PatientService from "../../../../services/PatientService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import CheckBox from "../../../layout/CheckBox";
+import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
+import parseDropdownValue from "../../../../helper/parseJSON";
 
 const Patient = (props) => {
 	// get the value of the props
-	const { title, mode, initialPatient } = props;
+	const { title, mode, initialPatient, initialDropDownValue } = props;
 
 	const [newPatient, setNewPatient] = useState(initialPatient);
 	const [handlers, sethandlers] = useState([]);
+	const [activeDropDownValue, setActiveDropDownValue] =
+		useState(initialDropDownValue);
 	const [checked, setChecked] = useState(false); // for the checkbox of PWD/Senior
 
 	useEffect(() => {
@@ -50,7 +54,7 @@ const Patient = (props) => {
 	const handleChecked = () => {
 		setChecked(!checked);
 		// ! set isSenior based on the checkbox value
-		setNewPatient({ ...newPatient, isSenior: checked });
+		setNewPatient({ ...newPatient, isSenior: !checked, SeniorId: "" });
 	};
 
 	return (
@@ -98,10 +102,9 @@ const Patient = (props) => {
 								onChange={handleInputChange}
 								required
 							>
-								<option value="male" selected>
-									Male
-								</option>
-								<option value="female">Female</option>
+								<DropDownDefaultOption content={"Select Sex"} />
+								<option value="Male">Male</option>
+								<option value="Female">Female</option>
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
@@ -179,18 +182,29 @@ const Patient = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="reffered">Reffered By:</label>
+							<label htmlFor="handlerId">Reffered By:</label>
 							<select
-								name="reffered"
-								id="reffered"
+								name="handlerId"
+								id="handlerId"
 								className="form-select form-input"
+								value={activeDropDownValue.handlerId}
+								onChange={(event) => {
+									let data = parseDropdownValue(event);
+									setActiveDropDownValue({
+										...activeDropDownValue,
+										handlerId: data.FirstName,
+									});
+									setNewPatient({ ...newPatient, handlerId: data.id });
+								}}
 								required
 							>
+								<DropDownDefaultOption content={"Select handler"} />
 								{handlers &&
 									handlers.map((handler, index) => (
 										<option
 											className="dropdown-item"
 											value={handler.FirstName}
+											data-value={JSON.stringify(handler)}
 											key={index}
 										>
 											{handler.FirstName}
@@ -246,8 +260,12 @@ const Patient = (props) => {
 						</div>
 					</div>
 					<button
+						type="submit"
 						className="btn btn-primary simple-shadow mt-3"
-						onClick={createPatient}
+						onClick={(event) => {
+							event.preventDefault();
+							createPatient();
+						}}
 					>
 						{mode === "update" ? "Update" : "Save"}
 					</button>
