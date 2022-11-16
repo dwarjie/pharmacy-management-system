@@ -173,16 +173,6 @@ const Patient = (props) => {
 						</div>
 					</div>
 					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
-							<CheckBox
-								label="PWD/Senior"
-								inputName="Status"
-								value={checked}
-								onChange={handleChecked}
-							/>
-						</div>
-					</div>
-					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Note">Medical Note:</label>
 							<textarea
@@ -192,6 +182,27 @@ const Patient = (props) => {
 								value={newPatient.Note}
 								onChange={handleInputChange}
 							></textarea>
+						</div>
+						<div className="col-sm-12 col-md">
+							<label htmlFor="Status">Status: </label>
+							<CheckBox
+								label="PWD/Senior"
+								inputName="Status"
+								value={checked}
+								onChange={handleChecked}
+							/>
+							<div className="col-sm-12 col-md">
+								<label htmlFor="SeniorId">Senior ID:</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="SeniorId"
+									id="SeniorId"
+									value={newPatient.SeniorId}
+									onChange={handleInputChange}
+									disabled={!checked}
+								/>
+							</div>
 						</div>
 					</div>
 				</form>
