@@ -49,7 +49,7 @@ exports.create = (req, res) => {
 
 // get all patient records
 exports.findAll = (req, res) => {
-	Patient.findAll()
+	Patient.findAll({ include: ["handler"] })
 		.then((data) => {
 			res.send(data);
 		})
