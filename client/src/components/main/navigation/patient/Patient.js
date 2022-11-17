@@ -1,13 +1,15 @@
 // This reusable component will be used for adding and updating patient information
 import { useState, useEffect } from "react";
-import PatientService from "../../../../services/PatientService";
+import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import PatientService from "../../../../services/PatientService";
 import CheckBox from "../../../layout/CheckBox";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import parseDropdownValue from "../../../../helper/parseJSON";
 import formatDate from "../../../../helper/formatDate";
 
 const Patient = (props) => {
+	let navigate = useNavigate();
 	// get the value of the props
 	const { title, mode, initialPatient, initialDropDownValue, isSenior } = props;
 
@@ -41,6 +43,18 @@ const Patient = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				refreshForm();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// update the patient
+	const updatePatient = () => {
+		PatientService.updatePatient(newPatient.id, newPatient)
+			.then((response) => {
+				console.log(response.data);
+				navigate(-1);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -273,7 +287,7 @@ const Patient = (props) => {
 						className="btn btn-primary simple-shadow mt-3"
 						onClick={(event) => {
 							event.preventDefault();
-							createPatient();
+							mode === "update" ? updatePatient() : createPatient();
 						}}
 					>
 						{mode === "update" ? "Update" : "Save"}
