@@ -1,8 +1,8 @@
 // This component is responsible for adding new medicine category
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CategoryService from "../../../../services/CategoryService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import CategoryService from "../../../../services/CategoryService";
 
 // Icons
 import { FaEdit } from "react-icons/fa";
@@ -37,7 +37,8 @@ const Category = () => {
 	};
 
 	// create a new category
-	const createCategory = () => {
+	const createCategory = (event) => {
+		event.preventDefault();
 		// confirm the user if they want to proceed
 		if (!AlertPrompt()) return;
 
@@ -98,7 +99,10 @@ const Category = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-lg-10 pb-5 mx-auto">
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => createCategory(event)}
+					>
 						<label htmlFor="CategoryName">Category Name:</label>
 						<input
 							type="text"
@@ -107,20 +111,21 @@ const Category = () => {
 							name="CategoryName"
 							value={category.CategoryName}
 							onChange={handleInputChange}
+							required
 						/>
+						<button
+							className="btn btn-primary simple-shadow mt-3 me-3"
+							type="submit"
+						>
+							Add
+						</button>
+						{/* <button
+							className="btn btn-secondary simple-shadow mt-3"
+							onClick={refreshList}
+						>
+							Cancel
+						</button> */}
 					</form>
-					<button
-						className="btn btn-primary simple-shadow me-3"
-						onClick={createCategory}
-					>
-						Add
-					</button>
-					<button
-						className="btn btn-secondary simple-shadow"
-						onClick={refreshList}
-					>
-						Cancel
-					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
