@@ -8,13 +8,13 @@ import parseDropdownValue from "../../../../helper/parseJSON";
 
 const Patient = (props) => {
 	// get the value of the props
-	const { title, mode, initialPatient, initialDropDownValue } = props;
+	const { title, mode, initialPatient, initialDropDownValue, isSenior } = props;
 
 	const [newPatient, setNewPatient] = useState(initialPatient);
 	const [handlers, sethandlers] = useState([]);
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
-	const [checked, setChecked] = useState(false); // for the checkbox of PWD/Senior
+	const [checked, setChecked] = useState(isSenior); // for the checkbox of PWD/Senior
 
 	useEffect(() => {
 		getAllHandler();

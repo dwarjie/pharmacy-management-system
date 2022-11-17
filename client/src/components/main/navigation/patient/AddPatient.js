@@ -29,6 +29,7 @@ const AddPatient = () => {
 			title="Add Patient"
 			initialPatient={initialPatient}
 			initialDropDownValue={initialDropDownValue}
+			isSenior={false}
 		/>
 	);
 };

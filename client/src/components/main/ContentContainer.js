@@ -6,6 +6,7 @@ import TopNavigation from "./navigation/TopNavigation";
 
 // Patient Tab
 import AddPatient from "./navigation/patient/AddPatient";
+import UpdatePatient from "./navigation/patient/UpdatePatient";
 import PatientList from "./navigation/patient/PatientList";
 
 // Maintenance Tab
@@ -49,6 +50,7 @@ const ContentContainer = (props) => {
 			<div className="container col-12 col-md-11 mt-5 pb-3 h-auto">
 				<Routes>
 					<Route path="/maintenance/patient" element={<AddPatient />} />
+					<Route path="/maintenance/patient/:id" element={<UpdatePatient />} />
 					<Route
 						path="/maintenance/patient/patient-list"
 						element={<PatientList />}

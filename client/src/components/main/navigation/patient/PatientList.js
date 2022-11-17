@@ -9,7 +9,6 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const PatientList = () => {
-	let navigate = useNavigate();
 	const [patients, setPatients] = useState([]);
 
 	useEffect(() => {
@@ -45,7 +44,17 @@ const PatientList = () => {
 };
 
 const PatientTable = (props) => {
+	let navigate = useNavigate();
 	const { patientsData } = props;
+
+	// update patient
+	const updatePatient = (patient) => {
+		navigate(`/pharmacy/maintenance/patient/${patient.id}`, {
+			state: {
+				patient: patient,
+			},
+		});
+	};
 
 	// This function will go through all patients data
 	// then return it as a rows in the table
@@ -58,7 +67,10 @@ const PatientTable = (props) => {
 			<td>{patient.handler.FirstName}</td>
 			<td>
 				<span className="px-2">
-					<FaEdit className="icon-size-sm cursor-pointer" />
+					<FaEdit
+						className="icon-size-sm cursor-pointer"
+						onClick={() => updatePatient(patient)}
+					/>
 				</span>
 				<span className="px-2">
 					<MdDelete className="icon-size-sm cursor-pointer" />
