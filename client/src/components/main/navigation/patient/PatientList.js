@@ -9,6 +9,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const PatientList = () => {
+	let navigate = useNavigate();
 	const [patients, setPatients] = useState([]);
 
 	useEffect(() => {
@@ -26,6 +27,30 @@ const PatientList = () => {
 			});
 	};
 
+	// update patient
+	const updatePatient = (patient) => {
+		navigate(`/pharmacy/maintenance/patient/${patient.id}`, {
+			state: {
+				patient: patient,
+			},
+		});
+	};
+
+	// delete patient
+	const deletePatient = (patient) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
+		PatientService.deletePatient(patient.id)
+			.then((response) => {
+				console.log(response.data);
+				getAllPatient(); // refresh the list
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -37,24 +62,18 @@ const PatientList = () => {
 					<label htmlFor="patient-search">Search:</label>
 					<input type="text" className="form-control" id="patient-search" />
 				</form>
-				<PatientTable patientsData={patients} />
+				<PatientTable
+					patientsData={patients}
+					updatePatient={updatePatient}
+					deletePatient={deletePatient}
+				/>
 			</div>
 		</div>
 	);
 };
 
 const PatientTable = (props) => {
-	let navigate = useNavigate();
-	const { patientsData } = props;
-
-	// update patient
-	const updatePatient = (patient) => {
-		navigate(`/pharmacy/maintenance/patient/${patient.id}`, {
-			state: {
-				patient: patient,
-			},
-		});
-	};
+	const { patientsData, updatePatient, deletePatient } = props;
 
 	// This function will go through all patients data
 	// then return it as a rows in the table
@@ -73,7 +92,10 @@ const PatientTable = (props) => {
 					/>
 				</span>
 				<span className="px-2">
-					<MdDelete className="icon-size-sm cursor-pointer" />
+					<MdDelete
+						className="icon-size-sm cursor-pointer"
+						onClick={() => deletePatient(patient)}
+					/>
 				</span>
 			</td>
 		</tr>

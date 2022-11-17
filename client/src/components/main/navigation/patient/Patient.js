@@ -5,6 +5,7 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import CheckBox from "../../../layout/CheckBox";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import parseDropdownValue from "../../../../helper/parseJSON";
+import formatDate from "../../../../helper/formatDate";
 
 const Patient = (props) => {
 	// get the value of the props
@@ -39,6 +40,7 @@ const Patient = (props) => {
 		PatientService.createPatient(newPatient)
 			.then((response) => {
 				console.log(response.data);
+				refreshForm();
 			})
 			.catch((err) => {
 				console.log(err);
@@ -55,6 +57,13 @@ const Patient = (props) => {
 		setChecked(!checked);
 		// ! set isSenior based on the checkbox value
 		setNewPatient({ ...newPatient, isSenior: !checked, SeniorId: "" });
+	};
+
+	// refresh the forms
+	const refreshForm = () => {
+		setNewPatient(initialPatient);
+		setActiveDropDownValue(initialDropDownValue);
+		setChecked(isSenior);
 	};
 
 	return (
@@ -114,7 +123,7 @@ const Patient = (props) => {
 								className="form-control form-input"
 								name="DateOfBirth"
 								id="DateOfBirth"
-								value={newPatient.DateOfBirth}
+								value={formatDate(newPatient.DateOfBirth)}
 								onChange={handleInputChange}
 								required
 							/>
@@ -219,7 +228,7 @@ const Patient = (props) => {
 								className="form-control form-input"
 								name="FirstVisit"
 								id="FirstVisit"
-								value={newPatient.FirstVisit}
+								value={formatDate(newPatient.FirstVisit)}
 								onChange={handleInputChange}
 								required
 							/>

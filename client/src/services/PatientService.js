@@ -15,7 +15,7 @@ const updatePatient = (id, data) => {
 };
 
 const deletePatient = (patientId) => {
-	return http.delete(`/patient?patientId=${patientId}`);
+	return http.delete(`/patient/patient-list?patientId=${patientId}`);
 };
 
 // * get all the handlers for adding patient dropdown
