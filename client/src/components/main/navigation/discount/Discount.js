@@ -24,7 +24,8 @@ const Discount = () => {
 	}, []);
 
 	// add new discount
-	const createDiscount = () => {
+	const createDiscount = (event) => {
+		event.preventDefault();
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -86,8 +87,13 @@ const Discount = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-lg-10 pb-5 mx-auto">
-						<label htmlFor="DiscountName">Discount Name:</label>
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => createDiscount(event)}
+					>
+						<label className="required" htmlFor="DiscountName">
+							Discount Name:
+						</label>
 						<input
 							type="text"
 							className="form-control form-input"
@@ -99,9 +105,12 @@ const Discount = () => {
 						/>
 						<div className="row mt-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="DiscountAmount">Discount Amount:</label>
+								<label className="required" htmlFor="DiscountAmount">
+									Discount Amount:
+								</label>
 								<input
 									type="number"
+									min={1}
 									className="form-control form-input"
 									name="DiscountAmount"
 									id="DiscountAmount"
@@ -111,7 +120,9 @@ const Discount = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="DiscountType">Discount Type:</label>
+								<label className="required" htmlFor="DiscountType">
+									Discount Type:
+								</label>
 								<select
 									name="DiscountType"
 									id="DiscountType"
@@ -125,13 +136,13 @@ const Discount = () => {
 								</select>
 							</div>
 						</div>
+						<button
+							type="submit"
+							className="btn btn-primary simple-shadow me-3 mt-3"
+						>
+							Add
+						</button>
 					</form>
-					<button
-						className="btn btn-primary simple-shadow me-3"
-						onClick={createDiscount}
-					>
-						Add
-					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">

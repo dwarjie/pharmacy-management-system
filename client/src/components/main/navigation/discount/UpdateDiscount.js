@@ -27,7 +27,9 @@ const UpdateDiscount = () => {
 	}, []);
 
 	// update the discount
-	const updateDiscount = () => {
+	const updateDiscount = (event) => {
+		event.preventDefault();
+
 		DiscountService.updateDiscount(discount.id, discount)
 			.then((response) => {
 				console.log(response.data);
@@ -79,8 +81,13 @@ const UpdateDiscount = () => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-10 pb-5">
-					<label htmlFor="DiscountName">Discount Name:</label>
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) => updateDiscount(event)}
+				>
+					<label className="required" htmlFor="DiscountName">
+						Discount Name:
+					</label>
 					<input
 						type="text"
 						className="form-control form-input"
@@ -92,9 +99,12 @@ const UpdateDiscount = () => {
 					/>
 					<div className="row mt-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="DiscountAmount">Discount Amount:</label>
+							<label className="required" htmlFor="DiscountAmount">
+								Discount Amount:
+							</label>
 							<input
 								type="number"
+								min={1}
 								className="form-control form-input"
 								name="DiscountAmount"
 								id="DiscountAmount"
@@ -104,7 +114,9 @@ const UpdateDiscount = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="DiscountType">Discount Type:</label>
+							<label className="required" htmlFor="DiscountType">
+								Discount Type:
+							</label>
 							<select
 								name="DiscountType"
 								id="DiscountType"
@@ -118,25 +130,27 @@ const UpdateDiscount = () => {
 							</select>
 						</div>
 					</div>
+					<button
+						type="submit"
+						className="btn btn-primary simple-shadow me-3 mt-3"
+					>
+						Update
+					</button>
+					<button
+						type="button"
+						className="btn btn-secondary simple-shadow me-3 mt-3"
+						onClick={() => navigate(-1)}
+					>
+						Cancel
+					</button>
+					<button
+						type="button"
+						className="btn btn-danger simple-shadow me-3 mt-3"
+						onClick={deleteDiscount}
+					>
+						Delete
+					</button>
 				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={updateDiscount}
-				>
-					Update
-				</button>
-				<button
-					className="btn btn-secondary simple-shadow me-3"
-					onClick={() => navigate(-1)}
-				>
-					Cancel
-				</button>
-				<button
-					className="btn btn-danger simple-shadow me-3"
-					onClick={deleteDiscount}
-				>
-					Delete
-				</button>
 			</div>
 		</div>
 	);

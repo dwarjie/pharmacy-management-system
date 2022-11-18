@@ -68,10 +68,12 @@ const UpdateSubCategory = () => {
 			</div>
 			<div className="p-3">
 				<form
-					className="col-10 pb-5"
+					className="col-12 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => updateSubCategory(event)}
 				>
-					<label htmlFor="SubCategoryName">Sub-Category Name:</label>
+					<label className="required" htmlFor="SubCategoryName">
+						Sub-Category Name:
+					</label>
 					<input
 						type="text"
 						className="form-control form-input"
@@ -83,7 +85,9 @@ const UpdateSubCategory = () => {
 					/>
 					<div className="row mt-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="MarkUp">Markup:</label>
+							<label className="required" htmlFor="MarkUp">
+								Markup:
+							</label>
 							<input
 								type="number"
 								min={1}
@@ -96,7 +100,9 @@ const UpdateSubCategory = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="MarkUpUnit">Unit:</label>
+							<label className="required" htmlFor="MarkUpUnit">
+								Unit:
+							</label>
 							<select
 								name="MarkUpUnit"
 								id="MarkUpUnit"
@@ -114,6 +120,7 @@ const UpdateSubCategory = () => {
 						Update
 					</button>
 					<button
+						type="button"
 						className="btn btn-secondary simple-shadow me-3 mt-3"
 						onClick={() => navigate(-1)}
 					>

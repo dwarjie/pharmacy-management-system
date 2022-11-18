@@ -45,7 +45,9 @@ const Medicine = (props) => {
 	}, [activeDropDownValue.category]);
 
 	// create new product
-	const createProduct = () => {
+	const createProduct = (event) => {
+		event.preventDefault();
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -75,7 +77,9 @@ const Medicine = (props) => {
 	};
 
 	// update medicine
-	const updateMedicine = () => {
+	const updateMedicine = (event) => {
+		event.preventDefault();
+
 		MedicineService.updateMedicine(medicine.id, medicine)
 			.then((response) => {
 				console.log(response.data);
@@ -170,10 +174,19 @@ const Medicine = (props) => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="pb-5">
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) => {
+						props.mode === "update"
+							? updateMedicine(event)
+							: createProduct(event);
+					}}
+				>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="ProductCode">Product Code:</label>
+							<label className="required" htmlFor="ProductCode">
+								Product Code:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -198,7 +211,9 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="ProductName">Product Name:</label>
+							<label className="required" htmlFor="ProductName">
+								Product Name:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -223,11 +238,14 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="category">Category:</label>
+							<label className="required" htmlFor="category">
+								Category:
+							</label>
 							<select
 								name="category"
 								id="category"
 								className="form-select form-input"
+								required
 								defaultValue={activeDropDownValue.category}
 								// set the sub category
 								onChange={(event) => {
@@ -257,11 +275,14 @@ const Medicine = (props) => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="subCategoryId">Sub Category:</label>
+							<label className="required" htmlFor="subCategoryId">
+								Sub Category:
+							</label>
 							<select
 								name="subCategoryId"
 								id="subCategoryId"
 								className="form-select form-input"
+								required
 								value={activeDropDownValue.subCategoryId}
 								onChange={(event) => {
 									// handle the value for subCategoryId name
@@ -301,9 +322,12 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="SupplierPrice">Unit Price:</label>
+							<label className="required" htmlFor="SupplierPrice">
+								Unit Price:
+							</label>
 							<input
 								type="number"
+								min={1}
 								className="form-control form-input"
 								name="SupplierPrice"
 								id="SupplierPrice"
@@ -313,7 +337,9 @@ const Medicine = (props) => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="SellingPrice">Selling Price:</label>
+							<label className="required" htmlFor="SellingPrice">
+								Selling Price:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -328,11 +354,14 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="supplierId">Supplier:</label>
+							<label className="required" htmlFor="supplierId">
+								Supplier:
+							</label>
 							<select
 								name="supplierId"
 								id="supplierId"
 								className="form-select form-input"
+								required
 								value={activeDropDownValue.supplierId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -357,11 +386,14 @@ const Medicine = (props) => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="unitId">Unit of Measure:</label>
+							<label className="required" htmlFor="unitId">
+								Unit of Measure:
+							</label>
 							<select
 								name="unitId"
 								id="unitId"
 								className="form-select form-input"
+								required
 								value={activeDropDownValue.unitId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -388,11 +420,14 @@ const Medicine = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
-							<label htmlFor="status">Status:</label>
+							<label className="required" htmlFor="status">
+								Status:
+							</label>
 							<select
 								className="form-select form-input"
 								name="status"
 								id="status"
+								required
 								value={status}
 								onChange={(event) => {
 									let data = event.target.value;
@@ -412,25 +447,24 @@ const Medicine = (props) => {
 							</select>
 						</div>
 					</div>
-				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={() =>
-						props.mode === "update" ? updateMedicine() : createProduct()
-					}
-				>
-					{props.mode === "update" ? "Update" : "Save"}
-				</button>
-				{props.mode === "update" ? (
 					<button
-						className="btn btn-secondary simple-shadow me-3"
-						onClick={() => navigate(-1)}
+						type="submit"
+						className="btn btn-primary simple-shadow me-3 mt-3"
 					>
-						Back
+						{props.mode === "update" ? "Update" : "Save"}
 					</button>
-				) : (
-					""
-				)}
+					{props.mode === "update" ? (
+						<button
+							type="button"
+							className="btn btn-secondary simple-shadow me-3 mt-3"
+							onClick={() => navigate(-1)}
+						>
+							Back
+						</button>
+					) : (
+						""
+					)}
+				</form>
 			</div>
 		</div>
 	);

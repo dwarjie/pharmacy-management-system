@@ -16,7 +16,11 @@ const OR = () => {
 	// get current OR every load
 	useEffect(() => {
 		getCurrentOR();
-	}, []);
+	}, [editMode]);
+
+	// useEffect(() => {
+	// 	getCurrentOR();
+	// }, [editMode]);
 
 	// get the current OR value from database
 	const getCurrentOR = () => {
@@ -31,7 +35,8 @@ const OR = () => {
 	};
 
 	// update current OR
-	const updateCurrentOR = () => {
+	const updateCurrentOR = (event) => {
+		event.preventDefault();
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -63,10 +68,15 @@ const OR = () => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-12 col-lg-10 pb-5 mx-auto">
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) => updateCurrentOR(event)}
+				>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
-							<label htmlFor="StartOR">Start:</label>
+							<label className="required" htmlFor="StartOR">
+								Start:
+							</label>
 							<input
 								type="number"
 								className="form-control form-input"
@@ -81,7 +91,9 @@ const OR = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
-							<label htmlFor="MaxOR">Max:</label>
+							<label className="required" htmlFor="MaxOR">
+								Max:
+							</label>
 							<input
 								type="number"
 								className="form-control form-input"
@@ -96,7 +108,9 @@ const OR = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
-							<label htmlFor="CurrentOR">Current:</label>
+							<label className="required" htmlFor="CurrentOR">
+								Current:
+							</label>
 							<input
 								type="number"
 								className="form-control form-input"
@@ -119,7 +133,6 @@ const OR = () => {
 					<button
 						type="submit"
 						className="btn btn-primary simple-shadow mt-3"
-						onClick={updateCurrentOR}
 						disabled={!editMode}
 					>
 						Update

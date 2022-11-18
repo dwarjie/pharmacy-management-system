@@ -30,7 +30,9 @@ const UpdateSupplier = () => {
 	}, []);
 
 	// update the supplier
-	const updateSupplier = () => {
+	const updateSupplier = (event) => {
+		event.preventDefault();
+
 		SupplierService.updateSupplier(supplier.id, supplier)
 			.then((response) => {
 				console.log(response.data);
@@ -65,10 +67,15 @@ const UpdateSupplier = () => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-12 col-lg-10 pb-5 mx-auto">
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) => updateSupplier(event)}
+				>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="SupplierName">Supplier Name:</label>
+							<label className="required" htmlFor="SupplierName">
+								Supplier Name:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -80,7 +87,9 @@ const UpdateSupplier = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Mobile">Mobile #:</label>
+							<label className="required" htmlFor="Mobile">
+								Mobile #:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -94,7 +103,9 @@ const UpdateSupplier = () => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Address">Address:</label>
+							<label className="required" htmlFor="Address">
+								Address:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -117,7 +128,9 @@ const UpdateSupplier = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Email">Email:</label>
+							<label className="required" htmlFor="Email">
+								Email:
+							</label>
 							<input
 								type="email"
 								className="form-control form-input"
@@ -129,19 +142,20 @@ const UpdateSupplier = () => {
 							/>
 						</div>
 					</div>
+					<button
+						type="submit"
+						className="btn btn-primary simple-shadow me-3 mt-3"
+					>
+						Update
+					</button>
+					<button
+						type="button"
+						className="btn btn-secondary simple-shadow me-3 mt-3"
+						onClick={() => navigate(-1)}
+					>
+						Cancel
+					</button>
 				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={updateSupplier}
-				>
-					Update
-				</button>
-				<button
-					className="btn btn-secondary simple-shadow me-3"
-					onClick={() => navigate(-1)}
-				>
-					Cancel
-				</button>
 			</div>
 		</div>
 	);

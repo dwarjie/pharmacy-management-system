@@ -35,7 +35,9 @@ const AddUnit = () => {
 	};
 
 	// add a new unit
-	const createUnitOfMeasure = () => {
+	const createUnitOfMeasure = (event) => {
+		event.preventDefault();
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -98,8 +100,13 @@ const AddUnit = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-lg-10 pb-5 mx-auto">
-						<label htmlFor="UnitName">Unit Name:</label>
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => createUnitOfMeasure(event)}
+					>
+						<label className="required" htmlFor="UnitName">
+							Unit Name:
+						</label>
 						<input
 							type="text"
 							className="form-control form-input"
@@ -109,13 +116,13 @@ const AddUnit = () => {
 							onChange={handleInputChange}
 							required
 						/>
+						<button
+							type="submit"
+							className="btn btn-primary simple-shadow mt-3"
+						>
+							Add
+						</button>
 					</form>
-					<button
-						className="btn btn-primary simple-shadow"
-						onClick={createUnitOfMeasure}
-					>
-						Add
-					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">

@@ -23,7 +23,9 @@ const VAT = () => {
 	}, []);
 
 	// create a new VAT
-	const createVAT = () => {
+	const createVAT = (event) => {
+		event.preventDefault();
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -91,10 +93,15 @@ const VAT = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-lg-10 pb-5 mx-auto">
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => createVAT(event)}
+					>
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="VatName">VAT Name:</label>
+								<label className="required" htmlFor="VatName">
+									VAT Name:
+								</label>
 								<input
 									type="text"
 									className="form-control form-input"
@@ -106,9 +113,12 @@ const VAT = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="VATAmount">Percentage:</label>
+								<label className="required" htmlFor="VATAmount">
+									Percentage:
+								</label>
 								<input
 									type="number"
+									min={1}
 									className="form-control form-input"
 									name="VatAmount"
 									id="VatAmount"
@@ -118,10 +128,8 @@ const VAT = () => {
 								/>
 							</div>
 						</div>
+						<button className="btn btn-primary simple-shadow mt-3">Add</button>
 					</form>
-					<button className="btn btn-primary simple-shadow" onClick={createVAT}>
-						Add
-					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">

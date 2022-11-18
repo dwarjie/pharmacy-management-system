@@ -48,7 +48,7 @@ exports.update = (req, res) => {
 
 	OR.update(req.body, { where: { id: id } })
 		.then((row) => {
-			if (row === 1) {
+			if (row == 1) {
 				res.send({
 					message: `Updated successfully.`,
 				});

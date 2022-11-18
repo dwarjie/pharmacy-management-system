@@ -93,7 +93,9 @@ const UpdateCategory = () => {
 						className="col-10 pb-5"
 						onSubmit={(event) => updateCategory(event)}
 					>
-						<label htmlFor="CategoryName">Category Name:</label>
+						<label className="required" htmlFor="CategoryName">
+							Category Name:
+						</label>
 						<input
 							type="text"
 							className="form-control"
@@ -103,16 +105,21 @@ const UpdateCategory = () => {
 							onChange={handleInputChange}
 							required
 						/>
-						<button className="btn btn-primary simple-shadow me-3 mt-3">
+						<button
+							type="submit"
+							className="btn btn-primary simple-shadow me-3 mt-3"
+						>
 							Update
 						</button>
 						<button
+							type="button"
 							className="btn btn-secondary simple-shadow me-3 mt-3"
 							onClick={cancelUpdate}
 						>
 							Cancel
 						</button>
 						<button
+							type="button"
 							className="btn btn-danger simple-shadow mt-3"
 							onClick={deleteCategory}
 						>

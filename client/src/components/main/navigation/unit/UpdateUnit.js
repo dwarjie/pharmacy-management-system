@@ -23,7 +23,9 @@ const UnitList = () => {
 	}, []);
 
 	// update the unit
-	const updateUnitOfMeasure = () => {
+	const updateUnitOfMeasure = (event) => {
+		event.preventDefault();
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -57,12 +59,17 @@ const UnitList = () => {
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Add Unit of Measure</h4>
+				<h4>Update Unit of Measure</h4>
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-12 col-lg-10 pb-5 mx-auto">
-					<label htmlFor="UnitName">Unit Name:</label>
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) => updateUnitOfMeasure(event)}
+				>
+					<label className="required" htmlFor="UnitName">
+						Unit Name:
+					</label>
 					<input
 						type="text"
 						className="form-control form-input"
@@ -72,19 +79,20 @@ const UnitList = () => {
 						onChange={handleInputChange}
 						required
 					/>
+					<button
+						type="submit"
+						className="btn btn-primary simple-shadow me-3 mt-3"
+					>
+						Update
+					</button>
+					<button
+						type="button"
+						className="btn btn-secondary simple-shadow me-3 mt-3"
+						onClick={() => navigate(-1)}
+					>
+						Cancel
+					</button>
 				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={updateUnitOfMeasure}
-				>
-					Update
-				</button>
-				<button
-					className="btn btn-secondary simple-shadow me-3"
-					onClick={() => navigate(-1)}
-				>
-					Cancel
-				</button>
 			</div>
 		</div>
 	);

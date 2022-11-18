@@ -105,7 +105,9 @@ const AddSubCategory = () => {
 						className="col-12 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => createSubCategory(event)}
 					>
-						<label htmlFor="SubCategoryName">Sub-Category Name:</label>
+						<label className="required" htmlFor="SubCategoryName">
+							Sub-Category Name:
+						</label>
 						<input
 							type="text"
 							className="form-control form-input"
@@ -117,7 +119,9 @@ const AddSubCategory = () => {
 						/>
 						<div className="row mt-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="MarkUp">Markup:</label>
+								<label className="required" htmlFor="MarkUp">
+									Markup:
+								</label>
 								<input
 									type="number"
 									min={1}
@@ -130,7 +134,9 @@ const AddSubCategory = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="MarkUpUnit">Unit:</label>
+								<label className="required" htmlFor="MarkUpUnit">
+									Unit:
+								</label>
 								<select
 									name="MarkUpUnit"
 									id="MarkUpUnit"
@@ -151,6 +157,7 @@ const AddSubCategory = () => {
 							Add
 						</button>
 						<button
+							type="button"
 							className="btn btn-secondary simple-shadow mt-3"
 							onClick={() => navigate(-1)}
 						>

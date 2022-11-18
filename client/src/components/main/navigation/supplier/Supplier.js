@@ -114,7 +114,9 @@ const Supplier = () => {
 					>
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="SupplierName">Supplier Name:</label>
+								<label className="required" htmlFor="SupplierName">
+									Supplier Name:
+								</label>
 								<input
 									type="text"
 									className="form-control form-input"
@@ -126,7 +128,9 @@ const Supplier = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="Mobile">Mobile #:</label>
+								<label className="required" htmlFor="Mobile">
+									Mobile #:
+								</label>
 								<input
 									type="text"
 									className="form-control form-input"
@@ -140,7 +144,9 @@ const Supplier = () => {
 						</div>
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
-								<label htmlFor="Address">Address:</label>
+								<label className="required" htmlFor="Address">
+									Address:
+								</label>
 								<input
 									type="text"
 									className="form-control form-input"
@@ -163,7 +169,9 @@ const Supplier = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="Email">Email:</label>
+								<label className="required" htmlFor="Email">
+									Email:
+								</label>
 								<input
 									type="email"
 									className="form-control form-input"
