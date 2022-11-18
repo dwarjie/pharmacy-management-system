@@ -12,7 +12,9 @@ const Handler = (props) => {
 	const [handler, setHandler] = useState(initialHandler);
 
 	// set onClick function for button to trigger
-	const createHandler = () => {
+	const createHandler = (event) => {
+		event.preventDefault();
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -27,7 +29,9 @@ const Handler = (props) => {
 	};
 
 	// update handler
-	const updateHandler = () => {
+	const updateHandler = (event) => {
+		event.preventDefault();
+
 		HandlerService.updateHandler(handler.id, handler)
 			.then((response) => {
 				console.log(response.data);
@@ -50,10 +54,17 @@ const Handler = (props) => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-12 col-lg-10 pb-5 mx-auto">
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) =>
+						mode === "update" ? updateHandler(event) : createHandler(event)
+					}
+				>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="FirstName">First Name:</label>
+							<label className="required" htmlFor="FirstName">
+								First Name:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -73,7 +84,9 @@ const Handler = (props) => {
 							/>
 						</div> */}
 						<div className="col-sm-12 col-md">
-							<label htmlFor="LastName">Last Name:</label>
+							<label className="required" htmlFor="LastName">
+								Last Name:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -87,7 +100,9 @@ const Handler = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Category">Category:</label>
+							<label className="required" htmlFor="Category">
+								Category:
+							</label>
 							<select
 								name="Category"
 								id="Category"
@@ -102,7 +117,9 @@ const Handler = (props) => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Sex">Sex:</label>
+							<label className="required" htmlFor="Sex">
+								Sex:
+							</label>
 							<select
 								name="Sex"
 								id="Sex"
@@ -151,7 +168,9 @@ const Handler = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Address">Address:</label>
+							<label className="required" htmlFor="Address">
+								Address:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -163,7 +182,9 @@ const Handler = (props) => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Mobile">Mobile:</label>
+							<label className="required" htmlFor="Mobile">
+								Mobile:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -197,15 +218,24 @@ const Handler = (props) => {
 							/>
 						</div>
 					</div>
+					<button
+						type="submit"
+						className="btn btn-primary simple-shadow me-3 mt-3"
+					>
+						{mode === "update" ? "Update" : "Save"}
+					</button>
+					{mode === "update" ? (
+						<button
+							type="button"
+							className="btn btn-secondary simple-shadow me-3 mt-3"
+							onClick={() => navigate(-1)}
+						>
+							Back
+						</button>
+					) : (
+						""
+					)}
 				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={() =>
-						mode === "update" ? updateHandler() : createHandler()
-					}
-				>
-					{mode === "update" ? "Update" : "Save"}
-				</button>
 			</div>
 		</div>
 	);

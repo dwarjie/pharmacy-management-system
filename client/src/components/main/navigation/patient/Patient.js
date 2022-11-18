@@ -35,7 +35,8 @@ const Patient = (props) => {
 	};
 
 	// create a new patient
-	const createPatient = () => {
+	const createPatient = (event) => {
+		event.preventDefault();
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -50,7 +51,8 @@ const Patient = (props) => {
 	};
 
 	// update the patient
-	const updatePatient = () => {
+	const updatePatient = (event) => {
+		event.preventDefault();
 		PatientService.updatePatient(newPatient.id, newPatient)
 			.then((response) => {
 				console.log(response.data);
@@ -87,10 +89,17 @@ const Patient = (props) => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-12 col-lg-10 pb-5 mx-auto">
+				<form
+					className="col-12 col-lg-10 pb-5 mx-auto"
+					onSubmit={(event) => {
+						mode === "update" ? updatePatient(event) : createPatient(event);
+					}}
+				>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="FirstName">First Name:</label>
+							<label className="required" htmlFor="FirstName">
+								First Name:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -102,7 +111,9 @@ const Patient = (props) => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="LastName">Last Name:</label>
+							<label className="required" htmlFor="LastName">
+								Last Name:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -116,7 +127,9 @@ const Patient = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Sex">Sex:</label>
+							<label className="required" htmlFor="Sex">
+								Sex:
+							</label>
 							<select
 								className="form-select form-input"
 								name="Sex"
@@ -131,7 +144,9 @@ const Patient = (props) => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="DateOfBirth">Date of Birth:</label>
+							<label className="required" htmlFor="DateOfBirth">
+								Date of Birth:
+							</label>
 							<input
 								type="date"
 								className="form-control form-input"
@@ -145,7 +160,9 @@ const Patient = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Address">Address:</label>
+							<label className="required" htmlFor="Address">
+								Address:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -181,23 +198,29 @@ const Patient = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="Mobile">Mobile #:</label>
+							<label className="required" htmlFor="Mobile">
+								Mobile #:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
 								name="Mobile"
 								id="Mobile"
+								required
 								value={newPatient.Mobile}
 								onChange={handleInputChange}
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="EmergencyContact">Emergency Contact:</label>
+							<label className="required" htmlFor="EmergencyContact">
+								Emergency Contact:
+							</label>
 							<input
 								type="text"
 								className="form-control form-input"
 								name="EmergencyContact"
 								id="EmergencyContact"
+								required
 								value={newPatient.EmergencyContact}
 								onChange={handleInputChange}
 							/>
@@ -205,11 +228,14 @@ const Patient = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="handlerId">Reffered By:</label>
+							<label className="required" htmlFor="handlerId">
+								Reffered By:
+							</label>
 							<select
 								name="handlerId"
 								id="handlerId"
 								className="form-select form-input"
+								required
 								value={activeDropDownValue.handlerId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -219,7 +245,6 @@ const Patient = (props) => {
 									});
 									setNewPatient({ ...newPatient, handlerId: data.id });
 								}}
-								required
 							>
 								<DropDownDefaultOption content={"Select handler"} />
 								{handlers &&
@@ -236,7 +261,9 @@ const Patient = (props) => {
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label htmlFor="FirstVisit">First Visit:</label>
+							<label className="required" htmlFor="FirstVisit">
+								First Visit:
+							</label>
 							<input
 								type="date"
 								className="form-control form-input"
@@ -268,7 +295,9 @@ const Patient = (props) => {
 								onChange={handleChecked}
 							/>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="SeniorId">Senior ID:</label>
+								<label className={checked ? "required" : ""} htmlFor="SeniorId">
+									Senior ID:
+								</label>
 								<input
 									type="text"
 									className="form-control form-input"
@@ -284,14 +313,21 @@ const Patient = (props) => {
 					</div>
 					<button
 						type="submit"
-						className="btn btn-primary simple-shadow mt-3"
-						onClick={(event) => {
-							event.preventDefault();
-							mode === "update" ? updatePatient() : createPatient();
-						}}
+						className="btn btn-primary simple-shadow mt-3 me-3"
 					>
 						{mode === "update" ? "Update" : "Save"}
 					</button>
+					{mode === "update" ? (
+						<button
+							type="button"
+							className="btn btn-secondary simple-shadow me-3 mt-3"
+							onClick={() => navigate(-1)}
+						>
+							Back
+						</button>
+					) : (
+						""
+					)}
 				</form>
 			</div>
 		</div>
