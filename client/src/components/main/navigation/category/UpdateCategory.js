@@ -25,7 +25,9 @@ const UpdateCategory = () => {
 	}, []);
 
 	// update the current category
-	const updateCategory = () => {
+	const updateCategory = (event) => {
+		event.preventDefault();
+
 		CategoryService.updateCategory(newCategory.id, newCategory)
 			.then((response) => {
 				console.log(response.data);
@@ -87,7 +89,10 @@ const UpdateCategory = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-10 pb-5">
+					<form
+						className="col-10 pb-5"
+						onSubmit={(event) => updateCategory(event)}
+					>
 						<label htmlFor="CategoryName">Category Name:</label>
 						<input
 							type="text"
@@ -96,26 +101,24 @@ const UpdateCategory = () => {
 							name="CategoryName"
 							value={newCategory.CategoryName}
 							onChange={handleInputChange}
+							required
 						/>
+						<button className="btn btn-primary simple-shadow me-3 mt-3">
+							Update
+						</button>
+						<button
+							className="btn btn-secondary simple-shadow me-3 mt-3"
+							onClick={cancelUpdate}
+						>
+							Cancel
+						</button>
+						<button
+							className="btn btn-danger simple-shadow mt-3"
+							onClick={deleteCategory}
+						>
+							Delete
+						</button>
 					</form>
-					<button
-						className="btn btn-primary simple-shadow me-3"
-						onClick={updateCategory}
-					>
-						Update
-					</button>
-					<button
-						className="btn btn-secondary simple-shadow me-3"
-						onClick={cancelUpdate}
-					>
-						Cancel
-					</button>
-					<button
-						className="btn btn-danger simple-shadow"
-						onClick={deleteCategory}
-					>
-						Delete
-					</button>
 				</div>
 			</div>
 		</div>

@@ -40,7 +40,8 @@ const Supplier = () => {
 	};
 
 	// create a new Supplier
-	const createSupplier = () => {
+	const createSupplier = (event) => {
+		event.preventDefault();
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -107,7 +108,10 @@ const Supplier = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-lg-10 pb-5 mx-auto">
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => createSupplier(event)}
+					>
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
 								<label htmlFor="SupplierName">Supplier Name:</label>
@@ -171,13 +175,8 @@ const Supplier = () => {
 								/>
 							</div>
 						</div>
+						<button className="btn btn-primary simple-shadow mt-3">Add</button>
 					</form>
-					<button
-						className="btn btn-primary simple-shadow"
-						onClick={createSupplier}
-					>
-						Add
-					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">

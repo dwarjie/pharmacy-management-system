@@ -39,7 +39,7 @@ exports.create = (req, res) => {
 
 //  Retrieve all categories
 exports.findAll = (req, res) => {
-	Category.findAll()
+	Category.findAll({ include: ["subCategory"] })
 		.then((data) => {
 			res.send(data);
 		})

@@ -19,6 +19,7 @@ const Category = () => {
 
 	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
+	const [subCategories, setSubCategories] = useState([]);
 	const [alertMessage, setAlertMessage] = useState("");
 
 	// once the page loaded, run this function
@@ -69,6 +70,11 @@ const Category = () => {
 		});
 	};
 
+	// this function will set the active subcategory to show at the table list
+	const setActiveSubCategory = (subCategory) => {
+		setSubCategories(subCategory);
+	};
+
 	const addSubCategory = (category) => {
 		navigate(`/pharmacy/maintenance/category/sub-category`, {
 			state: {
@@ -110,7 +116,9 @@ const Category = () => {
 						className="col-11 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => createCategory(event)}
 					>
-						<label htmlFor="CategoryName">Category Name:</label>
+						<label className="required" htmlFor="CategoryName">
+							Category Name:
+						</label>
 						<input
 							type="text"
 							className="form-control form-input"
@@ -126,60 +134,112 @@ const Category = () => {
 						>
 							Add
 						</button>
-						{/* <button
-							className="btn btn-secondary simple-shadow mt-3"
-							onClick={refreshList}
-						>
-							Cancel
-						</button> */}
 					</form>
 				</div>
 			</div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
-				<div className="p-3">
-					<h4>Category List</h4>
-					<hr />
-				</div>
-				<div className="p-3">
-					<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
-						<label htmlFor="manufacturer-search">Search:</label>
-						<input
-							type="text"
-							className="form-control form-input"
-							id="manufacturer-search"
-						/>
-					</form>
-					<table className="table">
-						<thead>
-							<tr>
-								<th scope="col">Name</th>
-								<th scope="col">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{categories &&
-								categories.map((category, index) => (
-									<tr key={index}>
-										<td>{category.CategoryName}</td>
-										<td>
-											<span className="px-2">
-												<FaEdit
-													className="icon-size-sm cursor-pointer"
-													onClick={() => setActiveCategory(category, index)}
-												/>
-											</span>
-											<span className="px-2">
-												<MdOutlineAddBox
-													className="icon-size-sm cursor-pointer"
-													onClick={() => addSubCategory(category)}
-												/>
-											</span>
-										</td>
-									</tr>
-								))}
-						</tbody>
-					</table>
-				</div>
+			<div className="d-flex flex-column flex-lg-row justify-content-between">
+				<CategoryList
+					categories={categories}
+					setActiveCategory={setActiveCategory}
+					addSubCategory={addSubCategory}
+					setActiveSubCategory={setActiveSubCategory}
+				/>
+				<SubCategoryList subCategories={subCategories} />
+			</div>
+		</div>
+	);
+};
+
+const CategoryList = (props) => {
+	const {
+		categories,
+		setActiveCategory,
+		addSubCategory,
+		setActiveSubCategory,
+	} = props;
+
+	return (
+		<div className="col-12 col-lg-6 h-auto border border-dark rounded simple-shadow mt-3 p-1">
+			<div className="p-3">
+				<h4>Category List</h4>
+				<hr />
+			</div>
+			<div className="p-3">
+				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+					<label htmlFor="manufacturer-search">Search:</label>
+					<input
+						type="text"
+						className="form-control form-input"
+						id="manufacturer-search"
+					/>
+				</form>
+				<table className="table">
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{categories &&
+							categories.map((category, index) => (
+								<tr
+									key={index}
+									onClick={() => setActiveSubCategory(category.subCategory)}
+								>
+									<td>{category.CategoryName}</td>
+									<td>
+										<span className="px-2">
+											<FaEdit
+												className="icon-size-sm cursor-pointer"
+												onClick={() => setActiveCategory(category, index)}
+											/>
+										</span>
+										<span className="px-2">
+											<MdOutlineAddBox
+												className="icon-size-sm cursor-pointer"
+												onClick={() => addSubCategory(category)}
+											/>
+										</span>
+									</td>
+								</tr>
+							))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	);
+};
+
+const SubCategoryList = (props) => {
+	const { subCategories } = props;
+
+	return (
+		<div className="col-12 col-lg-5 h-auto border border-dark rounded simple-shadow mt-3">
+			<div className="p-3">
+				<h4>Sub Category</h4>
+				<hr />
+			</div>
+			<div className="p-3">
+				<table className="table">
+					<thead>
+						<tr>
+							<th scope="col">Name</th>
+							<th scope="col">Markup</th>
+							<th scope="col">Unit</th>
+						</tr>
+					</thead>
+					<tbody>
+						{subCategories &&
+							subCategories.map((sub, index) => (
+								<tr key={index}>
+									<td>{sub.SubCategoryName}</td>
+									<td>{sub.MarkUp}</td>
+									<td>{sub.MarkUpUnit}</td>
+								</tr>
+							))}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);

@@ -29,7 +29,9 @@ const UpdateSubCategory = () => {
 	const [success, setSuccess] = useState(true);
 
 	// update the subCategory
-	const updateSubCategory = () => {
+	const updateSubCategory = (event) => {
+		event.preventDefault();
+
 		SubCategoryService.updateSubCategory(subCategory.id, subCategory)
 			.then((response) => {
 				console.log(response.data);
@@ -65,7 +67,10 @@ const UpdateSubCategory = () => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-10 pb-5">
+				<form
+					className="col-10 pb-5"
+					onSubmit={(event) => updateSubCategory(event)}
+				>
 					<label htmlFor="SubCategoryName">Sub-Category Name:</label>
 					<input
 						type="text"
@@ -81,6 +86,7 @@ const UpdateSubCategory = () => {
 							<label htmlFor="MarkUp">Markup:</label>
 							<input
 								type="number"
+								min={1}
 								className="form-control form-input"
 								name="MarkUp"
 								id="MarkUp"
@@ -95,28 +101,25 @@ const UpdateSubCategory = () => {
 								name="MarkUpUnit"
 								id="MarkUpUnit"
 								className="form-select form-input"
-								required
 								value={subCategory.MarkUpUnit}
 								onChange={handleInputChange}
+								required
 							>
 								<option value="amount">Amount</option>
 								<option value="%">%</option>
 							</select>
 						</div>
 					</div>
+					<button className="btn btn-primary simple-shadow me-3 mt-3">
+						Update
+					</button>
+					<button
+						className="btn btn-secondary simple-shadow me-3 mt-3"
+						onClick={() => navigate(-1)}
+					>
+						Cancel
+					</button>
 				</form>
-				<button
-					className="btn btn-primary simple-shadow me-3"
-					onClick={updateSubCategory}
-				>
-					Update
-				</button>
-				<button
-					className="btn btn-secondary simple-shadow me-3"
-					onClick={() => navigate(-1)}
-				>
-					Cancel
-				</button>
 				{/* <button
 					className="btn btn-danger simple-shadow"
 					onClick={deleteSubCategory}

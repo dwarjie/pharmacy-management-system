@@ -99,6 +99,10 @@ body {
 	color: white !important;
 }
 
+.btn-danger:hover {
+	color: white !important;
+}
+
 .button-font-md {
 	font-size: 1rem;
 }
@@ -137,6 +141,12 @@ body {
 
 label {
 	margin-bottom: 10px;
+}
+
+/* adding required icon into label */
+.required:after {
+	content: " *";
+	color: var(--cherry);
 }
 
 .form-lg-label {
