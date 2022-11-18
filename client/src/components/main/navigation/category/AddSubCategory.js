@@ -16,7 +16,7 @@ const AddSubCategory = () => {
 	const initialSubCategory = {
 		id: null,
 		SubCategoryName: "",
-		MarkUp: 0,
+		MarkUp: "",
 		MarkUpUnit: "%",
 		categoryId: location.state.category.id,
 	};
@@ -41,7 +41,9 @@ const AddSubCategory = () => {
 	};
 
 	// create a new SubCategory
-	const createSubCategory = () => {
+	const createSubCategory = (event) => {
+		event.preventDefault();
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -99,7 +101,10 @@ const AddSubCategory = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-lg-10 pb-5 mx-auto">
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => createSubCategory(event)}
+					>
 						<label htmlFor="SubCategoryName">Sub-Category Name:</label>
 						<input
 							type="text"
@@ -115,6 +120,7 @@ const AddSubCategory = () => {
 								<label htmlFor="MarkUp">Markup:</label>
 								<input
 									type="number"
+									min={1}
 									className="form-control form-input"
 									name="MarkUp"
 									id="MarkUp"
@@ -138,19 +144,19 @@ const AddSubCategory = () => {
 								</select>
 							</div>
 						</div>
+						<button
+							type="submit"
+							className="btn btn-primary simple-shadow mt-3 me-3"
+						>
+							Add
+						</button>
+						<button
+							className="btn btn-secondary simple-shadow mt-3"
+							onClick={() => navigate(-1)}
+						>
+							Cancel
+						</button>
 					</form>
-					<button
-						className="btn btn-primary simple-shadow me-3"
-						onClick={createSubCategory}
-					>
-						Add
-					</button>
-					<button
-						className="btn btn-secondary simple-shadow"
-						onClick={() => navigate(-1)}
-					>
-						Cancel
-					</button>
 				</div>
 			</div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">

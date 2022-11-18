@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import CategoryService from "../../../../services/CategoryService";
 
 // Icons
@@ -18,6 +19,7 @@ const Category = () => {
 
 	const [category, setCategory] = useState(initialCategory);
 	const [categories, setCategories] = useState([]);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	// once the page loaded, run this function
 	useEffect(() => {
@@ -49,12 +51,9 @@ const Category = () => {
 		// call the service in order to send the data to database
 		CategoryService.createCategory(data)
 			.then((response) => {
-				setCategory({
-					id: response.data.id,
-					CategoryName: response.data.CategoryName,
-				});
-				refreshList();
 				console.log(response.data);
+				setAlertMessage(response.data.message);
+				refreshList();
 			})
 			.catch((err) => {
 				console.log(err);
@@ -98,9 +97,17 @@ const Category = () => {
 					<h4>Add Category</h4>
 					<hr />
 				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
 				<div className="p-3">
 					<form
-						className="col-12 col-lg-10 pb-5 mx-auto"
+						className="col-11 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => createCategory(event)}
 					>
 						<label htmlFor="CategoryName">Category Name:</label>
