@@ -19,6 +19,8 @@ const UpdateMedicine = () => {
 		SupplierPrice: oldMedicine.SupplierPrice,
 		SellingPrice: oldMedicine.SellingPrice,
 		Quantity: 0,
+		ReorderPoint: oldMedicine.ReorderPoint,
+		SafetyStock: oldMedicine.SafetyStock,
 		Status: oldMedicine.Status,
 		supplierId: oldMedicine.supplierId,
 		unitId: oldMedicine.unitId,

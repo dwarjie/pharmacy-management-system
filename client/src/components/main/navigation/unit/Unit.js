@@ -1,8 +1,9 @@
 // This module is responsible for adding new medicine Unit
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
 
 // icon
 import { FaEdit } from "react-icons/fa";
@@ -17,6 +18,7 @@ const AddUnit = () => {
 
 	const [units, setUnits] = useState([]);
 	const [newUnit, setNewUnit] = useState(initialUnit);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getAllUnits();
@@ -49,6 +51,7 @@ const AddUnit = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -64,6 +67,7 @@ const AddUnit = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -99,6 +103,14 @@ const AddUnit = () => {
 					<h4>Add Unit of Measure</h4>
 					<hr />
 				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
 				<div className="p-3">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"

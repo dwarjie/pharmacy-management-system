@@ -128,7 +128,7 @@ exports.delete = (req, res) => {
 			}
 
 			res.send({
-				message: `Unit was deleted successfully`,
+				message: `Deleted successfully`,
 			});
 		})
 		.catch((err) => {

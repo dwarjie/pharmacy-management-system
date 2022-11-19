@@ -67,7 +67,7 @@ exports.delete = (req, res) => {
 			}
 
 			res.send({
-				message: `VAT was deleted successfully`,
+				message: `Deleted successfully`,
 			});
 		})
 		.catch((err) => {

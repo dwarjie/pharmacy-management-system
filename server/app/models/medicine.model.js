@@ -29,6 +29,14 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.INTEGER,
 			allowNull: false,
 		},
+		ReorderPoint: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+		},
+		SafetyStock: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+		},
 		Status: {
 			type: Sequelize.INTEGER, // 0 - inactive, 1 - active
 		},

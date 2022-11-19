@@ -1,8 +1,9 @@
 // This module is responsible for adding new VATS
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import VatService from "../../../../services/VatService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import VatService from "../../../../services/VatService";
 
 // icons
 import { MdDelete } from "react-icons/md";
@@ -17,6 +18,7 @@ const VAT = () => {
 
 	const [vats, setVats] = useState([]);
 	const [newVAT, setNewVAT] = useState(initialVat);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getAllVATs();
@@ -37,6 +39,7 @@ const VAT = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -66,6 +69,7 @@ const VAT = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -92,6 +96,14 @@ const VAT = () => {
 					<h4>Add VAT</h4>
 					<hr />
 				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
 				<div className="p-3">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"

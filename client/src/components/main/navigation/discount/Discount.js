@@ -1,8 +1,9 @@
 // This module is responsible for adding discount
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import DiscountService from "../../../../services/DiscountService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import DiscountService from "../../../../services/DiscountService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -19,6 +20,7 @@ const Discount = () => {
 
 	const [discounts, setDiscounts] = useState([]);
 	const [newDiscount, setNewDiscount] = useState(initialDiscount);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getAllDiscount();
@@ -40,6 +42,7 @@ const Discount = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -55,6 +58,7 @@ const Discount = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -102,6 +106,14 @@ const Discount = () => {
 					<h4>Add Discount</h4>
 					<hr />
 				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
 				<div className="p-3">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"

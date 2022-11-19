@@ -90,7 +90,7 @@ exports.delete = (req, res) => {
 			}
 
 			res.send({
-				message: `Handler successfully deleted`,
+				message: `Deleted successfully`,
 			});
 		})
 		.catch((err) => {

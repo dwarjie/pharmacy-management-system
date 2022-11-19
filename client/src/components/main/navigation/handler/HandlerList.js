@@ -1,16 +1,19 @@
 // this module is responsible for listing all the handlers
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import HandlerService from "../../../../services/HandlerService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import HandlerService from "../../../../services/HandlerService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const HandlerList = () => {
-	const [handlers, setHandlers] = useState([]);
 	const navigate = useNavigate();
+
+	const [handlers, setHandlers] = useState([]);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getAllHandler();
@@ -43,6 +46,7 @@ const HandlerList = () => {
 			.then((response) => {
 				console.log(response.data);
 				getAllHandler();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -55,6 +59,14 @@ const HandlerList = () => {
 				<h4>Handler List</h4>
 				<hr />
 			</div>
+			{alertMessage ? (
+				<AlertInfoLayout
+					content={alertMessage}
+					onClick={(value) => setAlertMessage(value)}
+				/>
+			) : (
+				""
+			)}
 			<div className="p-3">
 				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="handler-search">Search:</label>

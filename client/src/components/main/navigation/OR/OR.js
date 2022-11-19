@@ -1,7 +1,8 @@
 // This component is responsible for viewing the start, end, and current OR for the system
 import { useState, useEffect } from "react";
-import ORService from "../../../../services/ORService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import ORService from "../../../../services/ORService";
 
 const OR = () => {
 	const initialOR = {
@@ -12,15 +13,12 @@ const OR = () => {
 
 	const [valueOR, setValueOR] = useState(initialOR);
 	const [editMode, setEditMode] = useState(false);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	// get current OR every load
 	useEffect(() => {
 		getCurrentOR();
 	}, [editMode]);
-
-	// useEffect(() => {
-	// 	getCurrentOR();
-	// }, [editMode]);
 
 	// get the current OR value from database
 	const getCurrentOR = () => {
@@ -44,6 +42,7 @@ const OR = () => {
 			.then((response) => {
 				console.log(response.data);
 				getCurrentOR();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -67,6 +66,14 @@ const OR = () => {
 				<h4>Current OR</h4>
 				<hr />
 			</div>
+			{alertMessage ? (
+				<AlertInfoLayout
+					content={alertMessage}
+					onClick={(value) => setAlertMessage(value)}
+				/>
+			) : (
+				""
+			)}
 			<div className="p-3">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"

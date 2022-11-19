@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import PatientService from "../../../../services/PatientService";
 import CheckBox from "../../../layout/CheckBox";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
@@ -18,6 +19,7 @@ const Patient = (props) => {
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
 	const [checked, setChecked] = useState(isSenior); // for the checkbox of PWD/Senior
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getAllHandler();
@@ -44,6 +46,7 @@ const Patient = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				refreshForm();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -88,6 +91,14 @@ const Patient = (props) => {
 				<h4>{title}</h4>
 				<hr />
 			</div>
+			{alertMessage ? (
+				<AlertInfoLayout
+					content={alertMessage}
+					onClick={(value) => setAlertMessage(value)}
+				/>
+			) : (
+				""
+			)}
 			<div className="p-3">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"

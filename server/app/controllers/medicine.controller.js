@@ -14,6 +14,8 @@ exports.create = (req, res) => {
 		SupplierPrice: req.body.SupplierPrice,
 		SellingPrice: req.body.SellingPrice,
 		Quantity: req.body.Quantity,
+		ReorderPoint: req.body.ReorderPoint,
+		SafetyStock: req.body.SafetyStock,
 		Status: req.body.Status,
 		supplierId: req.body.supplierId,
 		unitId: req.body.unitId,
@@ -119,7 +121,7 @@ exports.delete = (req, res) => {
 			}
 
 			res.send({
-				message: `medicine was deleted successfully`,
+				message: `Deleted successfully`,
 			});
 		})
 		.catch((err) => {

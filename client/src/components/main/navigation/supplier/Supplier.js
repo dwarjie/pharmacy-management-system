@@ -1,8 +1,9 @@
 // this module is responsible for adding new manufacturer
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SupplierService from "../../../../services/SupplierService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import SupplierService from "../../../../services/SupplierService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -21,6 +22,7 @@ const Supplier = () => {
 
 	const [suppliers, setSuppliers] = useState([]);
 	const [newSupplier, setNewSupplier] = useState(initialSupplier);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	// once the page is loaded, run this
 	useEffect(() => {
@@ -57,6 +59,7 @@ const Supplier = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -72,6 +75,7 @@ const Supplier = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -107,6 +111,14 @@ const Supplier = () => {
 					<h4>Add Supplier</h4>
 					<hr />
 				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
 				<div className="p-3">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"

@@ -1,8 +1,9 @@
 // this module is responsible for listing all the medicines
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MedicineService from "../../../../services/MedicineService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import MedicineService from "../../../../services/MedicineService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -10,7 +11,9 @@ import { MdDelete } from "react-icons/md";
 
 const MedicineList = () => {
 	let navigate = useNavigate();
+
 	const [medicines, setMedicines] = useState([]);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getAllMedicine();
@@ -43,6 +46,7 @@ const MedicineList = () => {
 			.then((response) => {
 				console.log(response.data);
 				getAllMedicine();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -55,6 +59,14 @@ const MedicineList = () => {
 				<h4>Medicine List</h4>
 				<hr />
 			</div>
+			{alertMessage ? (
+				<AlertInfoLayout
+					content={alertMessage}
+					onClick={(value) => setAlertMessage(value)}
+				/>
+			) : (
+				""
+			)}
 			<div className="p-3">
 				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="medicine-search">Search:</label>

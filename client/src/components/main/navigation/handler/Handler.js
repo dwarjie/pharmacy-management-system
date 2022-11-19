@@ -1,15 +1,17 @@
 // this module is responsible for adding new NCM/Doctors
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import HandlerService from "../../../../services/HandlerService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
-import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const Handler = (props) => {
 	const { title, mode, initialHandler } = props;
 	const navigate = useNavigate();
 
 	const [handler, setHandler] = useState(initialHandler);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	// set onClick function for button to trigger
 	const createHandler = (event) => {
@@ -22,6 +24,7 @@ const Handler = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				setHandler(initialHandler);
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -53,6 +56,14 @@ const Handler = (props) => {
 				<h4>{title}</h4>
 				<hr />
 			</div>
+			{alertMessage ? (
+				<AlertInfoLayout
+					content={alertMessage}
+					onClick={(value) => setAlertMessage(value)}
+				/>
+			) : (
+				""
+			)}
 			<div className="p-3">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"

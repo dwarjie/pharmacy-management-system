@@ -93,7 +93,7 @@ exports.delete = (req, res) => {
 		}
 
 		res.send({
-			message: `SubCategory was deleted successfully`,
+			message: `Deleted successfully`,
 		});
 	});
 };

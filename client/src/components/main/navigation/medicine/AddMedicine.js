@@ -11,6 +11,8 @@ const AddMedicine = () => {
 		SupplierPrice: 0,
 		SellingPrice: 0,
 		Quantity: 0,
+		ReorderPoint: 0,
+		SafetyStock: 0,
 		Status: 1,
 		supplierId: null,
 		unitId: null,

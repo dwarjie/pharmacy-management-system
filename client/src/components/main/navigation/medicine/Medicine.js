@@ -1,8 +1,9 @@
 // this module is responsible for adding new medicines
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MedicineService from "../../../../services/MedicineService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import MedicineService from "../../../../services/MedicineService";
 
 const Medicine = (props) => {
 	// this is for the status drop down
@@ -15,6 +16,7 @@ const Medicine = (props) => {
 	);
 	const [status, setStatus] = useState(props.status);
 	const [subCategory, setSubCategory] = useState(props.subCategory);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		setMedicine(props.initialMedicine);
@@ -59,6 +61,8 @@ const Medicine = (props) => {
 			SupplierPrice: medicine.SupplierPrice,
 			SellingPrice: medicine.SellingPrice,
 			Quantity: 0,
+			ReorderPoint: medicine.ReorderPoint,
+			SafetyStock: medicine.SafetyStock,
 			Status: medicine.Status,
 			supplierId: medicine.supplierId,
 			unitId: medicine.unitId,
@@ -70,6 +74,7 @@ const Medicine = (props) => {
 				// reset the form
 				setMedicine(props.initialMedicine);
 				setActiveDropDownValue(props.initialDropDownValue);
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -83,6 +88,7 @@ const Medicine = (props) => {
 		MedicineService.updateMedicine(medicine.id, medicine)
 			.then((response) => {
 				console.log(response.data);
+				setAlertMessage(response.data.message);
 				navigate(-1);
 			})
 			.catch((err) => {
@@ -173,6 +179,14 @@ const Medicine = (props) => {
 				<h4>{props.title}</h4>
 				<hr />
 			</div>
+			{alertMessage ? (
+				<AlertInfoLayout
+					content={alertMessage}
+					onClick={(value) => setAlertMessage(value)}
+				/>
+			) : (
+				""
+			)}
 			<div className="p-3">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"
@@ -445,6 +459,36 @@ const Medicine = (props) => {
 										</option>
 									))}
 							</select>
+						</div>
+						<div className="col-sm-12 col-md-3">
+							<label htmlFor="ReorderPoint" className="required">
+								Reorder Point:
+							</label>
+							<input
+								type="number"
+								min={1}
+								className="form-control form-input"
+								name="ReorderPoint"
+								id="ReorderPoint"
+								value={medicine.ReorderPoint}
+								onChange={handleInputChange}
+								required
+							/>
+						</div>
+						<div className="col-sm-12 col-md-3">
+							<label htmlFor="SafetyStock" className="required">
+								Safety Stock:
+							</label>
+							<input
+								type="number"
+								min={1}
+								className="form-control form-input"
+								name="SafetyStock"
+								id="SafetyStock"
+								value={medicine.SafetyStock}
+								onChange={handleInputChange}
+								required
+							/>
 						</div>
 					</div>
 					<button

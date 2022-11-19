@@ -2,6 +2,7 @@
 // Hidden by default in mobile and Tablet
 import { Link } from "react-router-dom";
 import { HouseFill, PeopleFill, Cart4, Receipt } from "react-bootstrap-icons";
+import { AiFillMedicineBox, AiFillFile, AiFillSetting } from "react-icons/ai";
 
 const SideNavigation = () => {
 	return (
@@ -64,7 +65,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<PeopleFill className="icon-size-sm" />
+								<AiFillMedicineBox className="icon-size-sm" />
 							</span>{" "}
 							File Maintenance
 						</button>
@@ -150,7 +151,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<PeopleFill className="icon-size-sm" />
 							</span>{" "}
 							NCM/Doctors
 						</button>
@@ -275,7 +276,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<AiFillFile className="icon-size-sm" />
 							</span>{" "}
 							Report
 						</button>
@@ -324,7 +325,7 @@ const SideNavigation = () => {
 							aria-expanded="false"
 						>
 							<span className="px-2">
-								<HouseFill className="icon-size-sm" />
+								<AiFillSetting className="icon-size-sm" />
 							</span>{" "}
 							Utilities
 						</button>

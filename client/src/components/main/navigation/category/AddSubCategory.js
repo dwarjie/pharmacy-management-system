@@ -1,9 +1,10 @@
 // This module is responsible for adding sub category
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import CategoryService from "../../../../services/CategoryService";
-import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -23,6 +24,7 @@ const AddSubCategory = () => {
 
 	const [subCategory, setSubCategory] = useState(initialSubCategory);
 	const [subCategories, setSubCategories] = useState([]);
+	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
 		getSubCategory();
@@ -51,6 +53,7 @@ const AddSubCategory = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -66,6 +69,7 @@ const AddSubCategory = () => {
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -100,6 +104,14 @@ const AddSubCategory = () => {
 					<h4>Add Sub Category</h4>
 					<hr />
 				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
 				<div className="p-3">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"
