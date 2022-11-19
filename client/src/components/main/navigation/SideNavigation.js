@@ -247,7 +247,7 @@ const SideNavigation = () => {
 						</button>
 						<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 							<li>
-								<Link to={"pharmacy/sales/pos"} className="dropdown-item">
+								<Link to={"/pharmacy/sales/pos"} className="dropdown-item">
 									POS
 								</Link>
 							</li>

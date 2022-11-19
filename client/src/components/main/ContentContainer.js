@@ -34,13 +34,17 @@ import OR from "./navigation/OR/OR";
 import Discount from "./navigation/discount/Discount";
 import UpdateDiscount from "./navigation/discount/UpdateDiscount";
 
-// Utilities Tab
-import AddUser from "./navigation/user/AddUser";
-import UserList from "./navigation/user/UserList";
 // Handler Tab
 import AddHandler from "./navigation/handler/AddHandler";
 import UpdateHandler from "./navigation/handler/UpdateHandler";
 import HandlerList from "./navigation/handler/HandlerList";
+
+// Sales Tab
+import POS from "./navigation/pos/POS";
+
+// Utilities Tab
+import AddUser from "./navigation/user/AddUser";
+import UserList from "./navigation/user/UserList";
 
 const ContentContainer = (props) => {
 	return (
@@ -100,6 +104,11 @@ const ContentContainer = (props) => {
 					<Route path="/maintenance/handler/:id" element={<UpdateHandler />} />
 					<Route path="/utilities/add-user" element={<AddUser />} />
 					<Route path="/utilities/user-list" element={<UserList />} />
+				</Routes>
+			</div>
+			<div className=" col-12 px-3">
+				<Routes>
+					<Route path="/sales/pos" element={<POS />} />
 				</Routes>
 			</div>
 		</div>
