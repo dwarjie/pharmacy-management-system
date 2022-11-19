@@ -14,8 +14,8 @@ const updateDiscount = (id, data) => {
 	return http.put(`/discount/${id}`, data);
 };
 
-const deleteDiscount = (id) => {
-	return http.delete(`/discount/${id}`);
+const deleteDiscount = (discountId) => {
+	return http.delete(`/discount?discountId=${discountId}`);
 };
 
 const DiscountService = {

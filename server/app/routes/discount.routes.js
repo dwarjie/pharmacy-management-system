@@ -6,7 +6,7 @@ module.exports = (app) => {
 	router.post("/", discount.create);
 	router.get("/", discount.findAll);
 	router.put("/:id", discount.update);
-	router.delete("/:id", discount.delete);
+	router.delete("/", discount.delete);
 
 	app.use("/api/discount", router);
 };

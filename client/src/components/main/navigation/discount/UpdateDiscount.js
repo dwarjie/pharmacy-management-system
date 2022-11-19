@@ -42,23 +42,6 @@ const UpdateDiscount = () => {
 		checkSuccess();
 	};
 
-	// delete the discount
-	const deleteDiscount = () => {
-		// ask for confirmation
-		if (!AlertPrompt()) return;
-
-		DiscountService.deleteDiscount(discount.id)
-			.then((response) => {
-				console.log(response.data);
-				setSuccess(true);
-			})
-			.catch((err) => {
-				console.log(err);
-				setSuccess(false);
-			});
-		checkSuccess();
-	};
-
 	// handle input change event for forms
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
@@ -142,13 +125,6 @@ const UpdateDiscount = () => {
 						onClick={() => navigate(-1)}
 					>
 						Cancel
-					</button>
-					<button
-						type="button"
-						className="btn btn-danger simple-shadow me-3 mt-3"
-						onClick={deleteDiscount}
-					>
-						Delete
 					</button>
 				</form>
 			</div>

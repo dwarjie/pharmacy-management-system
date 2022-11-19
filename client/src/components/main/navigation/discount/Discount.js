@@ -6,6 +6,7 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const Discount = () => {
 	const initialDiscount = {
@@ -36,6 +37,21 @@ const Discount = () => {
 		};
 
 		DiscountService.createDiscount(data)
+			.then((response) => {
+				console.log(response.data);
+				refreshList();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// delete the discount
+	const deleteDiscount = (discount) => {
+		// ask for confirmation
+		if (!AlertPrompt()) return;
+
+		DiscountService.deleteDiscount(discount.id)
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
@@ -172,6 +188,12 @@ const Discount = () => {
 												<FaEdit
 													className="icon-size-sm cursor-pointer"
 													onClick={() => updateDiscount(discount)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdDelete
+													className="icon-size-sm cursor-pointer"
+													onClick={() => deleteDiscount(discount)}
 												/>
 											</span>
 										</td>

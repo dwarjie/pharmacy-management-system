@@ -96,24 +96,23 @@ exports.update = async (req, res) => {
 
 // delete the discount
 exports.delete = (req, res) => {
-	const id = req.params.id;
+	const id = req.query.discountId;
 
 	Discount.destroy({ where: { id: id } })
 		.then((row) => {
 			if (row != 1) {
 				res.send({
-					message: `Cannot update discount ${id}`,
+					message: `Cannot delete discount ${id}`,
 				});
 			}
 
 			res.send({
-				message: `Discount updated successfully.`,
+				message: `Deleted successfully.`,
 			});
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message:
-					err.message || `some error occurred while updating the discount`,
+				message: err.message || `some error occurred while deleting discount`,
 			});
 		});
 };
