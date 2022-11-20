@@ -37,6 +37,19 @@ body {
 	height: 10%;
 }
 
+.min-height-85 {
+	min-height: 85vh;
+	max-height: 85vh;
+}
+
+.max-height-85 {
+	max-height: 85%;
+}
+
+.max-height-100 {
+	max-height: 100%;
+}
+
 /* NAVIGATION */
 .top-navigation {
 	height: 5rem;
@@ -162,4 +175,9 @@ label {
 .table-active {
 	background-color: var(--cherry);
 	color: white;
+}
+
+.table-fixed {
+	overflow-y: scroll;
+	height: fit-content;
 }

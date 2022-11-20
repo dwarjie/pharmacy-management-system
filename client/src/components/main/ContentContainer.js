@@ -51,7 +51,7 @@ const ContentContainer = (props) => {
 		<div className="content-container h-100" id="content-container">
 			<TopNavigation toggleSideNavigation={props.toggleSideNavigation} />
 
-			<div className="container col-12 col-md-12 mt-5 pb-3 h-auto">
+			<div className="container col-12 col-md-12 mt-3 pb-3 h-auto">
 				<Routes>
 					<Route path="/maintenance/patient" element={<AddPatient />} />
 					<Route path="/maintenance/patient/:id" element={<UpdatePatient />} />
@@ -106,7 +106,7 @@ const ContentContainer = (props) => {
 					<Route path="/utilities/user-list" element={<UserList />} />
 				</Routes>
 			</div>
-			<div className=" col-12 px-3">
+			<div className="col-12 mt-0 px-3 min-height-85">
 				<Routes>
 					<Route path="/sales/pos" element={<POS />} />
 				</Routes>
