@@ -23,11 +23,17 @@ const getOtherModel = () => {
 	return http.get("/medicine");
 };
 
+// POS module
+const getByTitle = (title) => {
+	return http.get(`/medicine/medicine-list?title=${title}`);
+};
+
 const MedicineService = {
 	createMedicine,
 	updateMedicine,
 	deleteMedicine,
 	getAllMedicine,
+	getByTitle,
 	getOtherModel,
 };
 

@@ -1,24 +1,43 @@
 // This component is for POS
 import { useState, useEffect } from "react";
+import MedicineService from "../../../../services/MedicineService";
 
 const POS = () => {
+	const [products, setProducts] = useState([]);
+	const [orderList, setOrderList] = useState([]);
+
+	const findByTitle = (title) => {
+		MedicineService.getByTitle(title)
+			.then((response) => {
+				console.log(response.data);
+				setProducts(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
 			<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
 				<div className="h-50 border border-dark rounded simple-shadow">
 					<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
 						<div className="col-8">
-							<SearchProduct />
+							<SearchProduct findByTitle={findByTitle} />
 						</div>
 						<SearchProductCode />
 					</form>
 					<div className="table-responsive max-height-85">
-						<ProductTable />
+						<ProductTable
+							products={products}
+							orderList={orderList}
+							setOrderList={setOrderList}
+						/>
 					</div>
 				</div>
 				<div className="h-50 border border-dark rounded simple-shadow">
 					<div className="table-responsive max-height-100">
-						<OrderTable />
+						<OrderTable orderList={orderList} />
 					</div>
 				</div>
 			</div>
@@ -38,7 +57,7 @@ const OrderInformation = (props) => {
 				</h1>
 				<h5 className="text-weight-medium">Tuesday, November 22, 2022</h5>
 			</div>
-			<div className="d-flex flex-column justify-content-between pt-7 gap-5">
+			<div className="d-flex flex-column justify-content-between pt-4 gap-5">
 				<div>
 					<select
 						className="form-select form-input mb-3"
@@ -87,8 +106,24 @@ const OrderInformation = (props) => {
 };
 
 const ProductTable = (props) => {
+	const { products, orderList, setOrderList } = props;
+
+	const addProduct = (selectedProduct) => {
+		let initialSelectedProduct = {
+			id: selectedProduct.id,
+			name: selectedProduct.ProductName,
+			unitPrice: selectedProduct.SellingPrice,
+			stock: selectedProduct.Quantity,
+			qty: 1,
+			price: selectedProduct.SellingPrice,
+			total: selectedProduct.SellingPrice,
+		};
+
+		setOrderList([...orderList, initialSelectedProduct]);
+	};
+
 	return (
-		<table className="table">
+		<table className="table table-hover">
 			<thead>
 				<tr>
 					<th scope="col">Barcode</th>
@@ -100,20 +135,29 @@ const ProductTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
+				{products &&
+					products.map((product, index) => (
+						<tr
+							key={index}
+							className="cursor-pointer"
+							onClick={() => addProduct(product)}
+						>
+							<td>{product.ProductCode}</td>
+							<td>{product.ProductName}</td>
+							<td>{product.GenericName}</td>
+							<td>{product.ProductDetails}</td>
+							<td>&#8369; {product.SellingPrice}</td>
+							<td>{product.Quantity}</td>
+						</tr>
+					))}
 			</tbody>
 		</table>
 	);
 };
 
 const OrderTable = (props) => {
+	const { orderList } = props;
+
 	return (
 		<table className="table">
 			<thead>
@@ -126,13 +170,16 @@ const OrderTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
+				{orderList &&
+					orderList.map((order, index) => (
+						<tr key={index}>
+							<td>{order.name}</td>
+							<td>{order.price}</td>
+							<td>{order.qty}</td>
+							<td>{order.total}</td>
+							<td>X</td>
+						</tr>
+					))}
 			</tbody>
 		</table>
 	);
@@ -151,6 +198,14 @@ const SearchProductCode = (props) => {
 };
 
 const SearchProduct = (props) => {
+	const { findByTitle } = props;
+
+	const [searchInput, setSearchInput] = useState("");
+
+	useEffect(() => {
+		if (searchInput !== "") findByTitle(searchInput);
+	}, [searchInput]);
+
 	return (
 		<input
 			type="text"
@@ -158,6 +213,8 @@ const SearchProduct = (props) => {
 			placeholder="Search product name"
 			name="searchInput"
 			id="searchInput"
+			value={searchInput}
+			onChange={(event) => setSearchInput(event.target.value)}
 		/>
 	);
 };

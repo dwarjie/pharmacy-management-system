@@ -30,6 +30,8 @@ db.or = require("./OR.model")(sequelize, Sequelize);
 db.medicine = require("./medicine.model")(sequelize, Sequelize);
 db.patient = require("./patient.model")(sequelize, Sequelize);
 db.handler = require("./handler.model")(sequelize, Sequelize);
+db.salesDetail = require("./salesDetail.model")(sequelize, Sequelize);
+db.sales = require("./sales.model")(sequelize, Sequelize);
 
 // define model relationships
 
@@ -74,6 +76,23 @@ db.medicine.belongsTo(db.subCategory, {
 db.handler.hasMany(db.patient);
 db.patient.belongsTo(db.handler, {
 	as: "handler",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationship for salesDetails with medicine id and sales
+db.medicine.hasMany(db.salesDetail);
+db.salesDetail.belongsTo(db.medicine, {
+	as: "medicine",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.sales.hasMany(db.salesDetail);
+db.salesDetail.belongsTo(db.sales, {
+	as: "sale",
 	foreignKey: {
 		allowNull: false,
 	},

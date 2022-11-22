@@ -4,6 +4,7 @@ const Medicine = db.medicine;
 const Category = db.category;
 const duplicate = require("../util/CheckDuplicate");
 const { QueryTypes } = db.Sequelize;
+const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
 	const medicine = {
@@ -50,7 +51,13 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-	Medicine.findAll({ include: ["subCategory", "supplier", "unit"] })
+	const title = req.query.title;
+	const condition = title ? { ProductName: { [Op.like]: `%${title}%` } } : null;
+
+	Medicine.findAll(
+		{ where: condition },
+		{ include: ["subCategory", "supplier", "unit"] }
+	)
 		.then((data) => {
 			res.send(data);
 		})
@@ -170,6 +177,22 @@ exports.getOtherModel = async (req, res) => {
 		.catch((err) => {
 			return res.status(500).send({
 				message: err.message || `Some error occurred while processing data`,
+			});
+		});
+};
+
+// get the products by title
+exports.findByTitle = (req, res) => {
+	const title = req.query.title;
+	Medicine.findAll({
+		where: title ? { title: { [Op.like]: `%${title}%` } } : null,
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: `Cannot retrieve products`,
 			});
 		});
 };

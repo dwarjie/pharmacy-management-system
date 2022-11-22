@@ -7,7 +7,7 @@ import PatientService from "../../../../services/PatientService";
 import CheckBox from "../../../layout/CheckBox";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import parseDropdownValue from "../../../../helper/parseJSON";
-import formatDate from "../../../../helper/formatDate";
+import { formatDate } from "../../../../helper/dateHelper";
 
 const Patient = (props) => {
 	let navigate = useNavigate();
