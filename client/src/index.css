@@ -50,6 +50,15 @@ body {
 	max-height: 100%;
 }
 
+/* TEXT */
+.text-weight-medium {
+	font-weight: 500;
+}
+
+.text-date {
+	font-size: 3rem;
+}
+
 /* NAVIGATION */
 .top-navigation {
 	height: 5rem;

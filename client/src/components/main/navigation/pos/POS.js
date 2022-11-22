@@ -17,14 +17,69 @@ const POS = () => {
 					</div>
 				</div>
 				<div className="h-50 border border-dark rounded simple-shadow">
-					<div className="table-responsive table-fixed max-height-100">
+					<div className="table-responsive max-height-100">
 						<OrderTable />
 					</div>
 				</div>
 			</div>
 			<div className="col-4 h-auto border border-dark rounded simple-shadow">
-				<div className="p-3">
-					<form className="col-11 col-lg-10 pb-5 mx-auto"></form>
+				<OrderInformation />
+			</div>
+		</div>
+	);
+};
+
+const OrderInformation = (props) => {
+	return (
+		<div className="d-flex flex-column justify-content-between gap-7 p-3">
+			<div>
+				<h1 className="text-date">
+					<strong>08:47:70 AM</strong>
+				</h1>
+				<h5 className="text-weight-medium">Tuesday, November 22, 2022</h5>
+			</div>
+			<div className="d-flex flex-column justify-content-between pt-7 gap-5">
+				<div>
+					<select
+						className="form-select form-input mb-3"
+						name="customer"
+						id="customer"
+					>
+						<option value="Walk in">Walk in</option>
+					</select>
+					<select
+						className="form-select form-input mb-3"
+						name="discount"
+						id="discount"
+					>
+						<option value="">Select discount</option>
+					</select>
+					<select className="form-select form-input" name="vat" id="vat">
+						<option value="">Select VAT</option>
+					</select>
+				</div>
+				<div>
+					<h6>
+						<strong>Total: </strong>
+					</h6>
+					<h6>
+						<strong>Discount: </strong>
+					</h6>
+					<h6>
+						<strong>VAT: </strong>
+					</h6>
+					<h6>
+						<strong>VAT exempt sale: </strong>
+					</h6>
+					<h6>
+						<strong>Grand Total: </strong>
+					</h6>
+					<div className="pt-3">
+						<button className="btn btn-primary w-100 mb-2">
+							Proceed to checkout
+						</button>
+						<button className="btn btn-secondary w-100">Cancel order</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -44,119 +99,7 @@ const ProductTable = (props) => {
 					<th scope="col">Stock</th>
 				</tr>
 			</thead>
-			<tbody className="table-">
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
-				<tr>
-					<td>20000094935</td>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>Fluimucil</td>
-					<td>400ml</td>
-					<td>10.99</td>
-					<td>15</td>
-				</tr>
+			<tbody>
 				<tr>
 					<td>20000094935</td>
 					<td>Acetylcysteine (Fluimucil)</td>
@@ -170,7 +113,7 @@ const ProductTable = (props) => {
 	);
 };
 
-const OrderTable = () => {
+const OrderTable = (props) => {
 	return (
 		<table className="table">
 			<thead>
@@ -182,98 +125,7 @@ const OrderTable = () => {
 					<th scope="col">Actions</th>
 				</tr>
 			</thead>
-			<tbody className="table-">
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
-				<tr>
-					<td>Acetylcysteine (Fluimucil)</td>
-					<td>10.99</td>
-					<td>1</td>
-					<td>10.99</td>
-					<td>X</td>
-				</tr>
+			<tbody>
 				<tr>
 					<td>Acetylcysteine (Fluimucil)</td>
 					<td>10.99</td>
@@ -309,7 +161,5 @@ const SearchProduct = (props) => {
 		/>
 	);
 };
-
-const ProductList = () => {};
 
 export default POS;
