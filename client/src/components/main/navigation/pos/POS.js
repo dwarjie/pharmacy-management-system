@@ -1,10 +1,17 @@
 // This component is for POS
 import { useState, useEffect } from "react";
+import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
 import MedicineService from "../../../../services/MedicineService";
 
 const POS = () => {
 	const [products, setProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
+	const [currentTime, setCurrentTime] = useState(null);
+
+	// get current time and auto update every second
+	useEffect(() => {
+		setInterval(() => setCurrentTime(getCurrentTime()), 1000);
+	}, []);
 
 	const findByTitle = (title) => {
 		MedicineService.getByTitle(title)
@@ -42,30 +49,32 @@ const POS = () => {
 				</div>
 			</div>
 			<div className="col-4 h-auto border border-dark rounded simple-shadow">
-				<OrderInformation />
+				<OrderInformation currentTime={currentTime} />
 			</div>
 		</div>
 	);
 };
 
 const OrderInformation = (props) => {
+	const { currentTime } = props;
+
 	return (
 		<div className="d-flex flex-column justify-content-between gap-7 p-3">
 			<div>
 				<h1 className="text-date">
-					<strong>08:47:70 AM</strong>
+					<strong>{currentTime}</strong>
 				</h1>
-				<h5 className="text-weight-medium">Tuesday, November 22, 2022</h5>
+				<h5 className="text-weight-medium">{getCurrentDate()}</h5>
 			</div>
 			<div className="d-flex flex-column justify-content-between pt-4 gap-5">
 				<div>
-					<select
-						className="form-select form-input mb-3"
+					<input
+						type="text"
+						className="form-control form-input mb-3"
 						name="customer"
 						id="customer"
-					>
-						<option value="Walk in">Walk in</option>
-					</select>
+						placeholder="Customer Name"
+					/>
 					<select
 						className="form-select form-input mb-3"
 						name="discount"
@@ -110,13 +119,13 @@ const ProductTable = (props) => {
 
 	const addProduct = (selectedProduct) => {
 		let initialSelectedProduct = {
-			id: selectedProduct.id,
+			UnitPrice: selectedProduct.SellingPrice,
+			Quantity: 1,
+			DiscountedPrice: 0,
+			Total: selectedProduct.SellingPrice,
+			medicineId: selectedProduct.id,
+			salesId: 0,
 			name: selectedProduct.ProductName,
-			unitPrice: selectedProduct.SellingPrice,
-			stock: selectedProduct.Quantity,
-			qty: 1,
-			price: selectedProduct.SellingPrice,
-			total: selectedProduct.SellingPrice,
 		};
 
 		setOrderList([...orderList, initialSelectedProduct]);
@@ -174,9 +183,9 @@ const OrderTable = (props) => {
 					orderList.map((order, index) => (
 						<tr key={index}>
 							<td>{order.name}</td>
-							<td>{order.price}</td>
-							<td>{order.qty}</td>
-							<td>{order.total}</td>
+							<td>{order.UnitPrice}</td>
+							<td>{order.Quantity}</td>
+							<td>{order.Total}</td>
 							<td>X</td>
 						</tr>
 					))}
