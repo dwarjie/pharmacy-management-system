@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
 import MedicineService from "../../../../services/MedicineService";
 
+// icons
+import { AiFillMinusCircle } from "react-icons/ai";
+import { IoMdAddCircle } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+
 const POS = () => {
 	const [products, setProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
@@ -186,7 +191,17 @@ const OrderTable = (props) => {
 							<td>{order.UnitPrice}</td>
 							<td>{order.Quantity}</td>
 							<td>{order.Total}</td>
-							<td>X</td>
+							<td>
+								<span className="px-1">
+									<IoMdAddCircle className="icon-size-sm cursor-pointer" />
+								</span>
+								<span className="px-1">
+									<AiFillMinusCircle className="icon-size-sm cursor-pointer" />
+								</span>
+								<span className="px-1">
+									<MdDelete className="icon-size-sm cursor-pointer" />
+								</span>
+							</td>
 						</tr>
 					))}
 			</tbody>
