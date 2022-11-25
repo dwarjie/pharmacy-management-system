@@ -236,6 +236,7 @@ const ProductTable = (props) => {
 			medicineId: selectedProduct.id,
 			salesId: 0,
 			name: selectedProduct.ProductName,
+			maxQuantity: selectedProduct.Quantity,
 		};
 
 		setOrderList([...orderList, initialSelectedProduct]);
@@ -294,15 +295,28 @@ const OrderTable = (props) => {
 						<tr key={index}>
 							<td>{order.name}</td>
 							<td>{order.UnitPrice}</td>
-							<td>{order.Quantity}</td>
+							<td>
+								<input
+									type="number"
+									min={1}
+									max={order.maxQuantity}
+									className="form-control w-20"
+									value={order.Quantity}
+									onChange={(event) => {
+										order.Quantity = event.target.value;
+									}}
+								/>
+							</td>
 							<td>{order.Total}</td>
 							<td>
-								<span className="px-1">
-									<IoMdAddCircle className="icon-size-sm cursor-pointer" />
+								{/* <span className="px-1">
+									<IoMdAddCircle
+										className="icon-size-sm cursor-pointer"
+									/>
 								</span>
 								<span className="px-1">
 									<AiFillMinusCircle className="icon-size-sm cursor-pointer" />
-								</span>
+								</span> */}
 								<span className="px-1">
 									<MdDelete className="icon-size-sm cursor-pointer" />
 								</span>
