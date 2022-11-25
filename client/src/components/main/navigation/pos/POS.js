@@ -2,21 +2,53 @@
 import { useState, useEffect } from "react";
 import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
 import MedicineService from "../../../../services/MedicineService";
+import DiscountService from "../../../../services/DiscountService";
+import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 
 // icons
 import { AiFillMinusCircle } from "react-icons/ai";
 import { IoMdAddCircle } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import parseDropdownValue from "../../../../helper/parseJSON";
 
-const POS = () => {
+const POS = (props) => {
+	// const { initialActiveDropDownValue, initialOrderList } = props;
+
+	const initialActiveDropDownValue = {
+		discountId: "",
+		VATId: "",
+		discountAmount: 0,
+		VATAmount: 0,
+	};
+
 	const [products, setProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
+	const [discountList, setDiscountList] = useState([]);
+	const [activeDropDownValue, setActiveDropDownValue] = useState(
+		initialActiveDropDownValue
+	);
 	const [currentTime, setCurrentTime] = useState(null);
 
 	// get current time and auto update every second
 	useEffect(() => {
 		setInterval(() => setCurrentTime(getCurrentTime()), 1000);
 	}, []);
+
+	useEffect(() => {
+		getAllDiscount();
+	}, []);
+
+	// get all the discounts
+	const getAllDiscount = () => {
+		DiscountService.getAllDiscount()
+			.then((response) => {
+				console.log(response.data);
+				setDiscountList(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const findByTitle = (title) => {
 		MedicineService.getByTitle(title)
@@ -54,14 +86,30 @@ const POS = () => {
 				</div>
 			</div>
 			<div className="col-4 h-auto border border-dark rounded simple-shadow">
-				<OrderInformation currentTime={currentTime} />
+				<OrderInformation
+					currentTime={currentTime}
+					activeDropDownValue={activeDropDownValue}
+					discountList={discountList}
+					setActiveDropDownValue={setActiveDropDownValue}
+				/>
 			</div>
 		</div>
 	);
 };
 
 const OrderInformation = (props) => {
-	const { currentTime } = props;
+	const {
+		currentTime,
+		activeDropDownValue,
+		discountList,
+		vatList,
+		setActiveDropDownValue,
+	} = props;
+
+	const handleSelectChange = (event) => {
+		const { name, value } = event.target;
+		setActiveDropDownValue({ ...activeDropDownValue, [name]: value });
+	};
 
 	return (
 		<div className="d-flex flex-column justify-content-between gap-7 p-3">
@@ -82,13 +130,39 @@ const OrderInformation = (props) => {
 					/>
 					<select
 						className="form-select form-input mb-3"
-						name="discount"
-						id="discount"
+						name="discountId"
+						id="discountId"
+						value={activeDropDownValue.discountId}
+						onChange={(event) => {
+							let data = parseDropdownValue(event);
+							setActiveDropDownValue({
+								...activeDropDownValue,
+								discountId: data.DiscountName,
+								discountAmount: data.DiscountAmount,
+							});
+						}}
 					>
-						<option value="">Select discount</option>
+						<DropDownDefaultOption content={"Select Discount"} />
+						{discountList &&
+							discountList.map((discount, index) => (
+								<option
+									className="dropdown-item"
+									value={discount.DiscountName}
+									key={index}
+									data-value={JSON.stringify(discount)}
+								>
+									{discount.DiscountName}
+								</option>
+							))}
 					</select>
-					<select className="form-select form-input" name="vat" id="vat">
-						<option value="">Select VAT</option>
+					<select
+						className="form-select form-input"
+						name="VATId"
+						id="VATId"
+						value={activeDropDownValue.VATId}
+						onChange={handleSelectChange}
+					>
+						<DropDownDefaultOption content={"Select VAT"} />
 					</select>
 				</div>
 				<div>

@@ -137,7 +137,7 @@ const Category = () => {
 					</form>
 				</div>
 			</div>
-			<div className="d-flex flex-column flex-lg-row justify-content-between">
+			<div className="w-100 d-flex flex-column flex-lg-row justify-content-between gap-1">
 				<CategoryList
 					categories={categories}
 					setActiveCategory={setActiveCategory}
@@ -159,7 +159,7 @@ const CategoryList = (props) => {
 	} = props;
 
 	return (
-		<div className="col-12 col-lg-6 h-auto border border-dark rounded simple-shadow mt-3 p-1">
+		<div className="col-12 col-lg-6 h-auto border border-dark rounded simple-shadow mt-3">
 			<div className="p-3">
 				<h4>Category List</h4>
 				<hr />
@@ -173,7 +173,7 @@ const CategoryList = (props) => {
 						id="manufacturer-search"
 					/>
 				</form>
-				<table className="table">
+				<table className="table table-hover">
 					<thead>
 						<tr>
 							<th scope="col">Name</th>
@@ -185,6 +185,7 @@ const CategoryList = (props) => {
 							categories.map((category, index) => (
 								<tr
 									key={index}
+									className="cursor-pointer"
 									onClick={() => setActiveSubCategory(category.subCategory)}
 								>
 									<td>{category.CategoryName}</td>
@@ -215,7 +216,7 @@ const SubCategoryList = (props) => {
 	const { subCategories } = props;
 
 	return (
-		<div className="col-12 col-lg-5 h-auto border border-dark rounded simple-shadow mt-3">
+		<div className="col-12 col-lg-6 h-auto border border-dark rounded simple-shadow mt-3">
 			<div className="p-3">
 				<h4>Sub Category</h4>
 				<hr />
