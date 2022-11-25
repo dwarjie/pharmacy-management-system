@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
 import MedicineService from "../../../../services/MedicineService";
 import DiscountService from "../../../../services/DiscountService";
+import VatService from "../../../../services/VatService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 
 // icons
@@ -18,12 +19,14 @@ const POS = (props) => {
 		discountId: "",
 		VATId: "",
 		discountAmount: 0,
+		discountType: "",
 		VATAmount: 0,
 	};
 
 	const [products, setProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
 	const [discountList, setDiscountList] = useState([]);
+	const [vatList, setVatList] = useState([]);
 	const [activeDropDownValue, setActiveDropDownValue] = useState(
 		initialActiveDropDownValue
 	);
@@ -36,6 +39,7 @@ const POS = (props) => {
 
 	useEffect(() => {
 		getAllDiscount();
+		getAllVAT();
 	}, []);
 
 	// get all the discounts
@@ -44,6 +48,18 @@ const POS = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				setDiscountList(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// get all the vats
+	const getAllVAT = () => {
+		VatService.getAllVAT()
+			.then((response) => {
+				console.log(response.data);
+				setVatList(response.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -90,6 +106,7 @@ const POS = (props) => {
 					currentTime={currentTime}
 					activeDropDownValue={activeDropDownValue}
 					discountList={discountList}
+					vatList={vatList}
 					setActiveDropDownValue={setActiveDropDownValue}
 				/>
 			</div>
@@ -105,11 +122,6 @@ const OrderInformation = (props) => {
 		vatList,
 		setActiveDropDownValue,
 	} = props;
-
-	const handleSelectChange = (event) => {
-		const { name, value } = event.target;
-		setActiveDropDownValue({ ...activeDropDownValue, [name]: value });
-	};
 
 	return (
 		<div className="d-flex flex-column justify-content-between gap-7 p-3">
@@ -139,6 +151,7 @@ const OrderInformation = (props) => {
 								...activeDropDownValue,
 								discountId: data.DiscountName,
 								discountAmount: data.DiscountAmount,
+								discountType: data.DiscountType,
 							});
 						}}
 					>
@@ -160,9 +173,27 @@ const OrderInformation = (props) => {
 						name="VATId"
 						id="VATId"
 						value={activeDropDownValue.VATId}
-						onChange={handleSelectChange}
+						onChange={(event) => {
+							let data = parseDropdownValue(event);
+							setActiveDropDownValue({
+								...activeDropDownValue,
+								VATId: data.VatName,
+								VATAmount: data.VatAmount,
+							});
+						}}
 					>
 						<DropDownDefaultOption content={"Select VAT"} />
+						{vatList &&
+							vatList.map((vat, index) => (
+								<option
+									value={vat.VatName}
+									className="dropdown-item"
+									key={index}
+									data-value={JSON.stringify(vat)}
+								>
+									{vat.VatName}
+								</option>
+							))}
 					</select>
 				</div>
 				<div>
