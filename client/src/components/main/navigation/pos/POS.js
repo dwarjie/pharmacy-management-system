@@ -1,6 +1,7 @@
 // This component is for POS
 import { useState, useEffect } from "react";
 import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
+import { checkQuantity } from "../../../../helper/checkQuantity";
 import MedicineService from "../../../../services/MedicineService";
 import DiscountService from "../../../../services/DiscountService";
 import VatService from "../../../../services/VatService";
@@ -227,19 +228,53 @@ const OrderInformation = (props) => {
 const ProductTable = (props) => {
 	const { products, orderList, setOrderList } = props;
 
-	const addProduct = (selectedProduct) => {
-		let initialSelectedProduct = {
-			UnitPrice: selectedProduct.SellingPrice,
-			Quantity: 1,
-			DiscountedPrice: 0,
-			Total: selectedProduct.SellingPrice,
-			medicineId: selectedProduct.id,
-			salesId: 0,
-			name: selectedProduct.ProductName,
-			maxQuantity: selectedProduct.Quantity,
-		};
+	// this function will check if order already exists in order list
+	const checkOrderExist = (selectedProduct) => {
+		let isExist = false;
+		// check if the medicineId already exists in order list
+		orderList.forEach((order) => {
+			if (order.medicineId === selectedProduct.id) {
+				isExist = true;
+			}
+		});
 
-		setOrderList([...orderList, initialSelectedProduct]);
+		return isExist;
+	};
+
+	const addProduct = (selectedProduct) => {
+		if (!checkOrderExist(selectedProduct)) {
+			// check if quantity is greater than 0 before adding to the order list
+			if (checkQuantity(selectedProduct.Quantity)) {
+				let initialSelectedProduct = {
+					UnitPrice: selectedProduct.SellingPrice,
+					Quantity: 1,
+					DiscountedPrice: 0,
+					Total: selectedProduct.SellingPrice,
+					medicineId: selectedProduct.id,
+					salesId: 0,
+					name: selectedProduct.ProductName,
+					maxQuantity: selectedProduct.Quantity,
+				};
+
+				setOrderList([...orderList, initialSelectedProduct]);
+			} else {
+				alert("Insufficient Quantity!");
+			}
+		} else {
+			// if order exists, check if quantity is < the order quantity then update the order quantity
+			let order = orderList.map((product, index) => {
+				if (product.medicineId === selectedProduct.id) {
+					if (product.Quantity + 1 <= selectedProduct.Quantity) {
+						product.Quantity += 1;
+					} else {
+						alert("Insufficient Quantity");
+					}
+				}
+				return product;
+			});
+
+			setOrderList(order);
+		}
 	};
 
 	return (
@@ -300,7 +335,7 @@ const OrderTable = (props) => {
 									type="number"
 									min={1}
 									max={order.maxQuantity}
-									className="form-control w-20"
+									className="form-control w-30"
 									value={order.Quantity}
 									onChange={(event) => {
 										order.Quantity = event.target.value;
