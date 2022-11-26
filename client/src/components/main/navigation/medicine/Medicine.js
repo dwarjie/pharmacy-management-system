@@ -1,5 +1,5 @@
 // this module is responsible for adding new medicines
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
@@ -42,9 +42,9 @@ const Medicine = (props) => {
 	}, [activeDropDownValue.subCategoryId, medicine.SupplierPrice]);
 
 	// reset subcategory everytime category changes
-	useEffect(() => {
-		resetSubCategory();
-	}, [activeDropDownValue.category]);
+	// useEffect(() => {
+	// 	resetSubCategory();
+	// }, [activeDropDownValue.category]);
 
 	// create new product
 	const createProduct = (event) => {
@@ -265,6 +265,7 @@ const Medicine = (props) => {
 								onChange={(event) => {
 									let data = JSON.parse(event.target.value);
 									setActiveCategory(data);
+									resetSubCategory();
 								}}
 							>
 								{/* check if props category has value

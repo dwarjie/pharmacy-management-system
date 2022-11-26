@@ -29,10 +29,10 @@ const UpdateMedicine = () => {
 
 	const initialDropDownValue = {
 		category: "",
-		subCategoryId: "",
-		subCategoryItem: {},
-		supplierId: "",
-		unitId: "",
+		subCategoryId: oldMedicine.subCategory.SubCategoryName,
+		subCategoryItem: oldMedicine.subCategory,
+		supplierId: oldMedicine.supplier.SupplierName,
+		unitId: oldMedicine.unit.UnitName,
 	};
 
 	// initialize the initial value for medicines dropdown
@@ -42,6 +42,7 @@ const UpdateMedicine = () => {
 
 	useEffect(() => {
 		getOneCategory();
+		console.log(dropDownValue);
 	}, []);
 
 	// get the category data based from oldMedicine category id
@@ -53,14 +54,10 @@ const UpdateMedicine = () => {
 		)
 			.then((response) => {
 				categoryData = response.data;
-				setDropDownValue({
-					...dropDownValue,
+				setDropDownValue((prevValue) => ({
+					...prevValue,
 					category: categoryData.CategoryName,
-					subCategoryId: oldMedicine.subCategory.SubCategoryName,
-					subCategoryItem: oldMedicine.subCategory,
-					supplierId: oldMedicine.supplier.SupplierName,
-					unitId: oldMedicine.unit.UnitName,
-				});
+				}));
 				setSubCategory(categoryData.subCategory);
 			})
 			.catch((err) => {

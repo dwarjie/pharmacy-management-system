@@ -54,10 +54,10 @@ exports.findAll = (req, res) => {
 	const title = req.query.title;
 	const condition = title ? { ProductName: { [Op.like]: `%${title}%` } } : null;
 
-	Medicine.findAll(
-		{ where: condition },
-		{ include: ["subCategory", "supplier", "unit"] }
-	)
+	Medicine.findAll({
+		include: ["subCategory", "supplier", "unit"],
+		where: condition,
+	})
 		.then((data) => {
 			res.send(data);
 		})
