@@ -139,10 +139,10 @@ const Medicine = (props) => {
 	// this will set the current category
 	// and will also set it's sub categories
 	const setActiveCategory = (activeCategory) => {
-		setActiveDropDownValue({
-			...activeDropDownValue,
+		setActiveDropDownValue((prevValue) => ({
+			...prevValue,
 			category: activeCategory.CategoryName,
-		});
+		}));
 		setSubCategory(activeCategory.subCategory);
 	};
 
@@ -158,12 +158,13 @@ const Medicine = (props) => {
 
 	// reset sub categories and selling price once category changed
 	const resetSubCategory = () => {
-		setActiveDropDownValue({
-			...activeDropDownValue,
+		setActiveDropDownValue((prevValue) => ({
+			...prevValue,
 			subCategoryId: "",
 			subCategoryItem: "",
-		});
+		}));
 		setMedicine({ ...medicine, SellingPrice: 0, subCategoryId: 0 });
+		console.log("reset");
 	};
 
 	// parse the dropdown value into JSON and return it
@@ -260,12 +261,12 @@ const Medicine = (props) => {
 								id="category"
 								className="form-select form-input"
 								required
-								defaultValue={activeDropDownValue.category}
+								value={activeDropDownValue.category}
 								// set the sub category
 								onChange={(event) => {
-									let data = JSON.parse(event.target.value);
-									setActiveCategory(data);
+									let data = parseDropdownValue(event);
 									resetSubCategory();
+									setActiveCategory(data);
 								}}
 							>
 								{/* check if props category has value
@@ -282,7 +283,8 @@ const Medicine = (props) => {
 										<option
 											className="dropdown-item"
 											key={index}
-											value={JSON.stringify(item)}
+											value={item.CategoryName}
+											data-value={JSON.stringify(item)}
 										>
 											{item.CategoryName}
 										</option>
