@@ -15,9 +15,20 @@ $dark: #1D3557;
 // add the functions and variables in order to add more maps values
 @import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
+
+// Spacing utilities
+$custom-spacers: (
+  6: $spacer * 5,
+  7: $spacer * 6.25,
+  8: $spacer * 9.37,
+);
+// Adding utilities
+$spacers: map-merge($custom-spacers, $spacers);
+
 @import "../../../node_modules/bootstrap/scss/maps";
 @import "../../../node_modules/bootstrap/scss/mixins";
 @import "../../../node_modules/bootstrap/scss/utilities";
+@import "../../../node_modules/bootstrap/scss/utilities/api";
 
 // Sizing utilities
 $utilities: map-merge(
@@ -32,20 +43,9 @@ $utilities: map-merge(
         ),
       ),
     ),
-  )
+  ),
 );
 
-// Spacing utilities
-$custom-spacers: (
-  6: $spacer * 5,
-  7: $spacer * 6.25,
-  8: $spacer * 9.37,
-);
-
-// Adding utilities
-$spacers: map-merge($custom-spacers, $spacers);
-
-@import "../../../node_modules/bootstrap/scss/utilities/api";
 // import the main boostrap
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 

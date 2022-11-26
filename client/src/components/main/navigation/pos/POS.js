@@ -14,7 +14,14 @@ import { MdDelete } from "react-icons/md";
 import parseDropdownValue from "../../../../helper/parseJSON";
 
 const POS = (props) => {
-	// const { initialActiveDropDownValue, initialOrderList } = props;
+	const initialSalesValue = {
+		OrderNo: "",
+		OrderDate: getCurrentDate(),
+		CustomerName: "Walk in",
+		Discount: 0,
+		VAT: 0,
+		Total: 0,
+	};
 
 	const initialActiveDropDownValue = {
 		discountId: "",
@@ -24,6 +31,7 @@ const POS = (props) => {
 		VATAmount: 0,
 	};
 
+	const [sale, setSale] = useState(initialSalesValue);
 	const [products, setProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
 	const [discountList, setDiscountList] = useState([]);
@@ -38,10 +46,16 @@ const POS = (props) => {
 		setInterval(() => setCurrentTime(getCurrentTime()), 1000);
 	}, []);
 
+	// get the discounts and vat
 	useEffect(() => {
 		getAllDiscount();
 		getAllVAT();
 	}, []);
+
+	// compute the Grand Total amount
+	useEffect(() => {
+		computeTotal();
+	}, [orderList]);
 
 	// get all the discounts
 	const getAllDiscount = () => {
@@ -78,6 +92,16 @@ const POS = (props) => {
 			});
 	};
 
+	// compute the total amount of the transaction
+	const computeTotal = () => {
+		let total = 0;
+		orderList.map((order, index) => {
+			total += order.Total;
+			console.log(total);
+			setSale({ ...sale, Total: total });
+		});
+	};
+
 	return (
 		<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
 			<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
@@ -98,13 +122,14 @@ const POS = (props) => {
 				</div>
 				<div className="h-50 border border-dark rounded simple-shadow">
 					<div className="table-responsive max-height-100">
-						<OrderTable orderList={orderList} />
+						<OrderTable orderList={orderList} computeTotal={computeTotal} />
 					</div>
 				</div>
 			</div>
 			<div className="col-4 h-auto border border-dark rounded simple-shadow">
 				<OrderInformation
 					currentTime={currentTime}
+					sale={sale}
 					activeDropDownValue={activeDropDownValue}
 					discountList={discountList}
 					vatList={vatList}
@@ -118,6 +143,7 @@ const POS = (props) => {
 const OrderInformation = (props) => {
 	const {
 		currentTime,
+		sale,
 		activeDropDownValue,
 		discountList,
 		vatList,
@@ -199,7 +225,7 @@ const OrderInformation = (props) => {
 				</div>
 				<div>
 					<h6>
-						<strong>Total: </strong>
+						<strong>Total: {sale.Total}</strong>
 					</h6>
 					<h6>
 						<strong>Discount: </strong>
@@ -264,10 +290,10 @@ const ProductTable = (props) => {
 			// if order exists, check if quantity is < the order quantity then update the order quantity
 			let order = orderList.map((product, index) => {
 				if (product.medicineId === selectedProduct.id) {
-					if (product.Quantity + 1 <= selectedProduct.Quantity) {
-						product.Quantity += 1;
+					if (parseInt(product.Quantity) <= selectedProduct.Quantity) {
+						product.Quantity = parseInt(product.Quantity) + 1;
 					} else {
-						alert("Insufficient Quantity");
+						alert("Insufficient Quantity!");
 					}
 				}
 				return product;
@@ -311,7 +337,12 @@ const ProductTable = (props) => {
 };
 
 const OrderTable = (props) => {
-	const { orderList } = props;
+	const { orderList, computeTotal } = props;
+
+	const getProductTotal = (product) => {
+		product.Total = product.UnitPrice * product.Quantity;
+		return product.Total.toFixed(1);
+	};
 
 	return (
 		<table className="table">
@@ -333,16 +364,19 @@ const OrderTable = (props) => {
 							<td>
 								<input
 									type="number"
+									inputMode="numeric"
 									min={1}
 									max={order.maxQuantity}
 									className="form-control w-30"
 									value={order.Quantity}
 									onChange={(event) => {
 										order.Quantity = event.target.value;
+										getProductTotal(order);
+										computeTotal();
 									}}
 								/>
 							</td>
-							<td>{order.Total}</td>
+							<td>{getProductTotal(order)}</td>
 							<td>
 								{/* <span className="px-1">
 									<IoMdAddCircle
@@ -385,15 +419,24 @@ const SearchProduct = (props) => {
 	}, [searchInput]);
 
 	return (
-		<input
-			type="text"
-			className="w-100 form-control form-input"
-			placeholder="Search product name"
-			name="searchInput"
-			id="searchInput"
-			value={searchInput}
-			onChange={(event) => setSearchInput(event.target.value)}
-		/>
+		<div className="input-group flex-nowrap">
+			<input
+				type="text"
+				className="w-100 form-control form-input"
+				placeholder="Search product name"
+				name="searchInput"
+				id="searchInput"
+				value={searchInput}
+				onChange={(event) => setSearchInput(event.target.value)}
+			/>
+			<button
+				class="btn btn-secondary"
+				type="button"
+				onClick={() => setSearchInput("")}
+			>
+				Clear
+			</button>
+		</div>
 	);
 };
 
