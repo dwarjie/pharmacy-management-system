@@ -4831,6 +4831,11 @@
     display: none !important;
   }
 }
+@media (max-width: 767.98px) {
+  .text-date {
+    font-size: 2rem !important;
+  }
+}
 /*!
  * Bootstrap  v5.2.1 (https://getbootstrap.com/)
  * Copyright 2011-2022 The Bootstrap Authors

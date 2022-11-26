@@ -55,7 +55,16 @@ const POS = (props) => {
 	// compute the Grand Total amount
 	useEffect(() => {
 		computeTotal();
-	}, [orderList]);
+		computeDiscount();
+		console.log("call");
+	}, [orderList, activeDropDownValue.discountId]);
+
+	// compute discount
+	// useEffect(() => {
+	// 	let discount = computeDiscount();
+	// 	setSale({ ...sale, Discount: discount });
+	// 	console.log("call");
+	// }, [orderList, activeDropDownValue.discountId]);
 
 	// get all the discounts
 	const getAllDiscount = () => {
@@ -98,9 +107,39 @@ const POS = (props) => {
 		orderList.map((order, index) => {
 			total += order.Total;
 			console.log(total);
-			setSale({ ...sale, Total: total });
+		});
+		let discount = computeDiscount();
+		setSale({
+			...sale,
+			Total: total.toFixed(1),
+			Discount: discount.toFixed(1),
 		});
 	};
+
+	// compute the discount base on the selected discount and current total
+	const computeDiscount = () => {
+		if (activeDropDownValue.discountId === "") return 0;
+
+		// check the discount type if percentage or fixed
+		if (activeDropDownValue.discountType === "%") {
+			let percentage = parseFloat(activeDropDownValue.discountAmount) / 100;
+			let amount = percentage * parseFloat(sale.Total);
+
+			return amount;
+		} else {
+			return parseFloat(activeDropDownValue.discountAmount);
+		}
+	};
+
+	// // compute the VAT base on the selected VAT and current total
+	// const computeVAT = () => {
+	// 	if (activeDropDownValue.VATId === "") return 0;
+
+	// 	let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
+	// 	let amount = percentage * parseFloat(sale.Total);
+
+	// 	return amount;
+	// };
 
 	return (
 		<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
@@ -133,6 +172,7 @@ const POS = (props) => {
 					activeDropDownValue={activeDropDownValue}
 					discountList={discountList}
 					vatList={vatList}
+					setSale={setSale}
 					setActiveDropDownValue={setActiveDropDownValue}
 				/>
 			</div>
@@ -147,6 +187,7 @@ const OrderInformation = (props) => {
 		activeDropDownValue,
 		discountList,
 		vatList,
+		setSale,
 		setActiveDropDownValue,
 	} = props;
 
@@ -163,9 +204,13 @@ const OrderInformation = (props) => {
 					<input
 						type="text"
 						className="form-control form-input mb-3"
-						name="customer"
-						id="customer"
+						name="CustomerName"
+						id="CustomerName"
 						placeholder="Customer Name"
+						value={sale.CustomerName}
+						onChange={(event) =>
+							setSale({ ...sale, CustomerName: event.target.value })
+						}
 					/>
 					<select
 						className="form-select form-input mb-3"
@@ -228,7 +273,7 @@ const OrderInformation = (props) => {
 						<strong>Total: {sale.Total}</strong>
 					</h6>
 					<h6>
-						<strong>Discount: </strong>
+						<strong>Discount: {sale.Discount}</strong>
 					</h6>
 					<h6>
 						<strong>VAT: </strong>
@@ -240,9 +285,7 @@ const OrderInformation = (props) => {
 						<strong>Grand Total: </strong>
 					</h6>
 					<div className="pt-3">
-						<button className="btn btn-primary w-100 mb-2">
-							Proceed to checkout
-						</button>
+						<button className="btn btn-primary w-100 mb-2">Checkout</button>
 						<button className="btn btn-secondary w-100">Cancel order</button>
 					</div>
 				</div>
@@ -430,7 +473,7 @@ const SearchProduct = (props) => {
 				onChange={(event) => setSearchInput(event.target.value)}
 			/>
 			<button
-				class="btn btn-secondary"
+				className="btn btn-secondary"
 				type="button"
 				onClick={() => setSearchInput("")}
 			>
