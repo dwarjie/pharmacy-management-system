@@ -6,6 +6,7 @@ import MedicineService from "../../../../services/MedicineService";
 import DiscountService from "../../../../services/DiscountService";
 import VatService from "../../../../services/VatService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
 import { AiFillMinusCircle } from "react-icons/ai";
@@ -33,6 +34,7 @@ const POS = (props) => {
 	};
 
 	const [sale, setSale] = useState(initialSalesValue);
+	const [cashTendered, setCashTendered] = useState("");
 	const [products, setProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
 	const [discountList, setDiscountList] = useState([]);
@@ -58,6 +60,13 @@ const POS = (props) => {
 		getAllDiscount();
 		getAllVAT();
 	}, []);
+
+	const checkOut = () => {
+		if (!AlertPrompt("Are you sure you want to check out?")) {
+			return;
+		}
+		console.log("sure");
+	};
 
 	// get all the discounts
 	const getAllDiscount = () => {
@@ -197,11 +206,15 @@ const POS = (props) => {
 				<OrderInformation
 					currentTime={currentTime}
 					sale={sale}
+					orderList={orderList}
+					cashTendered={cashTendered}
 					activeDropDownValue={activeDropDownValue}
 					discountList={discountList}
 					vatList={vatList}
 					setSale={setSale}
+					setCashTendered={setCashTendered}
 					setActiveDropDownValue={setActiveDropDownValue}
+					checkOut={checkOut}
 				/>
 			</div>
 		</div>
@@ -211,16 +224,20 @@ const POS = (props) => {
 const OrderInformation = (props) => {
 	const {
 		currentTime,
+		orderList,
 		sale,
 		activeDropDownValue,
 		discountList,
 		vatList,
 		setSale,
 		setActiveDropDownValue,
+		cashTendered,
+		setCashTendered,
+		checkOut,
 	} = props;
 
 	return (
-		<div className="d-flex flex-column justify-content-between gap-7 p-3">
+		<div className="d-flex flex-column justify-content-between gap-6 p-3">
 			<div>
 				<h1 className="text-date">
 					<strong>{currentTime}</strong>
@@ -244,6 +261,7 @@ const OrderInformation = (props) => {
 						className="form-select form-input mb-3"
 						name="discountId"
 						id="discountId"
+						disabled={orderList.length > 0 ? false : true}
 						value={activeDropDownValue.discountId}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
@@ -272,6 +290,7 @@ const OrderInformation = (props) => {
 						className="form-select form-input"
 						name="VATId"
 						id="VATId"
+						disabled={orderList.length > 0 ? false : true}
 						value={activeDropDownValue.VATId}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
@@ -297,20 +316,47 @@ const OrderInformation = (props) => {
 					</select>
 				</div>
 				<div>
-					<h5 className="text-weight-regular">
-						<strong>Total:</strong> {sale.GrossAmount}
-					</h5>
-					<h5>
-						<strong>Discount:</strong> {sale.Discount}
-					</h5>
-					<h5>
-						<strong>VAT:</strong> {sale.VAT}
-					</h5>
-					<h5>
-						<strong>Grand Total: </strong> {sale.Total}
-					</h5>
+					<h6 className="text-weight-regular">
+						<strong>Total &#8369;: </strong> {sale.GrossAmount}
+					</h6>
+					<h6>
+						<strong>Discount Percentage/Fixed:</strong>{" "}
+						{`${activeDropDownValue.discountAmount} ${
+							activeDropDownValue.discountType !== ""
+								? "(" + activeDropDownValue.discountType + ")"
+								: ""
+						}`}
+					</h6>
+					<h6>
+						<strong>Discount Amount &#8369;:</strong> {sale.Discount}
+					</h6>
+					<h6>
+						<strong>VAT %:</strong> {sale.VAT}
+					</h6>
+					<h6>
+						<strong>Grand Total &#8369;: </strong> {sale.Total}
+					</h6>
+					<h6>
+						<strong>Cash Tendered &#8369;:</strong>
+					</h6>
+					<input
+						className="form-control form-input"
+						min={1}
+						placeholder="Input cash tender"
+						type="number"
+						name="cashTendered"
+						id="cashTendered"
+						value={cashTendered}
+						onChange={(event) => setCashTendered(event.target.value)}
+					/>
 					<div className="pt-3">
-						<button className="btn btn-primary w-100 mb-2">Checkout</button>
+						<button
+							className="btn btn-primary w-100 mb-2"
+							onClick={checkOut}
+							disabled={orderList.length > 0 ? false : true}
+						>
+							Checkout
+						</button>
 						<button className="btn btn-secondary w-100">Cancel order</button>
 					</div>
 				</div>
