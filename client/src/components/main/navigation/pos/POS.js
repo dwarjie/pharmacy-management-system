@@ -21,6 +21,7 @@ const POS = (props) => {
 		Discount: 0,
 		VAT: 0,
 		Total: 0,
+		GrossAmount: 0,
 	};
 
 	const initialActiveDropDownValue = {
@@ -57,14 +58,7 @@ const POS = (props) => {
 		computeTotal();
 		computeDiscount();
 		console.log("call");
-	}, [orderList, activeDropDownValue.discountId]);
-
-	// compute discount
-	// useEffect(() => {
-	// 	let discount = computeDiscount();
-	// 	setSale({ ...sale, Discount: discount });
-	// 	console.log("call");
-	// }, [orderList, activeDropDownValue.discountId]);
+	}, [orderList, activeDropDownValue]);
 
 	// get all the discounts
 	const getAllDiscount = () => {
@@ -101,7 +95,7 @@ const POS = (props) => {
 			});
 	};
 
-	// compute the total amount of the transaction
+	// compute the total amount, vat and discount of the transaction
 	const computeTotal = () => {
 		let total = 0;
 		orderList.map((order, index) => {
@@ -109,10 +103,13 @@ const POS = (props) => {
 			console.log(total);
 		});
 		let discount = computeDiscount();
+		let vat = computeVAT();
 		setSale({
 			...sale,
-			Total: total.toFixed(1),
-			Discount: discount.toFixed(1),
+			GrossAmount: total.toFixed(2),
+			Total: (total - discount + vat).toFixed(2),
+			Discount: discount.toFixed(2),
+			VAT: vat.toFixed(2),
 		});
 	};
 
@@ -123,7 +120,7 @@ const POS = (props) => {
 		// check the discount type if percentage or fixed
 		if (activeDropDownValue.discountType === "%") {
 			let percentage = parseFloat(activeDropDownValue.discountAmount) / 100;
-			let amount = percentage * parseFloat(sale.Total);
+			let amount = percentage * parseFloat(sale.GrossAmount);
 
 			return amount;
 		} else {
@@ -131,15 +128,15 @@ const POS = (props) => {
 		}
 	};
 
-	// // compute the VAT base on the selected VAT and current total
-	// const computeVAT = () => {
-	// 	if (activeDropDownValue.VATId === "") return 0;
+	// compute the VAT base on the selected VAT and current total
+	const computeVAT = () => {
+		if (activeDropDownValue.VATId === "") return 0;
 
-	// 	let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
-	// 	let amount = percentage * parseFloat(sale.Total);
+		let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
+		let amount = percentage * parseFloat(sale.GrossAmount);
 
-	// 	return amount;
-	// };
+		return amount;
+	};
 
 	return (
 		<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
@@ -269,21 +266,18 @@ const OrderInformation = (props) => {
 					</select>
 				</div>
 				<div>
-					<h6>
-						<strong>Total: {sale.Total}</strong>
-					</h6>
-					<h6>
-						<strong>Discount: {sale.Discount}</strong>
-					</h6>
-					<h6>
-						<strong>VAT: </strong>
-					</h6>
-					<h6>
-						<strong>VAT exempt sale: </strong>
-					</h6>
-					<h6>
-						<strong>Grand Total: </strong>
-					</h6>
+					<h5 className="text-weight-regular">
+						<strong>Total:</strong> {sale.GrossAmount}
+					</h5>
+					<h5>
+						<strong>Discount:</strong> {sale.Discount}
+					</h5>
+					<h5>
+						<strong>VAT:</strong> {sale.VAT}
+					</h5>
+					<h5>
+						<strong>Grand Total: </strong> {sale.Total}
+					</h5>
 					<div className="pt-3">
 						<button className="btn btn-primary w-100 mb-2">Checkout</button>
 						<button className="btn btn-secondary w-100">Cancel order</button>
@@ -333,7 +327,7 @@ const ProductTable = (props) => {
 			// if order exists, check if quantity is < the order quantity then update the order quantity
 			let order = orderList.map((product, index) => {
 				if (product.medicineId === selectedProduct.id) {
-					if (parseInt(product.Quantity) <= selectedProduct.Quantity) {
+					if (parseInt(product.Quantity) < selectedProduct.Quantity) {
 						product.Quantity = parseInt(product.Quantity) + 1;
 					} else {
 						alert("Insufficient Quantity!");
