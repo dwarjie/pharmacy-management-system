@@ -1,7 +1,7 @@
 // This component is for POS
 import { useState, useEffect } from "react";
 import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
-import { checkQuantity } from "../../../../helper/checkQuantity";
+import { checkQuantity, checkStock } from "../../../../helper/checkQuantity";
 import MedicineService from "../../../../services/MedicineService";
 import DiscountService from "../../../../services/DiscountService";
 import VatService from "../../../../services/VatService";
@@ -42,6 +42,12 @@ const POS = (props) => {
 	);
 	const [currentTime, setCurrentTime] = useState(null);
 
+	// compute the Grand Total amount
+	useEffect(() => {
+		setSaleInformation();
+		console.log("call");
+	}, [orderList, activeDropDownValue]);
+
 	// get current time and auto update every second
 	useEffect(() => {
 		setInterval(() => setCurrentTime(getCurrentTime()), 1000);
@@ -52,13 +58,6 @@ const POS = (props) => {
 		getAllDiscount();
 		getAllVAT();
 	}, []);
-
-	// compute the Grand Total amount
-	useEffect(() => {
-		computeTotal();
-		computeDiscount();
-		console.log("call");
-	}, [orderList, activeDropDownValue]);
 
 	// get all the discounts
 	const getAllDiscount = () => {
@@ -95,32 +94,57 @@ const POS = (props) => {
 			});
 	};
 
+	// delete an order in the list
+	// use array map, check the medicineId
+	const deleteOrder = (orderIndex) => {
+		orderList.splice(orderIndex, 1);
+		setSaleInformation();
+	};
+
+	// set the sale information
+	const setSaleInformation = () => {
+		// check if orderList is not empty
+		if (orderList.length !== 0) {
+			let total = computeTotal();
+			let discount = computeDiscount(total);
+			let vat = computeVAT(total);
+
+			setSale((previousSale) => ({
+				...previousSale,
+				GrossAmount: total,
+				Discount: discount.toFixed(2),
+				VAT: vat.toFixed(2),
+				Total: (total - discount + vat).toFixed(2),
+			}));
+		} else {
+			setSale({
+				...sale,
+				GrossAmount: 0.0,
+				Discount: 0.0,
+				VAT: 0.0,
+				Total: 0.0,
+			});
+		}
+	};
+
 	// compute the total amount, vat and discount of the transaction
 	const computeTotal = () => {
 		let total = 0;
 		orderList.map((order, index) => {
 			total += order.Total;
-			console.log(total);
 		});
-		let discount = computeDiscount();
-		let vat = computeVAT();
-		setSale({
-			...sale,
-			GrossAmount: total.toFixed(2),
-			Total: (total - discount + vat).toFixed(2),
-			Discount: discount.toFixed(2),
-			VAT: vat.toFixed(2),
-		});
+		return total.toFixed(2);
 	};
 
 	// compute the discount base on the selected discount and current total
-	const computeDiscount = () => {
-		if (activeDropDownValue.discountId === "") return 0;
+	const computeDiscount = (grossAmount) => {
+		if (activeDropDownValue.discountId === "" || parseFloat(grossAmount) === 0)
+			return 0;
 
 		// check the discount type if percentage or fixed
 		if (activeDropDownValue.discountType === "%") {
 			let percentage = parseFloat(activeDropDownValue.discountAmount) / 100;
-			let amount = percentage * parseFloat(sale.GrossAmount);
+			let amount = percentage * grossAmount;
 
 			return amount;
 		} else {
@@ -129,11 +153,11 @@ const POS = (props) => {
 	};
 
 	// compute the VAT base on the selected VAT and current total
-	const computeVAT = () => {
-		if (activeDropDownValue.VATId === "") return 0;
+	const computeVAT = (grossAmount) => {
+		if (activeDropDownValue.VATId === "" || grossAmount === 0) return 0;
 
 		let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
-		let amount = percentage * parseFloat(sale.GrossAmount);
+		let amount = percentage * parseFloat(grossAmount);
 
 		return amount;
 	};
@@ -144,7 +168,10 @@ const POS = (props) => {
 				<div className="h-50 border border-dark rounded simple-shadow">
 					<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
 						<div className="col-8">
-							<SearchProduct findByTitle={findByTitle} />
+							<SearchProduct
+								findByTitle={findByTitle}
+								setProducts={setProducts}
+							/>
 						</div>
 						<SearchProductCode />
 					</form>
@@ -158,7 +185,11 @@ const POS = (props) => {
 				</div>
 				<div className="h-50 border border-dark rounded simple-shadow">
 					<div className="table-responsive max-height-100">
-						<OrderTable orderList={orderList} computeTotal={computeTotal} />
+						<OrderTable
+							orderList={orderList}
+							setSaleInformation={setSaleInformation}
+							deleteOrder={deleteOrder}
+						/>
 					</div>
 				</div>
 			</div>
@@ -374,11 +405,24 @@ const ProductTable = (props) => {
 };
 
 const OrderTable = (props) => {
-	const { orderList, computeTotal } = props;
+	const { orderList, setSaleInformation, deleteOrder } = props;
 
 	const getProductTotal = (product) => {
 		product.Total = product.UnitPrice * product.Quantity;
 		return product.Total.toFixed(1);
+	};
+
+	const handleQuantityChange = (event, order) => {
+		let value = event.target.value;
+		if (checkStock(order.maxQuantity, value)) {
+			if (parseInt(value) !== 0) {
+				order.Quantity = value;
+			} else {
+				alert("Please input a valid quantity!");
+			}
+		} else {
+			alert("Insufficient Quantity!");
+		}
 	};
 
 	return (
@@ -404,12 +448,12 @@ const OrderTable = (props) => {
 									inputMode="numeric"
 									min={1}
 									max={order.maxQuantity}
-									className="form-control w-30"
+									className="form-control w-30 p-1"
 									value={order.Quantity}
 									onChange={(event) => {
-										order.Quantity = event.target.value;
+										handleQuantityChange(event, order);
 										getProductTotal(order);
-										computeTotal();
+										setSaleInformation();
 									}}
 								/>
 							</td>
@@ -424,7 +468,10 @@ const OrderTable = (props) => {
 									<AiFillMinusCircle className="icon-size-sm cursor-pointer" />
 								</span> */}
 								<span className="px-1">
-									<MdDelete className="icon-size-sm cursor-pointer" />
+									<MdDelete
+										className="icon-size-sm cursor-pointer"
+										onClick={() => deleteOrder(index)}
+									/>
 								</span>
 							</td>
 						</tr>
@@ -447,7 +494,7 @@ const SearchProductCode = (props) => {
 };
 
 const SearchProduct = (props) => {
-	const { findByTitle } = props;
+	const { findByTitle, setProducts } = props;
 
 	const [searchInput, setSearchInput] = useState("");
 
@@ -469,7 +516,10 @@ const SearchProduct = (props) => {
 			<button
 				className="btn btn-secondary"
 				type="button"
-				onClick={() => setSearchInput("")}
+				onClick={() => {
+					setSearchInput("");
+					setProducts([]);
+				}}
 			>
 				Clear
 			</button>

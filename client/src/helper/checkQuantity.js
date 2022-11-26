@@ -8,4 +8,13 @@ const checkQuantity = (quantity) => {
 	return true;
 };
 
-export { checkQuantity };
+// this will check if the stock is greated than the desired quantity
+const checkStock = (stock, quantity) => {
+	if (stock >= quantity) {
+		return true;
+	}
+
+	return false;
+};
+
+export { checkQuantity, checkStock };
