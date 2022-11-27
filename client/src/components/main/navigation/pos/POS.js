@@ -6,7 +6,7 @@ import {
 	generateOrderNumber,
 } from "../../../../helper/dateHelper";
 import { checkQuantity, checkStock } from "../../../../helper/checkQuantity";
-import { getOR } from "../../../../helper/ORHelper";
+import { getOR, incrementOR } from "../../../../helper/ORHelper";
 import MedicineService from "../../../../services/MedicineService";
 import DiscountService from "../../../../services/DiscountService";
 import VatService from "../../../../services/VatService";
@@ -77,23 +77,33 @@ const POS = (props) => {
 	};
 
 	// create the sales for the salesDetails
-	const createSale = () => {
-		SaleService.createSale(sale)
+	// then return the id of the sale
+	const createSale = async () => {
+		let saleId = 0;
+		await SaleService.createSale(sale)
 			.then((response) => {
 				console.log(response.data);
+				incrementOR();
+				saleId = response.data.data.id;
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+		return saleId;
 	};
 
-	const checkOut = () => {
+	const createSalesDetails = () => {};
+
+	const checkOut = async () => {
 		// ask for confirmation
 		if (!AlertPrompt("Are you sure you want to check out?")) {
 			return;
 		}
 
-		createSale();
+		let saleId = await createSale();
+		setORNumber();
+		console.log(saleId);
+		console.log("create details");
 	};
 
 	// get all the discounts
