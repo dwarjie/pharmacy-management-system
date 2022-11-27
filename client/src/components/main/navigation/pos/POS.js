@@ -42,6 +42,7 @@ const POS = (props) => {
 	const [activeDropDownValue, setActiveDropDownValue] = useState(
 		initialActiveDropDownValue
 	);
+	const [searchCode, setSearchCode] = useState("");
 	const [currentTime, setCurrentTime] = useState(null);
 
 	// compute the Grand Total amount
@@ -97,6 +98,23 @@ const POS = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				setProducts(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const findByCode = (code) => {
+		MedicineService.getByCode(code)
+			.then((response) => {
+				console.log(response.data);
+				// check if response is not null, else
+				// add the scanned product to the order list
+				setSearchCode("");
+				if (typeof response.data !== "object") {
+					return alert("Product does not exist.");
+				}
+				addProduct(response.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -171,6 +189,56 @@ const POS = (props) => {
 		return amount;
 	};
 
+	// this function will check if order already exists in order list
+	const checkOrderExist = (selectedProduct) => {
+		let isExist = false;
+		// check if the medicineId already exists in order list
+		orderList.forEach((order) => {
+			if (order.medicineId === selectedProduct.id) {
+				isExist = true;
+			}
+		});
+
+		return isExist;
+	};
+
+	// add product into the order list
+	const addProduct = (selectedProduct) => {
+		if (!checkOrderExist(selectedProduct)) {
+			// check if quantity is greater than 0 before adding to the order list
+			if (checkQuantity(selectedProduct.Quantity)) {
+				let initialSelectedProduct = {
+					UnitPrice: selectedProduct.SellingPrice,
+					Quantity: 1,
+					DiscountedPrice: 0,
+					Total: selectedProduct.SellingPrice,
+					medicineId: selectedProduct.id,
+					salesId: 0,
+					name: selectedProduct.ProductName,
+					maxQuantity: selectedProduct.Quantity,
+				};
+
+				setOrderList([...orderList, initialSelectedProduct]);
+			} else {
+				alert("Insufficient Quantity!");
+			}
+		} else {
+			// if order exists, check if quantity is < the order quantity then update the order quantity
+			let order = orderList.map((product, index) => {
+				if (product.medicineId === selectedProduct.id) {
+					if (parseInt(product.Quantity) < selectedProduct.Quantity) {
+						product.Quantity = parseInt(product.Quantity) + 1;
+					} else {
+						alert("Insufficient Quantity!");
+					}
+				}
+				return product;
+			});
+
+			setOrderList(order);
+		}
+	};
+
 	return (
 		<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
 			<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
@@ -182,13 +250,18 @@ const POS = (props) => {
 								setProducts={setProducts}
 							/>
 						</div>
-						<SearchProductCode />
+						<SearchProductCode
+							findByCode={findByCode}
+							searchCode={searchCode}
+							setSearchCode={setSearchCode}
+						/>
 					</form>
 					<div className="table-responsive max-height-85">
 						<ProductTable
 							products={products}
 							orderList={orderList}
 							setOrderList={setOrderList}
+							addProduct={addProduct}
 						/>
 					</div>
 				</div>
@@ -366,56 +439,7 @@ const OrderInformation = (props) => {
 };
 
 const ProductTable = (props) => {
-	const { products, orderList, setOrderList } = props;
-
-	// this function will check if order already exists in order list
-	const checkOrderExist = (selectedProduct) => {
-		let isExist = false;
-		// check if the medicineId already exists in order list
-		orderList.forEach((order) => {
-			if (order.medicineId === selectedProduct.id) {
-				isExist = true;
-			}
-		});
-
-		return isExist;
-	};
-
-	const addProduct = (selectedProduct) => {
-		if (!checkOrderExist(selectedProduct)) {
-			// check if quantity is greater than 0 before adding to the order list
-			if (checkQuantity(selectedProduct.Quantity)) {
-				let initialSelectedProduct = {
-					UnitPrice: selectedProduct.SellingPrice,
-					Quantity: 1,
-					DiscountedPrice: 0,
-					Total: selectedProduct.SellingPrice,
-					medicineId: selectedProduct.id,
-					salesId: 0,
-					name: selectedProduct.ProductName,
-					maxQuantity: selectedProduct.Quantity,
-				};
-
-				setOrderList([...orderList, initialSelectedProduct]);
-			} else {
-				alert("Insufficient Quantity!");
-			}
-		} else {
-			// if order exists, check if quantity is < the order quantity then update the order quantity
-			let order = orderList.map((product, index) => {
-				if (product.medicineId === selectedProduct.id) {
-					if (parseInt(product.Quantity) < selectedProduct.Quantity) {
-						product.Quantity = parseInt(product.Quantity) + 1;
-					} else {
-						alert("Insufficient Quantity!");
-					}
-				}
-				return product;
-			});
-
-			setOrderList(order);
-		}
-	};
+	const { products, orderList, setOrderList, addProduct } = props;
 
 	return (
 		<table className="table table-hover">
@@ -528,13 +552,21 @@ const OrderTable = (props) => {
 };
 
 const SearchProductCode = (props) => {
+	const { findByCode, searchCode, setSearchCode } = props;
+
+	useEffect(() => {
+		if (searchCode !== "") findByCode(searchCode);
+	}, [searchCode]);
+
 	return (
 		<input
 			type="text"
 			className="w-100 form-control form-input"
 			placeholder="Scan product code"
-			name="searchCode"
-			id="searchCode"
+			name="searchInput"
+			id="searchInput"
+			value={searchCode}
+			onChange={(event) => setSearchCode(event.target.value)}
 		/>
 	);
 };

@@ -28,12 +28,17 @@ const getByTitle = (title) => {
 	return http.get(`/medicine/medicine-list?title=${title}`);
 };
 
+const getByCode = (code) => {
+	return http.get(`/medicine/pos?code=${code}`);
+};
+
 const MedicineService = {
 	createMedicine,
 	updateMedicine,
 	deleteMedicine,
 	getAllMedicine,
 	getByTitle,
+	getByCode,
 	getOtherModel,
 };
 

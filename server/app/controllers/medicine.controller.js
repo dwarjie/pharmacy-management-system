@@ -69,6 +69,24 @@ exports.findAll = (req, res) => {
 		});
 };
 
+exports.findProductCode = (req, res) => {
+	const code = req.query.code;
+
+	Medicine.findOne({
+		include: ["subCategory", "supplier", "unit"],
+		where: { ProductCode: code },
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message:
+					err.message || `Some error occurred while retrieving Medicines`,
+			});
+		});
+};
+
 exports.update = async (req, res) => {
 	const id = req.params.id;
 	let row = 0;
