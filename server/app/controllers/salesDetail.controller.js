@@ -9,7 +9,7 @@ exports.create = (req, res) => {
 		DiscountedPrice: req.body.DiscountedPrice,
 		Total: req.body.Total,
 		medicineId: req.body.medicineId,
-		salesId: req.body.salesId,
+		saleId: req.body.saleId,
 	};
 
 	SalesDetail.create(product)
@@ -21,12 +21,12 @@ exports.create = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message: "Error creating sales data",
+				message: err.message || "Error creating sales data",
 			});
 		});
 };
 
-exposts.findAll = (req, res) => {
+exports.findAll = (req, res) => {
 	SalesDetail.findAll({ include: ["sales", "medicine"] })
 		.then((data) => {
 			res.send(data);

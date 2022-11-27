@@ -9,10 +9,6 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.INTEGER,
 			allowNull: false,
 		},
-		DiscountedPrice: {
-			type: Sequelize.FLOAT,
-			allowNull: true,
-		},
 		Total: {
 			type: Sequelize.FLOAT,
 			allowNull: false,

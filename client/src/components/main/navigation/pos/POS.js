@@ -17,6 +17,7 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 // icons
 import { MdDelete } from "react-icons/md";
 import parseDropdownValue from "../../../../helper/parseJSON";
+import SalesDetailService from "../../../../services/SalesDetailService";
 
 const POS = (props) => {
 	const initialSalesValue = {
@@ -92,7 +93,18 @@ const POS = (props) => {
 		return saleId;
 	};
 
-	const createSalesDetails = () => {};
+	const createSalesDetails = () => {
+		orderList.forEach((order) => {
+			order.saleId = 9;
+			SalesDetailService.createSalesDetails(order)
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
 
 	const checkOut = async () => {
 		// ask for confirmation
@@ -100,10 +112,11 @@ const POS = (props) => {
 			return;
 		}
 
-		let saleId = await createSale();
-		setORNumber();
-		console.log(saleId);
-		console.log("create details");
+		createSalesDetails();
+		// let saleId = await createSale();
+		// setORNumber();
+		// console.log(saleId);
+		// console.log("create details");
 	};
 
 	// get all the discounts
@@ -250,7 +263,7 @@ const POS = (props) => {
 					DiscountedPrice: 0,
 					Total: selectedProduct.SellingPrice,
 					medicineId: selectedProduct.id,
-					salesId: 0,
+					saleId: 0,
 					name: selectedProduct.ProductName,
 					maxQuantity: selectedProduct.Quantity,
 				};
