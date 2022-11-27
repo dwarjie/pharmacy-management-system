@@ -43,6 +43,7 @@ const POS = (props) => {
 		initialActiveDropDownValue
 	);
 	const [searchCode, setSearchCode] = useState("");
+	const [changeAmount, setChangeAmount] = useState(0);
 	const [currentTime, setCurrentTime] = useState(null);
 
 	// compute the Grand Total amount
@@ -63,10 +64,10 @@ const POS = (props) => {
 	}, []);
 
 	const checkOut = () => {
+		// ask for confirmation
 		if (!AlertPrompt("Are you sure you want to check out?")) {
 			return;
 		}
-		console.log("sure");
 	};
 
 	// get all the discounts
@@ -279,6 +280,8 @@ const POS = (props) => {
 				<OrderInformation
 					currentTime={currentTime}
 					sale={sale}
+					changeAmount={changeAmount}
+					setChangeAmount={setChangeAmount}
 					orderList={orderList}
 					cashTendered={cashTendered}
 					activeDropDownValue={activeDropDownValue}
@@ -299,15 +302,30 @@ const OrderInformation = (props) => {
 		currentTime,
 		orderList,
 		sale,
+		changeAmount,
 		activeDropDownValue,
 		discountList,
 		vatList,
 		setSale,
+		setChangeAmount,
 		setActiveDropDownValue,
 		cashTendered,
 		setCashTendered,
 		checkOut,
 	} = props;
+
+	useEffect(() => {
+		computeChange();
+	}, [cashTendered]);
+
+	// compute the change of the customer
+	const computeChange = () => {
+		if (cashTendered !== "") {
+			setChangeAmount(parseFloat(cashTendered) - parseFloat(sale.Total));
+		} else {
+			setChangeAmount(0);
+		}
+	};
 
 	return (
 		<div className="d-flex flex-column justify-content-between gap-6 p-3">
@@ -317,7 +335,7 @@ const OrderInformation = (props) => {
 				</h1>
 				<h5 className="text-weight-medium">{getCurrentDate()}</h5>
 			</div>
-			<div className="d-flex flex-column justify-content-between pt-4 gap-5">
+			<div className="d-flex flex-column justify-content-between pt-4 gap-3">
 				<div>
 					<input
 						type="text"
@@ -413,15 +431,21 @@ const OrderInformation = (props) => {
 						<strong>Cash Tendered &#8369;:</strong>
 					</h6>
 					<input
-						className="form-control form-input"
+						className="form-control form-input mb-3"
 						min={1}
+						disabled={orderList.length > 0 ? false : true}
 						placeholder="Input cash tender"
 						type="number"
 						name="cashTendered"
 						id="cashTendered"
 						value={cashTendered}
-						onChange={(event) => setCashTendered(event.target.value)}
+						onChange={(event) => {
+							setCashTendered(event.target.value);
+						}}
 					/>
+					<h6>
+						<strong>Change &#8369;:</strong> {changeAmount}
+					</h6>
 					<div className="pt-3">
 						<button
 							className="btn btn-primary w-100 mb-2"
@@ -439,7 +463,7 @@ const OrderInformation = (props) => {
 };
 
 const ProductTable = (props) => {
-	const { products, orderList, setOrderList, addProduct } = props;
+	const { products, addProduct } = props;
 
 	return (
 		<table className="table table-hover">
