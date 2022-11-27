@@ -5,6 +5,7 @@ module.exports = (app) => {
 
 	router.put("/", OR.update);
 	router.get("/", OR.findOne);
+	router.put("/increment", OR.incrementOR);
 
 	app.use("/api/or", router);
 };

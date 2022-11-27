@@ -53,6 +53,7 @@ require("./app/routes/medicine.routes")(app);
 require("./app/routes/handler.routes")(app);
 require("./app/routes/OR.routes")(app);
 require("./app/routes/patient.routes")(app);
+require("./app/routes/sale.routes")(app);
 
 // set the server port and listen for requests
 const PORT = process.env.PORT || 8080;

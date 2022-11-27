@@ -1,5 +1,6 @@
 // This module contains the OR controllers
 
+const { Sequelize } = require("../models");
 const db = require("../models");
 const OR = db.or;
 
@@ -63,4 +64,20 @@ exports.update = (req, res) => {
 				message: `Error updating OR.`,
 			});
 		});
+};
+
+exports.incrementOR = async (req, res) => {
+	try {
+		let result = await db.sequelize.query(
+			`UPDATE ors SET CurrentOR = CurrentOR + 1 WHERE id = 1`,
+			{
+				type: Sequelize.UPDATE,
+			}
+		);
+		res.send(result);
+	} catch (err) {
+		res.status(500).send({
+			message: err.message || `Error incrementing OR number`,
+		});
+	}
 };

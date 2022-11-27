@@ -20,4 +20,9 @@ const getCurrentTime = () => {
 	return moment(time, "HH:mm:ss").format("hh:mm:ss A");
 };
 
-export { formatDate, getCurrentTime, getCurrentDate };
+const generateOrderNumber = () => {
+	let date = new Date();
+	return `${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
+};
+
+export { formatDate, getCurrentTime, getCurrentDate, generateOrderNumber };

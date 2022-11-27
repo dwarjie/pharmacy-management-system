@@ -10,9 +10,14 @@ const updateCurrentOR = (data) => {
 	return http.put("/or", data);
 };
 
+const incrementOR = () => {
+	return http.put("/or/increment");
+};
+
 const ORService = {
 	getCurrentOR,
 	updateCurrentOR,
+	incrementOR,
 };
 
 export default ORService;

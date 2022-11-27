@@ -1,22 +1,27 @@
 // This component is for POS
 import { useState, useEffect } from "react";
-import { getCurrentTime, getCurrentDate } from "../../../../helper/dateHelper";
+import {
+	getCurrentTime,
+	getCurrentDate,
+	generateOrderNumber,
+} from "../../../../helper/dateHelper";
 import { checkQuantity, checkStock } from "../../../../helper/checkQuantity";
+import { getOR } from "../../../../helper/ORHelper";
 import MedicineService from "../../../../services/MedicineService";
 import DiscountService from "../../../../services/DiscountService";
 import VatService from "../../../../services/VatService";
+import SaleService from "../../../../services/SaleService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 // icons
-import { AiFillMinusCircle } from "react-icons/ai";
-import { IoMdAddCircle } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import parseDropdownValue from "../../../../helper/parseJSON";
 
 const POS = (props) => {
 	const initialSalesValue = {
-		OrderNo: "",
+		OrderNo: generateOrderNumber(),
+		ORNumber: "",
 		OrderDate: getCurrentDate(),
 		CustomerName: "Walk in",
 		Discount: 0,
@@ -61,13 +66,34 @@ const POS = (props) => {
 	useEffect(() => {
 		getAllDiscount();
 		getAllVAT();
+		setORNumber();
 	}, []);
+
+	// set the ORNumber once the page loaded
+	const setORNumber = async () => {
+		let orNumber = await getOR();
+		console.log(orNumber);
+		setSale((prevState) => ({ ...prevState, ORNumber: orNumber.CurrentOR }));
+	};
+
+	// create the sales for the salesDetails
+	const createSale = () => {
+		SaleService.createSale(sale)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const checkOut = () => {
 		// ask for confirmation
 		if (!AlertPrompt("Are you sure you want to check out?")) {
 			return;
 		}
+
+		createSale();
 	};
 
 	// get all the discounts
@@ -316,15 +342,24 @@ const OrderInformation = (props) => {
 
 	useEffect(() => {
 		computeChange();
-	}, [cashTendered]);
+	}, [cashTendered, sale.Total]);
 
 	// compute the change of the customer
 	const computeChange = () => {
 		if (cashTendered !== "") {
-			setChangeAmount(parseFloat(cashTendered) - parseFloat(sale.Total));
+			setChangeAmount(
+				(parseFloat(cashTendered) - parseFloat(sale.Total)).toFixed(2)
+			);
 		} else {
 			setChangeAmount(0);
 		}
+	};
+
+	// check if the cash tendered is >= grand total
+	const checkPayment = () => {
+		if (parseFloat(cashTendered) - parseFloat(sale.Total) >= 0) return true;
+
+		return false;
 	};
 
 	return (
@@ -450,7 +485,7 @@ const OrderInformation = (props) => {
 						<button
 							className="btn btn-primary w-100 mb-2"
 							onClick={checkOut}
-							disabled={orderList.length > 0 ? false : true}
+							disabled={orderList.length > 0 && checkPayment() ? false : true}
 						>
 							Checkout
 						</button>

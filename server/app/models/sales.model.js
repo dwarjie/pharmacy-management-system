@@ -4,6 +4,11 @@ module.exports = (sequelize, Sequelize) => {
 		OrderNo: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
+		},
+		ORNumber: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
 		},
 		OrderDate: {
 			type: Sequelize.DATE,
