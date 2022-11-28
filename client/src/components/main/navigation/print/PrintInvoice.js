@@ -1,9 +1,19 @@
 // This component prints the invoice for the pos
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 
 const PrintInvoice = () => {
 	let componentRef = useRef();
+	let location = useLocation();
+
+	const [sale, setSale] = useState({});
+	const [items, setItems] = useState([]);
+
+	useEffect(() => {
+		setSale(location.state.sale);
+		setItems(location.state.orderList);
+	}, []);
 
 	return (
 		<div className="container">
@@ -14,7 +24,11 @@ const PrintInvoice = () => {
 				content={() => componentRef}
 			/>
 			<div className="container">
-				<ComponentToPrint ref={(element) => (componentRef = element)} />
+				<ComponentToPrint
+					ref={(element) => (componentRef = element)}
+					sale={sale}
+					items={items}
+				/>
 			</div>
 		</div>
 	);
@@ -23,6 +37,10 @@ const PrintInvoice = () => {
 // component to be printed
 class ComponentToPrint extends React.Component {
 	render() {
+		// get the props
+		const sale = this.props.sale;
+		const items = this.props.items;
+
 		const getPageMargins = () => {
 			const marginTop = "50px";
 			const marginRight = "25px";
@@ -31,36 +49,121 @@ class ComponentToPrint extends React.Component {
 			return `@page { margin: ${marginTop} ${marginRight} ${marginBottom} ${marginLeft} !important; }`;
 		};
 
+		const renderItems = () => {
+			return (
+				items &&
+				items.map((item, index) => (
+					<tr key={index}>
+						<td>{item.name}</td>
+						<td className="text-center">{item.UnitPrice}</td>
+						<td className="text-center">{item.Quantity}</td>
+						<td className="text-right">{item.Total}</td>
+					</tr>
+				))
+			);
+		};
+
 		return (
-			<div>
+			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
-				<h2 style={{ color: "green" }}>Attendance</h2>
-				<table style={{ width: "60%", marginTop: "50px" }}>
-					<thead>
-						<tr>
-							<th>S/N</th>
-							<th>Name</th>
-							<th>Email</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>Njoku Samson</td>
-							<td>samson@yahoo.com</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>Ebere Plenty</td>
-							<td>ebere@gmail.com</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>Undefined</td>
-							<td>No Email</td>
-						</tr>
-					</tbody>
-				</table>
+				<div className="row">
+					<div className="col-xs-12 mt-3">
+						<div className="invoice-title">
+							<h3 className="pull-right">Order # {sale.OrderNo}</h3>
+							<h6 className="pull-left">OR # {sale.ORNumber}</h6>
+						</div>
+						<hr />
+					</div>
+					<div className="row">
+						<div className="col-xs-6 text-right">
+							<p>
+								<strong>Order Date:</strong>
+								<br />
+								{sale.OrderDate}
+								<br />
+							</p>
+						</div>
+						<div className="col-xs-6">
+							<p>
+								<strong>Customer Name:</strong>
+								<br />
+								{sale.CustomerName}
+							</p>
+						</div>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-md-12">
+						<div className="panel panel-default">
+							<div className="panel-body">
+								<div className="table-responsive">
+									<table className="table table-condensed">
+										<thead>
+											<tr>
+												<td>
+													<strong>Item</strong>
+												</td>
+												<td className="text-center">
+													<strong>Price</strong>
+												</td>
+												<td className="text-center">
+													<strong>Quantity</strong>
+												</td>
+												<td className="text-right">
+													<strong>Totals</strong>
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											{/* <!-- foreach ($order->lineItems as $line) or some such thing here --> */}
+											{renderItems()}
+											<tr>
+												<td className="thick-line"></td>
+												<td className="thick-line"></td>
+												<td className="thick-line text-center">
+													<strong>Subtotal</strong>
+												</td>
+												<td className="thick-line text-right">
+													&#8369;{sale.GrossAmount}
+												</td>
+											</tr>
+											<tr>
+												<td className="thick-line"></td>
+												<td className="thick-line"></td>
+												<td className="thick-line text-center">
+													<strong>Discount</strong>
+												</td>
+												<td className="thick-line text-right">
+													&#8369;{sale.Discount}
+												</td>
+											</tr>
+											<tr>
+												<td className="thick-line"></td>
+												<td className="thick-line"></td>
+												<td className="thick-line text-center">
+													<strong>VAT</strong>
+												</td>
+												<td className="thick-line text-right">
+													&#8369;{sale.VAT}
+												</td>
+											</tr>
+											<tr>
+												<td className="no-line"></td>
+												<td className="no-line"></td>
+												<td className="no-line text-center">
+													<strong>Total</strong>
+												</td>
+												<td className="no-line text-right">
+													&#8369;{sale.Total}
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}

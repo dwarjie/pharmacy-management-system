@@ -1,5 +1,6 @@
 // This component is for POS
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
 	getCurrentTime,
 	getCurrentDate,
@@ -20,6 +21,7 @@ import parseDropdownValue from "../../../../helper/parseJSON";
 import SalesDetailService from "../../../../services/SalesDetailService";
 
 const POS = (props) => {
+	let navigate = useNavigate();
 	const initialSalesValue = {
 		OrderNo: generateOrderNumber(),
 		ORNumber: "",
@@ -55,7 +57,6 @@ const POS = (props) => {
 	// compute the Grand Total amount
 	useEffect(() => {
 		setSaleInformation();
-		console.log("call");
 	}, [orderList, activeDropDownValue]);
 
 	// get current time and auto update every second
@@ -73,7 +74,6 @@ const POS = (props) => {
 	// set the ORNumber once the page loaded
 	const setORNumber = async () => {
 		let orNumber = await getOR();
-		console.log(orNumber);
 		setSale((prevState) => ({ ...prevState, ORNumber: orNumber.CurrentOR }));
 	};
 
@@ -93,8 +93,9 @@ const POS = (props) => {
 		return saleId;
 	};
 
-	const createSalesDetails = (saleId) => {
-		orderList.forEach((order) => {
+	// create the salesdetails one by one
+	const createSalesDetails = async (saleId) => {
+		await orderList.forEach((order) => {
 			order.saleId = saleId;
 			SalesDetailService.createSalesDetails(order)
 				.then((response) => {
@@ -106,15 +107,38 @@ const POS = (props) => {
 		});
 	};
 
+	// ask the user if they want to print, else stay and reset the page
+	const printInvoice = () => {
+		// ask the user
+		if (!AlertPrompt("Print Receipt?")) {
+			// cancel printing
+			refreshPage();
+			return;
+		}
+
+		navigate(`/pharmacy/sales/pos/print`, {
+			state: {
+				sale: sale,
+				orderList: orderList,
+			},
+		});
+	};
+
 	const checkOut = async () => {
 		// ask for confirmation
 		if (!AlertPrompt("Are you sure you want to check out?")) {
 			return;
 		}
 
+		// if proceed checkout,
+		// create the sale of the order, return the id order
+		// use the salesId in order to foreign key into SalesDetails
+		// then if successful, incrementOR for the next transaction
+		// and set the ORNumber of the next transaction
+		// then ask the user if they want to print the receipt
 		let saleId = await createSale();
-		createSalesDetails(saleId);
-		setORNumber();
+		await createSalesDetails(saleId);
+		printInvoice();
 	};
 
 	// get all the discounts
@@ -285,6 +309,17 @@ const POS = (props) => {
 
 			setOrderList(order);
 		}
+	};
+
+	// refresh the page
+	const refreshPage = () => {
+		setSale(initialSalesValue);
+		setORNumber();
+		setOrderList([]);
+		setProducts([]);
+		setActiveDropDownValue(initialActiveDropDownValue);
+		setCashTendered("");
+		setChangeAmount(0);
 	};
 
 	return (
