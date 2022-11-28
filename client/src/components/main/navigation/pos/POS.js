@@ -93,9 +93,9 @@ const POS = (props) => {
 		return saleId;
 	};
 
-	const createSalesDetails = () => {
+	const createSalesDetails = (saleId) => {
 		orderList.forEach((order) => {
-			order.saleId = 9;
+			order.saleId = saleId;
 			SalesDetailService.createSalesDetails(order)
 				.then((response) => {
 					console.log(response.data);
@@ -112,11 +112,9 @@ const POS = (props) => {
 			return;
 		}
 
-		createSalesDetails();
-		// let saleId = await createSale();
-		// setORNumber();
-		// console.log(saleId);
-		// console.log("create details");
+		let saleId = await createSale();
+		createSalesDetails(saleId);
+		setORNumber();
 	};
 
 	// get all the discounts

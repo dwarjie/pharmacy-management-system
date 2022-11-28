@@ -41,6 +41,7 @@ import HandlerList from "./navigation/handler/HandlerList";
 
 // Sales Tab
 import POS from "./navigation/pos/POS";
+import PrintInvoice from "./navigation/print/PrintInvoice";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -106,9 +107,11 @@ const ContentContainer = (props) => {
 					<Route path="/utilities/user-list" element={<UserList />} />
 				</Routes>
 			</div>
+			{/* for SALES */}
 			<div className="col-12 mt-0 px-3 min-height-85">
 				<Routes>
 					<Route path="/sales/pos" element={<POS />} />
+					<Route path="/sales/pos/print" element={<PrintInvoice />} />
 				</Routes>
 			</div>
 		</div>
