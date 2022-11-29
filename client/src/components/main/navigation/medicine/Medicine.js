@@ -88,7 +88,7 @@ const Medicine = (props) => {
 		MedicineService.updateMedicine(medicine.id, medicine)
 			.then((response) => {
 				console.log(response.data);
-				setAlertMessage(response.data.message);
+				alert(response.data.message);
 				navigate(-1);
 			})
 			.catch((err) => {
@@ -133,7 +133,7 @@ const Medicine = (props) => {
 
 		// check if price is NaN
 		if (isNaN(price)) return 0;
-		return price;
+		return price.toFixed(2);
 	};
 
 	// this will set the current category

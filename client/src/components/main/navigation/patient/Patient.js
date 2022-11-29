@@ -59,6 +59,7 @@ const Patient = (props) => {
 		PatientService.updatePatient(newPatient.id, newPatient)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				navigate(-1);
 			})
 			.catch((err) => {

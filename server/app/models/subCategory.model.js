@@ -4,6 +4,7 @@ module.exports = (sequelize, Sequelize) => {
 		SubCategoryName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		MarkUp: {
 			type: Sequelize.FLOAT,

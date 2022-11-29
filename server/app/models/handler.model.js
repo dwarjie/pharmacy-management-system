@@ -26,10 +26,12 @@ module.exports = (sequelize, Sequelize) => {
 		FirstName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		LastName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		Sex: {
 			type: Sequelize.STRING,

@@ -73,44 +73,72 @@ exports.findOne = (req, res) => {
 // Update a single unit
 exports.update = async (req, res) => {
 	const id = req.params.id;
-	let row = 0;
 
-	// check if unit already exists before updating
-	try {
-		row = await duplicate.checkDuplicate(
-			"units",
-			"UnitName",
-			req.body.UnitName
-		);
-	} catch (err) {
-		console.log(err);
-	}
-
-	// if row == 0, unit does not exists yet
-	if (row[0][0].count == 0) {
-		Unit.update(req.body, { where: { id: id } })
-			.then((row) => {
-				// check if affected row is not equals to 1
-				if (row == 1) {
-					res.send({
-						message: `Updated successfully.`,
-					});
-				} else {
-					res.send({
-						message: `Cannot update unit.`,
-					});
-				}
-			})
-			.catch((err) => {
-				res.status(500).send({
-					message: `Error updating unit ${id}`,
+	Unit.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is not equals to 1
+			if (row == 1) {
+				res.send({
+					message: `Updated successfully.`,
 				});
-			});
-	} else {
-		res.send({
-			message: `Record already exists.`,
+			} else {
+				res.send({
+					message: `Cannot update unit.`,
+				});
+			}
+		})
+		.catch((err) => {
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating unit of measure.`,
+					});
+					break;
+			}
 		});
-	}
+	// let row = 0;
+
+	// // check if unit already exists before updating
+	// try {
+	// 	row = await duplicate.checkDuplicate(
+	// 		"units",
+	// 		"UnitName",
+	// 		req.body.UnitName
+	// 	);
+	// } catch (err) {
+	// 	console.log(err);
+	// }
+
+	// // if row == 0, unit does not exists yet
+	// if (row[0][0].count == 0) {
+	// 	Unit.update(req.body, { where: { id: id } })
+	// 		.then((row) => {
+	// 			// check if affected row is not equals to 1
+	// 			if (row == 1) {
+	// 				res.send({
+	// 					message: `Updated successfully.`,
+	// 				});
+	// 			} else {
+	// 				res.send({
+	// 					message: `Cannot update unit.`,
+	// 				});
+	// 			}
+	// 		})
+	// 		.catch((err) => {
+	// 			res.status(500).send({
+	// 				message: `Error updating unit ${id}`,
+	// 			});
+	// 		});
+	// } else {
+	// 	res.send({
+	// 		message: `Record already exists.`,
+	// 	});
+	// }
 };
 
 // Delete a unit

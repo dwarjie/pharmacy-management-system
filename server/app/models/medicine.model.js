@@ -4,10 +4,12 @@ module.exports = (sequelize, Sequelize) => {
 		ProductCode: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		ProductName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		ProductDetails: {
 			type: Sequelize.STRING,

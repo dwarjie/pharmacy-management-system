@@ -75,9 +75,18 @@ exports.update = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({
-				message: err.message || `Error updating patient ${id}.`,
-			});
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating patient.`,
+					});
+					break;
+			}
 		});
 };
 

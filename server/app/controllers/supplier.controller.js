@@ -33,10 +33,18 @@ exports.create = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({
-				message:
-					err.message || `Some error occurred while creating the Supplier`,
-			});
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Supplier email already exist.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error creating supplier.`,
+					});
+					break;
+			}
 		});
 };
 
@@ -91,9 +99,18 @@ exports.update = (req, res) => {
 			});
 		})
 		.catch((err) => {
-			res.status(500).send({
-				message: `Error updating category ${id}`,
-			});
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Supplier name or email already exist.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating supplier.`,
+					});
+					break;
+			}
 		});
 };
 

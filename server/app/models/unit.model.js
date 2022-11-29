@@ -4,6 +4,7 @@ module.exports = (sequelize, Sequelize) => {
 		UnitName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 	});
 

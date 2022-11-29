@@ -31,6 +31,7 @@ const UpdateCategory = () => {
 		CategoryService.updateCategory(newCategory.id, newCategory)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				setSuccess(true);
 			})
 			.catch((err) => {

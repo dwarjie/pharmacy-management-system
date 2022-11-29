@@ -36,6 +36,7 @@ const UpdateSupplier = () => {
 		SupplierService.updateSupplier(supplier.id, supplier)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				setSuccess(true);
 			})
 			.catch((err) => {

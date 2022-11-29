@@ -55,43 +55,71 @@ exports.findAll = (req, res) => {
 // update the discount
 exports.update = async (req, res) => {
 	const id = req.params.id;
-	let row = 0;
 
-	// check if record already exists before updating
-	try {
-		row = await duplicate.checkDuplicate(
-			"discounts",
-			"DiscountName",
-			req.body.DiscountName
-		);
-	} catch (err) {
-		console.log(err);
-	}
-
-	// if row == 0, discount does not exists yet
-	if (row[0][0].count == 0) {
-		Discount.update(req.body, { where: { id: id } })
-			.then((row) => {
-				if (row == 1) {
-					res.send({
-						message: `Updated successfully.`,
-					});
-				} else {
-					res.send({
-						message: `Cannot update discount`,
-					});
-				}
-			})
-			.catch((err) => {
-				res.status(500).send({
-					message: `Error updating discount`,
+	Discount.update(req.body, { where: { id: id } })
+		.then((row) => {
+			if (row == 1) {
+				res.send({
+					message: `Updated successfully.`,
 				});
-			});
-	} else {
-		res.send({
-			message: `Record already exists.`,
+			} else {
+				res.send({
+					message: `Cannot update discount`,
+				});
+			}
+		})
+		.catch((err) => {
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating discount.`,
+					});
+					break;
+			}
 		});
-	}
+
+	// let row = 0;
+
+	// // check if record already exists before updating
+	// try {
+	// 	row = await duplicate.checkDuplicate(
+	// 		"discounts",
+	// 		"DiscountName",
+	// 		req.body.DiscountName
+	// 	);
+	// } catch (err) {
+	// 	console.log(err);
+	// }
+
+	// // if row == 0, discount does not exists yet
+	// if (row[0][0].count == 0) {
+	// 	Discount.update(req.body, { where: { id: id } })
+	// 		.then((row) => {
+	// 			if (row == 1) {
+	// 				res.send({
+	// 					message: `Updated successfully.`,
+	// 				});
+	// 			} else {
+	// 				res.send({
+	// 					message: `Cannot update discount`,
+	// 				});
+	// 			}
+	// 		})
+	// 		.catch((err) => {
+	// 			res.status(500).send({
+	// 				message: `Error updating discount`,
+	// 			});
+	// 		});
+	// } else {
+	// 	res.send({
+	// 		message: `Record already exists.`,
+	// 	});
+	// }
 };
 
 // delete the discount

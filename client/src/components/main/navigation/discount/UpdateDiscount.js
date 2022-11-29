@@ -33,6 +33,7 @@ const UpdateDiscount = () => {
 		DiscountService.updateDiscount(discount.id, discount)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				setSuccess(true);
 			})
 			.catch((err) => {

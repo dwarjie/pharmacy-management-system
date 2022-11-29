@@ -35,6 +35,7 @@ const UpdateSubCategory = () => {
 		SubCategoryService.updateSubCategory(subCategory.id, subCategory)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				setSuccess(true);
 			})
 			.catch((err) => {

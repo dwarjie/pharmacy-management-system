@@ -38,6 +38,7 @@ const Handler = (props) => {
 		HandlerService.updateHandler(handler.id, handler)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				navigate(-1);
 			})
 			.catch((err) => {

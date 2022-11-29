@@ -4,6 +4,7 @@ module.exports = (sequelize, Sequelize) => {
 		SupplierName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		Address: {
 			type: Sequelize.STRING,
@@ -20,6 +21,7 @@ module.exports = (sequelize, Sequelize) => {
 		Email: {
 			type: Sequelize.STRING,
 			allowNull: true,
+			unique: true,
 		},
 	});
 

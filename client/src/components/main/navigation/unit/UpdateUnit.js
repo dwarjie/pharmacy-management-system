@@ -32,6 +32,7 @@ const UnitList = () => {
 		UnitOfMeasureService.updateUnitOfMeasure(unit.id, unit)
 			.then((response) => {
 				console.log(response.data);
+				alert(response.data.message);
 				setSuccess(true);
 			})
 			.catch((err) => {

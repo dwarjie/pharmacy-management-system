@@ -16,6 +16,7 @@ const Discount = () => {
 		DiscountAmount: 0,
 		DiscountType: "%",
 	};
+
 	let navigate = useNavigate();
 
 	const [discounts, setDiscounts] = useState([]);

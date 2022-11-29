@@ -4,6 +4,7 @@ module.exports = (sequelize, Sequelize) => {
 		DiscountName: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		DiscountAmount: {
 			type: Sequelize.FLOAT,

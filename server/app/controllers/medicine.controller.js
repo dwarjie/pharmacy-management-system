@@ -89,44 +89,73 @@ exports.findProductCode = (req, res) => {
 
 exports.update = async (req, res) => {
 	const id = req.params.id;
-	let row = 0;
 
-	// ! check if medicine already exists
-	try {
-		row = await duplicate.checkDuplicate(
-			"medicines",
-			"ProductName",
-			req.body.ProductName
-		);
-	} catch (err) {
-		console.log(err);
-	}
-
-	// if row == 0, category does not exist yet
-	if (row[0][0].count === 0) {
-		Medicine.update(req.body, { where: { id: id } })
-			.then((row) => {
-				// check if affected row is not equals to 1
-				if (row != 1) {
-					res.send({
-						message: `Cannot update medicine`,
-					});
-				}
-
+	Medicine.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is not equals to 1
+			if (row != 1) {
 				res.send({
-					message: `Updated successfully`,
+					message: `Cannot update medicine`,
 				});
-			})
-			.catch((err) => {
-				res.status(500).send({
-					message: err.message || `Error updating medicine ${id}`,
-				});
+			}
+
+			res.send({
+				message: `Updated successfully`,
 			});
-	} else {
-		res.send({
-			message: `Record already exists.`,
+		})
+		.catch((err) => {
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating medicine.`,
+					});
+					break;
+			}
 		});
-	}
+
+	// let row = 0;
+
+	// // ! check if medicine already exists
+	// try {
+	// 	row = await duplicate.checkDuplicate(
+	// 		"medicines",
+	// 		"ProductName",
+	// 		req.body.ProductName
+	// 	);
+	// } catch (err) {
+	// 	console.log(err);
+	// }
+
+	// // if row == 0, category does not exist yet
+	// if (row[0][0].count === 0) {
+	// 	Medicine.update(req.body, { where: { id: id } })
+	// 		.then((row) => {
+	// 			// check if affected row is not equals to 1
+	// 			if (row != 1) {
+	// 				res.send({
+	// 					message: `Cannot update medicine`,
+	// 				});
+	// 			}
+
+	// 			res.send({
+	// 				message: `Updated successfully`,
+	// 			});
+	// 		})
+	// 		.catch((err) => {
+	// 			res.status(500).send({
+	// 				message: err.message || `Error updating medicine ${id}`,
+	// 			});
+	// 		});
+	// } else {
+	// 	res.send({
+	// 		message: `Record already exists.`,
+	// 	});
+	// }
 };
 
 // delete a medicine
