@@ -253,6 +253,14 @@ const SideNavigation = () => {
 							</li>
 							<li>
 								<Link
+									to={"/pharmacy/sales/sales-list"}
+									className="dropdown-item"
+								>
+									Sales List
+								</Link>
+							</li>
+							<li>
+								<Link
 									to={"pharmacy/sales/charge-to-account"}
 									className="dropdown-item"
 								>

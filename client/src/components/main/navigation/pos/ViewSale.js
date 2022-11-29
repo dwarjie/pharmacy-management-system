@@ -1,24 +1,49 @@
-// This component prints the invoice for the pos
+// This component views the specific sale of the POS
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
+import { formatDate } from "../../../../helper/dateHelper";
+import SaleService from "../../../../services/SaleService";
+import SalesDetailService from "../../../../services/SalesDetailService";
 
-const PrintInvoice = () => {
+const ViewSale = () => {
 	let componentRef = useRef();
-	let location = useLocation();
+	const { id } = useParams();
 
 	const [sale, setSale] = useState({});
 	const [items, setItems] = useState([]);
 
 	useEffect(() => {
-		setSale(location.state.sale);
-		setItems(location.state.orderList);
-	}, []);
+		getSale(id);
+	}, [id]);
+
+	const getSale = (id) => {
+		SaleService.getOneSale(id)
+			.then((response) => {
+				console.log(response.data);
+				setSale(response.data);
+				getSaleItems(id);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const getSaleItems = (id) => {
+		SalesDetailService.getSaleItems(id)
+			.then((response) => {
+				console.log(response.data);
+				setItems(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Sales Receipt</h4>
+				<h4>View Sale</h4>
 				<hr />
 			</div>
 			<div className="p-3">
@@ -62,7 +87,7 @@ class ComponentToPrint extends React.Component {
 				items &&
 				items.map((item, index) => (
 					<tr key={index}>
-						<td>{item.name}</td>
+						<td>{item.medicine.ProductName}</td>
 						<td className="text-center">{item.UnitPrice}</td>
 						<td className="text-center">{item.Quantity}</td>
 						<td className="text-right">{item.Total}</td>
@@ -87,7 +112,7 @@ class ComponentToPrint extends React.Component {
 							<p>
 								<strong>Order Date:</strong>
 								<br />
-								{sale.OrderDate}
+								{formatDate(sale.OrderDate)}
 								<br />
 							</p>
 						</div>
@@ -176,4 +201,5 @@ class ComponentToPrint extends React.Component {
 		);
 	}
 }
-export default PrintInvoice;
+
+export default ViewSale;

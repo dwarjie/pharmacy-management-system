@@ -37,3 +37,20 @@ exports.findAll = (req, res) => {
 			});
 		});
 };
+
+exports.findSaleItems = (req, res) => {
+	const saleId = req.query.saleId;
+
+	SalesDetail.findAll({
+		include: ["medicine"],
+		where: { saleId: saleId },
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error retrieving sales details`,
+			});
+		});
+};

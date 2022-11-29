@@ -11,6 +11,7 @@ exports.create = (req, res) => {
 		Discount: req.body.Discount,
 		VAT: req.body.VAT,
 		Total: req.body.Total,
+		GrossAmount: req.body.GrossAmount,
 	};
 
 	Sales.create(sale)
@@ -23,6 +24,38 @@ exports.create = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error creating sales`,
+			});
+		});
+};
+
+exports.findAll = (req, res) => {
+	Sales.findAll()
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error retrieving all sales`,
+			});
+		});
+};
+
+exports.findOne = (req, res) => {
+	const id = req.params.id;
+
+	Sales.findByPk(id)
+		.then((data) => {
+			if (data) {
+				res.send(data);
+			} else {
+				res.status(400).send({
+					message: `Cannot find sales ${id}`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error fetching sales ${id}`,
 			});
 		});
 };

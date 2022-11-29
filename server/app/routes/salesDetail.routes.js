@@ -4,6 +4,7 @@ module.exports = (app) => {
 	var router = require("express").Router();
 
 	router.post("/", salesDetail.create);
+	router.get("/manage-sale", salesDetail.findSaleItems);
 
 	app.use("/api/sales-detail", router);
 };

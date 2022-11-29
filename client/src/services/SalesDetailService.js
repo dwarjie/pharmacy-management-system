@@ -5,8 +5,13 @@ const createSalesDetails = (data) => {
 	return http.post("/sales-detail", data);
 };
 
+const getSaleItems = (saleId) => {
+	return http.get(`/sales-detail/manage-sale?saleId=${saleId}`);
+};
+
 const SalesDetailService = {
 	createSalesDetails,
+	getSaleItems,
 };
 
 export default SalesDetailService;
