@@ -75,44 +75,64 @@ exports.findOne = (req, res) => {
 // Update a single category
 exports.update = async (req, res) => {
 	const id = req.params.id;
-	let row = 0;
 
-	// check if category already exists before updating
-	try {
-		row = await duplicate.checkDuplicate(
-			"categories",
-			"CategoryName",
-			req.body.CategoryName
-		);
-	} catch (err) {
-		console.log(err);
-	}
+	Category.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is equals to 1
+			if (row == 1) {
+				res.send({
+					message: `Updated successfully`,
+				});
+			} else {
+				res.send({
+					message: `Cannot update category`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error updating category ${id}`,
+			});
+		});
+
+	// let row = 0;
+
+	// // check if category already exists before updating
+	// try {
+	// 	row = await duplicate.checkDuplicate(
+	// 		"categories",
+	// 		"CategoryName",
+	// 		req.body.CategoryName
+	// 	);
+	// } catch (err) {
+	// 	console.log(err);
+	// }
 
 	// if row is == 0, category does not exist yet
-	if (row[0][0].count == 0) {
-		Category.update(req.body, { where: { id: id } })
-			.then((row) => {
-				// check if affected row is equals to 1
-				if (row == 1) {
-					res.send({
-						message: `Updated successfully`,
-					});
-				} else {
-					res.send({
-						message: `Cannot update category`,
-					});
-				}
-			})
-			.catch((err) => {
-				res.status(500).send({
-					message: `Error updating category ${id}`,
-				});
-			});
-	} else {
-		res.send({
-			message: `Record already exists`,
-		});
-	}
+	// if (row[0][0].count == 0) {
+	// 	Category.update(req.body, { where: { id: id } })
+	// 		.then((row) => {
+	// 			// check if affected row is equals to 1
+	// 			if (row == 1) {
+	// 				res.send({
+	// 					message: `Updated successfully`,
+	// 				});
+	// 			} else {
+	// 				res.send({
+	// 					message: `Cannot update category`,
+	// 				});
+	// 			}
+	// 		})
+	// 		.catch((err) => {
+	// 			res.status(500).send({
+	// 				message: `Error updating category ${id}`,
+	// 			});
+	// 		});
+	// } else {
+	// 	res.send({
+	// 		message: `Record already exists`,
+	// 	});
+	// }
 };
 
 // Delete a category
