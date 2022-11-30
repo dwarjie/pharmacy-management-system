@@ -30,8 +30,12 @@ db.or = require("./OR.model")(sequelize, Sequelize);
 db.medicine = require("./medicine.model")(sequelize, Sequelize);
 db.patient = require("./patient.model")(sequelize, Sequelize);
 db.handler = require("./handler.model")(sequelize, Sequelize);
+
 db.salesDetail = require("./salesDetail.model")(sequelize, Sequelize);
 db.sales = require("./sales.model")(sequelize, Sequelize);
+
+db.user = require("./user.model")(sequelize, Sequelize);
+db.role = require("./role.model")(sequelize, Sequelize);
 
 // define model relationships
 
@@ -97,5 +101,21 @@ db.salesDetail.belongsTo(db.sales, {
 		allowNull: false,
 	},
 });
+
+// add relationship for users and roles for authorization
+db.role.belongsToMany(db.user, {
+	through: "user_roles",
+	foreignKey: "roleId",
+	otherKey: "userId",
+});
+
+db.belongsToMany(db.role, {
+	through: "user_roles",
+	foreignKey: "userId",
+	otherKey: "roleId",
+});
+
+// for authorizations
+db.ROLES = ["admin", "clerk"];
 
 module.exports = db; // export the db object
