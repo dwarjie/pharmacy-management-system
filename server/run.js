@@ -10,3 +10,15 @@ exports.Run = async () => {
 	});
 	console.log(onlyOR);
 };
+
+exports.Role = async (role) => {
+	role.create({
+		id: 1,
+		RoleName: "admin",
+	});
+
+	role.create({
+		id: 2,
+		RoleName: "cleark",
+	});
+};

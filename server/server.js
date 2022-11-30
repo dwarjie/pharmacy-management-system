@@ -21,24 +21,34 @@ app.use(express.urlencoded({ extended: true }));
 // import all models
 // sync the database
 const db = require("./app/models");
-// db.sequelize
-// 	.sync()
-// 	.then(() => {
-// 		console.log("synced database");
-// 	})
-// 	.catch((err) => {
-// 		console.log("failed to sync database: " + err.message);
-// 	});
+db.sequelize
+	.sync()
+	.then(() => {
+		console.log("synced database");
+	})
+	.catch((err) => {
+		console.log("failed to sync database: " + err.message);
+	});
 
 // FOR DEVELOPMENT ONLY, DROP THE DATABASE AND RE-SYNC THE DATABASE
-db.sequelize.sync({ force: true }).then(() => {
-	console.log("Drop and re-sync database");
-	initialize.Run();
-});
+// db.sequelize.sync({ force: true }).then(() => {
+// 	console.log("Drop and re-sync database");
+// 	initialize.Run();
+// 	initialize.Role(db.role);
+// });
 
 // sample route
 app.get("/", function (req, res) {
 	res.json({ message: "Hello" });
+});
+
+app.use(function (req, res, next) {
+	res.header(
+		"Access-Control-Allow-Headers",
+		"x-access-token, Origin, Content-Type, Accept"
+	);
+
+	next();
 });
 
 // server routes for the controllers
@@ -53,8 +63,11 @@ require("./app/routes/medicine.routes")(app);
 require("./app/routes/handler.routes")(app);
 require("./app/routes/OR.routes")(app);
 require("./app/routes/patient.routes")(app);
+
 require("./app/routes/sale.routes")(app);
 require("./app/routes/salesDetail.routes")(app);
+
+require("./app/routes/auth.routes")(app);
 
 // set the server port and listen for requests
 const PORT = process.env.PORT || 8080;
