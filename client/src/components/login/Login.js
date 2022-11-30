@@ -1,9 +1,10 @@
 // This module will include the login front end of the application
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 
 import { PersonCircle } from "react-bootstrap-icons";
+import { resetGlobalState, setGlobalState } from "../../state";
 
 const Login = () => {
 	let navigate = useNavigate();
@@ -13,6 +14,11 @@ const Login = () => {
 	};
 
 	const [credentials, setCredentials] = useState(initialLogin);
+
+	useEffect(() => {
+		AuthService.logout();
+		// resetGlobalState();
+	}, []);
 
 	const loginUser = (event) => {
 		event.preventDefault();
@@ -26,11 +32,13 @@ const Login = () => {
 			});
 	};
 
-	const checkLoginSuccess = (data) => {
+	const checkLoginSuccess = async (data) => {
 		if (data.message === undefined) {
-			AuthService.saveToken(data);
-			navigate(`/pharmacy`);
-			window.location.reload();
+			// AuthService.saveToken(data);
+			setGlobalState("currentUser", data);
+			setGlobalState("auth", true);
+			navigate(`pharmacy`);
+			// window.location.reload();
 			return;
 		}
 

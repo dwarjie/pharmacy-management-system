@@ -34,7 +34,7 @@ const getCurrentUser = () => {
 const getToken = () => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	if (user) {
-		return { "x-access-token": user, isAuthenticated: true };
+		return { "x-access-token": user.accessToken, isAuthenticated: true };
 	} else {
 		return {};
 	}

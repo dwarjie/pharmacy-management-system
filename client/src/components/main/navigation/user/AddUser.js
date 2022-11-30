@@ -1,8 +1,9 @@
 // this component is responsible for adding new user for the system
 import { useState, useEffect } from "react";
+import { MultiSelect } from "react-multi-select-component";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import AuthService from "../../../../services/AuthService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
-import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const AddUser = () => {
 	const initialUser = {
@@ -10,15 +11,37 @@ const AddUser = () => {
 		LastName: "",
 		UserName: "",
 		Password: "",
-		roles: ["admin"],
+		roles: [],
 	};
 
 	const [user, setUser] = useState(initialUser);
 	const [alertMessage, setAlertMessage] = useState("");
+	const [selected, setSelected] = useState([]);
+
+	useEffect(() => {
+		let userRoles = selected.map((role) => {
+			return role.value;
+		});
+		setUser((prevState) => ({ ...prevState, roles: userRoles }));
+	}, [selected]);
+
+	const options = [
+		{ label: "Maintenance", value: "maintenance" },
+		{ label: "Inventory", value: "inventory" },
+		{ label: "Sales", value: "sales" },
+		{ label: "Reports", value: "reports" },
+		{ label: "Utilities", value: "utilities" },
+	];
 
 	const handleInputChange = (event) => {
 		const { name, value } = event.target;
 		setUser({ ...user, [name]: value });
+	};
+
+	const checkRoles = () => {
+		if (user.roles.length === 0) return false;
+
+		return true;
 	};
 
 	const registerUser = (event) => {
@@ -26,15 +49,19 @@ const AddUser = () => {
 
 		if (!AlertPrompt()) return;
 
-		AuthService.registerUser(user)
-			.then((response) => {
-				console.log(response.data);
-				setAlertMessage(response.data.message);
-				setUser(initialUser);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		if (checkRoles()) {
+			AuthService.registerUser(user)
+				.then((response) => {
+					console.log(response.data);
+					setAlertMessage(response.data.message);
+					setUser(initialUser);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} else {
+			setAlertMessage("Choose user role/s");
+		}
 	};
 
 	return (
@@ -131,7 +158,13 @@ const AddUser = () => {
 							<label className="required" htmlFor="role">
 								Role:
 							</label>
-							<select
+							<MultiSelect
+								options={options}
+								value={selected}
+								onChange={setSelected}
+								labelledBy="Select Role/s"
+							/>
+							{/* <select
 								name="role"
 								id="role"
 								className="form-select form-input"
@@ -139,7 +172,7 @@ const AddUser = () => {
 							>
 								<option value="admin">Admin</option>
 								<option value="clerk">Clerk</option>
-							</select>
+							</select> */}
 						</div>
 					</div>
 					<button

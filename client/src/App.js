@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import "./style/css/main.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "./index.css";
@@ -6,7 +7,7 @@ import "./index.css";
 // components
 import LoginComponent from "./components/login/LoginComponent";
 import MainComponent from "./components/main/MainComponents";
-import AuthService from "./services/AuthService";
+import ProtectedRoutes from "./components/layout/ProtectedRouters";
 
 function App() {
 	return (
@@ -20,10 +21,5 @@ function App() {
 		</div>
 	);
 }
-
-const ProtectedRoutes = () => {
-	let auth = { token: false };
-	return auth.token ? <Outlet /> : <Navigate to={`/`} />;
-};
 
 export default App;
