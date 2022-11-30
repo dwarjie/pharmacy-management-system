@@ -34,7 +34,7 @@ const getCurrentUser = () => {
 const getToken = () => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	if (user) {
-		return { "x-access-token": user };
+		return { "x-access-token": user, isAuthenticated: true };
 	} else {
 		return {};
 	}
@@ -46,6 +46,7 @@ const AuthService = {
 	saveToken,
 	logout,
 	getCurrentUser,
+	getToken,
 };
 
 export default AuthService;
