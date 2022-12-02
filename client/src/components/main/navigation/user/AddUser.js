@@ -55,6 +55,7 @@ const AddUser = () => {
 					console.log(response.data);
 					setAlertMessage(response.data.message);
 					setUser(initialUser);
+					setSelected([]);
 				})
 				.catch((err) => {
 					console.log(err);

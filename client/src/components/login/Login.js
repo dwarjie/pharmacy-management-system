@@ -15,9 +15,19 @@ const Login = () => {
 
 	const [credentials, setCredentials] = useState(initialLogin);
 
-	// useEffect(() => {
-	// 	AuthService.logout();
-	// }, []);
+	useEffect(() => {
+		// AuthService.logout();
+		checkLoggedInUser();
+	}, []);
+
+	// check if a user already logged in
+	const checkLoggedInUser = () => {
+		const loggedInUser = AuthService.getToken()["x-access-token"];
+
+		if (loggedInUser) {
+			navigate(`/pharmacy`);
+		}
+	};
 
 	const loginUser = (event) => {
 		event.preventDefault();

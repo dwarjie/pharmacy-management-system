@@ -8,6 +8,7 @@ import "./index.css";
 import LoginComponent from "./components/login/LoginComponent";
 import MainComponent from "./components/main/MainComponents";
 import ProtectedRoutes from "./components/layout/ProtectedRouters";
+import NotFound from "./components/layout/NotFound";
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 				<Route element={<ProtectedRoutes />}>
 					<Route exact path="/pharmacy/*" element={<MainComponent />} />
 				</Route>
+				<Route path="*" element={<NotFound content={"NOT FOUND"} />} />
 			</Routes>
 		</div>
 	);

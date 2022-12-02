@@ -1,5 +1,7 @@
 //  This module will be the container for the main contents
 import { Routes, Route } from "react-router-dom";
+import ProtectedURL from "../layout/ProtectedURL";
+import NotFound from "../layout/NotFound";
 
 // components
 import TopNavigation from "./navigation/TopNavigation";
@@ -54,70 +56,89 @@ const ContentContainer = (props) => {
 		<div className="content-container h-100" id="content-container">
 			<TopNavigation toggleSideNavigation={props.toggleSideNavigation} />
 
-			<div className="container col-12 col-md-12 mt-3 pb-3 h-auto">
+			<div className="container-fluid col-12 mt-3 pb-3 h-auto">
 				<Routes>
-					<Route path="/maintenance/patient" element={<AddPatient />} />
-					<Route path="/maintenance/patient/:id" element={<UpdatePatient />} />
-					<Route
-						path="/maintenance/patient/patient-list"
-						element={<PatientList />}
-					/>
-					<Route path="/maintenance/category" element={<Category />} />
-					<Route
-						path="/maintenance/category/:id"
-						element={<UpdateCategory />}
-					/>
-					<Route
-						path="/maintenance/category/sub-category"
-						element={<AddSubCategory />}
-					/>
-					<Route
-						path="/maintenance/category/sub-category/:id"
-						element={<UpdateSubCategory />}
-					/>
-					<Route path="/maintenance/type" element={<AddType />} />
-					<Route path="/maintenance/unit" element={<Unit />} />
-					<Route path="/maintenance/unit/:id" element={<UpdateUnit />} />
-					<Route path="/maintenance/medicine" element={<AddMedicine />} />
-					<Route
-						path="/maintenance/medicine/medicine-list"
-						element={<MedicineList />}
-					/>
-					<Route
-						path="/maintenance/medicine/:id"
-						element={<UpdateMedicine />}
-					/>
-					<Route path="/maintenance/supplier" element={<Supplier />} />
-					<Route
-						path="/maintenance/supplier/:id"
-						element={<UpdateSupplier />}
-					/>
-					<Route path="/maintenance/discount" element={<Discount />} />
-					<Route
-						path="/maintenance/discount/:id"
-						element={<UpdateDiscount />}
-					/>
-					<Route path="/maintenance/vat" element={<VAT />} />
-					<Route path="/maintenance/or" element={<OR />} />
-					<Route path="/maintenance/handler" element={<AddHandler />} />
-					<Route
-						path="/maintenance/handler/handler-list"
-						element={<HandlerList />}
-					/>
-					<Route path="/maintenance/handler/:id" element={<UpdateHandler />} />
-					<Route path="/utilities/add-user" element={<AddUser />} />
-					<Route path="/utilities/user-list" element={<UserList />} />
+					<Route element={<ProtectedURL role={"ROLES_MAINTENANCE"} />}>
+						<Route path="/maintenance/patient" element={<AddPatient />} />
+						<Route
+							path="/maintenance/patient/:id"
+							element={<UpdatePatient />}
+						/>
+						<Route
+							path="/maintenance/patient/patient-list"
+							element={<PatientList />}
+						/>
+						<Route path="/maintenance/category" element={<Category />} />
+						<Route
+							path="/maintenance/category/:id"
+							element={<UpdateCategory />}
+						/>
+						<Route
+							path="/maintenance/category/sub-category"
+							element={<AddSubCategory />}
+						/>
+						<Route
+							path="/maintenance/category/sub-category/:id"
+							element={<UpdateSubCategory />}
+						/>
+						<Route path="/maintenance/type" element={<AddType />} />
+						<Route path="/maintenance/unit" element={<Unit />} />
+						<Route path="/maintenance/unit/:id" element={<UpdateUnit />} />
+						<Route path="/maintenance/medicine" element={<AddMedicine />} />
+						<Route
+							path="/maintenance/medicine/medicine-list"
+							element={<MedicineList />}
+						/>
+						<Route
+							path="/maintenance/medicine/:id"
+							element={<UpdateMedicine />}
+						/>
+						<Route path="/maintenance/supplier" element={<Supplier />} />
+						<Route
+							path="/maintenance/supplier/:id"
+							element={<UpdateSupplier />}
+						/>
+						<Route path="/maintenance/discount" element={<Discount />} />
+						<Route
+							path="/maintenance/discount/:id"
+							element={<UpdateDiscount />}
+						/>
+						<Route path="/maintenance/vat" element={<VAT />} />
+						<Route path="/maintenance/or" element={<OR />} />
+						<Route path="/maintenance/handler" element={<AddHandler />} />
+						<Route
+							path="/maintenance/handler/handler-list"
+							element={<HandlerList />}
+						/>
+						<Route
+							path="/maintenance/handler/:id"
+							element={<UpdateHandler />}
+						/>
+					</Route>
+					<Route element={<ProtectedURL role={"ROLES_UTILITIES"} />}>
+						<Route path="/utilities/add-user" element={<AddUser />} />
+						<Route path="/utilities/user-list" element={<UserList />} />
+					</Route>
+					<Route element={<ProtectedURL role={"ROLES_SALES"} />}>
+						<Route path="/sales/pos" element={<POS />} />
+						<Route path="/sales/pos/print" element={<PrintInvoice />} />
+						<Route path="/sales/sales-list" element={<ManagePOS />} />
+						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
+					</Route>
+					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>
 			</div>
 			{/* for SALES */}
-			<div className="col-12 mt-0 px-3 min-height-85">
+			{/* <div className="col-12 mt-0 px-3 min-height-85">
 				<Routes>
-					<Route path="/sales/pos" element={<POS />} />
-					<Route path="/sales/pos/print" element={<PrintInvoice />} />
-					<Route path="/sales/sales-list" element={<ManagePOS />} />
-					<Route path="/sales/sales-list/:id" element={<ViewSale />} />
+					<Route element={<ProtectedURL role={"ROLES_SALES"} />}>
+						<Route path="/sales/pos" element={<POS />} />
+						<Route path="/sales/pos/print" element={<PrintInvoice />} />
+						<Route path="/sales/sales-list" element={<ManagePOS />} />
+						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
+					</Route>
 				</Routes>
-			</div>
+			</div> */}
 		</div>
 	);
 };

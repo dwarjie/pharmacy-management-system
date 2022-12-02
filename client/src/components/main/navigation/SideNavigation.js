@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import { HouseFill, PeopleFill, Cart4, Receipt } from "react-bootstrap-icons";
 import { AiFillMedicineBox, AiFillFile, AiFillSetting } from "react-icons/ai";
 import { useGlobalState } from "../../../state";
-import { useEffect } from "react";
-import AuthService from "../../../services/AuthService";
 
 const SideNavigation = () => {
 	let [currentUser] = useGlobalState("currentUser");
@@ -66,8 +64,8 @@ const SideNavigation = () => {
 					{checkRoles(ROLES.reports) ? <ReportsModule /> : ""}
 
 					{/* UTILITIES */}
-					{/* {checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""} */}
-					<UtilitiesModule />
+					{checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""}
+					{/* <UtilitiesModule /> */}
 				</div>
 			</div>
 		</nav>
