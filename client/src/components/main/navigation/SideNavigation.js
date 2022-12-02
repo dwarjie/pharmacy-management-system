@@ -64,8 +64,8 @@ const SideNavigation = () => {
 					{checkRoles(ROLES.reports) ? <ReportsModule /> : ""}
 
 					{/* UTILITIES */}
-					{checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""}
-					{/* <UtilitiesModule /> */}
+					{/* {checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""} */}
+					<UtilitiesModule />
 				</div>
 			</div>
 		</nav>
