@@ -24,7 +24,7 @@ const User = (props) => {
 		let userRoles = selected.map((role) => {
 			return role.value;
 		});
-		setUser((prevState) => ({ ...prevState, roles: userRoles }));
+		setUser((prevState) => ({ ...prevState, Role: userRoles }));
 	}, [selected]);
 
 	const options = [
@@ -41,7 +41,7 @@ const User = (props) => {
 	};
 
 	const checkRoles = () => {
-		if (user.roles.length === 0) return false;
+		if (user.Role.length === 0) return false;
 
 		return true;
 	};
@@ -190,21 +190,17 @@ const User = (props) => {
 								<option value="inactive">Inactive</option>
 							</select>
 						</div> */}
-						{updateMode() ? (
-							""
-						) : (
-							<div className="col-sm-12 col-md-6">
-								<label className="required" htmlFor="role">
-									Role:
-								</label>
-								<MultiSelect
-									options={options}
-									value={selected}
-									onChange={setSelected}
-									labelledBy="Select Role/s"
-								/>
-							</div>
-						)}
+						<div className="col-sm-12 col-md-6">
+							<label className="required" htmlFor="role">
+								Role:
+							</label>
+							<MultiSelect
+								options={options}
+								value={selected}
+								onChange={setSelected}
+								labelledBy="Select Role/s"
+							/>
+						</div>
 					</div>
 					<button
 						className="btn btn-primary simple-shadow mt-3 me-3"
@@ -214,8 +210,8 @@ const User = (props) => {
 					</button>
 					{updateMode() ? (
 						<button
+							type="button"
 							className="btn btn-secondary simple-shadow mt-3 me-3"
-							type="submit"
 							onClick={() => navigate(-1)}
 						>
 							Cancel

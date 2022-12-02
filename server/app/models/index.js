@@ -35,7 +35,7 @@ db.salesDetail = require("./salesDetail.model")(sequelize, Sequelize);
 db.sales = require("./sales.model")(sequelize, Sequelize);
 
 db.user = require("./user.model")(sequelize, Sequelize);
-db.role = require("./role.model")(sequelize, Sequelize);
+// db.role = require("./role.model")(sequelize, Sequelize);
 
 // define model relationships
 
@@ -102,27 +102,27 @@ db.salesDetail.belongsTo(db.sales, {
 	},
 });
 
-// add relationship for users and roles for authorization
-db.role.belongsToMany(db.user, {
-	through: "user_roles",
-	foreignKey: "roleId",
-	otherKey: "userId",
-});
+// // add relationship for users and roles for authorization
+// db.role.belongsToMany(db.user, {
+// 	through: "user_roles",
+// 	foreignKey: "roleId",
+// 	otherKey: "userId",
+// });
 
-db.user.belongsToMany(db.role, {
-	through: "user_roles",
-	foreignKey: "userId",
-	otherKey: "roleId",
-});
+// db.user.belongsToMany(db.role, {
+// 	through: "user_roles",
+// 	foreignKey: "userId",
+// 	otherKey: "roleId",
+// });
 
-// for authorizations
-db.ROLES = [
-	"admin",
-	"maintenance",
-	"inventory",
-	"sales",
-	"reports",
-	"utilities",
-];
+// // for authorizations
+// db.ROLES = [
+// 	"admin",
+// 	"maintenance",
+// 	"inventory",
+// 	"sales",
+// 	"reports",
+// 	"utilities",
+// ];
 
 module.exports = db; // export the db object

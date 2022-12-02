@@ -31,12 +31,11 @@ db.sequelize
 	});
 
 // FOR DEVELOPMENT ONLY, DROP THE DATABASE AND RE-SYNC THE DATABASE
-// db.sequelize.sync({ force: true }).then(() => {
-// 	console.log("Drop and re-sync database");
-// 	initialize.Run();
-// 	initialize.Role(db.role);
-// 	initialize.User(db.user);
-// });
+db.sequelize.sync({ force: true }).then(() => {
+	console.log("Drop and re-sync database");
+	initialize.Run();
+	initialize.User(db.user);
+});
 
 // sample route
 app.get("/", function (req, res) {

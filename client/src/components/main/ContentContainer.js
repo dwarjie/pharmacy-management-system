@@ -59,7 +59,7 @@ const ContentContainer = (props) => {
 
 			<div className="container-fluid col-12 mt-3 pb-3 h-auto">
 				<Routes>
-					<Route element={<ProtectedURL role={"ROLES_MAINTENANCE"} />}>
+					<Route element={<ProtectedURL role={"maintenance"} />}>
 						<Route path="/maintenance/patient" element={<AddPatient />} />
 						<Route
 							path="/maintenance/patient/:id"
@@ -116,12 +116,12 @@ const ContentContainer = (props) => {
 							element={<UpdateHandler />}
 						/>
 					</Route>
-					<Route element={<ProtectedURL role={"ROLES_UTILITIES"} />}>
+					<Route element={<ProtectedURL role={"utilities"} />}>
 						<Route path="/utilities/add-user" element={<AddUser />} />
 						<Route path="/utilities/user-list" element={<UserList />} />
 						<Route path="/utilities/:id" element={<UpdateUser />} />
 					</Route>
-					<Route element={<ProtectedURL role={"ROLES_SALES"} />}>
+					<Route element={<ProtectedURL role={"sales"} />}>
 						<Route path="/sales/pos" element={<POS />} />
 						<Route path="/sales/pos/print" element={<PrintInvoice />} />
 						<Route path="/sales/sales-list" element={<ManagePOS />} />

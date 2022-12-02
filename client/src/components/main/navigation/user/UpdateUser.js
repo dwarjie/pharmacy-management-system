@@ -7,7 +7,7 @@ const UpdateUser = () => {
 	let location = useLocation();
 	const oldUser = location.state.user;
 
-	const [role, setRole] = useState([]);
+	const [roles, setRoles] = useState([]);
 
 	useEffect(() => {
 		getUser(oldUser.id);
@@ -19,15 +19,16 @@ const UpdateUser = () => {
 		LastName: oldUser.LastName,
 		UserName: oldUser.UserName,
 		Password: "",
-		roles: [],
+		Role: [],
 	};
 
 	const getUser = (id) => {
 		AuthService.getUser(id)
 			.then((response) => {
 				console.log(response.data);
-				setRole(response.data.roles);
-				initialUser.roles = response.data.roles;
+				let role = response.data.roles;
+				setRoles(role);
+				initialUser.Role = role;
 			})
 			.catch((err) => {
 				console.log(err);
@@ -35,7 +36,9 @@ const UpdateUser = () => {
 	};
 
 	const initialSelected = () => {
-		return role.map((role) => {
+		if (roles === []) return [];
+
+		return roles.map((role) => {
 			let roleName = role.replace(/^./, role[0].toUpperCase());
 			return { label: roleName, value: role };
 		});

@@ -66,7 +66,7 @@ exports.update = (req, res) => {
 		.then((row) => {
 			if (row != 1) {
 				res.send({
-					message: `Cannot update patient ${id}.`,
+					message: `Cannot update patient.`,
 				});
 			} else {
 				res.send({
@@ -98,7 +98,7 @@ exports.delete = (req, res) => {
 		.then((row) => {
 			if (row != 1) {
 				res.send({
-					message: `Cannot delete patient ${id}.`,
+					message: `Cannot delete patient.`,
 				});
 			} else {
 				res.send({

@@ -48,8 +48,8 @@ exports.User = async (user) => {
 	user.create({
 		FirstName: "Mark Darius",
 		LastName: "Pagaduan",
-		UserName: "dakoy",
-		Password: bcrypt.hashSync("password", 8),
-		roles: ["maintenance", "inventory", "sales", "reports", "utilities"],
+		UserName: "admin",
+		Password: bcrypt.hashSync("admin", 8),
+		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
 	});
 };

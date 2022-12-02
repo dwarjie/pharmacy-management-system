@@ -5,12 +5,15 @@ module.exports = (app) => {
 
 	router.post(
 		"/signup",
-		[verifySignUp.checkDuplicateUsername, verifySignUp.checkRolesExisted],
+		[verifySignUp.checkDuplicateUsername],
 		controller.signup
 	);
 
 	router.post("/signin", controller.signin);
-	router.get("/current_user", controller.currentUser);
+	router.get("/", controller.findAll);
+	router.get("/:id", controller.findOne);
+	router.put("/:id", controller.update);
+	router.delete("/", controller.delete);
 
 	app.use("/api/auth/", router);
 };

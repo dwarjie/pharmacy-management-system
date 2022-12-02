@@ -8,12 +8,12 @@ import { useGlobalState } from "../../../state";
 const SideNavigation = () => {
 	let [currentUser] = useGlobalState("currentUser");
 	const ROLES = {
-		admin: "ROLES_ADMIN",
-		maintenance: "ROLES_MAINTENANCE",
-		inventory: "ROLES_INVENTORY",
-		sales: "ROLES_SALES",
-		reports: "ROLES_REPORTS",
-		utilities: "ROLES_UTILITIES",
+		admin: "admin",
+		maintenance: "maintenance",
+		inventory: "inventory",
+		sales: "sales",
+		reports: "reports",
+		utilities: "utilities",
 	};
 
 	// check if user has the role in order to use the module
@@ -64,8 +64,8 @@ const SideNavigation = () => {
 					{checkRoles(ROLES.reports) ? <ReportsModule /> : ""}
 
 					{/* UTILITIES */}
-					{/* {checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""} */}
-					<UtilitiesModule />
+					{checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""}
+					{/* <UtilitiesModule /> */}
 				</div>
 			</div>
 		</nav>

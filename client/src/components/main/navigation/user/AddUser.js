@@ -9,7 +9,7 @@ const AddUser = () => {
 		LastName: "",
 		UserName: "",
 		Password: "",
-		roles: [],
+		Role: [],
 	};
 
 	return (
