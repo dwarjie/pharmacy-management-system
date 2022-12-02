@@ -49,6 +49,7 @@ import PrintInvoice from "./navigation/print/PrintInvoice";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
+import UpdateUser from "./navigation/user/UpdateUser";
 import UserList from "./navigation/user/UserList";
 
 const ContentContainer = (props) => {
@@ -118,6 +119,7 @@ const ContentContainer = (props) => {
 					<Route element={<ProtectedURL role={"ROLES_UTILITIES"} />}>
 						<Route path="/utilities/add-user" element={<AddUser />} />
 						<Route path="/utilities/user-list" element={<UserList />} />
+						<Route path="/utilities/:id" element={<UpdateUser />} />
 					</Route>
 					<Route element={<ProtectedURL role={"ROLES_SALES"} />}>
 						<Route path="/sales/pos" element={<POS />} />

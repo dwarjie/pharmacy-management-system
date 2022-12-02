@@ -4,6 +4,10 @@
 
 import http from "../http-common";
 
+const getAllUser = () => {
+	return http.get(`/auth`);
+};
+
 const registerUser = (data) => {
 	return http.post(`/auth/signup`, data);
 };
@@ -12,9 +16,23 @@ const loginUser = (data) => {
 	return http.post(`/auth/signin`, data);
 };
 
+const updateUser = (id, data) => {
+	return http.put(`/auth/${id}`, data);
+};
+
+const deleteUser = (userId) => {
+	return http.delete(`/auth?userId=${userId}`);
+};
+
+const getUser = (id) => {
+	return http.get(`/auth/${id}`);
+};
+
 const current_user = () => {
 	return http.get(`/auth/current_user`);
 };
+
+// Local storage
 
 const saveToken = (user) => {
 	// check if token exists
@@ -45,8 +63,12 @@ const getToken = () => {
 };
 
 const AuthService = {
+	getAllUser,
 	registerUser,
 	loginUser,
+	updateUser,
+	deleteUser,
+	getUser,
 	current_user,
 	saveToken,
 	logout,

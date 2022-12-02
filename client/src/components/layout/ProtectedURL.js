@@ -6,7 +6,7 @@ const ProtectedURL = ({ role }) => {
 	let user = useGlobalState("currentUser");
 
 	const checkRole = () => {
-		console.log(user);
+		// console.log(user);
 		if (user[0].roles.length === 0) return false;
 
 		if (user[0].roles.includes(role)) {
