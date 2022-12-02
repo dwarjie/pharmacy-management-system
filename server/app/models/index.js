@@ -116,6 +116,13 @@ db.user.belongsToMany(db.role, {
 });
 
 // for authorizations
-db.ROLES = ["admin", "clerk"];
+db.ROLES = [
+	"admin",
+	"maintenance",
+	"inventory",
+	"sales",
+	"reports",
+	"utilities",
+];
 
 module.exports = db; // export the db object

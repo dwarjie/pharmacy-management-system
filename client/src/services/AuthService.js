@@ -12,10 +12,14 @@ const loginUser = (data) => {
 	return http.post(`/auth/signin`, data);
 };
 
+const current_user = () => {
+	return http.get(`/auth/current_user`);
+};
+
 const saveToken = (user) => {
 	// check if token exists
 	if (user === null) {
-		return console.log("Error in saving token.");
+		return console.log("Error in saving user.");
 	}
 
 	// save token
@@ -43,6 +47,7 @@ const getToken = () => {
 const AuthService = {
 	registerUser,
 	loginUser,
+	current_user,
 	saveToken,
 	logout,
 	getCurrentUser,

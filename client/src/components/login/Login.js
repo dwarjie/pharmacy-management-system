@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 
 import { PersonCircle } from "react-bootstrap-icons";
-import { resetGlobalState, setGlobalState } from "../../state";
+import { setGlobalState } from "../../state";
 
 const Login = () => {
 	let navigate = useNavigate();
@@ -15,10 +15,9 @@ const Login = () => {
 
 	const [credentials, setCredentials] = useState(initialLogin);
 
-	useEffect(() => {
-		AuthService.logout();
-		// resetGlobalState();
-	}, []);
+	// useEffect(() => {
+	// 	AuthService.logout();
+	// }, []);
 
 	const loginUser = (event) => {
 		event.preventDefault();
@@ -34,7 +33,7 @@ const Login = () => {
 
 	const checkLoginSuccess = async (data) => {
 		if (data.message === undefined) {
-			// AuthService.saveToken(data);
+			AuthService.saveToken(data);
 			setGlobalState("currentUser", data);
 			setGlobalState("auth", true);
 			navigate(`pharmacy`);

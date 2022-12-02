@@ -1,5 +1,6 @@
 // This async function will be called when the database is created for the first time
 const OR = require("./app/controllers/OR.controller");
+const bcrypt = require("bcryptjs");
 
 exports.Run = async () => {
 	// *create the only record for OR
@@ -19,6 +20,36 @@ exports.Role = async (role) => {
 
 	role.create({
 		id: 2,
-		RoleName: "cleark",
+		RoleName: "maintenance",
+	});
+
+	role.create({
+		id: 3,
+		RoleName: "inventory",
+	});
+
+	role.create({
+		id: 4,
+		RoleName: "sales",
+	});
+
+	role.create({
+		id: 5,
+		RoleName: "reports",
+	});
+
+	role.create({
+		id: 6,
+		RoleName: "utilities",
+	});
+};
+
+exports.User = async (user) => {
+	user.create({
+		FirstName: "Mark Darius",
+		LastName: "Pagaduan",
+		UserName: "dakoy",
+		Password: bcrypt.hashSync("password", 8),
+		roles: ["maintenance", "inventory", "sales", "reports", "utilities"],
 	});
 };

@@ -1,14 +1,10 @@
 // This includes the global state for the whole application
 import { createGlobalState } from "react-hooks-global-state";
+import AuthService from "../services/AuthService";
 
 const { setGlobalState, useGlobalState } = createGlobalState({
-	currentUser: {},
-	auth: false,
+	currentUser: AuthService.getCurrentUser() || {},
+	auth: AuthService.getToken().isAuthenticated || false,
 });
-
-// const resetGlobalState = () => {
-// 	setGlobalState("currentUser", {});
-// 	setGlobalState("auth", false);
-// };
 
 export { setGlobalState, useGlobalState };

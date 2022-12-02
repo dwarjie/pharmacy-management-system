@@ -10,6 +10,7 @@ module.exports = (app) => {
 	);
 
 	router.post("/signin", controller.signin);
+	router.get("/current_user", controller.currentUser);
 
 	app.use("/api/auth/", router);
 };

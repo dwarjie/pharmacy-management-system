@@ -35,6 +35,7 @@ db.sequelize
 // 	console.log("Drop and re-sync database");
 // 	initialize.Run();
 // 	initialize.Role(db.role);
+// 	initialize.User(db.user);
 // });
 
 // sample route

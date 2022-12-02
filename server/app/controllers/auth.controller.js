@@ -14,6 +14,7 @@ const Role = db.role;
 const Op = db.Sequelize.Op;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+let currUser = {};
 
 exports.signup = (req, res) => {
 	// Save user into database
@@ -83,8 +84,19 @@ exports.signin = (req, res) => {
 				for (let i = 0; i < roles.length; i++) {
 					authorities.push(`ROLES_${roles[i].RoleName.toUpperCase()}`);
 				}
+
+				currUser = {
+					id: user.id,
+					FirstName: user.FirstName,
+					LastName: user.LastName,
+					UserName: user.UserName,
+					roles: authorities,
+					accessToken: token,
+				};
 				res.send({
 					id: user.id,
+					FirstName: user.FirstName,
+					LastName: user.LastName,
 					UserName: user.UserName,
 					roles: authorities,
 					accessToken: token,
@@ -96,4 +108,17 @@ exports.signin = (req, res) => {
 				message: err.message || `Error signing user.`,
 			});
 		});
+};
+
+exports.currentUser = async (req, res) => {
+	try {
+		await res.send({
+			currentUser: currUser,
+			auth: true,
+		});
+	} catch (err) {
+		await res.send({
+			message: err.message || `Error retrieving user`,
+		});
+	}
 };
