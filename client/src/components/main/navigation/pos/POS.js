@@ -669,9 +669,17 @@ const OrderTable = (props) => {
 const SearchProductCode = (props) => {
 	const { findByCode, searchCode, setSearchCode } = props;
 
-	useEffect(() => {
-		if (searchCode !== "") findByCode(searchCode);
-	}, [searchCode]);
+	const checkKeyPress = (e) => {
+		if (searchCode !== "") {
+			if (e.keyCode === 32) {
+				findByCode(searchCode);
+			}
+		}
+	};
+
+	// useEffect(() => {
+	// 	if (searchCode !== "") findByCode(searchCode);
+	// }, [searchCode]);
 
 	return (
 		<input
@@ -681,6 +689,7 @@ const SearchProductCode = (props) => {
 			name="searchInput"
 			id="searchInput"
 			value={searchCode}
+			onKeyPress={(event) => checkKeyPress(event)}
 			onChange={(event) => setSearchCode(event.target.value)}
 		/>
 	);
