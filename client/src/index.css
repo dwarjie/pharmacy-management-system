@@ -194,3 +194,22 @@ label {
 	overflow-y: scroll;
 	height: fit-content;
 }
+
+/* DROP DOWN FOR INVENTORY SEARCHING */
+.search-inner {
+	position: relative;
+	display: flex;
+}
+
+.dropdown-items {
+	position: absolute;
+	width: inherit;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid gray;
+}
+
+.dropdown-items:empty {
+	border: none;
+}

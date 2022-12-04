@@ -268,3 +268,23 @@ exports.findByTitle = (req, res) => {
 			});
 		});
 };
+
+// get the products by title and by supplier
+
+exports.findByTitleSupplier = (req, res) => {
+	let title = req.query.title;
+	let supplierId = req.query.supplierId;
+
+	Medicine.findAll({
+		include: ["subCategory", "supplier", "unit"],
+		where: { ProductName: { [Op.like]: `%${title}%` }, supplierId: supplierId },
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Cannot retrieve products`,
+			});
+		});
+};

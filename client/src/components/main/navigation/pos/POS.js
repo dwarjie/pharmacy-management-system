@@ -562,7 +562,7 @@ const ProductTable = (props) => {
 			<thead>
 				<tr>
 					<th scope="col">Barcode</th>
-					<th scope="col">Product Name</th>
+					<th scope="col">Item</th>
 					<th scope="col">Generic Name</th>
 					<th scope="col">Formulation</th>
 					<th scope="col">Price</th>
@@ -615,7 +615,7 @@ const OrderTable = (props) => {
 		<table className="table">
 			<thead>
 				<tr>
-					<th scope="col">Name</th>
+					<th scope="col">Item</th>
 					<th scope="col">Price</th>
 					<th scope="col">Qty</th>
 					<th scope="col">Total</th>

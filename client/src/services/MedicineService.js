@@ -28,6 +28,16 @@ const getByTitle = (title) => {
 	return http.get(`/medicine/medicine-list?title=${title}`);
 };
 
+// P.O Moduel
+const getByTitleAndSupplier = (title, supplierId) => {
+	return http.get(`/medicine/purchase-order`, {
+		params: {
+			title: title,
+			supplierId: supplierId,
+		},
+	});
+};
+
 const getByCode = (code) => {
 	return http.get(`/medicine/pos?code=${code}`);
 };
@@ -40,6 +50,7 @@ const MedicineService = {
 	getByTitle,
 	getByCode,
 	getOtherModel,
+	getByTitleAndSupplier,
 };
 
 export default MedicineService;

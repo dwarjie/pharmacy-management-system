@@ -226,7 +226,7 @@ const InventoryModule = () => {
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
 					<Link
-						to={"pharmacy/inventory/purchase-order"}
+						to={"/pharmacy/inventory/purchase-order"}
 						className="dropdown-item"
 					>
 						Purchase Order

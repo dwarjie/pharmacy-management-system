@@ -13,6 +13,8 @@ module.exports = (app) => {
 
 	// retrieve medicine using product code
 	router.get("/pos", medicine.findProductCode);
+	// retrieve medicine for Purchase Order
+	router.get("/purchase-order", medicine.findByTitleSupplier);
 	// retrieve category for updating medicine
 	router.get("/:id", category.findOne);
 

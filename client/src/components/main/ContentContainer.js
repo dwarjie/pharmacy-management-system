@@ -47,6 +47,9 @@ import ManagePOS from "./navigation/pos/ManagePOS";
 import ViewSale from "./navigation/pos/ViewSale";
 import PrintInvoice from "./navigation/print/PrintInvoice";
 
+// Inventory Tab
+import PurchaseOrder from "./navigation/purchase_order/PurchaseOrder";
+
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
 import UpdateUser from "./navigation/user/UpdateUser";
@@ -126,6 +129,12 @@ const ContentContainer = (props) => {
 						<Route path="/sales/pos/print" element={<PrintInvoice />} />
 						<Route path="/sales/sales-list" element={<ManagePOS />} />
 						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
+					</Route>
+					<Route element={<ProtectedURL role={"inventory"} />}>
+						<Route
+							path="/inventory/purchase-order"
+							element={<PurchaseOrder />}
+						/>
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>
