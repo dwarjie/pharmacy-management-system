@@ -277,7 +277,10 @@ exports.findByTitleSupplier = (req, res) => {
 
 	Medicine.findAll({
 		include: ["subCategory", "supplier", "unit"],
-		where: { ProductName: { [Op.like]: `%${title}%` }, supplierId: supplierId },
+		where: {
+			ProductName: { [Op.startsWith]: `${title}%` },
+			supplierId: supplierId,
+		},
 	})
 		.then((data) => {
 			res.send(data);

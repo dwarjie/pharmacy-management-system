@@ -5,20 +5,54 @@ import MedicineService from "../../../../services/MedicineService";
 const PurchaseOrder = () => {
 	const [searchProduct, setSearchProduct] = useState("");
 	const [supplierProducts, setSupplierProducts] = useState([]);
+	const [orderList, setOrderList] = useState([]);
 
-	const handleSearchProduct = (event) => {
-		setSearchProduct(event.target.value);
-		getAllProducts(event.target.value);
-	};
-
-	const getAllProducts = (title) => {
-		MedicineService.getByTitleAndSupplier(title, 2)
+	// get all the products in search
+	const getAllProducts = () => {
+		MedicineService.getByTitleAndSupplier(searchProduct, 1)
 			.then((response) => {
 				console.log(response.data);
+				setSupplierProducts(response.data);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	// this function will check if order already exists in order list
+	const checkOrderExist = (selectedProduct) => {
+		let isExist = false;
+		// check if the medicineId already exists in order list
+		orderList.forEach((order) => {
+			if (order.medicineId === selectedProduct.id) {
+				isExist = true;
+			}
+		});
+
+		return isExist;
+	};
+
+	// add the product into orderList
+	const addProduct = (selectedProduct) => {
+		if (!checkOrderExist(selectedProduct)) {
+			// not yet exist
+			let initialSelectedProduct = {
+				Quantity: 1,
+				Total: selectedProduct.SellingPrice,
+				medicineId: selectedProduct.id,
+				purchaseId: 0,
+				product: selectedProduct.medicine,
+			};
+			setOrderList([...orderList, initialSelectedProduct]);
+		}
+		console.log(selectedProduct);
+	};
+
+	// handle the searching
+	const handleSearchProduct = (event) => {
+		if (event.target.value.trim() === "") setSupplierProducts([]);
+		setSearchProduct(event.target.value);
+		if (searchProduct.trim() !== "") getAllProducts();
 	};
 
 	return (
@@ -27,18 +61,42 @@ const PurchaseOrder = () => {
 				<OrderInformation
 					searchProduct={searchProduct}
 					handleSearchProduct={handleSearchProduct}
+					supplierProducts={supplierProducts}
+					addProduct={addProduct}
 				/>
 			</div>
 			<div className="h-75 border border-dark rounded simple-shadow mt-3">
 				<div className="table-responsive max-height-100">
-					<ProductTable />
+					<ProductTable addProduct={addProduct} />
 				</div>
 			</div>
 		</div>
 	);
 };
 
-const OrderInformation = ({ searchProduct, handleSearchProduct }) => {
+const OrderInformation = ({
+	searchProduct,
+	supplierProducts,
+	handleSearchProduct,
+	addProduct,
+}) => {
+	const searchData = () => {
+		if (searchProduct === "") return;
+
+		return (
+			supplierProducts &&
+			supplierProducts.slice(0, 10).map((item, index) => (
+				<div
+					className="dropdown-row"
+					key={index}
+					onClick={() => addProduct(item)}
+				>
+					{item.ProductName}
+				</div>
+			))
+		);
+	};
+
 	return (
 		<>
 			<div className="col-sm-12 col-md-4">
@@ -59,7 +117,7 @@ const OrderInformation = ({ searchProduct, handleSearchProduct }) => {
 						</button>
 					</div> */}
 				</div>
-				<div className="dropdown-items"></div>
+				<div className="dropdown-items">{searchData()}</div>
 			</div>
 			<div className="col-sm-12 col-md-3">
 				<label className="required" htmlFor="">
