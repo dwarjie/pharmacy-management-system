@@ -160,7 +160,7 @@ const MaintenanceModule = () => {
 				</li>
 				<li>
 					<Link to={"/pharmacy/maintenance/medicine"} className="dropdown-item">
-						Add Medicine
+						Add Product
 					</Link>
 				</li>
 				<li>
@@ -168,7 +168,7 @@ const MaintenanceModule = () => {
 						to={"/pharmacy/maintenance/medicine/medicine-list"}
 						className="dropdown-item"
 					>
-						Medicine List
+						Product List
 					</Link>
 				</li>
 			</ul>

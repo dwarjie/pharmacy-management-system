@@ -10,14 +10,14 @@ const getAllVAT = () => {
 	return http.get("/vat");
 };
 
-const deleteVAT = (data) => {
+const updateVAT = (data) => {
 	return http.put(`/vat`, data);
 };
 
 const VatService = {
 	createVAT,
 	getAllVAT,
-	deleteVAT,
+	updateVAT,
 };
 
 export default VatService;

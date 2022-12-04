@@ -6,20 +6,20 @@ const Handler = db.handler;
 exports.create = (req, res) => {
 	const handler = {
 		Category: req.body.Category,
-		FirstName: req.body.FirstName,
-		LastName: req.body.LastName,
+		FirstName: req.body.FirstName.replace(/\s+/g, " ").trim(),
+		LastName: req.body.LastName.replace(/\s+/g, " ").trim(),
 		Sex: req.body.Sex,
-		City: req.body.City,
-		ZIP: req.body.ZIP,
-		Address: req.body.Address,
-		Mobile: req.body.Mobile,
+		City: req.body.City.replace(/\s+/g, " ").trim(),
+		ZIP: req.body.ZIP.replace(/\s+/g, " ").trim(),
+		Address: req.body.Address.replace(/\s+/g, " ").trim(),
+		Mobile: req.body.Mobile.replace(/\s+/g, " ").trim(),
 		Email: req.body.Email,
 	};
 
 	// check if handler already exists
 	// else create new handler
 	Handler.findOrCreate({
-		where: { FirstName: req.body.FirstName, LastName: req.body.LastName },
+		where: { FirstName: handler.FirstName, LastName: handler.LastName },
 		defaults: { ...handler },
 	})
 		.then(([data, created]) => {
@@ -35,9 +35,18 @@ exports.create = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({
-				message: err.message || `Some error occurred while creating handler`,
-			});
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error creating handler.`,
+					});
+					break;
+			}
 		});
 };
 
@@ -58,7 +67,19 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
 	const id = req.params.id;
 
-	Handler.update(req.body, { where: { id: id } })
+	const handler = {
+		Category: req.body.Category,
+		FirstName: req.body.FirstName.replace(/\s+/g, " ").trim(),
+		LastName: req.body.LastName.replace(/\s+/g, " ").trim(),
+		Sex: req.body.Sex,
+		City: req.body.City.replace(/\s+/g, " ").trim(),
+		ZIP: req.body.ZIP.replace(/\s+/g, " ").trim(),
+		Address: req.body.Address.replace(/\s+/g, " ").trim(),
+		Mobile: req.body.Mobile.replace(/\s+/g, " ").trim(),
+		Email: req.body.Email,
+	};
+
+	Handler.update(handler, { where: { id: id } })
 		.then((row) => {
 			if (row != 1) {
 				res.send({
@@ -68,6 +89,7 @@ exports.update = (req, res) => {
 
 			res.send({
 				message: `Updated successfully.`,
+				data: row,
 			});
 		})
 		.catch((err) => {

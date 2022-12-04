@@ -45,8 +45,10 @@ const Patient = (props) => {
 		PatientService.createPatient(newPatient)
 			.then((response) => {
 				console.log(response.data);
-				refreshForm();
 				setAlertMessage(response.data.message);
+				if (response.data.data) {
+					refreshForm();
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -59,8 +61,11 @@ const Patient = (props) => {
 		PatientService.updatePatient(newPatient.id, newPatient)
 			.then((response) => {
 				console.log(response.data);
-				alert(response.data.message);
-				navigate(-1);
+				if (response.data.data) {
+					alert(response.data.message);
+					navigate(-1);
+				}
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -171,7 +176,7 @@ const Patient = (props) => {
 						</div>
 					</div>
 					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
+						<div className="col-sm-12 col-md-9">
 							<label className="required" htmlFor="Address">
 								Address:
 							</label>
@@ -185,7 +190,7 @@ const Patient = (props) => {
 								required
 							/>
 						</div>
-						<div className="col-sm-12 col-md">
+						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="city">City:</label>
 							<input
 								type="text"
@@ -195,7 +200,7 @@ const Patient = (props) => {
 								value={newPatient.City}
 								onChange={handleInputChange}
 							/>
-						</div>
+						</div> */}
 						<div className="col-sm-12 col-md">
 							<label htmlFor="ZIP">ZIP:</label>
 							<input
@@ -215,6 +220,9 @@ const Patient = (props) => {
 							</label>
 							<input
 								type="text"
+								pattern="[0-9]+"
+								minLength={11}
+								maxLength={11}
 								className="form-control form-input"
 								name="Mobile"
 								id="Mobile"
@@ -224,15 +232,15 @@ const Patient = (props) => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="EmergencyContact">
-								Emergency Contact:
-							</label>
+							<label htmlFor="EmergencyContact">Emergency Contact:</label>
 							<input
 								type="text"
+								pattern="[0-9]+"
+								minLength={11}
+								maxLength={11}
 								className="form-control form-input"
 								name="EmergencyContact"
 								id="EmergencyContact"
-								required
 								value={newPatient.EmergencyContact}
 								onChange={handleInputChange}
 							/>

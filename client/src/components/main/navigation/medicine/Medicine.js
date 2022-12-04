@@ -72,9 +72,11 @@ const Medicine = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				// reset the form
-				setMedicine(props.initialMedicine);
-				setActiveDropDownValue(props.initialDropDownValue);
 				setAlertMessage(response.data.message);
+				if (response.data.data) {
+					setMedicine(props.initialMedicine);
+					setActiveDropDownValue(props.initialDropDownValue);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -270,7 +272,7 @@ const Medicine = (props) => {
 								}}
 							>
 								{/* check if props category has value
-									if yes, don't show the default value */}
+									if yes, don'i show the default value */}
 								{props.initialDropDownValue.category === "" ? (
 									<option disabled={true} hidden value="">
 										Select category
@@ -291,6 +293,40 @@ const Medicine = (props) => {
 									))}
 							</select>
 						</div>
+						<div className="col-sm-12 col-md">
+							<label className="required" htmlFor="unitId">
+								Unit of Measure:
+							</label>
+							<select
+								name="unitId"
+								id="unitId"
+								className="form-select form-input"
+								required
+								value={activeDropDownValue.unitId}
+								onChange={(event) => {
+									let data = parseDropdownValue(event);
+									handleSelectChange(event);
+									setMedicine({ ...medicine, unitId: data.id });
+								}}
+							>
+								<option disabled hidden value="">
+									Select Unit
+								</option>
+								{extraModel.unit &&
+									extraModel.unit.map((item, index) => (
+										<option
+											className="dropdown-item"
+											key={index}
+											value={item.UnitName}
+											data-value={JSON.stringify(item)}
+										>
+											{item.UnitName}
+										</option>
+									))}
+							</select>
+						</div>
+					</div>
+					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="subCategoryId">
 								Sub Category:
@@ -336,6 +372,21 @@ const Medicine = (props) => {
 									))}
 							</select>
 						</div>
+						<div className="col-sm-12 col-md">
+							<label className="required" htmlFor="SellingPrice">
+								Selling Price:
+							</label>
+							<input
+								type="text"
+								className="form-control form-input"
+								name="SellingPrice"
+								id="SellingPrice"
+								value={medicine.SellingPrice}
+								onChange={handleInputChange}
+								disabled
+								required
+							/>
+						</div>
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
@@ -353,20 +404,32 @@ const Medicine = (props) => {
 								required
 							/>
 						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="SellingPrice">
-								Selling Price:
+						<div className="col-sm-12 col-md-6">
+							<label className="required" htmlFor="status">
+								Status:
 							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="SellingPrice"
-								id="SellingPrice"
-								value={medicine.SellingPrice}
-								onChange={handleInputChange}
-								disabled
+							<select
+								className="form-select form-input"
+								name="status"
+								id="status"
 								required
-							/>
+								value={status}
+								onChange={(event) => {
+									let data = event.target.value;
+									setStatus(data);
+									setMedicine({
+										...medicine,
+										Status: data === "Active" ? 1 : 0,
+									});
+								}}
+							>
+								{statusList &&
+									statusList.map((item, index) => (
+										<option className="dropdown-item" key={index} value={item}>
+											{item}
+										</option>
+									))}
+							</select>
 						</div>
 					</div>
 					<div className="row mb-3">
@@ -402,74 +465,13 @@ const Medicine = (props) => {
 									))}
 							</select>
 						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="unitId">
-								Unit of Measure:
-							</label>
-							<select
-								name="unitId"
-								id="unitId"
-								className="form-select form-input"
-								required
-								value={activeDropDownValue.unitId}
-								onChange={(event) => {
-									let data = parseDropdownValue(event);
-									handleSelectChange(event);
-									setMedicine({ ...medicine, unitId: data.id });
-								}}
-							>
-								<option disabled hidden value="">
-									Select Unit
-								</option>
-								{extraModel.unit &&
-									extraModel.unit.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={item.UnitName}
-											data-value={JSON.stringify(item)}
-										>
-											{item.UnitName}
-										</option>
-									))}
-							</select>
-						</div>
-					</div>
-					<div className="row mb-3">
-						<div className="col-sm-12 col-md-6">
-							<label className="required" htmlFor="status">
-								Status:
-							</label>
-							<select
-								className="form-select form-input"
-								name="status"
-								id="status"
-								required
-								value={status}
-								onChange={(event) => {
-									let data = event.target.value;
-									setStatus(data);
-									setMedicine({
-										...medicine,
-										Status: data === "Active" ? 1 : 0,
-									});
-								}}
-							>
-								{statusList &&
-									statusList.map((item, index) => (
-										<option className="dropdown-item" key={index} value={item}>
-											{item}
-										</option>
-									))}
-							</select>
-						</div>
 						<div className="col-sm-12 col-md-3">
 							<label htmlFor="ReorderPoint" className="required">
 								Reorder Point:
 							</label>
 							<input
 								type="number"
-								min={1}
+								min={medicine.SafetyStock}
 								className="form-control form-input"
 								name="ReorderPoint"
 								id="ReorderPoint"
@@ -485,6 +487,7 @@ const Medicine = (props) => {
 							<input
 								type="number"
 								min={1}
+								max={medicine.ReorderPoint}
 								className="form-control form-input"
 								name="SafetyStock"
 								id="SafetyStock"

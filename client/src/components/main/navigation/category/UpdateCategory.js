@@ -8,6 +8,7 @@ const UpdateCategory = () => {
 	const initialCategory = {
 		id: null,
 		CategoryName: "",
+		subCategory: [],
 	};
 	// initial state for the category
 	let location = useLocation();
@@ -21,6 +22,7 @@ const UpdateCategory = () => {
 		setNewCategory({
 			id: oldCategory.id,
 			CategoryName: oldCategory.CategoryName,
+			subCategory: oldCategory.subCategory,
 		});
 	}, []);
 
@@ -43,6 +45,8 @@ const UpdateCategory = () => {
 
 	// delete the category
 	const deleteCategory = () => {
+		if (newCategory.subCategory.length !== 0)
+			return alert("Category has sub-categories."); // don't delete if is has sub category
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -91,7 +95,7 @@ const UpdateCategory = () => {
 				</div>
 				<div className="p-3">
 					<form
-						className="col-10 pb-5"
+						className="col-11 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => updateCategory(event)}
 					>
 						<label className="required" htmlFor="CategoryName">

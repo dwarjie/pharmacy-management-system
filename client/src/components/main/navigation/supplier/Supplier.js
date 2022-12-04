@@ -141,10 +141,13 @@ const Supplier = () => {
 							</div>
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="Mobile">
-									Mobile #:
+									Contact #:
 								</label>
 								<input
 									type="text"
+									pattern="[0-9]+"
+									minLength={11}
+									maxLength={11}
 									className="form-control form-input"
 									name="Mobile"
 									id="Mobile"
@@ -170,9 +173,12 @@ const Supplier = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label htmlFor="Phone">Phone #:</label>
+								<label htmlFor="Phone">Alternative Contact #:</label>
 								<input
 									type="text"
+									pattern="[0-9]+"
+									minLength={7}
+									maxLength={7}
 									className="form-control form-input"
 									name="Phone"
 									id="Phone"
@@ -181,9 +187,7 @@ const Supplier = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
-								<label className="required" htmlFor="Email">
-									Email:
-								</label>
+								<label htmlFor="Email">Email:</label>
 								<input
 									type="email"
 									className="form-control form-input"
@@ -191,7 +195,6 @@ const Supplier = () => {
 									id="Email"
 									value={newSupplier.Email}
 									onChange={handleInputChange}
-									required
 								/>
 							</div>
 						</div>
@@ -205,14 +208,14 @@ const Supplier = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+					{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 						<label htmlFor="supplier-search">Search:</label>
 						<input
 							type="text"
 							className="form-control form-input"
 							id="supplier-search"
 						/>
-					</form>
+					</form> */}
 					<table className="table">
 						<thead>
 							<tr>

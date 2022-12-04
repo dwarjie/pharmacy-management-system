@@ -23,8 +23,10 @@ const Handler = (props) => {
 		HandlerService.createHandler(handler)
 			.then((response) => {
 				console.log(response.data);
-				setHandler(initialHandler);
 				setAlertMessage(response.data.message);
+				if (response.data.data) {
+					setHandler(initialHandler);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -38,8 +40,11 @@ const Handler = (props) => {
 		HandlerService.updateHandler(handler.id, handler)
 			.then((response) => {
 				console.log(response.data);
-				alert(response.data.message);
-				navigate(-1);
+				setAlertMessage(response.data.message);
+				if (response.data.data) {
+					alert(response.data.message);
+					navigate(-1);
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -113,7 +118,7 @@ const Handler = (props) => {
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Category">
-								Category:
+								Profession:
 							</label>
 							<select
 								name="Category"
@@ -123,7 +128,7 @@ const Handler = (props) => {
 								onChange={handleChangeEvent}
 								required
 							>
-								<DropDownDefaultOption content={"Select Category"} />
+								<DropDownDefaultOption content={"Select Profession"} />
 								<option value="NCM">NCM</option>
 								<option value="Doctor">Doctor</option>
 							</select>
@@ -148,7 +153,23 @@ const Handler = (props) => {
 					</div>
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
-							<label htmlFor="City">City:</label>
+							<label className="required" htmlFor="Address">
+								Address Line 1:
+							</label>
+							<input
+								type="text"
+								className="form-control form-input"
+								name="Address"
+								id="Address"
+								value={handler.Address}
+								onChange={handleChangeEvent}
+								required
+							/>
+						</div>
+					</div>
+					<div className="row mb-3">
+						<div className="col-sm-12 col-md">
+							<label htmlFor="City">Address Line 2:</label>
 							<input
 								type="text"
 								className="form-control form-input"
@@ -179,36 +200,6 @@ const Handler = (props) => {
 						</div>
 					</div>
 					<div className="row mb-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="Address">
-								Address:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="Address"
-								id="Address"
-								value={handler.Address}
-								onChange={handleChangeEvent}
-								required
-							/>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="Mobile">
-								Mobile:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="Mobile"
-								id="Mobile"
-								value={handler.Mobile}
-								onChange={handleChangeEvent}
-								required
-							/>
-						</div>
-					</div>
-					<div className="row mb-3">
 						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="phone">Phone:</label>
 							<input
@@ -218,6 +209,23 @@ const Handler = (props) => {
 								required
 							/>
 						</div> */}
+						<div className="col-sm-12 col-md">
+							<label className="required" htmlFor="Mobile">
+								Mobile:
+							</label>
+							<input
+								type="text"
+								pattern="[0-9]+"
+								minLength={11}
+								maxLength={11}
+								className="form-control form-input"
+								name="Mobile"
+								id="Mobile"
+								value={handler.Mobile}
+								onChange={handleChangeEvent}
+								required
+							/>
+						</div>
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Email">Email:</label>
 							<input

@@ -14,9 +14,8 @@ const VAT = () => {
 		VatName: "",
 		VatAmount: 0,
 	};
-	let navigate = useNavigate();
 
-	const [vats, setVats] = useState([]);
+	// const [vats, setVats] = useState([]);
 	const [newVAT, setNewVAT] = useState(initialVat);
 	const [alertMessage, setAlertMessage] = useState("");
 
@@ -25,17 +24,17 @@ const VAT = () => {
 	}, []);
 
 	// create a new VAT
-	const createVAT = (event) => {
+	const updateVAT = (event) => {
 		event.preventDefault();
 
 		// ask for confirmation
-		if (!AlertPrompt()) return;
+		// if (!AlertPrompt()) return;
 
 		let data = {
 			VatName: newVAT.VatName,
 			VatAmount: newVAT.VatAmount,
 		};
-		VatService.createVAT(data)
+		VatService.updateVAT(data)
 			.then((response) => {
 				console.log(response.data);
 				refreshList();
@@ -51,30 +50,35 @@ const VAT = () => {
 		VatService.getAllVAT()
 			.then((response) => {
 				console.log(response.data);
-				setVats(response.data);
+				// setVats(response.data);
+				setNewVAT({
+					id: response.data.id,
+					VatName: response.data.VatName,
+					VatAmount: response.data.VatAmount,
+				});
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
-	const deleteVAT = (vat) => {
-		// ask for confirmation
-		if (!AlertPrompt()) return;
+	// const deleteVAT = (vat) => {
+	// 	// ask for confirmation
+	// 	if (!AlertPrompt()) return;
 
-		let data = {
-			id: vat.id,
-		};
-		VatService.deleteVAT(data)
-			.then((response) => {
-				console.log(response.data);
-				refreshList();
-				setAlertMessage(response.data.message);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
+	// 	let data = {
+	// 		id: vat.id,
+	// 	};
+	// 	VatService.deleteVAT(data)
+	// 		.then((response) => {
+	// 			console.log(response.data);
+	// 			refreshList();
+	// 			setAlertMessage(response.data.message);
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// };
 
 	// handle input change event for forms
 	const handleInputChange = (event) => {
@@ -84,8 +88,8 @@ const VAT = () => {
 
 	// refresh the page
 	const refreshList = () => {
-		setVats([]);
-		setNewVAT(initialVat);
+		// setVats([]);
+		// setNewVAT(initialVat);
 		getAllVATs();
 	};
 
@@ -107,7 +111,7 @@ const VAT = () => {
 				<div className="p-3">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"
-						onSubmit={(event) => createVAT(event)}
+						onSubmit={(event) => updateVAT(event)}
 					>
 						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
@@ -119,6 +123,7 @@ const VAT = () => {
 									className="form-control form-input"
 									name="VatName"
 									id="VatName"
+									disabled
 									value={newVAT.VatName}
 									onChange={handleInputChange}
 									required
@@ -140,11 +145,13 @@ const VAT = () => {
 								/>
 							</div>
 						</div>
-						<button className="btn btn-primary simple-shadow mt-3">Add</button>
+						<button className="btn btn-primary simple-shadow mt-3">
+							Update
+						</button>
 					</form>
 				</div>
 			</div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
+			{/* <div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
 				<div className="p-3">
 					<h4>VAT List</h4>
 					<hr />
@@ -177,7 +184,7 @@ const VAT = () => {
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };

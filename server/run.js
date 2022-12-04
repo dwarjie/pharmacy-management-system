@@ -12,6 +12,14 @@ exports.Run = async () => {
 	console.log(onlyOR);
 };
 
+exports.VAT = async (vat) => {
+	vat.create({
+		id: 1,
+		VatName: "Tax",
+		VatAmount: 12,
+	});
+};
+
 exports.Role = async (role) => {
 	role.create({
 		id: 1,

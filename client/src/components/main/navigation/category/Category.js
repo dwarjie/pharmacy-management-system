@@ -14,6 +14,7 @@ const Category = () => {
 	const initialCategory = {
 		id: null,
 		CategoryName: "",
+		subCategory: [],
 	};
 	let navigate = useNavigate();
 
@@ -62,7 +63,7 @@ const Category = () => {
 	};
 
 	const setActiveCategory = (category) => {
-		setCategory(category.CategoryName);
+		setCategory(category);
 		navigate(`/pharmacy/maintenance/category/${category.id}`, {
 			state: {
 				category: category,
@@ -165,14 +166,14 @@ const CategoryList = (props) => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+				{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="manufacturer-search">Search:</label>
 					<input
 						type="text"
 						className="form-control form-input"
 						id="manufacturer-search"
 					/>
-				</form>
+				</form> */}
 				<table className="table table-hover">
 					<thead>
 						<tr>

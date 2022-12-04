@@ -135,7 +135,7 @@ const Discount = () => {
 						<div className="row mt-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="DiscountAmount">
-									Discount Amount:
+									Discount Value:
 								</label>
 								<input
 									type="number"

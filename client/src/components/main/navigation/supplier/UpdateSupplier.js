@@ -89,10 +89,13 @@ const UpdateSupplier = () => {
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Mobile">
-								Mobile #:
+								Contact #:
 							</label>
 							<input
 								type="text"
+								minLength={11}
+								maxLength={11}
+								pattern="[0-9]+"
 								className="form-control form-input"
 								name="Mobile"
 								id="Mobile"
@@ -122,6 +125,9 @@ const UpdateSupplier = () => {
 							<input
 								type="text"
 								className="form-control form-input"
+								minLength={7}
+								maxLength={7}
+								pattern="[0-9]+"
 								name="Phone"
 								id="Phone"
 								value={supplier.Phone}
@@ -129,9 +135,7 @@ const UpdateSupplier = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="Email">
-								Email:
-							</label>
+							<label htmlFor="Email">Email:</label>
 							<input
 								type="email"
 								className="form-control form-input"
@@ -139,7 +143,6 @@ const UpdateSupplier = () => {
 								id="Email"
 								value={supplier.Email}
 								onChange={handleInputChange}
-								required
 							/>
 						</div>
 					</div>

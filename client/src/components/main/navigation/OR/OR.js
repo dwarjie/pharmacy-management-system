@@ -20,6 +20,12 @@ const OR = () => {
 		getCurrentOR();
 	}, [editMode]);
 
+	// if the start is changing
+	useEffect(() => {
+		let start = parseInt(valueOR.StartOR);
+		setValueOR((prevState) => ({ ...prevState, CurrentOR: (start += 1) }));
+	}, [valueOR.StartOR]);
+
 	// get the current OR value from database
 	const getCurrentOR = () => {
 		ORService.getCurrentOR()
@@ -33,8 +39,11 @@ const OR = () => {
 	};
 
 	// update current OR
-	const updateCurrentOR = (event) => {
+	const updateCurrentOR = async (event) => {
 		event.preventDefault();
+
+		if (valueOR.StartOR >= valueOR.MaxOR)
+			return alert("End should be greated than Start.");
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -48,6 +57,22 @@ const OR = () => {
 				console.log(err);
 			});
 	};
+
+	// const computeCurrentOR = () => {
+	// 	let start = valueOR.StartOR;
+	// 	let end = valueOR.MaxOR;
+	// 	let current = valueOR.CurrentOR;
+
+	// 	if (start > end) return alert("End should be greated than Start."); // check if start < end
+
+	// 	// check if OR need to be updated
+	// 	if (current >= end - 1) return 0;
+
+	// 	return setValueOR((prevState) => ({
+	// 		...prevState,
+	// 		CurrentOR: (start += 1),
+	// 	}));
+	// };
 
 	// set the edit mode to true
 	// enable the forms and update button
@@ -88,6 +113,7 @@ const OR = () => {
 								type="number"
 								className="form-control form-input"
 								name="StartOR"
+								min={0}
 								id="StartOR"
 								disabled={editMode === true ? false : true}
 								value={valueOR.StartOR}
@@ -99,11 +125,12 @@ const OR = () => {
 					<div className="row mb-3">
 						<div className="col-sm-12 col-md-6">
 							<label className="required" htmlFor="MaxOR">
-								Max:
+								End
 							</label>
 							<input
 								type="number"
 								className="form-control form-input"
+								min={valueOR.StartOR}
 								name="MaxOR"
 								id="MaxOR"
 								disabled={editMode === true ? false : true}
@@ -123,9 +150,8 @@ const OR = () => {
 								className="form-control form-input"
 								name="CurrentOR"
 								id="CurrentOR"
-								disabled={editMode === true ? false : true}
+								disabled={true}
 								value={valueOR.CurrentOR}
-								onChange={handleInputChange}
 								required
 							/>
 						</div>

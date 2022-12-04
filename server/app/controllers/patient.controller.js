@@ -41,9 +41,18 @@ exports.create = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({
-				message: err.message || `Error creating patient`,
-			});
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error creating patient.`,
+					});
+					break;
+			}
 		});
 };
 
@@ -71,6 +80,7 @@ exports.update = (req, res) => {
 			} else {
 				res.send({
 					message: `Updated successfully.`,
+					data: row,
 				});
 			}
 		})

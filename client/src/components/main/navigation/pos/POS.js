@@ -677,10 +677,6 @@ const SearchProductCode = (props) => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	if (searchCode !== "") findByCode(searchCode);
-	// }, [searchCode]);
-
 	return (
 		<input
 			type="text"

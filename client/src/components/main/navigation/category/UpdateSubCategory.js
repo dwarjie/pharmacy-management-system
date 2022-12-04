@@ -86,21 +86,6 @@ const UpdateSubCategory = () => {
 					/>
 					<div className="row mt-3">
 						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="MarkUp">
-								Markup:
-							</label>
-							<input
-								type="number"
-								min={1}
-								className="form-control form-input"
-								name="MarkUp"
-								id="MarkUp"
-								value={subCategory.MarkUp}
-								onChange={handleInputChange}
-								required
-							/>
-						</div>
-						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="MarkUpUnit">
 								Unit:
 							</label>
@@ -115,6 +100,21 @@ const UpdateSubCategory = () => {
 								<option value="amount">Amount</option>
 								<option value="%">%</option>
 							</select>
+						</div>
+						<div className="col-sm-12 col-md">
+							<label className="required" htmlFor="MarkUp">
+								Markup:
+							</label>
+							<input
+								type="number"
+								min={1}
+								className="form-control form-input"
+								name="MarkUp"
+								id="MarkUp"
+								value={subCategory.MarkUp}
+								onChange={handleInputChange}
+								required
+							/>
 						</div>
 					</div>
 					<button className="btn btn-primary simple-shadow me-3 mt-3">

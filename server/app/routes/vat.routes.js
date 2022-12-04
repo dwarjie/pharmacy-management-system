@@ -4,8 +4,10 @@ module.exports = (app) => {
 	var router = require("express").Router();
 
 	router.post("/", vat.create);
-	router.get("/", vat.findAll);
-	router.put("/", vat.delete);
+	router.get("/", vat.findOne);
+	router.put("/", vat.update);
+	// router.get("/", vat.findAll);
+	// router.put("/", vat.delete);
 
 	app.use("/api/vat", router);
 };

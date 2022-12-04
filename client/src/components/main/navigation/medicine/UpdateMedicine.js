@@ -73,7 +73,7 @@ const UpdateMedicine = () => {
 
 	return (
 		<Medicine
-			title={"Update Medicine"}
+			title={"Update Product"}
 			initialMedicine={medicine}
 			initialDropDownValue={dropDownValue}
 			status={checkStatus}

@@ -8,7 +8,7 @@ const duplicate = require("../util/CheckDuplicate");
 exports.create = (req, res) => {
 	// create a new unit
 	const unit = {
-		UnitName: req.body.UnitName,
+		UnitName: req.body.UnitName.replace(/\s+/g, " ").trim(),
 	};
 
 	// check if unit already
@@ -74,7 +74,11 @@ exports.findOne = (req, res) => {
 exports.update = async (req, res) => {
 	const id = req.params.id;
 
-	Unit.update(req.body, { where: { id: id } })
+	const unit = {
+		UnitName: req.body.UnitName.replace(/\s+/g, " ").trim(),
+	};
+
+	Unit.update(unit, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is not equals to 1
 			if (row == 1) {

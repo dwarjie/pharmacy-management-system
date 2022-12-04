@@ -7,11 +7,11 @@ const Supplier = db.supplier;
 exports.create = (req, res) => {
 	// create a new Supplier
 	const supplier = {
-		SupplierName: req.body.SupplierName,
-		Address: req.body.Address,
+		SupplierName: req.body.SupplierName.replace(/\s+/g, " ").trim(),
+		Address: req.body.Address.replace(/\s+/g, " ").trim(),
 		Mobile: req.body.Mobile,
 		Phone: req.body.Phone,
-		Email: req.body.Email,
+		Email: req.body.Email.replace(/\s+/g, " ").trim(),
 	};
 
 	// !check if supplier already exists
@@ -85,7 +85,15 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
 	const id = req.params.id;
 
-	Supplier.update(req.body, { where: { id: id } })
+	const supplier = {
+		SupplierName: req.body.SupplierName.replace(/\s+/g, " ").trim(),
+		Address: req.body.Address.replace(/\s+/g, " ").trim(),
+		Mobile: req.body.Mobile,
+		Phone: req.body.Phone,
+		Email: req.body.Email.replace(/\s+/g, " ").trim(),
+	};
+
+	Supplier.update(supplier, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is not equals to 1
 			if (row != 1) {
@@ -95,14 +103,14 @@ exports.update = (req, res) => {
 			}
 
 			res.send({
-				message: `Supplier was updated successfully`,
+				message: `Updated successfully`,
 			});
 		})
 		.catch((err) => {
 			switch (err.name) {
 				case "SequelizeUniqueConstraintError":
 					res.send({
-						message: `Supplier name or email already exist.`,
+						message: `Record already exist.`,
 					});
 					break;
 				default:

@@ -7,7 +7,7 @@ const duplicate = require("../util/CheckDuplicate");
 // create a new Discount
 exports.create = (req, res) => {
 	const discount = {
-		DiscountName: req.body.DiscountName,
+		DiscountName: req.body.DiscountName.replace(/\s+/g, " ").trim(),
 		DiscountAmount: req.body.DiscountAmount,
 		DiscountType: req.body.DiscountType,
 	};
@@ -56,7 +56,13 @@ exports.findAll = (req, res) => {
 exports.update = async (req, res) => {
 	const id = req.params.id;
 
-	Discount.update(req.body, { where: { id: id } })
+	const discount = {
+		DiscountName: req.body.DiscountName.replace(/\s+/g, " ").trim(),
+		DiscountAmount: req.body.DiscountAmount,
+		DiscountType: req.body.DiscountType,
+	};
+
+	Discount.update(discount, { where: { id: id } })
 		.then((row) => {
 			if (row == 1) {
 				res.send({

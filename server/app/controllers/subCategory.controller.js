@@ -7,7 +7,7 @@ const duplicate = require("../util/CheckDuplicate");
 // Creating a new SubCategory
 exports.create = (req, res) => {
 	const subCategory = {
-		SubCategoryName: req.body.SubCategoryName,
+		SubCategoryName: req.body.SubCategoryName.replace(/\s+/g, " ").trim(),
 		MarkUp: req.body.MarkUp,
 		MarkUpUnit: req.body.MarkUpUnit,
 		categoryId: req.body.categoryId,
@@ -42,7 +42,14 @@ exports.create = (req, res) => {
 exports.update = async (req, res) => {
 	const id = req.params.id;
 
-	SubCategory.update(req.body, { where: { id: id } })
+	const subCategory = {
+		SubCategoryName: req.body.SubCategoryName.replace(/\s+/g, " ").trim(),
+		MarkUp: req.body.MarkUp,
+		MarkUpUnit: req.body.MarkUpUnit,
+		categoryId: req.body.categoryId,
+	};
+
+	SubCategory.update(subCategory, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is not equals to 1
 			if (row == 1) {

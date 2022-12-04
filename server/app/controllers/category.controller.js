@@ -8,13 +8,13 @@ const duplicate = require("../util/CheckDuplicate");
 exports.create = (req, res) => {
 	// create a new category
 	const category = {
-		CategoryName: req.body.CategoryName,
+		CategoryName: req.body.CategoryName.replace(/\s+/g, " ").trim(),
 	};
 
 	// check if category already exists,
 	// else create a new category
 	Category.findOrCreate({
-		where: { ...category },
+		where: { CategoryName: category.CategoryName },
 		defaults: { ...category },
 	})
 		.then(([data, created]) => {
@@ -76,7 +76,11 @@ exports.findOne = (req, res) => {
 exports.update = async (req, res) => {
 	const id = req.params.id;
 
-	Category.update(req.body, { where: { id: id } })
+	let data = {
+		CategoryName: req.body.CategoryName.replace(/\s+/g, " ").trim(),
+	};
+
+	Category.update(data, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is equals to 1
 			if (row == 1) {

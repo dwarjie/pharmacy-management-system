@@ -8,10 +8,10 @@ const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
 	const medicine = {
-		ProductCode: req.body.ProductCode,
-		ProductName: req.body.ProductName,
-		ProductDetails: req.body.ProductDetails,
-		GenericName: req.body.GenericName,
+		ProductCode: req.body.ProductCode.replace(/\s+/g, " ").trim(),
+		ProductName: req.body.ProductName.replace(/\s+/g, " ").trim(),
+		ProductDetails: req.body.ProductDetails.replace(/\s+/g, " ").trim(),
+		GenericName: req.body.GenericName.replace(/\s+/g, " ").trim(),
 		SupplierPrice: req.body.SupplierPrice,
 		SellingPrice: req.body.SellingPrice,
 		Quantity: req.body.Quantity,
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
 	// else create new product
 	Medicine.findOrCreate({
 		where: {
-			ProductName: req.body.ProductName,
+			ProductName: medicine.ProductName,
 		},
 		defaults: { ...medicine },
 	})
@@ -44,9 +44,18 @@ exports.create = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({
-				message: err.message || `Some error occurred while creating medicine`,
-			});
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: err.message || `Error creating medicine.`,
+					});
+					break;
+			}
 		});
 };
 
@@ -90,7 +99,23 @@ exports.findProductCode = (req, res) => {
 exports.update = async (req, res) => {
 	const id = req.params.id;
 
-	Medicine.update(req.body, { where: { id: id } })
+	const medicine = {
+		ProductCode: req.body.ProductCode.replace(/\s+/g, " ").trim(),
+		ProductName: req.body.ProductName.replace(/\s+/g, " ").trim(),
+		ProductDetails: req.body.ProductDetails.replace(/\s+/g, " ").trim(),
+		GenericName: req.body.GenericName.replace(/\s+/g, " ").trim(),
+		SupplierPrice: req.body.SupplierPrice,
+		SellingPrice: req.body.SellingPrice,
+		Quantity: req.body.Quantity,
+		ReorderPoint: req.body.ReorderPoint,
+		SafetyStock: req.body.SafetyStock,
+		Status: req.body.Status,
+		supplierId: req.body.supplierId,
+		unitId: req.body.unitId,
+		subCategoryId: req.body.subCategoryId,
+	};
+
+	Medicine.update(medicine, { where: { id: id } })
 		.then((row) => {
 			// check if affected row is not equals to 1
 			if (row != 1) {
