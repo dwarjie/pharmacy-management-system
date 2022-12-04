@@ -327,17 +327,17 @@ const POS = (props) => {
 			<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
 				<div className="h-50 border border-dark rounded simple-shadow">
 					<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
+						<SearchProductCode
+							findByCode={findByCode}
+							searchCode={searchCode}
+							setSearchCode={setSearchCode}
+						/>
 						<div className="col-8">
 							<SearchProduct
 								findByTitle={findByTitle}
 								setProducts={setProducts}
 							/>
 						</div>
-						<SearchProductCode
-							findByCode={findByCode}
-							searchCode={searchCode}
-							setSearchCode={setSearchCode}
-						/>
 					</form>
 					<div className="table-responsive max-height-85">
 						<ProductTable
@@ -468,7 +468,8 @@ const OrderInformation = (props) => {
 								</option>
 							))}
 					</select>
-					<select
+					{/* //TODO: CHANGE INTO INPUT, AND REMOVE VAT IF DISCOUNT IS SC OR PWD */}
+					{/* <select
 						className="form-select form-input"
 						name="VATId"
 						id="VATId"
@@ -495,7 +496,7 @@ const OrderInformation = (props) => {
 									{vat.VatName}
 								</option>
 							))}
-					</select>
+					</select> */}
 				</div>
 				<div>
 					<h6 className="text-weight-regular">
