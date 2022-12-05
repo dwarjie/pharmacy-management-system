@@ -34,6 +34,9 @@ db.handler = require("./handler.model")(sequelize, Sequelize);
 db.salesDetail = require("./salesDetail.model")(sequelize, Sequelize);
 db.sales = require("./sales.model")(sequelize, Sequelize);
 
+db.purchaseDetail = require("./purchaseDetails.model")(sequelize, Sequelize);
+db.purchase = require("./purchaseOrder.model")(sequelize, Sequelize);
+
 db.user = require("./user.model")(sequelize, Sequelize);
 // db.role = require("./role.model")(sequelize, Sequelize);
 
@@ -97,6 +100,32 @@ db.salesDetail.belongsTo(db.medicine, {
 db.sales.hasMany(db.salesDetail);
 db.salesDetail.belongsTo(db.sales, {
 	as: "sale",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationship for purchaseDetails with purchase
+
+db.purchase.hasMany(db.purchaseDetail);
+db.purchaseDetail.belongsTo(db.purchase, {
+	as: "purchase",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.supplier.hasMany(db.purchase);
+db.purchase.belongsTo(db.supplier, {
+	as: "supplier",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.medicine.hasMany(db.purchaseDetail);
+db.purchaseDetail.belongsTo(db.medicine, {
+	as: "medicine",
 	foreignKey: {
 		allowNull: false,
 	},

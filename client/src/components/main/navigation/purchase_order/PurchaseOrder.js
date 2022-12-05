@@ -6,13 +6,18 @@ import MedicineService from "../../../../services/MedicineService";
 // icons
 import { MdDelete } from "react-icons/md";
 import SupplierService from "../../../../services/SupplierService";
-import { getCurrentDate } from "../../../../helper/dateHelper";
+import {
+	generateOrderNumber,
+	getCurrentDate,
+} from "../../../../helper/dateHelper";
 import parseDropdownValue from "../../../../helper/parseJSON";
+import PurchaseService from "../../../../services/PurchaseService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const PurchaseOrder = () => {
 	const initialPurchaseOrder = {
 		id: null,
-		POCode: "",
+		POCode: generateOrderNumber(),
 		OrderDate: getCurrentDate(),
 		ItemQty: 0,
 		Status: "pending",
@@ -24,7 +29,7 @@ const PurchaseOrder = () => {
 		supplier: "",
 	};
 
-	const [puchaseOrder, setPurchaseOrder] = useState(initialPurchaseOrder);
+	const [purchaseOrder, setPurchaseOrder] = useState(initialPurchaseOrder);
 	const [searchProduct, setSearchProduct] = useState("");
 	const [supplierProducts, setSupplierProducts] = useState([]);
 	const [orderList, setOrderList] = useState([]);
@@ -33,14 +38,42 @@ const PurchaseOrder = () => {
 		useState(initialDropDownValue);
 
 	useEffect(() => {
-		getALlSuppliers();
+		getAllSuppliers();
 	}, []);
+
+	useEffect(() => {
+		let total = computeTotal();
+		setPurchaseOrder((prevState) => ({ ...prevState, Total: total }));
+	}, [orderList]);
+
+	const createPurchase = async () => {
+		let purchaseId = 0;
+		await PurchaseService.createPurchase(purchaseOrder)
+			.then((response) => {
+				console.log(response.data);
+				purchaseId = response.data.data.id;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		return purchaseId;
+	};
+
+	// create the purchase order
+	const createOrder = async () => {
+		if (!AlertPrompt("Are you sure you want to create this purchase order?"))
+			return;
+
+		let purchaseId = await createPurchase();
+		console.log(purchaseId);
+	};
 
 	// get all the products in search
 	const getAllProducts = () => {
 		MedicineService.getByTitleAndSupplier(
 			searchProduct,
-			puchaseOrder.supplierId
+			purchaseOrder.supplierId
 		)
 			.then((response) => {
 				console.log(response.data);
@@ -52,7 +85,7 @@ const PurchaseOrder = () => {
 	};
 
 	// get all the suppliers
-	const getALlSuppliers = () => {
+	const getAllSuppliers = () => {
 		SupplierService.getSupplier()
 			.then((response) => {
 				console.log(response.data);
@@ -61,6 +94,15 @@ const PurchaseOrder = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	// compute the total amount, vat and discount of the transaction
+	const computeTotal = () => {
+		let total = 0;
+		orderList.map((order, index) => {
+			total += order.Total;
+		});
+		return total.toFixed(2);
 	};
 
 	// this function will check if order already exists in order list
@@ -109,23 +151,31 @@ const PurchaseOrder = () => {
 				<OrderInformation
 					searchProduct={searchProduct}
 					supplierList={supplierList}
-					purchaseOrder={puchaseOrder}
+					purchaseOrder={purchaseOrder}
 					activeDropDownValue={activeDropDownValue}
 					supplierProducts={supplierProducts}
 					handleSearchProduct={handleSearchProduct}
 					addProduct={addProduct}
+					setSearchProduct={setSearchProduct}
+					setSupplierProducts={setSupplierProducts}
 					setPurchaseOrder={setPurchaseOrder}
 					setActiveDropDownValue={setActiveDropDownValue}
 				/>
 			</div>
 			<div className="h-75 border border-dark rounded simple-shadow mt-3">
 				<div className="table-responsive max-height-100">
-					<ProductTable orderList={orderList} setOrderList={setOrderList} />
+					<ProductTable
+						orderList={orderList}
+						purchaseOrder={purchaseOrder}
+						setOrderList={setOrderList}
+					/>
 				</div>
 			</div>
 			<button
 				type="submit"
 				className="btn btn-primary col-12 col-md-1 simple-shadow mt-3 me-3"
+				disabled={orderList.length === 0 ? true : false}
+				onClick={() => createOrder()}
 			>
 				Create
 			</button>
@@ -142,6 +192,8 @@ const OrderInformation = ({
 	handleSearchProduct,
 	addProduct,
 	setPurchaseOrder,
+	setSearchProduct,
+	setSupplierProducts,
 	setActiveDropDownValue,
 }) => {
 	const searchData = () => {
@@ -151,14 +203,19 @@ const OrderInformation = ({
 			supplierProducts &&
 			supplierProducts.slice(0, 10).map((item, index) => (
 				<div
-					className="dropdown-row"
+					className="dropdown-row m-1 cursor-pointer"
 					key={index}
 					onClick={() => addProduct(item)}
 				>
-					{item.ProductName}
+					<h5>{item.ProductName}</h5>
 				</div>
 			))
 		);
+	};
+
+	const resetSearch = () => {
+		setSearchProduct("");
+		setSupplierProducts([]);
 	};
 
 	return (
@@ -166,21 +223,25 @@ const OrderInformation = ({
 			<div className="col-sm-12 col-md-4">
 				<label htmlFor="searchProduct">Search:</label>
 				<div className="search-inner">
-					<input
-						type="text"
-						className="form-control form-input"
-						placeholder="Search Product"
-						name="searchProduct"
-						disabled={purchaseOrder.supplierId ? false : true}
-						value={searchProduct}
-						onChange={handleSearchProduct}
-						required
-					/>
-					{/* <div className="input-group flex-nowrap">
-						<button className="btn btn-secondary" type="button">
-							Search
+					<div className="input-group flex-nowrap">
+						<input
+							type="text"
+							className="form-control form-input"
+							placeholder="Search Product"
+							name="searchProduct"
+							disabled={purchaseOrder.supplierId ? false : true}
+							value={searchProduct}
+							onChange={handleSearchProduct}
+							required
+						/>
+						<button
+							className="btn btn-secondary"
+							type="button"
+							onClick={resetSearch}
+						>
+							Clear
 						</button>
-					</div> */}
+					</div>
 				</div>
 				<div className="dropdown-items">{searchData()}</div>
 			</div>
@@ -240,7 +301,21 @@ const OrderInformation = ({
 	);
 };
 
-const ProductTable = ({ orderList, setOrderList }) => {
+const ProductTable = ({ orderList, purchaseOrder, setOrderList }) => {
+	const getProductTotal = (order) => {
+		order.Total = order.UnitCost * order.Quantity;
+		return order.Total.toFixed(1);
+	};
+
+	const handleQuantityChange = (event, order) => {
+		let value = parseInt(event.target.value);
+		if (value !== 0) {
+			order.Quantity = value;
+		} else {
+			alert("Please input a valid quantity!");
+		}
+	};
+
 	const orderData = () => {
 		return (
 			orderList &&
@@ -253,14 +328,18 @@ const ProductTable = ({ orderList, setOrderList }) => {
 					<td>
 						<input
 							type="number"
-							inputMode="numeric"
-							min={1}
 							className="form-control w-20 p-1"
-							// value={order.Quantity}
+							value={order.Quantity}
+							onChange={(event) => {
+								console.log(orderList[index].Quantity);
+								handleQuantityChange(event, order);
+								getProductTotal(order);
+								orderData();
+							}}
 						/>
 					</td>
 					<td>{order.UnitCost}</td>
-					<td>100</td>
+					<td>{getProductTotal(order)}</td>
 					<td>
 						<span className="px-1">
 							<MdDelete className="icon-size-sm cursor-pointer" />
@@ -296,7 +375,7 @@ const ProductTable = ({ orderList, setOrderList }) => {
 					<td className="no-line text-center">
 						<strong>Total:</strong>
 					</td>
-					<td className="no-line text-right">&#8369; 100.00</td>
+					<td className="no-line text-right">&#8369;{purchaseOrder.Total}</td>
 				</tr>
 			</tbody>
 		</table>

@@ -68,6 +68,9 @@ require("./app/routes/patient.routes")(app);
 require("./app/routes/sale.routes")(app);
 require("./app/routes/salesDetail.routes")(app);
 
+require("./app/routes/purchase.routes")(app);
+require("./app/routes/purchaseDetail.routes")(app);
+
 require("./app/routes/auth.routes")(app);
 
 // set the server port and listen for requests
