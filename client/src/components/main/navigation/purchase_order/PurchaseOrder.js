@@ -46,6 +46,7 @@ const PurchaseOrder = () => {
 	useEffect(() => {
 		let total = computeTotal();
 		setPurchaseOrder((prevState) => ({ ...prevState, Total: total }));
+		countItems();
 	}, [orderList]);
 
 	// create the purchasedetails one by one
@@ -83,6 +84,7 @@ const PurchaseOrder = () => {
 
 		let purchaseId = await createPurchase();
 		createPurchaseDetails(purchaseId);
+		resetPage();
 	};
 
 	// get all the products in search
@@ -119,6 +121,12 @@ const PurchaseOrder = () => {
 			total += order.Total;
 		});
 		return total.toFixed(2);
+	};
+
+	// count all the items in the order list
+	const countItems = () => {
+		let itemCount = orderList.length;
+		setPurchaseOrder((prevState) => ({ ...prevState, ItemQty: itemCount }));
 	};
 
 	// this function will check if order already exists in order list
@@ -159,6 +167,13 @@ const PurchaseOrder = () => {
 		if (event.target.value.trim() === "") setSupplierProducts([]);
 		setSearchProduct(event.target.value);
 		if (searchProduct.trim() !== "") getAllProducts();
+	};
+
+	const resetPage = () => {
+		setPurchaseOrder(initialPurchaseOrder);
+		setSupplierProducts([]);
+		setOrderList([]);
+		setActiveDropDownValue(initialDropDownValue);
 	};
 
 	return (
