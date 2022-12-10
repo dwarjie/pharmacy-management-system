@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
 		},
 		RecieveDate: {
 			type: Sequelize.DATE,
-			allowNull: false,
+			allowNull: true,
 		},
 		Status: {
 			type: Sequelize.STRING,

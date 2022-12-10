@@ -3,12 +3,11 @@ const PurchaseDetail = db.purchaseDetail;
 
 exports.create = (req, res) => {
 	const order = {
-		UnitPrice: req.body.UnitPrice,
 		Quantity: req.body.Quantity,
-		DiscountedPrice: req.body.DiscountedPrice,
 		Total: req.body.Total,
+		ReceivedData: req.body.ReceivedData,
 		medicineId: req.body.medicineId,
-		saleId: req.body.saleId,
+		purchaseId: req.body.purchaseId,
 	};
 
 	PurchaseDetail.create(order)

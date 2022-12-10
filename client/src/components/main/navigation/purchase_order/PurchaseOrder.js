@@ -1,19 +1,20 @@
 // This component will add a purchase order
 import { useEffect, useState } from "react";
-import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
-import MedicineService from "../../../../services/MedicineService";
-
-// icons
-import { MdDelete } from "react-icons/md";
-import SupplierService from "../../../../services/SupplierService";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { checkQuantity } from "../../../../helper/checkQuantity";
 import {
 	generateOrderNumber,
 	getCurrentDate,
 } from "../../../../helper/dateHelper";
+import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import parseDropdownValue from "../../../../helper/parseJSON";
+import MedicineService from "../../../../services/MedicineService";
+import SupplierService from "../../../../services/SupplierService";
 import PurchaseService from "../../../../services/PurchaseService";
-import { AlertPrompt } from "../../../layout/AlertModal.layout";
-import { checkQuantity } from "../../../../helper/checkQuantity";
+import PurchaseDetailService from "../../../../services/PurchaseDetailService";
+
+// icons
+import { MdDelete } from "react-icons/md";
 
 const PurchaseOrder = () => {
 	const initialPurchaseOrder = {
@@ -47,6 +48,20 @@ const PurchaseOrder = () => {
 		setPurchaseOrder((prevState) => ({ ...prevState, Total: total }));
 	}, [orderList]);
 
+	// create the purchasedetails one by one
+	const createPurchaseDetails = async (purchaseId) => {
+		await orderList.forEach((order) => {
+			order.purchaseId = purchaseId;
+			PurchaseDetailService.createPurchaseDetails(order)
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
 	const createPurchase = async () => {
 		let purchaseId = 0;
 		await PurchaseService.createPurchase(purchaseOrder)
@@ -67,7 +82,7 @@ const PurchaseOrder = () => {
 			return;
 
 		let purchaseId = await createPurchase();
-		console.log(purchaseId);
+		createPurchaseDetails(purchaseId);
 	};
 
 	// get all the products in search
@@ -133,7 +148,7 @@ const PurchaseOrder = () => {
 				Total: selectedProduct.SellingPrice,
 				ReceivedData: "",
 				medicineId: selectedProduct.id,
-				purchaseId: 0,
+				purchaseId: null,
 			};
 			setOrderList([...orderList, initialSelectedProduct]);
 		}
