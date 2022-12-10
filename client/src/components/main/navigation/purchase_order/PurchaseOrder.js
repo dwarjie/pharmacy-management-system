@@ -13,6 +13,7 @@ import {
 import parseDropdownValue from "../../../../helper/parseJSON";
 import PurchaseService from "../../../../services/PurchaseService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { checkQuantity } from "../../../../helper/checkQuantity";
 
 const PurchaseOrder = () => {
 	const initialPurchaseOrder = {
@@ -307,13 +308,25 @@ const ProductTable = ({ orderList, purchaseOrder, setOrderList }) => {
 		return order.Total.toFixed(1);
 	};
 
-	const handleQuantityChange = (event, order) => {
+	const handleQuantityChange = (event, i) => {
 		let value = parseInt(event.target.value);
-		if (value !== 0) {
-			order.Quantity = value;
-		} else {
-			alert("Please input a valid quantity!");
-		}
+		if (!checkQuantity(value)) alert("Please input a valid quantity!");
+
+		const newOrderList = orderList.map((order, index) => {
+			if (index !== i) return order;
+
+			if (checkQuantity(value)) {
+				return { ...order, Quantity: value };
+			} else {
+				return order;
+			}
+		});
+		setOrderList(newOrderList);
+		// if (checkQuantity(value)) {
+		// 	order.Quantity = value;
+		// } else {
+		// 	alert("Please input a valid quantity!");
+		// }
 	};
 
 	const orderData = () => {
@@ -331,8 +344,7 @@ const ProductTable = ({ orderList, purchaseOrder, setOrderList }) => {
 							className="form-control w-20 p-1"
 							value={order.Quantity}
 							onChange={(event) => {
-								console.log(orderList[index].Quantity);
-								handleQuantityChange(event, order);
+								handleQuantityChange(event, index);
 								getProductTotal(order);
 								orderData();
 							}}
