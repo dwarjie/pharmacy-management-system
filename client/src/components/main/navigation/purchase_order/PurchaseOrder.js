@@ -302,10 +302,22 @@ const OrderInformation = ({
 	);
 };
 
-const ProductTable = ({ orderList, purchaseOrder, setOrderList }) => {
+const ProductTable = (props) => {
+	const { orderList, purchaseOrder, setOrderList } = props;
+
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
 		return order.Total.toFixed(1);
+	};
+
+	// delete an order in the list
+	// use array map, check the medicineId
+	const deleteOrder = (orderIndex) => {
+		const newOrderList = orderList.filter((item, index) => {
+			if (index !== orderIndex) return item;
+		});
+
+		setOrderList(newOrderList);
 	};
 
 	const handleQuantityChange = (event, i) => {
@@ -322,11 +334,6 @@ const ProductTable = ({ orderList, purchaseOrder, setOrderList }) => {
 			}
 		});
 		setOrderList(newOrderList);
-		// if (checkQuantity(value)) {
-		// 	order.Quantity = value;
-		// } else {
-		// 	alert("Please input a valid quantity!");
-		// }
 	};
 
 	const orderData = () => {
@@ -354,7 +361,10 @@ const ProductTable = ({ orderList, purchaseOrder, setOrderList }) => {
 					<td>{getProductTotal(order)}</td>
 					<td>
 						<span className="px-1">
-							<MdDelete className="icon-size-sm cursor-pointer" />
+							<MdDelete
+								className="icon-size-sm cursor-pointer"
+								onClick={() => deleteOrder(index)}
+							/>
 						</span>
 					</td>
 				</tr>

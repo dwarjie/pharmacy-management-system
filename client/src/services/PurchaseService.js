@@ -9,17 +9,6 @@ const createPurchase = (data) => {
 const getOnePurchase = () => {
 	return http.get(`/purchase`);
 };
-// const createSale = (data) => {
-// 	return http.post("/sale/pos", data);
-// };
-
-// const getAllSales = () => {
-// 	return http.get("/sale/manage-sale");
-// };
-
-// const getOneSale = (id) => {
-// 	return http.get(`/sale/manage-sale/${id}`);
-// };
 
 const PurchaseService = {
 	createPurchase,
