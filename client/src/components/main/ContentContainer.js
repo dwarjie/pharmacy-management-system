@@ -49,6 +49,7 @@ import PrintInvoice from "./navigation/print/PrintInvoice";
 
 // Inventory Tab
 import PurchaseOrder from "./navigation/purchase_order/PurchaseOrder";
+import ManagePO from "./navigation/purchase_order/ManagePO";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -135,6 +136,7 @@ const ContentContainer = (props) => {
 							path="/inventory/purchase-order"
 							element={<PurchaseOrder />}
 						/>
+						<Route path="/inventory/purchase-list" element={<ManagePO />} />
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>

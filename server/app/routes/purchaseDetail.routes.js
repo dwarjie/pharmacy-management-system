@@ -4,6 +4,7 @@ module.exports = (app) => {
 	var router = require("express").Router();
 
 	router.post("/", purchaseDetails.create);
+	router.delete("/:id", purchaseDetails.delete);
 
 	app.use("/api/purchase-detail", router);
 };

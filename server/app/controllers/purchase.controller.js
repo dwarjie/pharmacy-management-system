@@ -43,3 +43,41 @@ exports.findOne = (req, res) => {
 			});
 		});
 };
+
+exports.findAll = (req, res) => {
+	Purchase.findAll({
+		include: ["supplier"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error fetching purchases`,
+			});
+		});
+};
+
+exports.delete = (req, res) => {
+	const id = req.params.id;
+
+	Purchase.destroy({
+		where: { id: id },
+	})
+		.then((row) => {
+			if (row != 1) {
+				res.send({
+					message: `Cannot delete purchase ${id}`,
+				});
+			}
+
+			res.send({
+				message: `Deleted successfully`,
+			});
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error deleting purchase ${id}`,
+			});
+		});
+};

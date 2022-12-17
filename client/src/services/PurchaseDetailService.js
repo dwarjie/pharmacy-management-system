@@ -9,9 +9,14 @@ const getPurchaseItems = (saleId) => {
 	return http.get(`/sales-detail/manage-sale?saleId=${saleId}`);
 };
 
+const deletePurchaseItems = (id) => {
+	return http.delete(`/purchase-detail/${id}`);
+};
+
 const PurchaseDetailService = {
 	createPurchaseDetails,
 	getPurchaseItems,
+	deletePurchaseItems,
 };
 
 export default PurchaseDetailService;

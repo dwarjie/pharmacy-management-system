@@ -35,3 +35,27 @@ exports.findAll = (req, res) => {
 			});
 		});
 };
+
+exports.delete = (req, res) => {
+	const id = req.params.id;
+
+	PurchaseDetail.destroy({
+		where: { purchaseId: id },
+	})
+		.then((row) => {
+			if (row <= 0) {
+				res.send({
+					message: `Cannot delete purchase item ${id}`,
+				});
+			} else {
+				res.send({
+					message: `Deleted successfully`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error deleting purchase item ${id}`,
+			});
+		});
+};

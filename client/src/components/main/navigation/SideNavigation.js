@@ -234,6 +234,14 @@ const InventoryModule = () => {
 				</li>
 				<li>
 					<Link
+						to={"/pharmacy/inventory/purchase-list"}
+						className="dropdown-item"
+					>
+						Manage PO
+					</Link>
+				</li>
+				<li>
+					<Link
 						to={"pharmacy/inventory/receive-purchase-order"}
 						className="dropdown-item"
 					>
