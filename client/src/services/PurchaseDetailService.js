@@ -5,8 +5,8 @@ const createPurchaseDetails = (data) => {
 	return http.post("/purchase-detail", data);
 };
 
-const getPurchaseItems = (saleId) => {
-	return http.get(`/sales-detail/manage-sale?saleId=${saleId}`);
+const getOrderList = (id) => {
+	return http.get(`/purchase-detail/${id}`);
 };
 
 const deletePurchaseItems = (id) => {
@@ -15,7 +15,7 @@ const deletePurchaseItems = (id) => {
 
 const PurchaseDetailService = {
 	createPurchaseDetails,
-	getPurchaseItems,
+	getOrderList,
 	deletePurchaseItems,
 };
 

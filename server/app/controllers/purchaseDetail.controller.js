@@ -5,7 +5,7 @@ exports.create = (req, res) => {
 	const order = {
 		Quantity: req.body.Quantity,
 		Total: req.body.Total,
-		ReceivedData: req.body.ReceivedData,
+		ReceivedDate: req.body.ReceivedDate,
 		medicineId: req.body.medicineId,
 		purchaseId: req.body.purchaseId,
 	};
@@ -32,6 +32,23 @@ exports.findAll = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: `Error retrieving purchase details`,
+			});
+		});
+};
+
+exports.findAllOrder = (req, res) => {
+	const id = req.params.id;
+
+	PurchaseDetail.findAll({
+		where: { purchaseId: id },
+		include: ["purchase", "medicine"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error retrieving purchase items`,
 			});
 		});
 };

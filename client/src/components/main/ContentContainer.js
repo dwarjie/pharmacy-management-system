@@ -48,7 +48,8 @@ import ViewSale from "./navigation/pos/ViewSale";
 import PrintInvoice from "./navigation/print/PrintInvoice";
 
 // Inventory Tab
-import PurchaseOrder from "./navigation/purchase_order/PurchaseOrder";
+import AddPO from "./navigation/purchase_order/AddPO";
+import UpdatePO from "./navigation/purchase_order/UpdatePO";
 import ManagePO from "./navigation/purchase_order/ManagePO";
 
 // Utilities Tab
@@ -132,9 +133,10 @@ const ContentContainer = (props) => {
 						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
+						<Route path="/inventory/purchase-order" element={<AddPO />} />
 						<Route
-							path="/inventory/purchase-order"
-							element={<PurchaseOrder />}
+							path="/inventory/purchase-order/:id"
+							element={<UpdatePO />}
 						/>
 						<Route path="/inventory/purchase-list" element={<ManagePO />} />
 					</Route>

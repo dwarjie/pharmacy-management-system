@@ -16,28 +16,21 @@ import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 // icons
 import { MdDelete } from "react-icons/md";
 
-const PurchaseOrder = () => {
-	const initialPurchaseOrder = {
-		id: null,
-		POCode: generateOrderNumber(),
-		OrderDate: getCurrentDate(),
-		ItemQty: 0,
-		Status: "pending",
-		Total: 0,
-		supplierId: null,
-	};
-
-	const initialDropDownValue = {
-		supplier: "",
-	};
+const PurchaseOrder = (props) => {
+	const { mode, initialPurchaseOrder, initialDropDownValue, initialOrderList } =
+		props;
 
 	const [purchaseOrder, setPurchaseOrder] = useState(initialPurchaseOrder);
 	const [searchProduct, setSearchProduct] = useState("");
 	const [supplierProducts, setSupplierProducts] = useState([]);
-	const [orderList, setOrderList] = useState([]);
+	const [orderList, setOrderList] = useState(initialOrderList);
 	const [supplierList, setSupplierList] = useState([]);
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
+
+	useEffect(() => {
+		setOrderList(initialOrderList);
+	}, [initialOrderList]);
 
 	useEffect(() => {
 		getAllSuppliers();
@@ -154,7 +147,7 @@ const PurchaseOrder = () => {
 				Quantity: 1,
 				UnitCost: selectedProduct.SellingPrice,
 				Total: selectedProduct.SellingPrice,
-				ReceivedData: "",
+				ReceivedDate: "",
 				medicineId: selectedProduct.id,
 				purchaseId: null,
 			};
@@ -174,6 +167,10 @@ const PurchaseOrder = () => {
 		setSupplierProducts([]);
 		setOrderList([]);
 		setActiveDropDownValue(initialDropDownValue);
+	};
+
+	const isUpdate = () => {
+		return mode === "update" ? true : false;
 	};
 
 	return (
@@ -208,7 +205,7 @@ const PurchaseOrder = () => {
 				disabled={orderList.length === 0 ? true : false}
 				onClick={() => createOrder()}
 			>
-				Create
+				{isUpdate ? "Update" : "Create"}
 			</button>
 		</div>
 	);

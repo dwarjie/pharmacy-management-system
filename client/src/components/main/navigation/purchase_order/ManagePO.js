@@ -1,6 +1,6 @@
 // This component will show the list of all purchase orders
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../helper/dateHelper";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import PurchaseService from "../../../../services/PurchaseService";
@@ -11,6 +11,7 @@ import { MdDelete } from "react-icons/md";
 import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 
 const ManagePO = () => {
+	const navigate = useNavigate();
 	const [purchases, setPurchases] = useState([]);
 
 	useEffect(() => {
@@ -56,6 +57,14 @@ const ManagePO = () => {
 		getAllPurchase();
 	};
 
+	const updatePO = (purchase) => {
+		navigate(`/pharmacy/inventory/purchase-order/${purchase.id}`, {
+			state: {
+				purchase: purchase,
+			},
+		});
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -89,7 +98,10 @@ const ManagePO = () => {
 									<td>{purchase.Status}</td>
 									<td>
 										<span className="px-2">
-											<FaEdit className="icon-size-sm cursor-pointer" />
+											<FaEdit
+												className="icon-size-sm cursor-pointer"
+												onClick={() => updatePO(purchase)}
+											/>
 										</span>
 										<span className="px-2">
 											<MdDelete

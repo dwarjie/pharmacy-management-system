@@ -18,6 +18,7 @@ const AddMedicine = () => {
 		unitId: null,
 		subCategoryId: null,
 	};
+
 	const initialDropDownValue = {
 		category: "",
 		subCategoryId: "",
