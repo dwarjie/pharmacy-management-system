@@ -1,5 +1,6 @@
 // This component will add a purchase order
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { checkQuantity } from "../../../../helper/checkQuantity";
 import {
@@ -17,6 +18,7 @@ import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 import { MdDelete } from "react-icons/md";
 
 const PurchaseOrder = (props) => {
+	const navigate = useNavigate();
 	const { mode, initialPurchaseOrder, initialDropDownValue, initialOrderList } =
 		props;
 
@@ -78,6 +80,34 @@ const PurchaseOrder = (props) => {
 		let purchaseId = await createPurchase();
 		createPurchaseDetails(purchaseId);
 		resetPage();
+	};
+
+	const updateItems = async () => {
+		await orderList.map((item) => {
+			PurchaseDetailService.updateItem(item.id, item)
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
+	const updatePurchase = async () => {
+		await PurchaseService.updatePurchase(purchaseOrder.id, purchaseOrder)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// update the purchase order
+	const updateOrder = async () => {
+		await updatePurchase();
+		await updateItems();
 	};
 
 	// get all the products in search
@@ -199,14 +229,24 @@ const PurchaseOrder = (props) => {
 					/>
 				</div>
 			</div>
-			<button
-				type="submit"
-				className="btn btn-primary col-12 col-md-1 simple-shadow mt-3 me-3"
-				disabled={orderList.length === 0 ? true : false}
-				onClick={() => createOrder()}
-			>
-				{isUpdate ? "Update" : "Create"}
-			</button>
+			<div>
+				<button
+					type="submit"
+					className="btn btn-primary col-12 col-md-1 simple-shadow mt-3 me-3"
+					disabled={orderList.length === 0 ? true : false}
+					onClick={() => (isUpdate() ? updateOrder() : createOrder())}
+				>
+					{isUpdate() ? "Update" : "Create"}
+				</button>
+				<button
+					type="button"
+					hidden={!isUpdate()}
+					className="btn btn-secondary col-12 col-md-1 simple-shadow mt-3 me-3"
+					onClick={() => navigate(-1)}
+				>
+					Cancel
+				</button>
+			</div>
 		</div>
 	);
 };

@@ -24,6 +24,38 @@ exports.create = (req, res) => {
 		});
 };
 
+exports.update = (req, res) => {
+	const id = req.params.id;
+
+	PurchaseDetail.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is equals to 1
+			if (row == 1) {
+				res.send({
+					message: `Updated successfully`,
+				});
+			} else {
+				res.send({
+					message: `Cannot update category`,
+				});
+			}
+		})
+		.catch((err) => {
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating category.`,
+					});
+					break;
+			}
+		});
+};
+
 exports.findAll = (req, res) => {
 	PurchaseDetail.findAll({ include: ["purchase", "medicine"] })
 		.then((data) => {

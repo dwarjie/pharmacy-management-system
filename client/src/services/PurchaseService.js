@@ -14,6 +14,10 @@ const getOnePurchase = () => {
 	return http.get(`/purchase`);
 };
 
+const updatePurchase = (id, data) => {
+	return http.put(`/purchase/${id}`, data);
+};
+
 const deletePurchase = (id) => {
 	return http.delete(`/purchase/purchase-list/${id}`);
 };
@@ -22,6 +26,7 @@ const PurchaseService = {
 	createPurchase,
 	getAllPurchase,
 	getOnePurchase,
+	updatePurchase,
 	deletePurchase,
 };
 

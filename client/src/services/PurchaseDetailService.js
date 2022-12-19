@@ -9,6 +9,10 @@ const getOrderList = (id) => {
 	return http.get(`/purchase-detail/${id}`);
 };
 
+const updateItem = (id, data) => {
+	return http.put(`/purchase-detail/${id}`, data);
+};
+
 const deletePurchaseItems = (id) => {
 	return http.delete(`/purchase-detail/${id}`);
 };
@@ -16,6 +20,7 @@ const deletePurchaseItems = (id) => {
 const PurchaseDetailService = {
 	createPurchaseDetails,
 	getOrderList,
+	updateItem,
 	deletePurchaseItems,
 };
 

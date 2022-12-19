@@ -19,6 +19,7 @@ const AddPO = () => {
 
 	return (
 		<PurchaseOrder
+			mode="add"
 			initialPurchaseOrder={initialPurchaseOrder}
 			initialDropDownValue={initialDropDownValue}
 			initialOrderList={[]}

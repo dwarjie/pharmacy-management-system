@@ -5,6 +5,7 @@ module.exports = (app) => {
 
 	router.post("/", purchaseDetails.create);
 	router.get("/:id", purchaseDetails.findAllOrder);
+	router.put("/:id", purchaseDetails.update);
 	router.delete("/:id", purchaseDetails.delete);
 
 	app.use("/api/purchase-detail", router);

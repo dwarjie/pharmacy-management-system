@@ -68,7 +68,7 @@ const ManagePO = () => {
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Sales List</h4>
+				<h4>Purchase Order List</h4>
 				<hr />
 			</div>
 			<div className="p-3">

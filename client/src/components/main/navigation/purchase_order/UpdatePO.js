@@ -40,6 +40,7 @@ const UpdatePO = () => {
 	const setOrderItem = (data) => {
 		let newOrderList = data.map((item) => {
 			return {
+				id: item.id,
 				PCode: item.medicine.ProductCode,
 				Item: item.medicine.ProductName,
 				OnHand: item.medicine.Quantity,
