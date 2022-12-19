@@ -36,7 +36,7 @@ exports.update = (req, res) => {
 				});
 			} else {
 				res.send({
-					message: `Cannot update category`,
+					message: `Cannot update item`,
 				});
 			}
 		})
@@ -49,10 +49,43 @@ exports.update = (req, res) => {
 					break;
 				default:
 					res.status(500).send({
-						message: `Error updating category.`,
+						message: err.message || `Error updating item.`,
 					});
 					break;
 			}
+		});
+};
+
+exports.updateOrCreate = (req, res) => {
+	const id = req.params.id;
+
+	const item = {
+		Quantity: req.body.Quantity,
+		Total: req.body.Total,
+		ReceivedDate: req.body.ReceivedDate,
+		medicineId: req.body.medicineId,
+		purchaseId: req.body.purchaseId,
+	};
+
+	if (id != -1) item.id = id;
+
+	PurchaseDetail.upsert(item)
+		.then(([data, created]) => {
+			if (created) {
+				res.send({
+					message: "Created",
+					data: data,
+				});
+			} else {
+				res.send({
+					message: "Updated",
+				});
+			}
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || "Error updated/creating item.",
+			});
 		});
 };
 

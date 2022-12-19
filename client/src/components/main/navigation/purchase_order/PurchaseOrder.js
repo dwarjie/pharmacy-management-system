@@ -90,7 +90,8 @@ const PurchaseOrder = (props) => {
 
 	const updateItems = async () => {
 		await orderList.map((item) => {
-			PurchaseDetailService.updateItem(item.id, item)
+			if (item.purchaseId === null) item.purchaseId = purchaseOrder.id;
+			PurchaseDetailService.upsertItems(item.id, item)
 				.then((response) => {
 					console.log(response.data);
 				})
@@ -210,6 +211,7 @@ const PurchaseOrder = (props) => {
 		if (!checkOrderExist(selectedProduct)) {
 			// not yet exist
 			let initialSelectedProduct = {
+				id: -1,
 				PCode: selectedProduct.ProductCode,
 				Item: selectedProduct.ProductName,
 				OnHand: selectedProduct.Quantity,

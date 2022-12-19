@@ -6,6 +6,7 @@ module.exports = (app) => {
 	router.post("/", purchaseDetails.create);
 	router.get("/:id", purchaseDetails.findAllOrder);
 	router.put("/:id", purchaseDetails.update);
+	router.put("/upsert-item/:id", purchaseDetails.updateOrCreate);
 	router.delete("/:id", purchaseDetails.delete);
 	router.delete("/delete-item/:id", purchaseDetails.deleteItem);
 
