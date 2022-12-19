@@ -26,8 +26,8 @@ const UpdatePO = () => {
 		getOrderList(oldPurchase.id);
 	}, []);
 
-	const getOrderList = (id) => {
-		PurchaseDetailService.getOrderList(id)
+	const getOrderList = async (id) => {
+		await PurchaseDetailService.getOrderList(id)
 			.then((response) => {
 				console.log(response.data);
 				setOrderItem(response.data);
@@ -62,6 +62,7 @@ const UpdatePO = () => {
 			initialPurchaseOrder={initialPurchaseOrder}
 			initialDropDownValue={initialDropDownValue}
 			initialOrderList={orderList}
+			getOrderList={getOrderList}
 		/>
 	);
 };

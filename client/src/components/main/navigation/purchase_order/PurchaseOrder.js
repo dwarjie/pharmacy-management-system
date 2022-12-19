@@ -19,8 +19,13 @@ import { MdDelete } from "react-icons/md";
 
 const PurchaseOrder = (props) => {
 	const navigate = useNavigate();
-	const { mode, initialPurchaseOrder, initialDropDownValue, initialOrderList } =
-		props;
+	const {
+		mode,
+		initialPurchaseOrder,
+		initialDropDownValue,
+		initialOrderList,
+		getOrderList,
+	} = props;
 
 	const [purchaseOrder, setPurchaseOrder] = useState(initialPurchaseOrder);
 	const [searchProduct, setSearchProduct] = useState("");
@@ -32,6 +37,7 @@ const PurchaseOrder = (props) => {
 
 	useEffect(() => {
 		setOrderList(initialOrderList);
+		countItems();
 	}, [initialOrderList]);
 
 	useEffect(() => {
@@ -110,6 +116,37 @@ const PurchaseOrder = (props) => {
 		await updateItems();
 	};
 
+	const updatePurchaseQuantity = async () => {
+		await PurchaseService.updatePurchase(purchaseOrder.id, {
+			ItemQty: orderList.length - 1,
+		})
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// delete a single item for updateing order list
+	const deleteItem = async (item) => {
+		if (!AlertPrompt()) return;
+
+		await deleteUpdateItem(item);
+		await getOrderList(purchaseOrder.id);
+		await updatePurchaseQuantity();
+	};
+
+	const deleteUpdateItem = async (item) => {
+		await PurchaseDetailService.deleteItem(item.id)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	// get all the products in search
 	const getAllProducts = () => {
 		MedicineService.getByTitleAndSupplier(
@@ -147,9 +184,12 @@ const PurchaseOrder = (props) => {
 	};
 
 	// count all the items in the order list
-	const countItems = () => {
+	const countItems = async () => {
 		let itemCount = orderList.length;
-		setPurchaseOrder((prevState) => ({ ...prevState, ItemQty: itemCount }));
+		await setPurchaseOrder((prevState) => ({
+			...prevState,
+			ItemQty: itemCount,
+		}));
 	};
 
 	// this function will check if order already exists in order list
@@ -226,6 +266,8 @@ const PurchaseOrder = (props) => {
 						orderList={orderList}
 						purchaseOrder={purchaseOrder}
 						setOrderList={setOrderList}
+						deleteItem={deleteItem}
+						isUpdate={isUpdate}
 					/>
 				</div>
 			</div>
@@ -370,7 +412,8 @@ const OrderInformation = ({
 };
 
 const ProductTable = (props) => {
-	const { orderList, purchaseOrder, setOrderList } = props;
+	const { orderList, purchaseOrder, setOrderList, deleteItem, isUpdate } =
+		props;
 
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
@@ -430,7 +473,9 @@ const ProductTable = (props) => {
 						<span className="px-1">
 							<MdDelete
 								className="icon-size-sm cursor-pointer"
-								onClick={() => deleteOrder(index)}
+								onClick={() => {
+									isUpdate() ? deleteItem(order) : deleteOrder(index);
+								}}
 							/>
 						</span>
 					</td>

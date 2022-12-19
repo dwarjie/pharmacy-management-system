@@ -13,6 +13,10 @@ const updateItem = (id, data) => {
 	return http.put(`/purchase-detail/${id}`, data);
 };
 
+const deleteItem = (id) => {
+	return http.delete(`/purchase-detail/delete-item/${id}`);
+};
+
 const deletePurchaseItems = (id) => {
 	return http.delete(`/purchase-detail/${id}`);
 };
@@ -22,6 +26,7 @@ const PurchaseDetailService = {
 	getOrderList,
 	updateItem,
 	deletePurchaseItems,
+	deleteItem,
 };
 
 export default PurchaseDetailService;
