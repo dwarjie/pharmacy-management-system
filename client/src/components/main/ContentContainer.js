@@ -51,6 +51,7 @@ import PrintInvoice from "./navigation/print/PrintInvoice";
 import AddPO from "./navigation/purchase_order/AddPO";
 import UpdatePO from "./navigation/purchase_order/UpdatePO";
 import ManagePO from "./navigation/purchase_order/ManagePO";
+import PrintPO from "./navigation/print/PrintPO";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -137,6 +138,10 @@ const ContentContainer = (props) => {
 						<Route
 							path="/inventory/purchase-order/:id"
 							element={<UpdatePO />}
+						/>
+						<Route
+							path="/inventory/purchase-order/print/:id"
+							element={<PrintPO />}
 						/>
 						<Route path="/inventory/purchase-list" element={<ManagePO />} />
 					</Route>

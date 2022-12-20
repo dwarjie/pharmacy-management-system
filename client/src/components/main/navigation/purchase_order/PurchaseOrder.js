@@ -64,6 +64,16 @@ const PurchaseOrder = (props) => {
 		});
 	};
 
+	const createSpecificItem = (item) => {
+		PurchaseDetailService.createPurchaseDetails(item)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	const createPurchase = async () => {
 		let purchaseId = 0;
 		await PurchaseService.createPurchase(purchaseOrder)
@@ -175,6 +185,10 @@ const PurchaseOrder = (props) => {
 			});
 	};
 
+	const printPO = () => {
+		navigate(`/pharmacy/inventory/purchase-order/print/${purchaseOrder.id}`);
+	};
+
 	// compute the total amount, vat and discount of the transaction
 	const computeTotal = () => {
 		let total = 0;
@@ -210,20 +224,37 @@ const PurchaseOrder = (props) => {
 	const addProduct = (selectedProduct) => {
 		if (!checkOrderExist(selectedProduct)) {
 			// not yet exist
-			let initialSelectedProduct = {
-				id: -1,
-				PCode: selectedProduct.ProductCode,
-				Item: selectedProduct.ProductName,
-				OnHand: selectedProduct.Quantity,
-				ReorderPoint: selectedProduct.ReorderPoint,
-				Quantity: 1,
-				UnitCost: selectedProduct.SellingPrice,
-				Total: selectedProduct.SellingPrice,
-				ReceivedDate: "",
-				medicineId: selectedProduct.id,
-				purchaseId: null,
-			};
-			setOrderList([...orderList, initialSelectedProduct]);
+			if (!isUpdate) {
+				let initialSelectedProduct = {
+					id: -1,
+					PCode: selectedProduct.ProductCode,
+					Item: selectedProduct.ProductName,
+					OnHand: selectedProduct.Quantity,
+					ReorderPoint: selectedProduct.ReorderPoint,
+					Quantity: 1,
+					UnitCost: selectedProduct.SellingPrice,
+					Total: selectedProduct.SellingPrice,
+					ReceivedDate: "",
+					medicineId: selectedProduct.id,
+					purchaseId: null,
+				};
+				setOrderList([...orderList, initialSelectedProduct]);
+			} else {
+				let initialSelectedProduct = {
+					PCode: selectedProduct.ProductCode,
+					Item: selectedProduct.ProductName,
+					OnHand: selectedProduct.Quantity,
+					ReorderPoint: selectedProduct.ReorderPoint,
+					Quantity: 1,
+					UnitCost: selectedProduct.SellingPrice,
+					Total: selectedProduct.SellingPrice,
+					ReceivedDate: "",
+					medicineId: selectedProduct.id,
+					purchaseId: purchaseOrder.id,
+				};
+				createSpecificItem(initialSelectedProduct);
+				getOrderList(purchaseOrder.id);
+			}
 		}
 	};
 
@@ -273,10 +304,10 @@ const PurchaseOrder = (props) => {
 					/>
 				</div>
 			</div>
-			<div>
+			<div className="w-auto">
 				<button
 					type="submit"
-					className="btn btn-primary col-12 col-md-1 simple-shadow mt-3 me-3"
+					className="btn btn-primary simple-shadow mt-2 me-3"
 					disabled={orderList.length === 0 ? true : false}
 					onClick={() => (isUpdate() ? updateOrder() : createOrder())}
 				>
@@ -285,7 +316,22 @@ const PurchaseOrder = (props) => {
 				<button
 					type="button"
 					hidden={!isUpdate()}
-					className="btn btn-secondary col-12 col-md-1 simple-shadow mt-3 me-3"
+					className="btn btn-success simple-shadow mt-2 me-3"
+				>
+					Recieved
+				</button>
+				<button
+					type="button"
+					hidden={!isUpdate()}
+					className="btn btn-dark simple-shadow mt-2 me-3"
+					onClick={printPO}
+				>
+					Print
+				</button>
+				<button
+					type="button"
+					hidden={!isUpdate()}
+					className="btn btn-secondary simple-shadow mt-2 me-3"
 					onClick={() => navigate(-1)}
 				>
 					Cancel
@@ -460,7 +506,7 @@ const ProductTable = (props) => {
 					<td>
 						<input
 							type="number"
-							className="form-control w-20 p-1"
+							className="form-control form-input w-xs-auto w-20 p-1"
 							value={order.Quantity}
 							onChange={(event) => {
 								handleQuantityChange(event, index);

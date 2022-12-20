@@ -59,7 +59,9 @@ exports.update = (req, res) => {
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 
-	Purchase.findByPk(id)
+	Purchase.findByPk(id, {
+		include: ["supplier"],
+	})
 		.then((data) => {
 			if (data) {
 				res.send(data);

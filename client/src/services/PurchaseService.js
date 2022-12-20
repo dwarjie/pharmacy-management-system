@@ -10,8 +10,8 @@ const getAllPurchase = () => {
 	return http.get(`/purchase/purchase-list`);
 };
 
-const getOnePurchase = () => {
-	return http.get(`/purchase`);
+const getOnePurchase = (id) => {
+	return http.get(`/purchase/${id}`);
 };
 
 const updatePurchase = (id, data) => {
