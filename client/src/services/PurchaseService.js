@@ -11,7 +11,7 @@ const getAllPurchase = () => {
 };
 
 const getOnePurchase = (id) => {
-	return http.get(`/purchase/${id}`);
+	return http.get(`/purchase/print/${id}`);
 };
 
 const updatePurchase = (id, data) => {

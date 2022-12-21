@@ -214,3 +214,9 @@ label {
 .dropdown-items:empty {
 	border: none;
 }
+
+/*  LOADER  */
+.loader {
+	width: 100px;
+	height: 100px;
+}

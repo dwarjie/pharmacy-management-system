@@ -1,10 +1,11 @@
 // This component prints the invoice for the pos
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { formatDate } from "../../../../helper/dateHelper";
+import Loader from "../../../layout/Loader";
 import ReactToPrint from "react-to-print";
 import PurchaseService from "../../../../services/PurchaseService";
 import PurchaseDetailService from "../../../../services/PurchaseDetailService";
-import { formatDate } from "../../../../helper/dateHelper";
 
 const PrintPO = () => {
 	const { id } = useParams();
@@ -12,25 +13,27 @@ const PrintPO = () => {
 
 	const [purchase, setPurchase] = useState({});
 	const [items, setItems] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		getPurchase(id);
 		getOrderList(id);
-	}, [id]);
+	}, []);
 
-	const getPurchase = (id) => {
-		PurchaseService.getOnePurchase(id)
+	const getPurchase = async (id) => {
+		await PurchaseService.getOnePurchase(id)
 			.then((response) => {
 				console.log(response.data);
 				setPurchase(response.data);
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
-	const getOrderList = (id) => {
-		PurchaseDetailService.getOrderList(id)
+	const getOrderList = async (id) => {
+		await PurchaseDetailService.getOrderList(id)
 			.then((response) => {
 				console.log(response.data);
 				setItems(response.data);
@@ -41,29 +44,39 @@ const PrintPO = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
-				<h4>PO Receipt</h4>
-				<hr />
-			</div>
-			<div className="p-3">
-				<div className="container p-3">
-					<div className="container">
-						<ComponentToPrint
-							ref={(element) => (componentRef = element)}
-							purchase={purchase}
-							items={items}
-						/>
-						<ReactToPrint
-							trigger={() => (
-								<button className="btn btn-primary mx-2">Print Receipt</button>
-							)}
-							content={() => componentRef}
-						/>
+		<>
+			{loading ? (
+				<div className="w-auto mt-8 d-flex justify-content-center align-items-center">
+					<Loader />
+				</div>
+			) : (
+				<div className="col-12 h-auto border border-dark rounded simple-shadow">
+					<div className="p-3">
+						<h4>PO Receipt</h4>
+						<hr />
+					</div>
+					<div className="p-3">
+						<div className="container p-3">
+							<div className="container">
+								<ComponentToPrint
+									ref={(element) => (componentRef = element)}
+									purchase={purchase}
+									items={items}
+								/>
+								<ReactToPrint
+									trigger={() => (
+										<button className="btn btn-primary mx-2">
+											Print Receipt
+										</button>
+									)}
+									content={() => componentRef}
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };
 
