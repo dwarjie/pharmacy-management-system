@@ -31,6 +31,7 @@ const ManageDelivery = () => {
 		navigate(`/pharmacy/inventory/delivery-list/${purchase.id}`, {
 			state: {
 				purchase: purchase,
+				supplier: purchase.supplier,
 			},
 		});
 	};

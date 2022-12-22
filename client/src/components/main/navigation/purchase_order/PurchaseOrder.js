@@ -112,6 +112,8 @@ const PurchaseOrder = (props) => {
 	};
 
 	const updateStatus = async () => {
+		if (!AlertPrompt("Update purchase order status into recieved?")) return;
+
 		let data = {
 			Status: "recieved",
 		};
@@ -119,10 +121,20 @@ const PurchaseOrder = (props) => {
 		await PurchaseService.updateStatus(purchaseOrder.id, data)
 			.then((response) => {
 				console.log(response.data);
+				redirectDelivery();
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const redirectDelivery = () => {
+		navigate(`/pharmacy/inventory/delivery-list/${purchaseOrder.id}`, {
+			state: {
+				purchase: purchaseOrder,
+				supplier: purchaseOrder.supplier,
+			},
+		});
 	};
 
 	const updatePurchase = async () => {

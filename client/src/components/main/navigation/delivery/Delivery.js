@@ -22,6 +22,7 @@ const Delivery = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const purchase = location.state.purchase;
+	const supplier = location.state.supplier;
 	const initialPurchaseOrder = {
 		id: null,
 		POCode: "",
@@ -58,8 +59,8 @@ const Delivery = () => {
 		});
 		setActiveDropDownValue({
 			...activeDropDownValue,
-			supplier: purchase.supplier.SupplierName,
-			supplierData: purchase.supplier,
+			supplier: supplier.SupplierName,
+			supplierData: supplier,
 		});
 	}, [purchase]);
 
