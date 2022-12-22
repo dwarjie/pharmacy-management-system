@@ -1,6 +1,6 @@
 // This component will add a purchase order
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { checkQuantity } from "../../../../helper/checkQuantity";
 import {
@@ -19,11 +19,80 @@ import { MdDelete } from "react-icons/md";
 
 const Delivery = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const purchase = location.state.purchase;
+	const initialPurchaseOrder = {
+		id: null,
+		POCode: "",
+		OrderDate: "",
+		ItemQty: 0,
+		Status: "",
+		Total: 0,
+		supplierId: null,
+	};
+
+	const initialDropDownValue = {
+		supplier: "",
+		supplierData: {},
+	};
+
+	const [purchaseOrder, setPurchaseOrder] = useState(initialPurchaseOrder);
+	const [supplierList, setSupplierList] = useState([]);
+	const [activeDropDownValue, setActiveDropDownValue] =
+		useState(initialDropDownValue);
+
+	// update the purchase once loaded
+	useEffect(() => {
+		setPurchaseOrder({
+			...purchase,
+			id: purchase.id,
+			POCode: purchase.POCode,
+			OrderDate: purchase.OrderDate,
+			ItemQty: purchase.ItemQty,
+			Status: purchase.Status,
+			Total: purchase.Total,
+			supplierId: purchase.supplierId,
+		});
+		setActiveDropDownValue({
+			...activeDropDownValue,
+			supplier: purchase.supplier.SupplierName,
+			supplierData: purchase.supplier,
+		});
+	}, [purchase]);
+
+	useEffect(() => {
+		getAllSuppliers();
+	}, []);
+
+	// get all the suppliers
+	const getAllSuppliers = () => {
+		SupplierService.getSupplier()
+			.then((response) => {
+				console.log(response.data);
+				setSupplierList(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// handle the input change for the purchase order state
+	const handlePurchaseChange = (event) => {
+		const { name, value } = event.target;
+		setPurchaseOrder((prevState) => ({ ...prevState, [name]: value }));
+	};
 
 	return (
 		<div className="h-auto d-flex flex-column justify-content-between gap-1">
 			<div className="col-12 h-auto">
-				<OrderInformation />
+				<OrderInformation
+					purchaseOrder={purchaseOrder}
+					supplierList={supplierList}
+					activeDropDownValue={activeDropDownValue}
+					setPurchaseOrder={setPurchaseOrder}
+					setActiveDropDownValue={setActiveDropDownValue}
+					handlePurchaseChange={handlePurchaseChange}
+				/>
 			</div>
 			<div className="h-75 border border-dark rounded simple-shadow mt-3">
 				<div className="table-responsive max-height-100">
@@ -52,7 +121,14 @@ const Delivery = () => {
 	);
 };
 
-const OrderInformation = ({}) => {
+const OrderInformation = ({
+	purchaseOrder,
+	supplierList,
+	activeDropDownValue,
+	setPurchaseOrder,
+	setActiveDropDownValue,
+	handlePurchaseChange,
+}) => {
 	return (
 		<>
 			<div className="row mt-3 col-12">
@@ -62,8 +138,11 @@ const OrderInformation = ({}) => {
 					</label>
 					<input
 						type="text"
+						name="POCode"
 						className="form-control form-input"
 						placeholder="Reference #"
+						value={purchaseOrder.POCode}
+						onChange={handlePurchaseChange}
 					/>
 				</div>
 				<div className="col-sm-12 col-md">
@@ -73,6 +152,7 @@ const OrderInformation = ({}) => {
 						className="form-control form-input"
 						placeholder="Contact Person"
 						disabled={true}
+						defaultValue={activeDropDownValue.supplierData.ContactPerson}
 					/>
 				</div>
 			</div>
@@ -81,8 +161,36 @@ const OrderInformation = ({}) => {
 					<label className="required" htmlFor="">
 						Supplier:
 					</label>
-					<select name="supplierId" className="form-select form-input">
+					<select
+						name="supplierId"
+						className="form-select form-input"
+						disabled={true}
+						value={activeDropDownValue.supplier}
+						onChange={(event) => {
+							let data = parseDropdownValue(event);
+							setActiveDropDownValue((prevState) => ({
+								...prevState,
+								supplier: data.SupplierName,
+								supplierData: data,
+							}));
+							setPurchaseOrder((prevState) => ({
+								...prevState,
+								supplierId: data.id,
+							}));
+						}}
+					>
 						<DropDownDefaultOption content={"Select Supplier"} />
+						{supplierList &&
+							supplierList.map((supplier, index) => (
+								<option
+									className="dropdown-item"
+									value={supplier.SupplierName}
+									key={index}
+									data-value={JSON.stringify(supplier)}
+								>
+									{supplier.SupplierName}
+								</option>
+							))}
 					</select>
 				</div>
 				<div className="col-sm-12 col-md">
@@ -92,6 +200,7 @@ const OrderInformation = ({}) => {
 						className="form-control form-input"
 						placeholder="Contact Person"
 						disabled={true}
+						value={activeDropDownValue.supplierData.Address}
 					/>
 				</div>
 			</div>

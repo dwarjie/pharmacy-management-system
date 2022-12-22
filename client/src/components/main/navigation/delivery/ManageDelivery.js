@@ -27,6 +27,14 @@ const ManageDelivery = () => {
 			});
 	};
 
+	const openDelivery = (purchase) => {
+		navigate(`/pharmacy/inventory/delivery-list/${purchase.id}`, {
+			state: {
+				purchase: purchase,
+			},
+		});
+	};
+
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -64,7 +72,10 @@ const ManageDelivery = () => {
 									</td>
 									<td>
 										<span className="px-2">
-											<FaEdit className="icon-size-sm cursor-pointer" />
+											<FaEdit
+												className="icon-size-sm cursor-pointer"
+												onClick={() => openDelivery(purchase)}
+											/>
 										</span>
 										<span className="px-2">
 											<MdDelete className="icon-size-sm cursor-pointer" />
