@@ -10,8 +10,16 @@ const getAllPurchase = () => {
 	return http.get(`/purchase/purchase-list`);
 };
 
+const getAllRecieved = () => {
+	return http.get(`/purchase/recieved-list`);
+};
+
 const getOnePurchase = (id) => {
 	return http.get(`/purchase/print/${id}`);
+};
+
+const updateStatus = (id, status) => {
+	return http.put(`/purchase/status/${id}`, status);
 };
 
 const updatePurchase = (id, data) => {
@@ -24,9 +32,11 @@ const deletePurchase = (id) => {
 
 const PurchaseService = {
 	createPurchase,
+	getAllRecieved,
 	getAllPurchase,
 	getOnePurchase,
 	updatePurchase,
+	updateStatus,
 	deletePurchase,
 };
 

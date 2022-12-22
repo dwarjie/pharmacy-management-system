@@ -6,6 +6,10 @@ module.exports = (sequelize, Sequelize) => {
 			allowNull: false,
 			unique: true,
 		},
+		ContactPerson: {
+			type: Sequelize.STRING,
+			allowNull: false,
+		},
 		Address: {
 			type: Sequelize.STRING,
 			allowNull: false,

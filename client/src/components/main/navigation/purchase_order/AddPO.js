@@ -15,6 +15,7 @@ const AddPO = () => {
 
 	const initialDropDownValue = {
 		supplier: "",
+		supplierData: "",
 	};
 
 	return (

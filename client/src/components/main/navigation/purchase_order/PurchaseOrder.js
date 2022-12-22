@@ -111,6 +111,20 @@ const PurchaseOrder = (props) => {
 		});
 	};
 
+	const updateStatus = async () => {
+		let data = {
+			Status: "recieved",
+		};
+
+		await PurchaseService.updateStatus(purchaseOrder.id, data)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	const updatePurchase = async () => {
 		await PurchaseService.updatePurchase(purchaseOrder.id, purchaseOrder)
 			.then((response) => {
@@ -224,7 +238,7 @@ const PurchaseOrder = (props) => {
 	const addProduct = (selectedProduct) => {
 		if (!checkOrderExist(selectedProduct)) {
 			// not yet exist
-			if (!isUpdate) {
+			if (!isUpdate()) {
 				let initialSelectedProduct = {
 					id: -1,
 					PCode: selectedProduct.ProductCode,
@@ -278,7 +292,7 @@ const PurchaseOrder = (props) => {
 
 	return (
 		<div className="h-auto d-flex flex-column justify-content-between gap-1">
-			<div className="d-flex flex-column flex-md-row justify-content-start gap-3">
+			<div className="col-12 h-auto">
 				<OrderInformation
 					searchProduct={searchProduct}
 					supplierList={supplierList}
@@ -317,6 +331,7 @@ const PurchaseOrder = (props) => {
 					type="button"
 					hidden={!isUpdate()}
 					className="btn btn-success simple-shadow mt-2 me-3"
+					onClick={updateStatus}
 				>
 					Recieved
 				</button>
@@ -378,82 +393,109 @@ const OrderInformation = ({
 
 	return (
 		<>
-			<div className="col-sm-12 col-md-4">
-				<label htmlFor="searchProduct">Search:</label>
-				<div className="search-inner">
-					<div className="input-group flex-nowrap">
-						<input
-							type="text"
-							className="form-control form-input"
-							placeholder="Search Product"
-							name="searchProduct"
-							disabled={purchaseOrder.supplierId ? false : true}
-							value={searchProduct}
-							onChange={handleSearchProduct}
-							required
-						/>
-						<button
-							className="btn btn-secondary"
-							type="button"
-							onClick={resetSearch}
-						>
-							Clear
-						</button>
-					</div>
+			<div className="row mt-3 col-12">
+				<div className="col-sm-12 col-md">
+					<label className="required" htmlFor="">
+						Reference #:
+					</label>
+					<input
+						type="text"
+						className="form-control form-input"
+						placeholder="Purchase Code"
+						value={purchaseOrder.POCode}
+						onChange={(event) =>
+							setPurchaseOrder((prevState) => ({
+								...prevState,
+								POCode: event.target.value,
+							}))
+						}
+						required
+					/>
 				</div>
-				<div className="dropdown-items">{searchData()}</div>
+				<div className="col-sm-12 col-md">
+					<label htmlFor="">Contact Person:</label>
+					<input
+						type="text"
+						className="form-control form-input"
+						placeholder="Contact Person"
+						disabled={true}
+						value={activeDropDownValue.supplierData.ContactPerson}
+					/>
+				</div>
 			</div>
-			<div className="col-sm-12 col-md-3">
-				<label className="required" htmlFor="">
-					P.O Code:
-				</label>
-				<input
-					type="text"
-					className="form-control form-input"
-					placeholder="Purchase Code"
-					value={purchaseOrder.POCode}
-					onChange={(event) =>
-						setPurchaseOrder((prevState) => ({
-							...prevState,
-							POCode: event.target.value,
-						}))
-					}
-					required
-				/>
+			<div className="row mt-3 col-12">
+				<div className="col-sm-12 col-md">
+					<label className="required" htmlFor="">
+						Supplier:
+					</label>
+					<select
+						name="supplierId"
+						className="form-select form-input"
+						value={activeDropDownValue.supplier}
+						onChange={(event) => {
+							let data = parseDropdownValue(event);
+							setActiveDropDownValue((prevState) => ({
+								...prevState,
+								supplier: data.SupplierName,
+								supplierData: data,
+							}));
+							setPurchaseOrder((prevState) => ({
+								...prevState,
+								supplierId: data.id,
+							}));
+						}}
+					>
+						<DropDownDefaultOption content={"Select Supplier"} />
+						{supplierList &&
+							supplierList.map((supplier, index) => (
+								<option
+									className="dropdown-item"
+									value={supplier.SupplierName}
+									key={index}
+									data-value={JSON.stringify(supplier)}
+								>
+									{supplier.SupplierName}
+								</option>
+							))}
+					</select>
+				</div>
+				<div className="col-sm-12 col-md">
+					<label htmlFor="">Address:</label>
+					<input
+						type="text"
+						className="form-control form-input"
+						placeholder="Contact Person"
+						disabled={true}
+						value={activeDropDownValue.supplierData.Address}
+					/>
+				</div>
 			</div>
-			<div className="col-sm-12 col-md-3">
-				<label className="required" htmlFor="">
-					Supplier:
-				</label>
-				<select
-					name="supplierId"
-					className="form-select form-input"
-					value={activeDropDownValue.supplier}
-					onChange={(event) => {
-						let data = parseDropdownValue(event);
-						setActiveDropDownValue((prevState) => ({
-							...prevState,
-							supplier: data.SupplierName,
-						}));
-						setPurchaseOrder((prevState) => ({
-							...prevState,
-							supplierId: data.id,
-						}));
-					}}
-				>
-					<DropDownDefaultOption content={"Select Supplier"} />
-					{supplierList &&
-						supplierList.map((supplier, index) => (
-							<option
-								className="dropdown-item"
-								value={supplier.SupplierName}
-								key={index}
-								data-value={JSON.stringify(supplier)}
+			<div className="row mt-3 col-12">
+				<div className="col-sm-12 col-md-6">
+					<label htmlFor="searchProduct">Search:</label>
+					<div className="search-inner">
+						<div className="input-group flex-nowrap">
+							<input
+								type="text"
+								className="form-control form-input"
+								placeholder="Search Product"
+								name="searchProduct"
+								disabled={purchaseOrder.supplierId ? false : true}
+								value={searchProduct}
+								onChange={handleSearchProduct}
+								required
+							/>
+							<button
+								className="btn btn-secondary"
+								type="button"
+								onClick={resetSearch}
 							>
-								{supplier.SupplierName}
-							</option>
-						))}
-				</select>
+								Clear
+							</button>
+						</div>
+					</div>
+					<div className="dropdown-items">{searchData()}</div>
+				</div>
 			</div>
 		</>
 	);

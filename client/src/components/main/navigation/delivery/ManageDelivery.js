@@ -1,25 +1,23 @@
-// This component will show the list of all purchase orders
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../helper/dateHelper";
-import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import PurchaseService from "../../../../services/PurchaseService";
-import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const ManagePO = () => {
+const ManageDelivery = () => {
 	const navigate = useNavigate();
+
 	const [purchases, setPurchases] = useState([]);
 
 	useEffect(() => {
-		getAllPurchase();
+		getAllRecievedPurchases();
 	}, []);
 
-	const getAllPurchase = () => {
-		PurchaseService.getAllPurchase()
+	const getAllRecievedPurchases = async () => {
+		PurchaseService.getAllRecieved()
 			.then((response) => {
 				console.log(response.data);
 				setPurchases(response.data);
@@ -29,46 +27,10 @@ const ManagePO = () => {
 			});
 	};
 
-	const deleteItems = async (id) => {
-		await PurchaseDetailService.deletePurchaseItems(id)
-			.then((response) => {
-				console.log(response.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
-	const deletePurchase = async (id) => {
-		await PurchaseService.deletePurchase(id)
-			.then((response) => {
-				console.log(response.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
-	const deleteOrder = async (id) => {
-		if (!AlertPrompt()) return;
-
-		await deleteItems(id);
-		await deletePurchase(id);
-		getAllPurchase();
-	};
-
-	const updatePO = (purchase) => {
-		navigate(`/pharmacy/inventory/purchase-order/${purchase.id}`, {
-			state: {
-				purchase: purchase,
-			},
-		});
-	};
-
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
-				<h4>Purchase Order List</h4>
+				<h4>Delivered Order List</h4>
 				<hr />
 			</div>
 			<div className="p-3">
@@ -79,7 +41,7 @@ const ManagePO = () => {
 				<table className="table">
 					<thead>
 						<tr>
-							<th scope="col">Order Date</th>
+							<th scope="col">Recieve Date</th>
 							<th scope="col">Reference #</th>
 							<th scope="col">Supplier</th>
 							<th scope="col">Items</th>
@@ -96,22 +58,16 @@ const ManagePO = () => {
 									<td>{purchase.supplier.SupplierName}</td>
 									<td>{purchase.ItemQty}</td>
 									<td>
-										<span className="badge text-bg-warning">
+										<span className="badge text-bg-success">
 											{purchase.Status}
 										</span>
 									</td>
 									<td>
 										<span className="px-2">
-											<FaEdit
-												className="icon-size-sm cursor-pointer"
-												onClick={() => updatePO(purchase)}
-											/>
+											<FaEdit className="icon-size-sm cursor-pointer" />
 										</span>
 										<span className="px-2">
-											<MdDelete
-												className="icon-size-sm cursor-pointer"
-												onClick={() => deleteOrder(purchase.id)}
-											/>
+											<MdDelete className="icon-size-sm cursor-pointer" />
 										</span>
 									</td>
 								</tr>
@@ -123,4 +79,4 @@ const ManagePO = () => {
 	);
 };
 
-export default ManagePO;
+export default ManageDelivery;

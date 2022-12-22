@@ -18,6 +18,7 @@ const UpdatePO = () => {
 
 	const initialDropDownValue = {
 		supplier: oldPurchase.supplier.SupplierName,
+		supplierData: oldPurchase.supplier,
 	};
 
 	const [orderList, setOrderList] = useState([]);

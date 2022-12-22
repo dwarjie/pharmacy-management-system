@@ -7,9 +7,9 @@ const UpdateSupplier = () => {
 	const initialSupplier = {
 		id: null,
 		SupplierName: "",
+		ContactPerson: "",
 		Address: "",
 		Mobile: "",
-		Phone: "",
 		Email: "",
 	};
 	let navigate = useNavigate();
@@ -22,9 +22,9 @@ const UpdateSupplier = () => {
 		setSupplier({
 			id: location.state.supplier.id,
 			SupplierName: location.state.supplier.SupplierName,
+			ContactPerson: location.state.supplier.ContactPerson,
 			Address: location.state.supplier.Address,
 			Mobile: location.state.supplier.Mobile,
-			Phone: location.state.supplier.Phone,
 			Email: location.state.supplier.Email,
 		});
 	}, []);
@@ -88,6 +88,22 @@ const UpdateSupplier = () => {
 							/>
 						</div>
 						<div className="col-sm-12 col-md">
+							<label className="required" htmlFor="SupplierName">
+								Contact Person:
+							</label>
+							<input
+								type="text"
+								className="form-control form-input"
+								name="ContactPerson"
+								id="ContactPerson"
+								value={supplier.ContactPerson}
+								onChange={handleInputChange}
+								required
+							/>
+						</div>
+					</div>
+					<div className="row mb-3">
+						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Mobile">
 								Contact #:
 							</label>
@@ -104,8 +120,6 @@ const UpdateSupplier = () => {
 								required
 							/>
 						</div>
-					</div>
-					<div className="row mb-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Address">
 								Address:
@@ -118,20 +132,6 @@ const UpdateSupplier = () => {
 								value={supplier.Address}
 								onChange={handleInputChange}
 								required
-							/>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="Phone">Phone #:</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								minLength={7}
-								maxLength={7}
-								pattern="[0-9]+"
-								name="Phone"
-								id="Phone"
-								value={supplier.Phone}
-								onChange={handleInputChange}
 							/>
 						</div>
 						<div className="col-sm-12 col-md">

@@ -36,7 +36,7 @@ exports.update = (req, res) => {
 				});
 			} else {
 				res.send({
-					message: `Cannot update category`,
+					message: `Cannot update purchase`,
 				});
 			}
 		})
@@ -49,7 +49,7 @@ exports.update = (req, res) => {
 					break;
 				default:
 					res.status(500).send({
-						message: `Error updating category.`,
+						message: `Error updating purchase.`,
 					});
 					break;
 			}
@@ -78,8 +78,32 @@ exports.findOne = (req, res) => {
 		});
 };
 
+exports.updateStatus = (req, res) => {
+	const id = req.params.id;
+
+	Purchase.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is equals to 1
+			if (row == 1) {
+				res.send({
+					message: `Updated successfully`,
+				});
+			} else {
+				res.send({
+					message: `Cannot update purchase`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error updating purchase`,
+			});
+		});
+};
+
 exports.findAll = (req, res) => {
 	Purchase.findAll({
+		where: { Status: "pending" },
 		include: ["supplier"],
 	})
 		.then((data) => {
@@ -112,6 +136,21 @@ exports.delete = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error deleting purchase ${id}`,
+			});
+		});
+};
+
+exports.findAllDeliver = (req, res) => {
+	Purchase.findAll({
+		where: { Status: "recieved" },
+		include: ["supplier"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error fetching purchases`,
 			});
 		});
 };

@@ -13,9 +13,9 @@ const Supplier = () => {
 	const initialSupplier = {
 		id: null,
 		SupplierName: "",
+		ContactPerson: "",
 		Address: "",
 		Mobile: "",
-		Phone: "",
 		Email: "",
 	};
 	let navigate = useNavigate();
@@ -49,9 +49,9 @@ const Supplier = () => {
 
 		let data = {
 			SupplierName: newSupplier.SupplierName,
+			ContactPerson: newSupplier.ContactPerson,
 			Address: newSupplier.Address,
 			Mobile: newSupplier.Mobile,
-			Phone: newSupplier.Phone,
 			Email: newSupplier.Email,
 		};
 
@@ -140,6 +140,22 @@ const Supplier = () => {
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="SupplierName">
+									Contact Person:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="ContactPerson"
+									id="ContactPerson"
+									value={newSupplier.ContactPerson}
+									onChange={handleInputChange}
+									required
+								/>
+							</div>
+						</div>
+						<div className="row mb-3">
+							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="Mobile">
 									Contact #:
 								</label>
@@ -156,8 +172,6 @@ const Supplier = () => {
 									required
 								/>
 							</div>
-						</div>
-						<div className="row mb-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="Address">
 									Address:
@@ -170,20 +184,6 @@ const Supplier = () => {
 									value={newSupplier.Address}
 									onChange={handleInputChange}
 									required
-								/>
-							</div>
-							<div className="col-sm-12 col-md">
-								<label htmlFor="Phone">Alternative Contact #:</label>
-								<input
-									type="text"
-									pattern="[0-9]+"
-									minLength={7}
-									maxLength={7}
-									className="form-control form-input"
-									name="Phone"
-									id="Phone"
-									value={newSupplier.Phone}
-									onChange={handleInputChange}
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
@@ -219,7 +219,8 @@ const Supplier = () => {
 					<table className="table">
 						<thead>
 							<tr>
-								<th scope="col">Name</th>
+								<th scope="col">Supplier Name</th>
+								<th scope="col">Contact Person</th>
 								<th scope="col">Mobile</th>
 								<th scope="col">Address</th>
 								<th scope="col">Actions</th>
@@ -230,6 +231,7 @@ const Supplier = () => {
 								suppliers.map((supplier, index) => (
 									<tr key={index}>
 										<td>{supplier.SupplierName}</td>
+										<td>{supplier.ContactPerson}</td>
 										<td>{supplier.Mobile}</td>
 										<td>{supplier.Address}</td>
 										<td>

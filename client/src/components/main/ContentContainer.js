@@ -52,6 +52,8 @@ import AddPO from "./navigation/purchase_order/AddPO";
 import UpdatePO from "./navigation/purchase_order/UpdatePO";
 import ManagePO from "./navigation/purchase_order/ManagePO";
 import PrintPO from "./navigation/print/PrintPO";
+import ManageDelivery from "./navigation/delivery/ManageDelivery";
+import Delivery from "./navigation/delivery/Delivery";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -144,6 +146,11 @@ const ContentContainer = (props) => {
 							element={<PrintPO />}
 						/>
 						<Route path="/inventory/purchase-list" element={<ManagePO />} />
+						<Route
+							path="/inventory/delivery-list"
+							element={<ManageDelivery />}
+						/>
+						<Route path="/inventory/delivery-list/:id" element={<Delivery />} />
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>

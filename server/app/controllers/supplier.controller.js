@@ -8,9 +8,9 @@ exports.create = (req, res) => {
 	// create a new Supplier
 	const supplier = {
 		SupplierName: req.body.SupplierName.replace(/\s+/g, " ").trim(),
+		ContactPerson: req.body.ContactPerson.replace(/\s+/g, " ").trim(),
 		Address: req.body.Address.replace(/\s+/g, " ").trim(),
 		Mobile: req.body.Mobile,
-		Phone: req.body.Phone,
 		Email: req.body.Email.replace(/\s+/g, " ").trim(),
 	};
 
@@ -87,9 +87,9 @@ exports.update = (req, res) => {
 
 	const supplier = {
 		SupplierName: req.body.SupplierName.replace(/\s+/g, " ").trim(),
+		ContactPerson: req.body.ContactPerson.replace(/\s+/g, " ").trim(),
 		Address: req.body.Address.replace(/\s+/g, " ").trim(),
 		Mobile: req.body.Mobile,
-		Phone: req.body.Phone,
 		Email: req.body.Email.replace(/\s+/g, " ").trim(),
 	};
 
