@@ -16,6 +16,7 @@ import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 
 // icons
 import { MdDelete } from "react-icons/md";
+import Loader from "../../../layout/Loader";
 
 const Delivery = () => {
 	const navigate = useNavigate();
@@ -37,9 +38,11 @@ const Delivery = () => {
 	};
 
 	const [purchaseOrder, setPurchaseOrder] = useState(initialPurchaseOrder);
+	const [orderList, setOrderList] = useState([]);
 	const [supplierList, setSupplierList] = useState([]);
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
+	const [loading, setLoading] = useState(true);
 
 	// update the purchase once loaded
 	useEffect(() => {
@@ -62,6 +65,7 @@ const Delivery = () => {
 
 	useEffect(() => {
 		getAllSuppliers();
+		getOrderList(purchase.id);
 	}, []);
 
 	// get all the suppliers
@@ -76,6 +80,37 @@ const Delivery = () => {
 			});
 	};
 
+	const getOrderList = async (id) => {
+		await PurchaseDetailService.getOrderList(id)
+			.then((response) => {
+				console.log(response.data);
+				setOrderItem(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const setOrderItem = (data) => {
+		let newOrderList = data.map((item) => {
+			return {
+				id: item.id,
+				PCode: item.medicine.ProductCode,
+				Item: item.medicine.ProductName,
+				OnHand: item.medicine.Quantity,
+				ReorderPoint: item.medicine.ReorderPoint,
+				Quantity: item.Quantity,
+				UnitCost: item.medicine.SellingPrice,
+				Total: item.Total,
+				ReceivedDate: item.ReceivedDate,
+				medicineId: item.medicineId,
+				purchaseId: item.purchaseId,
+			};
+		});
+		setOrderList(newOrderList);
+		setLoading(false);
+	};
+
 	// handle the input change for the purchase order state
 	const handlePurchaseChange = (event) => {
 		const { name, value } = event.target;
@@ -83,41 +118,50 @@ const Delivery = () => {
 	};
 
 	return (
-		<div className="h-auto d-flex flex-column justify-content-between gap-1">
-			<div className="col-12 h-auto">
-				<OrderInformation
-					purchaseOrder={purchaseOrder}
-					supplierList={supplierList}
-					activeDropDownValue={activeDropDownValue}
-					setPurchaseOrder={setPurchaseOrder}
-					setActiveDropDownValue={setActiveDropDownValue}
-					handlePurchaseChange={handlePurchaseChange}
-				/>
-			</div>
-			<div className="h-75 border border-dark rounded simple-shadow mt-3">
-				<div className="table-responsive max-height-100">
-					<ProductTable />
+		<>
+			{loading ? (
+				<div className="w-auto mt-8 d-flex justify-content-center align-items-center">
+					<Loader />
 				</div>
-			</div>
-			<div className="w-auto">
-				<button
-					type="button"
-					className="btn btn-success simple-shadow mt-2 me-3"
-				>
-					Recieved
-				</button>
-				<button type="button" className="btn btn-dark simple-shadow mt-2 me-3">
-					Print
-				</button>
-				<button
-					type="button"
-					className="btn btn-secondary simple-shadow mt-2 me-3"
-					onClick={() => navigate(-1)}
-				>
-					Cancel
-				</button>
-			</div>
-		</div>
+			) : (
+				<div className="h-auto d-flex flex-column justify-content-between gap-1">
+					<div className="col-12 h-auto">
+						<OrderInformation
+							purchaseOrder={purchaseOrder}
+							supplierList={supplierList}
+							activeDropDownValue={activeDropDownValue}
+							setPurchaseOrder={setPurchaseOrder}
+							setActiveDropDownValue={setActiveDropDownValue}
+							handlePurchaseChange={handlePurchaseChange}
+						/>
+					</div>
+					<div className="h-75 border border-dark rounded simple-shadow mt-3">
+						<div className="table-responsive max-height-100">
+							<ProductTable
+								orderList={orderList}
+								purchaseOrder={purchaseOrder}
+								setOrderList={setOrderList}
+							/>
+						</div>
+					</div>
+					<div className="w-auto">
+						<button
+							type="button"
+							className="btn btn-success simple-shadow mt-2 me-3"
+						>
+							Recieved
+						</button>
+						<button
+							type="button"
+							className="btn btn-secondary simple-shadow mt-2 me-3"
+							onClick={() => navigate(-1)}
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 
@@ -208,43 +252,72 @@ const OrderInformation = ({
 	);
 };
 
-const ProductTable = (props) => {
+const ProductTable = ({ purchaseOrder, orderList, setOrderList }) => {
+	const getProductTotal = (order) => {
+		order.Total = order.UnitCost * order.Quantity;
+		return order.Total.toFixed(1);
+	};
+
+	// delete an order in the list
+	// use array map, check the medicineId
+	const deleteOrder = (orderIndex) => {
+		const newOrderList = orderList.filter((item, index) => {
+			if (index !== orderIndex) return item;
+		});
+
+		setOrderList(newOrderList);
+	};
+
+	const handleQuantityChange = (event, i) => {
+		let value = parseInt(event.target.value);
+		if (!checkQuantity(value)) alert("Please input a valid quantity!");
+
+		const newOrderList = orderList.map((order, index) => {
+			if (index !== i) return order;
+
+			if (checkQuantity(value)) {
+				return { ...order, Quantity: value };
+			} else {
+				return order;
+			}
+		});
+		setOrderList(newOrderList);
+	};
+
 	const orderData = () => {
-		// return (
-		// orderList &&
-		// orderList.map((order, index) => (
-		// 	<tr key={index}>
-		// 		<td>{order.PCode}</td>
-		// 		<td>{order.Item}</td>
-		// 		<td>{order.OnHand}</td>
-		// 		<td>{order.ReorderPoint}</td>
-		// 		<td>
-		// 			<input
-		// 				type="number"
-		// 				className="form-control form-input w-xs-auto w-20 p-1"
-		// 				value={order.Quantity}
-		// 				onChange={(event) => {
-		// 					handleQuantityChange(event, index);
-		// 					getProductTotal(order);
-		// 					orderData();
-		// 				}}
-		// 			/>
-		// 		</td>
-		// 		<td>{order.UnitCost}</td>
-		// 		<td>{getProductTotal(order)}</td>
-		// 		<td>
-		// 			<span className="px-1">
-		// 				<MdDelete
-		// 					className="icon-size-sm cursor-pointer"
-		// 					onClick={() => {
-		// 						isUpdate() ? deleteItem(order) : deleteOrder(index);
-		// 					}}
-		// 				/>
-		// 			</span>
-		// 		</td>
-		// 	</tr>
-		// ))
-		// );
+		return (
+			orderList &&
+			orderList.map((order, index) => (
+				<tr key={index}>
+					<td>{order.PCode}</td>
+					<td>{order.Item}</td>
+					<td>
+						<input
+							type="number"
+							className="form-control form-input w-xs-auto w-20 p-1"
+							value={order.Quantity}
+							onChange={(event) => {
+								handleQuantityChange(event, index);
+								getProductTotal(order);
+								orderData();
+							}}
+						/>
+					</td>
+					<td>{order.UnitCost}</td>
+					<td>{getProductTotal(order)}</td>
+					<td>
+						<span className="px-1">
+							<MdDelete
+								className="icon-size-sm cursor-pointer"
+								// onClick={() => {
+								// 	isUpdate() ? deleteItem(order) : deleteOrder(index);
+								// }}
+							/>
+						</span>
+					</td>
+				</tr>
+			))
+		);
 	};
 
 	return (
@@ -253,9 +326,7 @@ const ProductTable = (props) => {
 				<tr>
 					<th scope="col">PCode</th>
 					<th scope="col">Item</th>
-					<th scope="col">On hand</th>
-					<th scope="col">Reorder</th>
-					<th scope="col">Qty</th>
+					<th scope="col">Recieve Qty</th>
 					<th scope="col">Unit Cost</th>
 					<th scope="col">Total</th>
 					<th scope="col">Action</th>
@@ -267,12 +338,10 @@ const ProductTable = (props) => {
 					<td className="no-line"></td>
 					<td className="no-line"></td>
 					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
 					<td className="no-line text-center">
 						<strong>Total:</strong>
 					</td>
-					{/* <td className="no-line text-right">&#8369;{purchaseOrder.Total}</td> */}
+					<td className="no-line text-right">&#8369;{purchaseOrder.Total}</td>
 				</tr>
 			</tbody>
 		</table>
