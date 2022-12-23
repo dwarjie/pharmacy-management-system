@@ -132,7 +132,7 @@ const PurchaseOrder = (props) => {
 		navigate(`/pharmacy/inventory/delivery-list/${purchaseOrder.id}`, {
 			state: {
 				purchase: purchaseOrder,
-				supplier: purchaseOrder.supplier,
+				supplier: activeDropDownValue.supplierData,
 			},
 		});
 	};
@@ -476,7 +476,7 @@ const OrderInformation = ({
 					<input
 						type="text"
 						className="form-control form-input"
-						placeholder="Contact Person"
+						placeholder="Address"
 						disabled={true}
 						value={activeDropDownValue.supplierData.Address}
 					/>

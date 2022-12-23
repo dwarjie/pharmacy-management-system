@@ -69,6 +69,37 @@ const Delivery = () => {
 		getOrderList(purchase.id);
 	}, []);
 
+	const updatePurchaseQuantity = async () => {
+		await PurchaseService.updatePurchase(purchaseOrder.id, {
+			ItemQty: orderList.length - 1,
+		})
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// delete a single item for updateing order list
+	const deleteItem = async (item) => {
+		if (!AlertPrompt()) return;
+
+		await deleteUpdateItem(item);
+		await getOrderList(purchaseOrder.id);
+		await updatePurchaseQuantity();
+	};
+
+	const deleteUpdateItem = async (item) => {
+		await PurchaseDetailService.deleteItem(item.id)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	// get all the suppliers
 	const getAllSuppliers = () => {
 		SupplierService.getSupplier()
@@ -142,6 +173,7 @@ const Delivery = () => {
 								orderList={orderList}
 								purchaseOrder={purchaseOrder}
 								setOrderList={setOrderList}
+								deleteItem={deleteItem}
 							/>
 						</div>
 					</div>
@@ -155,7 +187,7 @@ const Delivery = () => {
 						<button
 							type="button"
 							className="btn btn-secondary simple-shadow mt-2 me-3"
-							onClick={() => navigate(-1)}
+							onClick={() => navigate(`/pharmacy/inventory/delivery-list`)}
 						>
 							Cancel
 						</button>
@@ -253,20 +285,15 @@ const OrderInformation = ({
 	);
 };
 
-const ProductTable = ({ purchaseOrder, orderList, setOrderList }) => {
+const ProductTable = ({
+	purchaseOrder,
+	orderList,
+	setOrderList,
+	deleteItem,
+}) => {
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
 		return order.Total.toFixed(1);
-	};
-
-	// delete an order in the list
-	// use array map, check the medicineId
-	const deleteOrder = (orderIndex) => {
-		const newOrderList = orderList.filter((item, index) => {
-			if (index !== orderIndex) return item;
-		});
-
-		setOrderList(newOrderList);
 	};
 
 	const handleQuantityChange = (event, i) => {
@@ -310,9 +337,7 @@ const ProductTable = ({ purchaseOrder, orderList, setOrderList }) => {
 						<span className="px-1">
 							<MdDelete
 								className="icon-size-sm cursor-pointer"
-								// onClick={() => {
-								// 	isUpdate() ? deleteItem(order) : deleteOrder(index);
-								// }}
+								onClick={() => deleteItem(order)}
 							/>
 						</span>
 					</td>
