@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../helper/dateHelper";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import PurchaseService from "../../../../services/PurchaseService";
+import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 
 // icons
 import { FaEdit } from "react-icons/fa";
@@ -25,6 +27,34 @@ const ManageDelivery = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const deleteItems = async (id) => {
+		await PurchaseDetailService.deletePurchaseItems(id)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const deletePurchase = async (id) => {
+		await PurchaseService.deletePurchase(id)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const deleteOrder = async (id) => {
+		if (!AlertPrompt()) return;
+
+		await deleteItems(id);
+		await deletePurchase(id);
+		getAllReceivedPurchase();
 	};
 
 	const openDelivery = (purchase) => {
@@ -79,7 +109,10 @@ const ManageDelivery = () => {
 											/>
 										</span>
 										<span className="px-2">
-											<MdDelete className="icon-size-sm cursor-pointer" />
+											<MdDelete
+												className="icon-size-sm cursor-pointer"
+												onClick={() => deleteOrder(purchase.id)}
+											/>
 										</span>
 									</td>
 								</tr>
