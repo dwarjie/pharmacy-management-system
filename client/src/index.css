@@ -201,6 +201,10 @@ label {
 	background-color: var(--back-order);
 }
 
+.item-received {
+	background-color: var(--success);
+}
+
 /* DROP DOWN FOR INVENTORY SEARCHING */
 .search-inner {
 	position: relative;

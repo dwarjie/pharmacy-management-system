@@ -73,6 +73,7 @@ const Delivery = () => {
 		await PurchaseService.updatePurchase(purchaseOrder.id, purchaseOrder)
 			.then((response) => {
 				console.log(response.data);
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -80,15 +81,44 @@ const Delivery = () => {
 	};
 
 	const updateItems = async () => {
-		await orderList.map((item) => {
-			PurchaseDetailService.upsertItems(item.id, item)
-				.then((response) => {
-					console.log(response.data);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+		await orderList.map(async (item) => {
+			// update items properties
+			item.Status = checkItemStatus(item); // check if item is already delivered
+			item.Quantity = subtractReceivedItem(item); // subtract the received item to ordered items
+			await updateItem(item);
+			await updateItemStock(item);
 		});
+	};
+
+	const updateItem = (item) => {
+		PurchaseDetailService.updateItem(item.id, item)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const updateItemStock = (item) => {
+		let data = {
+			Quantity: item.ReceivedQuantity,
+		};
+		MedicineService.updateMedicineStock(item.medicineId, data)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const updateOrder = async () => {
+		if (!AlertPrompt()) return;
+
+		setLoading(true);
+		await updateItems();
+		await updatePurchase();
 	};
 
 	const updatePurchaseQuantity = async () => {
@@ -167,7 +197,22 @@ const Delivery = () => {
 		setLoading(false);
 	};
 
+	// subtract item received from the ordered quantity of the item
+	const subtractReceivedItem = (item) => {
+		let remainingQuantity = item.Quantity - item.ReceivedQuantity;
+
+		// check if negative number, else return 0
+		if (Math.sign(remainingQuantity) === -1) {
+			return 0;
+		} else {
+			return remainingQuantity;
+		}
+	};
+
 	// check if item status is received
+	const checkItemStatus = (item) => {
+		if (item.ReceivedQuantity === item.Quantity) return "received";
+	};
 
 	// handle the input change for the purchase order state
 	const handlePurchaseChange = (event) => {
@@ -207,6 +252,7 @@ const Delivery = () => {
 						<button
 							type="button"
 							className="btn btn-primary simple-shadow mt-2 me-3"
+							onClick={updateOrder}
 						>
 							Update
 						</button>
@@ -337,9 +383,10 @@ const ProductTable = ({
 		setOrderList(newOrderList);
 	};
 
-	// check if this item quantity matches with the recieved quantity
+	// check if this item quantity matches with the received quantity
 	const changeOrderStatus = (order) => {
 		if (order.ReceivedQuantity < order.Quantity) return "item-back-order";
+		if (order.Status === "received") return " item-received";
 
 		return "";
 	};
@@ -358,6 +405,7 @@ const ProductTable = ({
 							min={0}
 							className="form-control form-input w-xs-auto w-20 p-1"
 							value={order.ReceivedQuantity}
+							disabled={order.Status === "received" ? true : false}
 							onChange={(event) => {
 								handleQuantityChange(event, index);
 								getProductTotal(order);
@@ -366,7 +414,7 @@ const ProductTable = ({
 						/>
 					</td>
 					<td>{order.UnitCost}</td>
-					<td>{getProductTotal(order)}</td>
+					{/* <td>{getProductTotal(order)}</td> */}
 					<td>
 						<span className="px-1">
 							<MdDelete
@@ -389,14 +437,12 @@ const ProductTable = ({
 					<th scope="col">Ordered Qty</th>
 					<th scope="col">Received Qty</th>
 					<th scope="col">Unit Cost</th>
-					<th scope="col">Sub-Total</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				{orderData()}
-				<tr>
-					<td className="no-line"></td>
+				{/* <tr>
 					<td className="no-line"></td>
 					<td className="no-line"></td>
 					<td className="no-line"></td>
@@ -404,7 +450,7 @@ const ProductTable = ({
 						<strong>Total:</strong>
 					</td>
 					<td className="no-line text-right">&#8369;{purchaseOrder.Total}</td>
-				</tr>
+				</tr> */}
 			</tbody>
 		</table>
 	);

@@ -1,4 +1,6 @@
 // This module contains all the medicine controllers
+
+const { Sequelize } = require("../models");
 const db = require("../models");
 const Medicine = db.medicine;
 const Category = db.category;
@@ -181,6 +183,26 @@ exports.update = async (req, res) => {
 	// 		message: `Record already exists.`,
 	// 	});
 	// }
+};
+
+// increment product on stock quantity
+exports.increaseStockQuantity = async (req, res) => {
+	const receivedQuantity = req.body.Quantity;
+	const id = req.params.id;
+
+	try {
+		let result = await db.sequelize.query(
+			`UPDATE medicines SET Quantity = Quantity + ${receivedQuantity} WHERE id = ${id}`,
+			{
+				type: Sequelize.UPDATE,
+			}
+		);
+		res.send(result);
+	} catch (err) {
+		res.status(500).send({
+			message: err.message || `Error incrementing product stock`,
+		});
+	}
 };
 
 // delete a medicine
