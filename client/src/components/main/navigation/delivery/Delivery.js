@@ -69,6 +69,28 @@ const Delivery = () => {
 		getOrderList(purchase.id);
 	}, []);
 
+	const updatePurchase = async () => {
+		await PurchaseService.updatePurchase(purchaseOrder.id, purchaseOrder)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const updateItems = async () => {
+		await orderList.map((item) => {
+			PurchaseDetailService.upsertItems(item.id, item)
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
 	const updatePurchaseQuantity = async () => {
 		await PurchaseService.updatePurchase(purchaseOrder.id, {
 			ItemQty: orderList.length - 1,
@@ -132,9 +154,11 @@ const Delivery = () => {
 				OnHand: item.medicine.Quantity,
 				ReorderPoint: item.medicine.ReorderPoint,
 				Quantity: item.Quantity,
+				ReceivedQuantity: item.Quantity,
 				UnitCost: item.medicine.SellingPrice,
 				Total: item.Total,
 				ReceivedDate: item.ReceivedDate,
+				Status: item.Status,
 				medicineId: item.medicineId,
 				purchaseId: item.purchaseId,
 			};
@@ -142,6 +166,8 @@ const Delivery = () => {
 		setOrderList(newOrderList);
 		setLoading(false);
 	};
+
+	// check if item status is received
 
 	// handle the input change for the purchase order state
 	const handlePurchaseChange = (event) => {
@@ -180,9 +206,9 @@ const Delivery = () => {
 					<div className="w-auto">
 						<button
 							type="button"
-							className="btn btn-success simple-shadow mt-2 me-3"
+							className="btn btn-primary simple-shadow mt-2 me-3"
 						>
-							Recieved
+							Update
 						</button>
 						<button
 							type="button"
@@ -298,13 +324,12 @@ const ProductTable = ({
 
 	const handleQuantityChange = (event, i) => {
 		let value = parseInt(event.target.value);
-		if (!checkQuantity(value)) alert("Please input a valid quantity!");
 
 		const newOrderList = orderList.map((order, index) => {
 			if (index !== i) return order;
 
 			if (checkQuantity(value)) {
-				return { ...order, Quantity: value };
+				return { ...order, ReceivedQuantity: value };
 			} else {
 				return order;
 			}
@@ -312,18 +337,27 @@ const ProductTable = ({
 		setOrderList(newOrderList);
 	};
 
+	// check if this item quantity matches with the recieved quantity
+	const changeOrderStatus = (order) => {
+		if (order.ReceivedQuantity < order.Quantity) return "item-back-order";
+
+		return "";
+	};
+
 	const orderData = () => {
 		return (
 			orderList &&
 			orderList.map((order, index) => (
-				<tr key={index}>
+				<tr key={index} className={changeOrderStatus(order)}>
 					<td>{order.PCode}</td>
 					<td>{order.Item}</td>
+					<td>{order.Quantity}</td>
 					<td>
 						<input
 							type="number"
+							min={0}
 							className="form-control form-input w-xs-auto w-20 p-1"
-							value={order.Quantity}
+							value={order.ReceivedQuantity}
 							onChange={(event) => {
 								handleQuantityChange(event, index);
 								getProductTotal(order);
@@ -352,15 +386,17 @@ const ProductTable = ({
 				<tr>
 					<th scope="col">PCode</th>
 					<th scope="col">Item</th>
-					<th scope="col">Recieve Qty</th>
+					<th scope="col">Ordered Qty</th>
+					<th scope="col">Received Qty</th>
 					<th scope="col">Unit Cost</th>
-					<th scope="col">Total</th>
+					<th scope="col">Sub-Total</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				{orderData()}
 				<tr>
+					<td className="no-line"></td>
 					<td className="no-line"></td>
 					<td className="no-line"></td>
 					<td className="no-line"></td>

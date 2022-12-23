@@ -13,10 +13,10 @@ const ManageDelivery = () => {
 	const [purchases, setPurchases] = useState([]);
 
 	useEffect(() => {
-		getAllRecievedPurchases();
+		getAllReceivedPurchase();
 	}, []);
 
-	const getAllRecievedPurchases = async () => {
+	const getAllReceivedPurchase = async () => {
 		PurchaseService.getAllRecieved()
 			.then((response) => {
 				console.log(response.data);
@@ -50,7 +50,7 @@ const ManageDelivery = () => {
 				<table className="table">
 					<thead>
 						<tr>
-							<th scope="col">Recieve Date</th>
+							<th scope="col">Receive Date</th>
 							<th scope="col">Reference #</th>
 							<th scope="col">Supplier</th>
 							<th scope="col">Items</th>

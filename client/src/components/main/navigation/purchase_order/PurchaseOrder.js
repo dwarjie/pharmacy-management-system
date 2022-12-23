@@ -112,10 +112,10 @@ const PurchaseOrder = (props) => {
 	};
 
 	const updateStatus = async () => {
-		if (!AlertPrompt("Update purchase order status into recieved?")) return;
+		if (!AlertPrompt("Update purchase order status into received?")) return;
 
 		let data = {
-			Status: "recieved",
+			Status: "received",
 		};
 
 		await PurchaseService.updateStatus(purchaseOrder.id, data)
@@ -596,7 +596,7 @@ const ProductTable = (props) => {
 					<th scope="col">Reorder</th>
 					<th scope="col">Qty</th>
 					<th scope="col">Unit Cost</th>
-					<th scope="col">Total</th>
+					<th scope="col">Sub-Total</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
