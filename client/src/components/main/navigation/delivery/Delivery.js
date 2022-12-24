@@ -44,6 +44,7 @@ const Delivery = () => {
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
 	const [loading, setLoading] = useState(true);
+	const [purchaseSettled, setPurchaseSettled] = useState(false);
 
 	// update the purchase once loaded
 	useEffect(() => {
@@ -187,7 +188,7 @@ const Delivery = () => {
 				ReceivedQuantity: item.Quantity,
 				UnitCost: item.medicine.SellingPrice,
 				Total: item.Total,
-				ReceivedDate: item.ReceivedDate,
+				RecieveDate: item.RecieveDate,
 				Status: item.Status,
 				medicineId: item.medicineId,
 				purchaseId: item.purchaseId,
@@ -211,7 +212,10 @@ const Delivery = () => {
 
 	// check if item status is received
 	const checkItemStatus = (item) => {
-		if (item.ReceivedQuantity === item.Quantity) return "received";
+		if (item.ReceivedQuantity === item.Quantity) {
+			item.RecieveDate = getCurrentDate();
+			return "received";
+		}
 	};
 
 	// handle the input change for the purchase order state

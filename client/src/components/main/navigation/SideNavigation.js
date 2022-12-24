@@ -193,7 +193,7 @@ const HandlerModule = () => {
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
 					<Link to={"/pharmacy/maintenance/handler"} className="dropdown-item">
-						Add User
+						Add Handler
 					</Link>
 				</li>
 				<li>
