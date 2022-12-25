@@ -16,6 +16,7 @@ import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 
 // icons
 import { MdDelete } from "react-icons/md";
+import Loader from "../../../layout/Loader";
 
 const PurchaseOrder = (props) => {
 	const navigate = useNavigate();
@@ -34,10 +35,12 @@ const PurchaseOrder = (props) => {
 	const [supplierList, setSupplierList] = useState([]);
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		setOrderList(initialOrderList);
 		countItems();
+		setLoading(false);
 	}, [initialOrderList]);
 
 	useEffect(() => {
@@ -95,6 +98,7 @@ const PurchaseOrder = (props) => {
 
 		let purchaseId = await createPurchase();
 		createPurchaseDetails(purchaseId);
+		navigate(`/pharmacy/inventory/purchase-order/print/${purchaseId}`);
 		resetPage();
 	};
 
@@ -171,6 +175,7 @@ const PurchaseOrder = (props) => {
 		})
 			.then((response) => {
 				console.log(response.data);
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -290,6 +295,7 @@ const PurchaseOrder = (props) => {
 					medicineId: selectedProduct.id,
 					purchaseId: purchaseOrder.id,
 				};
+				setLoading(true);
 				await createSpecificItem(initialSelectedProduct);
 				await getOrderList(purchaseOrder.id);
 				await updatePurchaseIncreaseQuantity();
@@ -316,68 +322,76 @@ const PurchaseOrder = (props) => {
 	};
 
 	return (
-		<div className="h-auto d-flex flex-column justify-content-between gap-1">
-			<div className="col-12 h-auto">
-				<OrderInformation
-					searchProduct={searchProduct}
-					supplierList={supplierList}
-					purchaseOrder={purchaseOrder}
-					activeDropDownValue={activeDropDownValue}
-					supplierProducts={supplierProducts}
-					handleSearchProduct={handleSearchProduct}
-					addProduct={addProduct}
-					setSearchProduct={setSearchProduct}
-					setSupplierProducts={setSupplierProducts}
-					setPurchaseOrder={setPurchaseOrder}
-					setActiveDropDownValue={setActiveDropDownValue}
-				/>
-			</div>
-			<div className="h-75 border border-dark rounded simple-shadow mt-3">
-				<div className="table-responsive max-height-100">
-					<ProductTable
-						orderList={orderList}
-						purchaseOrder={purchaseOrder}
-						setOrderList={setOrderList}
-						deleteItem={deleteItem}
-						isUpdate={isUpdate}
-					/>
+		<>
+			{loading ? (
+				<div className="w-auto mt-8 d-flex justify-content-center align-items-center">
+					<Loader />
 				</div>
-			</div>
-			<div className="w-auto">
-				<button
-					type="submit"
-					className="btn btn-primary simple-shadow mt-2 me-3"
-					disabled={orderList.length === 0 ? true : false}
-					onClick={() => (isUpdate() ? updateOrder() : createOrder())}
-				>
-					{isUpdate() ? "Update" : "Create"}
-				</button>
-				<button
-					type="button"
-					hidden={!isUpdate()}
-					className="btn btn-success simple-shadow mt-2 me-3"
-					onClick={updateStatus}
-				>
-					Received
-				</button>
-				<button
-					type="button"
-					hidden={!isUpdate()}
-					className="btn btn-dark simple-shadow mt-2 me-3"
-					onClick={printPO}
-				>
-					Print
-				</button>
-				<button
-					type="button"
-					hidden={!isUpdate()}
-					className="btn btn-secondary simple-shadow mt-2 me-3"
-					onClick={() => navigate(-1)}
-				>
-					Cancel
-				</button>
-			</div>
-		</div>
+			) : (
+				<div className="h-auto d-flex flex-column justify-content-between gap-1">
+					<div className="col-12 h-auto">
+						<OrderInformation
+							searchProduct={searchProduct}
+							supplierList={supplierList}
+							purchaseOrder={purchaseOrder}
+							activeDropDownValue={activeDropDownValue}
+							supplierProducts={supplierProducts}
+							handleSearchProduct={handleSearchProduct}
+							addProduct={addProduct}
+							setSearchProduct={setSearchProduct}
+							setSupplierProducts={setSupplierProducts}
+							setPurchaseOrder={setPurchaseOrder}
+							setActiveDropDownValue={setActiveDropDownValue}
+						/>
+					</div>
+					<div className="h-75 border border-dark rounded simple-shadow mt-3">
+						<div className="table-responsive max-height-100">
+							<ProductTable
+								orderList={orderList}
+								purchaseOrder={purchaseOrder}
+								setOrderList={setOrderList}
+								deleteItem={deleteItem}
+								isUpdate={isUpdate}
+							/>
+						</div>
+					</div>
+					<div className="w-auto">
+						<button
+							type="submit"
+							className="btn btn-primary simple-shadow mt-2 me-3"
+							disabled={orderList.length === 0 ? true : false}
+							onClick={() => (isUpdate() ? updateOrder() : createOrder())}
+						>
+							{isUpdate() ? "Update" : "Create"}
+						</button>
+						<button
+							type="button"
+							hidden={!isUpdate()}
+							className="btn btn-success simple-shadow mt-2 me-3"
+							onClick={updateStatus}
+						>
+							Received
+						</button>
+						<button
+							type="button"
+							hidden={!isUpdate()}
+							className="btn btn-dark simple-shadow mt-2 me-3"
+							onClick={printPO}
+						>
+							Print
+						</button>
+						<button
+							type="button"
+							hidden={!isUpdate()}
+							className="btn btn-secondary simple-shadow mt-2 me-3"
+							onClick={() => navigate(-1)}
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 

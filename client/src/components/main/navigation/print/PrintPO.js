@@ -1,6 +1,6 @@
 // This component prints the invoice for the pos
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { formatDate } from "../../../../helper/dateHelper";
 import Loader from "../../../layout/Loader";
 import ReactToPrint from "react-to-print";
@@ -10,6 +10,7 @@ import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 const PrintPO = () => {
 	const { id } = useParams();
 	let componentRef = useRef();
+	let navigate = useNavigate();
 
 	const [purchase, setPurchase] = useState({});
 	const [items, setItems] = useState([]);
@@ -71,6 +72,12 @@ const PrintPO = () => {
 									)}
 									content={() => componentRef}
 								/>
+								<button
+									className="btn btn-secondary"
+									onClick={() => navigate(-1)}
+								>
+									Cancel
+								</button>
 							</div>
 						</div>
 					</div>
