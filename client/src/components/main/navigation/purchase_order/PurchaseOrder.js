@@ -345,7 +345,7 @@ const PurchaseOrder = (props) => {
 					className="btn btn-success simple-shadow mt-2 me-3"
 					onClick={updateStatus}
 				>
-					Recieved
+					Received
 				</button>
 				<button
 					type="button"

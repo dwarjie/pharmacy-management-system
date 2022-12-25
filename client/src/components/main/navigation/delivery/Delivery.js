@@ -54,7 +54,7 @@ const Delivery = () => {
 			POCode: purchase.POCode,
 			OrderDate: purchase.OrderDate,
 			ItemQty: purchase.ItemQty,
-			Status: purchase.Status,
+			Status: "received",
 			Total: purchase.Total,
 			supplierId: purchase.supplierId,
 		});
@@ -84,8 +84,9 @@ const Delivery = () => {
 	const updateItems = async () => {
 		await orderList.map(async (item) => {
 			// update items properties
-			item.Status = checkItemStatus(item); // check if item is already delivered
+			checkItemStatus(item); // check if item is already delivered
 			item.Quantity = subtractReceivedItem(item); // subtract the received item to ordered items
+			console.log(item);
 			await updateItem(item);
 			await updateItemStock(item);
 		});
@@ -119,7 +120,27 @@ const Delivery = () => {
 
 		setLoading(true);
 		await updateItems();
+		let isSettled = checkPurchaseStatus(); // check if all items are already received, make the purchase settled
 		await updatePurchase();
+		await getOrderList(purchaseOrder.id);
+		if (!isSettled) return;
+
+		// if purchase is settled, update the status
+		await updatePurchaseStatus();
+	};
+
+	const updatePurchaseStatus = async () => {
+		let data = {
+			Status: "settled",
+		};
+
+		await PurchaseService.updateStatus(purchase.id, data)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const updatePurchaseQuantity = async () => {
@@ -178,6 +199,7 @@ const Delivery = () => {
 
 	const setOrderItem = (data) => {
 		let newOrderList = data.map((item) => {
+			console.log(item);
 			return {
 				id: item.id,
 				PCode: item.medicine.ProductCode,
@@ -210,11 +232,25 @@ const Delivery = () => {
 		}
 	};
 
+	// check if all items are received,
+	// if yes, make the purchase settled else let it
+	const checkPurchaseStatus = () => {
+		let settled = true;
+		orderList.map((item) => {
+			console.log(item);
+			if (item.Status === "pending") {
+				settled = false;
+			}
+		});
+
+		return settled;
+	};
+
 	// check if item status is received
 	const checkItemStatus = (item) => {
 		if (item.ReceivedQuantity === item.Quantity) {
 			item.RecieveDate = getCurrentDate();
-			return "received";
+			return (item.Status = "received");
 		}
 	};
 
