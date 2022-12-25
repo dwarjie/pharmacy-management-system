@@ -127,6 +127,7 @@ const Delivery = () => {
 
 		// if purchase is settled, update the status
 		await updatePurchaseStatus();
+		navigate(`/pharmacy/inventory/delivery-list`);
 	};
 
 	const updatePurchaseStatus = async () => {

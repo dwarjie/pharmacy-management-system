@@ -165,6 +165,18 @@ const PurchaseOrder = (props) => {
 			});
 	};
 
+	const updatePurchaseIncreaseQuantity = async () => {
+		await PurchaseService.updatePurchase(purchaseOrder.id, {
+			ItemQty: orderList.length + 1,
+		})
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	// delete a single item for updateing order list
 	const deleteItem = async (item) => {
 		if (!AlertPrompt()) return;
@@ -247,7 +259,7 @@ const PurchaseOrder = (props) => {
 	};
 
 	// add the product into orderList
-	const addProduct = (selectedProduct) => {
+	const addProduct = async (selectedProduct) => {
 		if (!checkOrderExist(selectedProduct)) {
 			// not yet exist
 			if (!isUpdate()) {
@@ -278,8 +290,9 @@ const PurchaseOrder = (props) => {
 					medicineId: selectedProduct.id,
 					purchaseId: purchaseOrder.id,
 				};
-				createSpecificItem(initialSelectedProduct);
-				getOrderList(purchaseOrder.id);
+				await createSpecificItem(initialSelectedProduct);
+				await getOrderList(purchaseOrder.id);
+				await updatePurchaseIncreaseQuantity();
 			}
 		}
 	};
