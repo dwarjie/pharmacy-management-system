@@ -14,6 +14,10 @@ const updateMedicineStock = (id, data) => {
 	return http.put(`/medicine/add-stock/${id}`, data);
 };
 
+const updateDecreaseMedicineStock = (id, data) => {
+	return http.put(`/medicine/subtract-stock/${id}`, data);
+};
+
 const getAllMedicine = () => {
 	return http.get("/medicine/medicine-list");
 };
@@ -50,6 +54,7 @@ const MedicineService = {
 	createMedicine,
 	updateMedicine,
 	updateMedicineStock,
+	updateDecreaseMedicineStock,
 	deleteMedicine,
 	getAllMedicine,
 	getByTitle,

@@ -12,7 +12,7 @@ exports.create = (req, res) => {
 	StockAdjustment.create(adjustment)
 		.then((data) => {
 			res.send({
-				message: "Created successfully.",
+				message: "Adjusted Successfully.",
 				data,
 			});
 		})

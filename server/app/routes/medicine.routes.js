@@ -8,6 +8,7 @@ module.exports = (app) => {
 	router.post("/", medicine.create);
 	router.put("/:id", medicine.update);
 	router.put("/add-stock/:id", medicine.increaseStockQuantity);
+	router.put("/subtract-stock/:id", medicine.decreaseStockQuantity);
 	router.get("/medicine-list", medicine.findAll);
 	router.get("/", medicine.getOtherModel);
 	router.delete("/medicine-list", medicine.delete);

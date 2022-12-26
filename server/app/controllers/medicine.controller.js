@@ -205,6 +205,26 @@ exports.increaseStockQuantity = async (req, res) => {
 	}
 };
 
+// increment product on stock quantity
+exports.decreaseStockQuantity = async (req, res) => {
+	const receivedQuantity = req.body.Quantity;
+	const id = req.params.id;
+
+	try {
+		let result = await db.sequelize.query(
+			`UPDATE medicines SET Quantity = Quantity - ${receivedQuantity} WHERE id = ${id}`,
+			{
+				type: Sequelize.UPDATE,
+			}
+		);
+		res.send(result);
+	} catch (err) {
+		res.status(500).send({
+			message: err.message || `Error incrementing product stock`,
+		});
+	}
+};
+
 // delete a medicine
 exports.delete = (req, res) => {
 	const id = req.query.medicineId;

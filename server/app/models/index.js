@@ -132,6 +132,15 @@ db.purchaseDetail.belongsTo(db.medicine, {
 	},
 });
 
+// add relationship for stock adjustment and medicine
+db.medicine.hasMany(db.stockAdjustment);
+db.stockAdjustment.belongsTo(db.medicine, {
+	as: "medicine",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
 // // add relationship for users and roles for authorization
 // db.role.belongsToMany(db.user, {
 // 	through: "user_roles",

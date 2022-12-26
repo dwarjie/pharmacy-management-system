@@ -14,7 +14,7 @@ const AlertInfoLayout = (props) => {
 
 	return (
 		<div
-			className="alert alert-info alert-dismissible fade show col-11 col-lg-10 mx-auto"
+			className="alert alert-info alert-dismissible fade show col-11 col-lg-11 mx-auto"
 			role={"alert"}
 		>
 			{message}

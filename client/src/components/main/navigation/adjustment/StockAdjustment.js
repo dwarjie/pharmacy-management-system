@@ -1,16 +1,96 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
+import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import MedicineService from "../../../../services/MedicineService";
+import StockAdjustmentService from "../../../../services/StockAdjustmentService";
+import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import Loader from "../../../layout/Loader";
 
+// create context API
+const AdjustmentContext = createContext();
+const { Provider } = AdjustmentContext;
+
 const StockAdjustment = () => {
+	const initialStockAdjustmentValue = {
+		id: null,
+		Mode: "add",
+		Quantity: 0,
+		Reason: "",
+		medicineId: null,
+	};
+
+	const [adjustment, setAdjustment] = useState(initialStockAdjustmentValue);
 	const [productList, setProductList] = useState([]);
 	const [selectedProduct, setSelectedProduct] = useState({});
 	const [searchInput, setSearchInput] = useState("");
+	const [alertMessage, setAlertMessage] = useState("Created");
 	const [loading, setLoading] = useState(true);
+
+	// context api value
+	const contextValue = {
+		adjustment,
+		setAdjustment,
+	};
 
 	useEffect(() => {
 		getProductList();
 	}, []);
+
+	const createStockAdjustment = async () => {
+		await StockAdjustmentService.createStockAdjustment(adjustment)
+			.then((response) => {
+				console.log(response.data);
+				setAlertMessage(response.data.message);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const increaseProductStock = async () => {
+		let data = {
+			Quantity: adjustment.Quantity,
+		};
+		await MedicineService.updateMedicineStock(adjustment.medicineId, data)
+			.then((response) => {
+				console.log(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const decreaseProductStock = async () => {
+		let data = {
+			Quantity: adjustment.Quantity,
+		};
+		await MedicineService.updateDecreaseMedicineStock(
+			adjustment.medicineId,
+			data
+		)
+			.then((response) => {
+				console.log(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const adjustStock = async (event) => {
+		event.preventDefault();
+		if (adjustment.medicineId === null) return alert("Pick product to adjust.");
+		if (!AlertPrompt()) return;
+
+		setLoading(true);
+		await createStockAdjustment();
+		if (adjustment.Mode === "add") {
+			await increaseProductStock();
+		} else {
+			await decreaseProductStock();
+		}
+		setAdjustment(initialStockAdjustmentValue);
+	};
 
 	const getProductList = async () => {
 		await MedicineService.getAllMedicine()
@@ -42,37 +122,60 @@ const StockAdjustment = () => {
 					<Loader />
 				</div>
 			) : (
-				<div className="h-auto d-flex flex-column justify-content-between gap-1">
-					<div className="h-75 border border-dark rounded simple-shadow mt-3">
-						<div className="table-responsive max-height-100">
-							<div className="p-3 w-100">
-								<SearchProduct
-									setSearchInput={setSearchInput}
-									searchInput={searchInput}
-									findByTitle={findByTitle}
-									getProductList={getProductList}
+				<Provider value={contextValue}>
+					<div className="h-auto d-flex flex-column justify-content-between gap-1">
+						{alertMessage ? (
+							<AlertInfoLayout
+								content={alertMessage}
+								onClick={(value) => setAlertMessage(value)}
+							/>
+						) : (
+							""
+						)}
+						<div className="h-75 border border-dark rounded simple-shadow">
+							<div className="table-responsive max-height-100">
+								<div className="p-3 w-100">
+									<SearchProduct
+										setSearchInput={setSearchInput}
+										searchInput={searchInput}
+										findByTitle={findByTitle}
+										getProductList={getProductList}
+									/>
+								</div>
+								<ProductTable
+									productList={productList}
+									setSelectedProduct={setSelectedProduct}
 								/>
 							</div>
-							<ProductTable
-								productList={productList}
-								setSelectedProduct={setSelectedProduct}
-							/>
+						</div>
+						<div className="col-12 h-auto">
+							<div className="-75 border border-dark rounded simple-shadow mt-3">
+								<ProductDetails
+									selectedProduct={selectedProduct}
+									adjustStock={adjustStock}
+								/>
+							</div>
 						</div>
 					</div>
-					<div className="col-12 h-auto">
-						<div className="h-75 border border-dark rounded simple-shadow mt-3">
-							<ProductDetails selectedProduct={selectedProduct} />
-						</div>
-					</div>
-				</div>
+				</Provider>
 			)}
 		</>
 	);
 };
 
-const ProductDetails = ({ selectedProduct }) => {
+const ProductDetails = ({ selectedProduct, adjustStock }) => {
+	const { adjustment, setAdjustment } = useContext(AdjustmentContext);
+
+	const handleInputChange = (event) => {
+		const { name, value } = event.target;
+		setAdjustment((prevState) => ({ ...prevState, [name]: value }));
+	};
+
 	return (
-		<form className="col-12 col-md-11 p-3 mb-3 mx-auto">
+		<form
+			className="col-12 col-md-11 p-3 mb-3 mx-auto"
+			onSubmit={(event) => adjustStock(event)}
+		>
 			<div className="row mt-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label htmlFor="">Item:</label>
@@ -91,6 +194,8 @@ const ProductDetails = ({ selectedProduct }) => {
 						name="Mode"
 						id="Mode"
 						className="form-select form-input"
+						value={adjustment.Mode}
+						onChange={handleInputChange}
 						required
 					>
 						<option value="add">Add</option>
@@ -116,8 +221,11 @@ const ProductDetails = ({ selectedProduct }) => {
 						type="number"
 						name="Quantity"
 						id="Quantity"
+						min={1}
 						placeholder="Quantity to adjust"
 						className="form-control form-input"
+						value={adjustment.Quantity}
+						onChange={handleInputChange}
 						required
 					/>
 				</div>
@@ -137,24 +245,28 @@ const ProductDetails = ({ selectedProduct }) => {
 					/>
 				</div>
 				<div className="col-sm-12 col-md">
-					<label className="required" htmlFor="Reason">
-						Reason:
-					</label>
+					<label htmlFor="Reason">Reason:</label>
 					<input
 						type="text"
 						name="Reason"
 						id="Reason"
 						placeholder="Reason for adjustment"
 						className="form-control form-input"
-						required
+						value={adjustment.Reason}
+						onChange={handleInputChange}
 					/>
 				</div>
 			</div>
+			<button type="submit" className="btn btn-primary simple-shadow mt-3">
+				Create
+			</button>
 		</form>
 	);
 };
 
 const ProductTable = ({ productList, setSelectedProduct }) => {
+	const { adjustment, setAdjustment } = useContext(AdjustmentContext);
+
 	const productData = () => {
 		return (
 			productList &&
@@ -162,7 +274,10 @@ const ProductTable = ({ productList, setSelectedProduct }) => {
 				<tr
 					key={index}
 					className="cursor-pointer"
-					onClick={() => setSelectedProduct(product)}
+					onClick={async () => {
+						await setSelectedProduct(product);
+						await setAdjustment({ ...adjustment, medicineId: product.id });
+					}}
 				>
 					<td>{index}</td>
 					<td>{product.ProductCode}</td>
