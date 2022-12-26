@@ -250,7 +250,7 @@ const InventoryModule = () => {
 				</li>
 				<li>
 					<Link
-						to={"pharmacy/inventory/stock-adjustment"}
+						to={"/pharmacy/inventory/stock-adjustment"}
 						className="dropdown-item"
 					>
 						Stock Adjustment

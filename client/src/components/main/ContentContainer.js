@@ -54,6 +54,7 @@ import ManagePO from "./navigation/purchase_order/ManagePO";
 import PrintPO from "./navigation/print/PrintPO";
 import ManageDelivery from "./navigation/delivery/ManageDelivery";
 import Delivery from "./navigation/delivery/Delivery";
+import StockAdjustment from "./navigation/adjustment/StockAdjustment";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -151,6 +152,10 @@ const ContentContainer = (props) => {
 							element={<ManageDelivery />}
 						/>
 						<Route path="/inventory/delivery-list/:id" element={<Delivery />} />
+						<Route
+							path="/inventory/stock-adjustment"
+							element={<StockAdjustment />}
+						/>
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>
