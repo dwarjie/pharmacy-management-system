@@ -70,6 +70,7 @@ require("./app/routes/salesDetail.routes")(app);
 
 require("./app/routes/purchase.routes")(app);
 require("./app/routes/purchaseDetail.routes")(app);
+require("./app/routes/stockAdjustment.routes")(app);
 
 require("./app/routes/auth.routes")(app);
 
