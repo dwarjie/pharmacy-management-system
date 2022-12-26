@@ -38,7 +38,7 @@ const UpdatePO = () => {
 			});
 	};
 
-	const setOrderItem = (data) => {
+	const setOrderItem = async (data) => {
 		let newOrderList = data.map((item) => {
 			return {
 				id: item.id,
@@ -54,7 +54,7 @@ const UpdatePO = () => {
 				purchaseId: item.purchaseId,
 			};
 		});
-		setOrderList(newOrderList);
+		await setOrderList(newOrderList);
 	};
 
 	return (

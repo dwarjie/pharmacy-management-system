@@ -67,8 +67,8 @@ const PurchaseOrder = (props) => {
 		});
 	};
 
-	const createSpecificItem = (item) => {
-		PurchaseDetailService.createPurchaseDetails(item)
+	const createSpecificItem = async (item) => {
+		await PurchaseDetailService.createPurchaseDetails(item)
 			.then((response) => {
 				console.log(response.data);
 			})
