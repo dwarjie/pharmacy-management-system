@@ -22,7 +22,7 @@ const StockAdjustment = () => {
 	const [productList, setProductList] = useState([]);
 	const [selectedProduct, setSelectedProduct] = useState({});
 	const [searchInput, setSearchInput] = useState("");
-	const [alertMessage, setAlertMessage] = useState("Created");
+	const [alertMessage, setAlertMessage] = useState("");
 	const [loading, setLoading] = useState(true);
 
 	// context api value
@@ -90,6 +90,7 @@ const StockAdjustment = () => {
 			await decreaseProductStock();
 		}
 		setAdjustment(initialStockAdjustmentValue);
+		setSelectedProduct({});
 	};
 
 	const getProductList = async () => {

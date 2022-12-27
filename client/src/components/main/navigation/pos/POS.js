@@ -159,6 +159,11 @@ const POS = (props) => {
 			.then((response) => {
 				console.log(response.data);
 				setVatList(response.data);
+				setActiveDropDownValue({
+					...activeDropDownValue,
+					VATId: response.data.VatName,
+					VATAmount: response.data.VatAmount,
+				});
 			})
 			.catch((err) => {
 				console.log(err);
@@ -469,6 +474,14 @@ const OrderInformation = (props) => {
 							))}
 					</select>
 					{/* //TODO: CHANGE INTO INPUT, AND REMOVE VAT IF DISCOUNT IS SC OR PWD */}
+					<input
+						type="text"
+						className="form-control form-input"
+						name="VATId"
+						id="VATId"
+						disabled={true}
+						value={activeDropDownValue.VATId}
+					/>
 					{/* <select
 						className="form-select form-input"
 						name="VATId"
