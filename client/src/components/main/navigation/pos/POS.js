@@ -53,6 +53,7 @@ const POS = (props) => {
 	const [searchCode, setSearchCode] = useState("");
 	const [changeAmount, setChangeAmount] = useState(0);
 	const [currentTime, setCurrentTime] = useState(null);
+	const [specialDiscount, setSpecialDiscount] = useState(false);
 
 	// compute the Grand Total amount
 	useEffect(() => {
@@ -259,6 +260,7 @@ const POS = (props) => {
 	// compute the VAT base on the selected VAT and current total
 	const computeVAT = (grossAmount) => {
 		if (activeDropDownValue.VATId === "" || grossAmount === 0) return 0;
+		if (specialDiscount) return 0;
 
 		let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
 		let amount = percentage * parseFloat(grossAmount);
@@ -377,7 +379,9 @@ const POS = (props) => {
 					setSale={setSale}
 					setCashTendered={setCashTendered}
 					setActiveDropDownValue={setActiveDropDownValue}
+					setSpecialDiscount={setSpecialDiscount}
 					checkOut={checkOut}
+					refreshPage={refreshPage}
 				/>
 			</div>
 		</div>
@@ -399,6 +403,8 @@ const OrderInformation = (props) => {
 		cashTendered,
 		setCashTendered,
 		checkOut,
+		setSpecialDiscount,
+		refreshPage,
 	} = props;
 
 	useEffect(() => {
@@ -452,12 +458,19 @@ const OrderInformation = (props) => {
 						value={activeDropDownValue.discountId}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
+							console.log(data);
 							setActiveDropDownValue({
 								...activeDropDownValue,
 								discountId: data.DiscountName,
 								discountAmount: data.DiscountAmount,
 								discountType: data.DiscountType,
 							});
+							// if senior/pwd is discount, set special discount true
+							if (data.id === 1) {
+								setSpecialDiscount(true);
+							} else {
+								setSpecialDiscount(false);
+							}
 						}}
 					>
 						<DropDownDefaultOption content={"Select Discount"} />
@@ -512,9 +525,6 @@ const OrderInformation = (props) => {
 					</select> */}
 				</div>
 				<div>
-					<h6 className="text-weight-regular">
-						<strong>Total &#8369;: </strong> {sale.GrossAmount}
-					</h6>
 					<h6>
 						<strong>Discount Percentage/Fixed:</strong>{" "}
 						{`${activeDropDownValue.discountAmount} ${
@@ -526,11 +536,14 @@ const OrderInformation = (props) => {
 					<h6>
 						<strong>Discount Amount &#8369;:</strong> {sale.Discount}
 					</h6>
+					<h6 className="text-weight-regular">
+						<strong>VAT Exempt Sales &#8369;: </strong> {sale.GrossAmount}
+					</h6>
 					<h6>
 						<strong>VAT %:</strong> {sale.VAT}
 					</h6>
 					<h6>
-						<strong>Grand Total &#8369;: </strong> {sale.Total}
+						<strong>Total Amount &#8369;: </strong> {sale.Total}
 					</h6>
 					<h6>
 						<strong>Cash Tendered &#8369;:</strong>
@@ -559,7 +572,13 @@ const OrderInformation = (props) => {
 						>
 							Checkout
 						</button>
-						<button className="btn btn-secondary w-100">Cancel order</button>
+						<button
+							className="btn btn-secondary w-100"
+							disabled={orderList.length > 0 ? false : true}
+							onClick={() => window.location.reload()}
+						>
+							Cancel order
+						</button>
 					</div>
 				</div>
 			</div>

@@ -61,3 +61,11 @@ exports.User = async (user) => {
 		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
 	});
 };
+
+exports.Discount = async (discount) => {
+	discount.create({
+		DiscountName: "Senior/PWD",
+		DiscountAmount: 20,
+		DiscountType: "%",
+	});
+};

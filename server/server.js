@@ -36,6 +36,7 @@ db.sequelize
 // 	initialize.Run();
 // 	initialize.User(db.user);
 // 	initialize.VAT(db.vat);
+// 	initialize.Discount(db.discount);
 // });
 
 // sample route

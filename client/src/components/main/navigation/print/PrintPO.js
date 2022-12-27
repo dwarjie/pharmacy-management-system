@@ -142,6 +142,11 @@ class ComponentToPrint extends React.Component {
 								{purchase.supplier.SupplierName}
 							</p>
 							<p>
+								<strong>Contact Person:</strong>
+								<br />
+								{purchase.supplier.ContactPerson}
+							</p>
+							<p>
 								<strong>Address:</strong>
 								<br />
 								{purchase.supplier.Address}
