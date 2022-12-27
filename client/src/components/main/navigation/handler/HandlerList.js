@@ -72,9 +72,10 @@ const HandlerList = () => {
 					<label htmlFor="handler-search">Search:</label>
 					<input type="text" className="form-control" id="handler-search" />
 				</form>
-				<table className="table">
-					<thead>
+				<table className="table table-striped table-hover">
+					<thead className="table-dark">
 						<tr>
+							<th scope="col">#</th>
 							<th scope="col">Name</th>
 							<th scope="col">Category</th>
 							<th scope="col">Address</th>
@@ -86,6 +87,7 @@ const HandlerList = () => {
 						{handlers &&
 							handlers.map((handler, index) => (
 								<tr key={index}>
+									<td>{index + 1}</td>
 									<td>{`${handler.FirstName} ${handler.LastName}`}</td>
 									<td>{handler.Category}</td>
 									<td>{handler.Address}</td>

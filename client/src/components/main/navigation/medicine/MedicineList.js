@@ -72,9 +72,10 @@ const MedicineList = () => {
 					<label htmlFor="medicine-search">Search:</label>
 					<input type="text" className="form-control" id="medicine-search" />
 				</form>
-				<table className="table">
-					<thead>
+				<table className="table table-striped table-hover">
+					<thead className="table-dark">
 						<tr>
+							<th scope="col">#</th>
 							<th scope="col">Product Name</th>
 							<th scope="col">Generic Name</th>
 							<th scope="col">Category</th>
@@ -89,6 +90,7 @@ const MedicineList = () => {
 						{medicines &&
 							medicines.map((medicine, index) => (
 								<tr key={index}>
+									<td>{index + 1}</td>
 									<td>{medicine.ProductName}</td>
 									<td>{medicine.GenericName}</td>
 									<td>{medicine.subCategory.SubCategoryName}</td>

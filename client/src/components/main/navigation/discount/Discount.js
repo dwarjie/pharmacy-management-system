@@ -180,9 +180,10 @@ const Discount = () => {
 					<hr />
 				</div>
 				<div className="p-3">
-					<table className="table">
-						<thead>
+					<table className="table table-striped table-hover">
+						<thead className="table-dark">
 							<tr>
+								<th scope="col">#</th>
 								<th scope="col">Name</th>
 								<th scope="col">Amount</th>
 								<th scope="col">Unit</th>
@@ -193,6 +194,7 @@ const Discount = () => {
 							{discounts &&
 								discounts.map((discount, index) => (
 									<tr key={index}>
+										<td>{index + 1}</td>
 										<td>{discount.DiscountName}</td>
 										<td>{discount.DiscountAmount}</td>
 										<td>{discount.DiscountType}</td>

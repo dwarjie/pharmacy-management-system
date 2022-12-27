@@ -174,8 +174,8 @@ const CategoryList = (props) => {
 						id="manufacturer-search"
 					/>
 				</form> */}
-				<table className="table table-hover">
-					<thead>
+				<table className="table table-hover table-striped">
+					<thead className="table-dark">
 						<tr>
 							<th scope="col">Name</th>
 							<th scope="col">Actions</th>
@@ -223,8 +223,8 @@ const SubCategoryList = (props) => {
 				<hr />
 			</div>
 			<div className="p-3">
-				<table className="table">
-					<thead>
+				<table className="table table-striped">
+					<thead className="table-dark">
 						<tr>
 							<th scope="col">Name</th>
 							<th scope="col">Markup</th>

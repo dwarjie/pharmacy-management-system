@@ -91,6 +91,7 @@ const PatientTable = (props) => {
 	// then return it as a rows in the table
 	const patientRows = patientsData.map((patient, index) => (
 		<tr key={index}>
+			<td>{index + 1}</td>
 			<td>{`${patient.FirstName} ${patient.LastName}`}</td>
 			<td>{patient.Sex}</td>
 			<td>{patient.Address}</td>
@@ -114,9 +115,10 @@ const PatientTable = (props) => {
 	));
 
 	return (
-		<table className="table">
-			<thead>
+		<table className="table table-striped table-hover">
+			<thead className="table-dark">
 				<tr>
+					<th scope="col">#</th>
 					<th scope="col">Name</th>
 					<th scope="col">Sex</th>
 					<th scope="col">Address</th>

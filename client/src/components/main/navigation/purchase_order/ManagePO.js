@@ -76,9 +76,10 @@ const ManagePO = () => {
 					<label htmlFor="medicine-search">Search:</label>
 					<input type="text" className="form-control" id="medicine-search" />
 				</form>
-				<table className="table">
-					<thead>
+				<table className="table table-striped table-hover">
+					<thead className="table-dark">
 						<tr>
+							<th scope="col">#</th>
 							<th scope="col">Order Date</th>
 							<th scope="col">Reference #</th>
 							<th scope="col">Supplier</th>
@@ -91,6 +92,7 @@ const ManagePO = () => {
 						{purchases &&
 							purchases.map((purchase, index) => (
 								<tr key={index}>
+									<td>{index + 1}</td>
 									<td>{formatDate(purchase.OrderDate)}</td>
 									<td>{purchase.POCode}</td>
 									<td>{purchase.supplier.SupplierName}</td>

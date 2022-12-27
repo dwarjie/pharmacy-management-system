@@ -216,9 +216,10 @@ const Supplier = () => {
 							id="supplier-search"
 						/>
 					</form> */}
-					<table className="table">
-						<thead>
+					<table className="table table-striped table-hover">
+						<thead className="table-dark">
 							<tr>
+								<th>#</th>
 								<th scope="col">Supplier Name</th>
 								<th scope="col">Contact Person</th>
 								<th scope="col">Mobile</th>
@@ -230,6 +231,7 @@ const Supplier = () => {
 							{suppliers &&
 								suppliers.map((supplier, index) => (
 									<tr key={index}>
+										<td>{index + 1}</td>
 										<td>{supplier.SupplierName}</td>
 										<td>{supplier.ContactPerson}</td>
 										<td>{supplier.Mobile}</td>

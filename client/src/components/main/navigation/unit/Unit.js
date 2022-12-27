@@ -151,9 +151,10 @@ const AddUnit = () => {
 							id="manufacturer-search"
 						/>
 					</form> */}
-					<table className="table">
-						<thead>
+					<table className="table table-striped table-hover">
+						<thead className="table-dark">
 							<tr>
+								<th scope="col">#</th>
 								<th scope="col">Name</th>
 								<th scope="col">Actions</th>
 							</tr>
@@ -162,6 +163,7 @@ const AddUnit = () => {
 							{units &&
 								units.map((unit, index) => (
 									<tr key={index}>
+										<td>{index + 1}</td>
 										<td>{unit.UnitName}</td>
 										<td>
 											<span className="px-2">

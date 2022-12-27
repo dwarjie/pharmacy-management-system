@@ -42,9 +42,10 @@ const ManagePOS = () => {
 					<label htmlFor="medicine-search">Search:</label>
 					<input type="text" className="form-control" id="medicine-search" />
 				</form>
-				<table className="table">
-					<thead>
+				<table className="table table-striped table-hover">
+					<thead className="table-dark">
 						<tr>
+							<th scope="col">#</th>
 							<th scope="col">Order No</th>
 							<th scope="col">Customer Name</th>
 							<th scope="col">Date</th>
@@ -56,6 +57,7 @@ const ManagePOS = () => {
 						{sales &&
 							sales.map((sale, index) => (
 								<tr key={index}>
+									<td>{index + 1}</td>
 									<td>{sale.OrderNo}</td>
 									<td>{sale.CustomerName}</td>
 									<td>{formatDate(sale.OrderDate)}</td>
