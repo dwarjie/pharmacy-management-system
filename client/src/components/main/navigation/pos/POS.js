@@ -19,6 +19,7 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { MdDelete } from "react-icons/md";
 import parseDropdownValue from "../../../../helper/parseJSON";
 import SalesDetailService from "../../../../services/SalesDetailService";
+import Loader from "../../../layout/Loader";
 
 const POS = (props) => {
 	let navigate = useNavigate();
@@ -54,6 +55,7 @@ const POS = (props) => {
 	const [changeAmount, setChangeAmount] = useState(0);
 	const [currentTime, setCurrentTime] = useState(null);
 	const [specialDiscount, setSpecialDiscount] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	// compute the Grand Total amount
 	useEffect(() => {
@@ -76,6 +78,7 @@ const POS = (props) => {
 	const setORNumber = async () => {
 		let orNumber = await getOR();
 		setSale((prevState) => ({ ...prevState, ORNumber: orNumber.CurrentOR }));
+		setLoading(false);
 	};
 
 	// create the sales for the salesDetails
@@ -85,6 +88,7 @@ const POS = (props) => {
 		await SaleService.createSale(sale)
 			.then((response) => {
 				console.log(response.data);
+				setLoading(true);
 				incrementOR();
 				saleId = response.data.data.id;
 			})
@@ -101,6 +105,23 @@ const POS = (props) => {
 			SalesDetailService.createSalesDetails(order)
 				.then((response) => {
 					console.log(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
+	const decreaseProductStock = async () => {
+		await orderList.forEach((product) => {
+			let data = {
+				Quantity: product.Quantity,
+			};
+
+			MedicineService.updateDecreaseMedicineStock(product.medicineId, data)
+				.then((response) => {
+					console.log(response.data);
+					setLoading(false);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -139,6 +160,7 @@ const POS = (props) => {
 		// then ask the user if they want to print the receipt
 		let saleId = await createSale();
 		await createSalesDetails(saleId);
+		await decreaseProductStock();
 		printInvoice();
 	};
 
@@ -330,61 +352,69 @@ const POS = (props) => {
 	};
 
 	return (
-		<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
-			<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
-				<div className="h-50 border border-dark rounded simple-shadow">
-					<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
-						<SearchProductCode
-							findByCode={findByCode}
-							searchCode={searchCode}
-							setSearchCode={setSearchCode}
-						/>
-						<div className="col-8">
-							<SearchProduct
-								findByTitle={findByTitle}
-								setProducts={setProducts}
-							/>
+		<>
+			{loading ? (
+				<div className="w-auto mt-8 d-flex justify-content-center align-items-center">
+					<Loader />
+				</div>
+			) : (
+				<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
+					<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
+						<div className="h-50 border border-dark rounded simple-shadow">
+							<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
+								<SearchProductCode
+									findByCode={findByCode}
+									searchCode={searchCode}
+									setSearchCode={setSearchCode}
+								/>
+								<div className="col-8">
+									<SearchProduct
+										findByTitle={findByTitle}
+										setProducts={setProducts}
+									/>
+								</div>
+							</form>
+							<div className="table-responsive max-height-85">
+								<ProductTable
+									products={products}
+									orderList={orderList}
+									setOrderList={setOrderList}
+									addProduct={addProduct}
+								/>
+							</div>
 						</div>
-					</form>
-					<div className="table-responsive max-height-85">
-						<ProductTable
-							products={products}
+						<div className="h-50 border border-dark rounded simple-shadow">
+							<div className="table-responsive max-height-100">
+								<OrderTable
+									orderList={orderList}
+									setSaleInformation={setSaleInformation}
+									deleteOrder={deleteOrder}
+								/>
+							</div>
+						</div>
+					</div>
+					<div className="col-4 h-auto border border-dark rounded simple-shadow">
+						<OrderInformation
+							currentTime={currentTime}
+							sale={sale}
+							changeAmount={changeAmount}
+							setChangeAmount={setChangeAmount}
 							orderList={orderList}
-							setOrderList={setOrderList}
-							addProduct={addProduct}
+							cashTendered={cashTendered}
+							activeDropDownValue={activeDropDownValue}
+							discountList={discountList}
+							vatList={vatList}
+							setSale={setSale}
+							setCashTendered={setCashTendered}
+							setActiveDropDownValue={setActiveDropDownValue}
+							setSpecialDiscount={setSpecialDiscount}
+							checkOut={checkOut}
+							refreshPage={refreshPage}
 						/>
 					</div>
 				</div>
-				<div className="h-50 border border-dark rounded simple-shadow">
-					<div className="table-responsive max-height-100">
-						<OrderTable
-							orderList={orderList}
-							setSaleInformation={setSaleInformation}
-							deleteOrder={deleteOrder}
-						/>
-					</div>
-				</div>
-			</div>
-			<div className="col-4 h-auto border border-dark rounded simple-shadow">
-				<OrderInformation
-					currentTime={currentTime}
-					sale={sale}
-					changeAmount={changeAmount}
-					setChangeAmount={setChangeAmount}
-					orderList={orderList}
-					cashTendered={cashTendered}
-					activeDropDownValue={activeDropDownValue}
-					discountList={discountList}
-					vatList={vatList}
-					setSale={setSale}
-					setCashTendered={setCashTendered}
-					setActiveDropDownValue={setActiveDropDownValue}
-					setSpecialDiscount={setSpecialDiscount}
-					checkOut={checkOut}
-					refreshPage={refreshPage}
-				/>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };
 
