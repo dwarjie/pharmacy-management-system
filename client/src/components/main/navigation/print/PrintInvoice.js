@@ -1,10 +1,11 @@
 // This component prints the invoice for the pos
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 
 const PrintInvoice = () => {
 	let componentRef = useRef();
+	let navigate = useNavigate();
 	let location = useLocation();
 
 	const [sale, setSale] = useState({});
@@ -35,6 +36,12 @@ const PrintInvoice = () => {
 							)}
 							content={() => componentRef}
 						/>
+						<button
+							className="btn btn-secondary mx-2"
+							onClick={() => navigate(-1)}
+						>
+							Cancel
+						</button>
 					</div>
 				</div>
 			</div>

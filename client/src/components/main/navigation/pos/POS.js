@@ -132,12 +132,6 @@ const POS = (props) => {
 	// ask the user if they want to print, else stay and reset the page
 	const printInvoice = () => {
 		// ask the user
-		if (!AlertPrompt("Print Receipt?")) {
-			// cancel printing
-			refreshPage();
-			return;
-		}
-
 		navigate(`/pharmacy/sales/pos/print`, {
 			state: {
 				sale: sale,
