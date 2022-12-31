@@ -674,7 +674,7 @@ const OrderTable = (props) => {
 					<th scope="col">Item</th>
 					<th scope="col">Price</th>
 					<th scope="col">Qty</th>
-					<th scope="col">Total</th>
+					<th scope="col">Sub-Total</th>
 					<th scope="col">Actions</th>
 				</tr>
 			</thead>

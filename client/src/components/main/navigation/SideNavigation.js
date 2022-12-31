@@ -288,7 +288,7 @@ const SalesModule = () => {
 				</li>
 				<li>
 					<Link
-						to={"pharmacy/sales/charge-to-account"}
+						to={"/pharmacy/sales/charge-to-account"}
 						className="dropdown-item"
 					>
 						Charge to Account

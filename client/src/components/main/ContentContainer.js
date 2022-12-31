@@ -46,6 +46,7 @@ import POS from "./navigation/pos/POS";
 import ManagePOS from "./navigation/pos/ManagePOS";
 import ViewSale from "./navigation/pos/ViewSale";
 import PrintInvoice from "./navigation/print/PrintInvoice";
+import ChargeToAccount from "./navigation/invoice/ChargeToAccount";
 
 // Inventory Tab
 import AddPO from "./navigation/purchase_order/AddPO";
@@ -135,6 +136,10 @@ const ContentContainer = (props) => {
 						<Route path="/sales/pos/print" element={<PrintInvoice />} />
 						<Route path="/sales/sales-list" element={<ManagePOS />} />
 						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
+						<Route
+							path="/sales/charge-to-account"
+							element={<ChargeToAccount />}
+						/>
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
 						<Route path="/inventory/purchase-order" element={<AddPO />} />
