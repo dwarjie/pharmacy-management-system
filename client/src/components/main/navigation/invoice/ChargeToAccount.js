@@ -34,6 +34,8 @@ const ChargeToAccount = (props) => {
 		DueDate: "",
 		Total: 0,
 		PaidAmount: 0,
+		Status: "pending",
+		Remarks: "Charge Upon Use",
 		handlerId: null,
 		userId: currentUser.id,
 		patientId: null,
@@ -151,7 +153,6 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 		setActiveDropDownValue,
 	} = useContext(InvoiceContext);
 
-	console.log(currentUser);
 	return (
 		<>
 			<div className="row mt-3 col-12">
@@ -197,6 +198,14 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 						name="handler"
 						className="form-select form-input"
 						value={activeDropDownValue.handler}
+						onChange={(event) => {
+							let data = parseDropdownValue(event);
+							setActiveDropDownValue((prevState) => ({
+								...prevState,
+								handler: data.FirstName,
+							}));
+							setInvoice((prevState) => ({ ...prevState, handlerId: data.id }));
+						}}
 					>
 						<DropDownDefaultOption content={"Select Handler"} />
 						{handlerList &&
@@ -239,6 +248,14 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 						name="patient"
 						className="form-select form-input"
 						value={activeDropDownValue.patient}
+						onChange={(event) => {
+							let data = parseDropdownValue(event);
+							setActiveDropDownValue((prevState) => ({
+								...prevState,
+								patient: data.FirstName,
+							}));
+							setInvoice((prevState) => ({ ...prevState, patientId: data.id }));
+						}}
 					>
 						<DropDownDefaultOption content={"Select Patient"} />
 						{patientList &&
