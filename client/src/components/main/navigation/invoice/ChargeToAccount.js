@@ -19,6 +19,7 @@ import PatientService from "../../../../services/PatientService";
 import { MdDelete } from "react-icons/md";
 import Loader from "../../../layout/Loader";
 import VatService from "../../../../services/VatService";
+import InvoiceService from "../../../../services/InvoiceService";
 
 // creating context API
 const InvoiceContext = createContext();
@@ -90,6 +91,26 @@ const ChargeToAccount = (props) => {
 	useEffect(() => {
 		setInvoiceInformation();
 	}, [orderList]);
+
+	const createChargeToAccount = async () => {
+		let invoiceId = 0;
+		await InvoiceService.createInvoice(invoice)
+			.then((response) => {
+				console.log(response.data);
+				invoiceId = response.data.data.id;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		return invoiceId;
+	};
+
+	const createInvoice = async () => {
+		if (!AlertPrompt("Are you sure you want to create this invoice?")) return;
+
+		let invoiceId = await createChargeToAccount();
+	};
 
 	const getHandlers = async () => {
 		await HandlerService.getAllHandler()
@@ -250,6 +271,20 @@ const ChargeToAccount = (props) => {
 								<ProductTable deleteOrder={deleteOrder} />
 							</div>
 						</div>
+						<div className="col-12 col-md-6">
+							<label htmlFor="">Remarks:</label>
+							<textarea
+								className="form-control form-input"
+								placeholder="Invoice Remarks"
+								value={invoice.Remarks}
+								onChange={(event) => {
+									setInvoice((prevState) => ({
+										...prevState,
+										Remarks: event.target.value,
+									}));
+								}}
+							></textarea>
+						</div>
 						<div className="w-auto">
 							<button
 								type="submit"
@@ -289,7 +324,7 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 	} = useContext(InvoiceContext);
 
 	return (
-		<>
+		<form>
 			<div className="row mt-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
@@ -415,7 +450,7 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 					/>
 				</div>
 			</div>
-		</>
+		</form>
 	);
 };
 
@@ -590,15 +625,15 @@ const SearchProduct = ({ getAllProducts, addProduct }) => {
 
 	return (
 		<div className="row mt-3 col-12">
-			<div className="col-sm-12 col-md">
+			{/* <div className="col-sm-12 col-md">
 				<input
 					type="text"
 					className="form-control form-input"
 					placeholder="Search Product Code"
 					name="searchProductCode"
 				/>
-			</div>
-			<div className="col-sm-12 col-md">
+			</div> */}
+			<div className="col-sm-12 col-md-6">
 				<div className="search-inner">
 					<div className="input-group flex-nowrap">
 						<input
