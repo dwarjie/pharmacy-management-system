@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
-import { checkQuantity } from "../../../../helper/checkQuantity";
+import { checkQuantity, checkStock } from "../../../../helper/checkQuantity";
 import {
 	formatDate,
 	generateOrderNumber,
@@ -116,6 +116,8 @@ const ChargeToAccount = (props) => {
 			});
 	};
 
+	// add an item to the account details
+
 	// this function will check if order already exists in order list
 	const checkOrderExist = (selectedProduct) => {
 		let isExist = false;
@@ -131,7 +133,6 @@ const ChargeToAccount = (props) => {
 
 	// add product into the order list
 	const addProduct = (selectedProduct) => {
-		console.log(selectedProduct);
 		if (!checkOrderExist(selectedProduct)) {
 			// check if quantity is greater than 0 before adding to the order list
 			if (checkQuantity(selectedProduct.Quantity)) {
@@ -362,7 +363,7 @@ const ProductTable = (props) => {
 
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
-		return order.Total.toFixed(1);
+		return order.Total.toFixed(2);
 	};
 
 	// delete an order in the list
@@ -375,9 +376,9 @@ const ProductTable = (props) => {
 		setOrderList(newOrderList);
 	};
 
-	const handleQuantityChange = (event, i) => {
+	const handleQuantityChange = (event, order, i) => {
 		let value = parseInt(event.target.value);
-		if (!checkQuantity(value)) alert("Please input a valid quantity!");
+		if (!checkQuantity(value)) return alert("Please input a valid quantity!");
 
 		const newOrderList = orderList.map((order, index) => {
 			if (index !== i) return order;
@@ -391,6 +392,25 @@ const ProductTable = (props) => {
 		setOrderList(newOrderList);
 	};
 
+	const handleStockCheck = (event, order, i) => {
+		let value = parseInt(event.target.value);
+
+		if (!checkStock(order.OnHand, value)) {
+			alert("Insufficient Quantity!");
+
+			const newOrderList = orderList.map((order, index) => {
+				if (index !== i) return order;
+
+				if (checkQuantity(value)) {
+					return { ...order, Quantity: 1 };
+				} else {
+					return order;
+				}
+			});
+			setOrderList(newOrderList);
+		}
+	};
+
 	const orderData = () => {
 		return (
 			orderList &&
@@ -402,13 +422,15 @@ const ProductTable = (props) => {
 					<td>
 						<input
 							type="number"
+							min={1}
 							className="form-control form-input w-xs-auto w-20 p-1"
 							value={order.Quantity}
 							onChange={(event) => {
-								handleQuantityChange(event, index);
+								handleQuantityChange(event, order, index);
 								getProductTotal(order);
 								orderData();
 							}}
+							onBlur={(event) => handleStockCheck(event, order, index)}
 						/>
 					</td>
 					<td>{order.UnitCost}</td>
