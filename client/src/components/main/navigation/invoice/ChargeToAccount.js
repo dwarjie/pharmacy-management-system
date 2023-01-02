@@ -50,10 +50,12 @@ const ChargeToAccount = (props) => {
 	const initialOrderList = [];
 
 	const [invoice, setInvoice] = useState(initialInvoice);
-	const [searchProduct, setSearchProduct] = useState("");
 	const [orderList, setOrderList] = useState(initialOrderList);
+	const [products, setProducts] = useState([]);
 	const [handlerList, setHandlerList] = useState([]);
 	const [patientList, setPatientList] = useState([]);
+	const [searchProduct, setSearchProduct] = useState("");
+	const [searchProductCode, setSearchProductCode] = useState("");
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
 	const [loading, setLoading] = useState(true);
@@ -63,8 +65,16 @@ const ChargeToAccount = (props) => {
 		currentUser,
 		invoice,
 		setInvoice,
+		orderList,
+		setOrderList,
 		activeDropDownValue,
 		setActiveDropDownValue,
+		searchProduct,
+		setSearchProduct,
+		searchProductCode,
+		setSearchProductCode,
+		products,
+		setProducts,
 	};
 
 	useEffect(() => {
@@ -95,6 +105,56 @@ const ChargeToAccount = (props) => {
 			});
 	};
 
+	const getAllProducts = async () => {
+		await MedicineService.getByTitle(searchProduct)
+			.then((response) => {
+				console.log(response.data);
+				setProducts(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	// this function will check if order already exists in order list
+	const checkOrderExist = (selectedProduct) => {
+		let isExist = false;
+		// check if the medicineId already exists in order list
+		orderList.forEach((order) => {
+			if (order.medicineId === selectedProduct.id) {
+				isExist = true;
+			}
+		});
+
+		return isExist;
+	};
+
+	// add product into the order list
+	const addProduct = (selectedProduct) => {
+		console.log(selectedProduct);
+		if (!checkOrderExist(selectedProduct)) {
+			// check if quantity is greater than 0 before adding to the order list
+			if (checkQuantity(selectedProduct.Quantity)) {
+				let initialSelectedProduct = {
+					id: -1,
+					PCode: selectedProduct.ProductCode,
+					Item: selectedProduct.ProductName,
+					OnHand: selectedProduct.Quantity,
+					Quantity: 1,
+					UnitCost: selectedProduct.SellingPrice,
+					Total: selectedProduct.SellingPrice,
+					medicineId: selectedProduct.id,
+					purchaseId: null,
+				};
+				setOrderList([...orderList, initialSelectedProduct]);
+
+				setOrderList([...orderList, initialSelectedProduct]);
+			} else {
+				alert("Insufficient Quantity!");
+			}
+		}
+	};
+
 	return (
 		<>
 			{loading ? (
@@ -108,6 +168,10 @@ const ChargeToAccount = (props) => {
 							<InvoiceInformation
 								patientList={patientList}
 								handlerList={handlerList}
+							/>
+							<SearchProduct
+								getAllProducts={getAllProducts}
+								addProduct={addProduct}
 							/>
 						</div>
 						<div className="h-75 border border-dark rounded simple-shadow mt-3">
@@ -280,38 +344,21 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 					/>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
-				<div className="col-sm-12 col-md">
-					<input
-						type="text"
-						className="form-control form-input"
-						placeholder="Search Product Code"
-						name="searchProductCode"
-					/>
-				</div>
-				<div className="col-sm-12 col-md">
-					<div className="search-inner">
-						<div className="input-group flex-nowrap">
-							<input
-								type="text"
-								className="form-control form-input"
-								placeholder="Search Product Name"
-								name="searchProduct"
-							/>
-							<button className="btn btn-secondary" type="button">
-								Clear
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
 		</>
 	);
 };
 
 const ProductTable = (props) => {
-	const { orderList, purchaseOrder, setOrderList, deleteItem, isUpdate } =
-		props;
+	const {
+		orderList,
+		setOrderList,
+		searchProduct,
+		setSearchProduct,
+		searchProductCode,
+		setSearchProductCode,
+		products,
+		setProducts,
+	} = useContext(InvoiceContext);
 
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
@@ -344,43 +391,37 @@ const ProductTable = (props) => {
 		setOrderList(newOrderList);
 	};
 
-	// const orderData = () => {
-	// 	return (
-	// 		orderList &&
-	// 		orderList.map((order, index) => (
-	// 			<tr key={index}>
-	// 				<td>{order.PCode}</td>
-	// 				<td>{order.Item}</td>
-	// 				<td>{order.OnHand}</td>
-	// 				<td>{order.ReorderPoint}</td>
-	// 				<td>
-	// 					<input
-	// 						type="number"
-	// 						className="form-control form-input w-xs-auto w-20 p-1"
-	// 						value={order.Quantity}
-	// 						onChange={(event) => {
-	// 							handleQuantityChange(event, index);
-	// 							getProductTotal(order);
-	// 							orderData();
-	// 						}}
-	// 					/>
-	// 				</td>
-	// 				<td>{order.UnitCost}</td>
-	// 				<td>{getProductTotal(order)}</td>
-	// 				<td>
-	// 					<span className="px-1">
-	// 						<MdDelete
-	// 							className="icon-size-sm cursor-pointer"
-	// 							onClick={() => {
-	// 								isUpdate() ? deleteItem(order) : deleteOrder(index);
-	// 							}}
-	// 						/>
-	// 					</span>
-	// 				</td>
-	// 			</tr>
-	// 		))
-	// 	);
-	// };
+	const orderData = () => {
+		return (
+			orderList &&
+			orderList.map((order, index) => (
+				<tr key={index}>
+					<td>{order.PCode}</td>
+					<td>{order.Item}</td>
+					<td>{order.OnHand}</td>
+					<td>
+						<input
+							type="number"
+							className="form-control form-input w-xs-auto w-20 p-1"
+							value={order.Quantity}
+							onChange={(event) => {
+								handleQuantityChange(event, index);
+								getProductTotal(order);
+								orderData();
+							}}
+						/>
+					</td>
+					<td>{order.UnitCost}</td>
+					<td>{getProductTotal(order)}</td>
+					<td>
+						<span className="px-1">
+							<MdDelete className="icon-size-sm cursor-pointer" />
+						</span>
+					</td>
+				</tr>
+			))
+		);
+	};
 
 	return (
 		<table className="table">
@@ -396,7 +437,7 @@ const ProductTable = (props) => {
 				</tr>
 			</thead>
 			<tbody>
-				{/* {orderData()} */}
+				{orderData()}
 				<tr>
 					<td className="no-line"></td>
 					<td className="no-line"></td>
@@ -409,6 +450,81 @@ const ProductTable = (props) => {
 				</tr>
 			</tbody>
 		</table>
+	);
+};
+
+const SearchProduct = ({ getAllProducts, addProduct }) => {
+	const {
+		searchProduct,
+		setSearchProduct,
+		searchProductCode,
+		setSearchProductCode,
+		products,
+		setProducts,
+	} = useContext(InvoiceContext);
+
+	const searchData = () => {
+		if (searchProduct === "") return;
+
+		return (
+			products &&
+			products.slice(0, 10).map((item, index) => (
+				<div
+					className="dropdown-row m-1 cursor-pointer"
+					key={index}
+					onClick={() => addProduct(item)}
+				>
+					<h5>{item.ProductName}</h5>
+				</div>
+			))
+		);
+	};
+
+	// handle the searching
+	const handleSearchProduct = (event) => {
+		if (event.target.value.trim() === "") setProducts([]);
+		setSearchProduct(event.target.value);
+		if (searchProduct.trim() !== "") getAllProducts();
+	};
+
+	const resetSearchTitle = () => {
+		setSearchProduct("");
+		setProducts([]);
+	};
+
+	return (
+		<div className="row mt-3 col-12">
+			<div className="col-sm-12 col-md">
+				<input
+					type="text"
+					className="form-control form-input"
+					placeholder="Search Product Code"
+					name="searchProductCode"
+				/>
+			</div>
+			<div className="col-sm-12 col-md">
+				<div className="search-inner">
+					<div className="input-group flex-nowrap">
+						<input
+							type="text"
+							className="form-control form-input"
+							placeholder="Search Product Name"
+							name="searchProduct"
+							value={searchProduct}
+							onChange={handleSearchProduct}
+						/>
+						<button
+							className="btn btn-secondary"
+							type="button"
+							onClick={resetSearchTitle}
+						>
+							Clear
+						</button>
+					</div>
+				</div>
+				<div className="dropdown-items">{searchData()}</div>
+			</div>
+		</div>
 	);
 };
 

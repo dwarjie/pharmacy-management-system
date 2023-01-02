@@ -33,6 +33,8 @@ db.handler = require("./handler.model")(sequelize, Sequelize);
 
 db.salesDetail = require("./salesDetail.model")(sequelize, Sequelize);
 db.sales = require("./sales.model")(sequelize, Sequelize);
+db.invoiceDetail = require("./invoiceDetails.model")(sequelize, Sequelize);
+db.invoice = require("./invoice.model")(sequelize, Sequelize);
 
 db.purchaseDetail = require("./purchaseDetails.model")(sequelize, Sequelize);
 db.purchase = require("./purchaseOrder.model")(sequelize, Sequelize);
@@ -136,6 +138,48 @@ db.purchaseDetail.belongsTo(db.medicine, {
 db.medicine.hasMany(db.stockAdjustment);
 db.stockAdjustment.belongsTo(db.medicine, {
 	as: "medicine",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationship for invoice details with medicine id and invoice
+db.medicine.hasMany(db.invoiceDetail);
+db.invoiceDetail.belongsTo(db.medicine, {
+	as: "medicine",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.invoice.hasMany(db.invoiceDetail);
+db.invoiceDetail.belongsTo(db.invoice, {
+	as: "invoice",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationship for invoice with patient id, handler id, and user id
+db.patient.hasMany(db.invoice);
+db.invoice.belongsTo(db.patient, {
+	as: "patient",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.handler.hasMany(db.invoice);
+db.invoice.belongsTo(db.handler, {
+	as: "handler",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.user.hasMany(db.invoice);
+db.invoice.belongsTo(db.user, {
+	as: "user",
 	foreignKey: {
 		allowNull: false,
 	},
