@@ -18,6 +18,7 @@ import PatientService from "../../../../services/PatientService";
 // icons
 import { MdDelete } from "react-icons/md";
 import Loader from "../../../layout/Loader";
+import VatService from "../../../../services/VatService";
 
 // creating context API
 const InvoiceContext = createContext();
@@ -32,8 +33,10 @@ const ChargeToAccount = (props) => {
 		InvoiceNo: generateOrderNumber(),
 		InvoiceDate: getCurrentDate(),
 		DueDate: "",
+		VAT: 0,
 		Total: 0,
 		PaidAmount: 0,
+		GrossAmount: 0,
 		Status: "pending",
 		Remarks: "Charge Upon Use",
 		handlerId: null,
@@ -56,6 +59,7 @@ const ChargeToAccount = (props) => {
 	const [patientList, setPatientList] = useState([]);
 	const [searchProduct, setSearchProduct] = useState("");
 	const [searchProductCode, setSearchProductCode] = useState("");
+	const [vat, setVat] = useState(0);
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
 	const [loading, setLoading] = useState(true);
@@ -79,8 +83,13 @@ const ChargeToAccount = (props) => {
 
 	useEffect(() => {
 		getHandlers();
+		getVAT();
 		getPatients();
 	}, []);
+
+	useEffect(() => {
+		setInvoiceInformation();
+	}, [orderList]);
 
 	const getHandlers = async () => {
 		await HandlerService.getAllHandler()
@@ -116,7 +125,16 @@ const ChargeToAccount = (props) => {
 			});
 	};
 
-	// add an item to the account details
+	const getVAT = async () => {
+		await VatService.getAllVAT()
+			.then((response) => {
+				console.log(response.data);
+				setVat(parseFloat(response.data.VatAmount));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	// this function will check if order already exists in order list
 	const checkOrderExist = (selectedProduct) => {
@@ -156,6 +174,58 @@ const ChargeToAccount = (props) => {
 		}
 	};
 
+	// set the sale information
+	const setInvoiceInformation = () => {
+		// check if orderList is not empty
+		if (orderList.length !== 0) {
+			let grossAmount = parseFloat(computeTotal());
+			let vat = parseFloat(computeVAT(grossAmount));
+			let total = parseFloat(grossAmount + vat).toFixed(2);
+
+			setInvoice((prevState) => ({
+				...prevState,
+				GrossAmount: grossAmount,
+				VAT: vat,
+				Total: total,
+			}));
+		} else {
+			setInvoice((prevState) => ({
+				...prevState,
+				GrossAmount: 0,
+				VAT: 0,
+				Total: 0,
+			}));
+		}
+	};
+
+	// compute the total amount, vat and discount of the transaction
+	const computeTotal = () => {
+		let total = 0;
+		orderList.map((order, index) => {
+			total += order.Total;
+		});
+
+		return total.toFixed(2);
+	};
+
+	// compute the VAT base on the selected VAT and current total
+	const computeVAT = (grossAmount) => {
+		let percentage = parseFloat(vat) / 100;
+		let amount = percentage * parseFloat(grossAmount);
+
+		return amount.toFixed(2);
+	};
+
+	// delete an order in the list
+	// use array map, check the medicineId
+	const deleteOrder = (orderIndex) => {
+		const newOrderList = orderList.filter((item, index) => {
+			if (index !== orderIndex) return item;
+		});
+
+		setOrderList(newOrderList);
+	};
+
 	return (
 		<>
 			{loading ? (
@@ -177,7 +247,7 @@ const ChargeToAccount = (props) => {
 						</div>
 						<div className="h-75 border border-dark rounded simple-shadow mt-3">
 							<div className="table-responsive max-height-100">
-								<ProductTable />
+								<ProductTable deleteOrder={deleteOrder} />
 							</div>
 						</div>
 						<div className="w-auto">
@@ -349,31 +419,12 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 	);
 };
 
-const ProductTable = (props) => {
-	const {
-		orderList,
-		setOrderList,
-		searchProduct,
-		setSearchProduct,
-		searchProductCode,
-		setSearchProductCode,
-		products,
-		setProducts,
-	} = useContext(InvoiceContext);
+const ProductTable = ({ deleteOrder }) => {
+	const { orderList, setOrderList, invoice } = useContext(InvoiceContext);
 
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
 		return order.Total.toFixed(2);
-	};
-
-	// delete an order in the list
-	// use array map, check the medicineId
-	const deleteOrder = (orderIndex) => {
-		const newOrderList = orderList.filter((item, index) => {
-			if (index !== orderIndex) return item;
-		});
-
-		setOrderList(newOrderList);
 	};
 
 	const handleQuantityChange = (event, order, i) => {
@@ -395,7 +446,7 @@ const ProductTable = (props) => {
 	const handleStockCheck = (event, order, i) => {
 		let value = parseInt(event.target.value);
 
-		if (!checkStock(order.OnHand, value)) {
+		if (!checkStock(order.OnHand, value) || isNaN(value)) {
 			alert("Insufficient Quantity!");
 
 			const newOrderList = orderList.map((order, index) => {
@@ -437,7 +488,10 @@ const ProductTable = (props) => {
 					<td>{getProductTotal(order)}</td>
 					<td>
 						<span className="px-1">
-							<MdDelete className="icon-size-sm cursor-pointer" />
+							<MdDelete
+								className="icon-size-sm cursor-pointer"
+								onClick={() => deleteOrder(index)}
+							/>
 						</span>
 					</td>
 				</tr>
@@ -446,7 +500,7 @@ const ProductTable = (props) => {
 	};
 
 	return (
-		<table className="table">
+		<table className="table table-condensed">
 			<thead>
 				<tr>
 					<th scope="col">PCode</th>
@@ -466,9 +520,29 @@ const ProductTable = (props) => {
 					<td className="no-line"></td>
 					<td className="no-line"></td>
 					<td className="no-line text-center">
+						<strong>VAT Exempt Sale:</strong>
+					</td>
+					<td className="no-line text-right">&#8369;{invoice.GrossAmount}</td>
+				</tr>
+				<tr>
+					<td className="no-line"></td>
+					<td className="no-line"></td>
+					<td className="no-line"></td>
+					<td className="no-line"></td>
+					<td className="no-line text-center">
+						<strong>VAT:</strong>
+					</td>
+					<td className="no-line text-right">&#8369;{invoice.VAT}</td>
+				</tr>
+				<tr>
+					<td className="no-line"></td>
+					<td className="no-line"></td>
+					<td className="no-line"></td>
+					<td className="no-line"></td>
+					<td className="no-line text-center">
 						<strong>Total:</strong>
 					</td>
-					{/* <td className="no-line text-right">&#8369;{purchaseOrder.Total}</td> */}
+					<td className="no-line text-right">&#8369;{invoice.Total}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -492,7 +566,7 @@ const SearchProduct = ({ getAllProducts, addProduct }) => {
 			products &&
 			products.slice(0, 10).map((item, index) => (
 				<div
-					className="dropdown-row m-1 cursor-pointer"
+					className="dropdown-row cursor-pointer"
 					key={index}
 					onClick={() => addProduct(item)}
 				>

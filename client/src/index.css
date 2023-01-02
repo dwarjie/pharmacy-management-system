@@ -229,6 +229,15 @@ label {
 	border: none;
 }
 
+.dropdown-row:hover {
+	background-color: rgb(219, 219, 219);
+}
+
+.dropdown-row h5 {
+	padding: 0.3rem;
+	font-size: 1.1rem;
+}
+
 /*  LOADER  */
 .loader {
 	width: 100px;

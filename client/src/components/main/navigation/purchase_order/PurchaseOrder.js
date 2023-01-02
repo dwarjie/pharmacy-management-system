@@ -415,7 +415,7 @@ const OrderInformation = ({
 			supplierProducts &&
 			supplierProducts.slice(0, 10).map((item, index) => (
 				<div
-					className="dropdown-row m-1 cursor-pointer"
+					className="dropdown-row cursor-pointer"
 					key={index}
 					onClick={() => addProduct(item)}
 				>
