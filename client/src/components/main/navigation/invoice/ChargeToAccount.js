@@ -150,6 +150,7 @@ const ChargeToAccount = (props) => {
 		let invoiceId = await createChargeToAccount();
 		await createInvoiceDetails(invoiceId);
 		await decreaseProductStock();
+		navigate(`/pharmacy/sales/charge-to-account/print/${invoiceId}`);
 	};
 
 	// set the ORNumber once the page loaded

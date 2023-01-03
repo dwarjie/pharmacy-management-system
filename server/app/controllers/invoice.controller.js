@@ -44,7 +44,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 
-	Invoice.findByPk(id)
+	Invoice.findByPk(id, { include: ["patient", "handler", "user"] })
 		.then((data) => {
 			if (data) {
 				res.send(data);
