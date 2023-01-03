@@ -8,9 +8,9 @@ const getAllInvoiceItems = (invoiceId) => {
 	return http.get(`/invoice-detail?invoiceId=${invoiceId}`);
 };
 
-const InvoiceService = {
+const InvoiceDetailService = {
 	createInvoiceDetail,
 	getAllInvoiceItems,
 };
 
-export default InvoiceService;
+export default InvoiceDetailService;

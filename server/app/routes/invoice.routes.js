@@ -6,5 +6,5 @@ module.exports = (app) => {
 	router.get("/", invoice.findAll);
 	router.get("/:id", invoice.findOne);
 
-	app.use("/app/invoice", router);
+	app.use("/api/invoice", router);
 };

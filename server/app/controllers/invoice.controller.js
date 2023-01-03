@@ -9,6 +9,10 @@ exports.create = (req, res) => {
 		DueDate: req.body.DueDate,
 		VAT: req.body.VAT,
 		Total: req.body.Total,
+		Remarks: req.body.Remarks,
+		handlerId: req.body.handlerId,
+		userId: req.body.userId,
+		patientId: req.body.patientId,
 	};
 
 	Invoice.create(invoice)

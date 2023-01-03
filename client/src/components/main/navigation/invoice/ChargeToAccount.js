@@ -11,15 +11,17 @@ import {
 import { useGlobalState } from "../../../../state";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import parseDropdownValue from "../../../../helper/parseJSON";
+import Loader from "../../../layout/Loader";
+import VatService from "../../../../services/VatService";
+import InvoiceService from "../../../../services/InvoiceService";
+import InvoiceDetailService from "../../../../services/InvoiceDetailService";
 import MedicineService from "../../../../services/MedicineService";
 import HandlerService from "../../../../services/HandlerService";
 import PatientService from "../../../../services/PatientService";
 
 // icons
 import { MdDelete } from "react-icons/md";
-import Loader from "../../../layout/Loader";
-import VatService from "../../../../services/VatService";
-import InvoiceService from "../../../../services/InvoiceService";
+import { getOR, incrementOR } from "../../../../helper/ORHelper";
 
 // creating context API
 const InvoiceContext = createContext();
@@ -32,6 +34,7 @@ const ChargeToAccount = (props) => {
 	const initialInvoice = {
 		id: null,
 		InvoiceNo: generateOrderNumber(),
+		ORNumber: "",
 		InvoiceDate: getCurrentDate(),
 		DueDate: "",
 		VAT: 0,
@@ -84,6 +87,7 @@ const ChargeToAccount = (props) => {
 
 	useEffect(() => {
 		getHandlers();
+		setORNumber();
 		getVAT();
 		getPatients();
 	}, []);
@@ -97,6 +101,7 @@ const ChargeToAccount = (props) => {
 		await InvoiceService.createInvoice(invoice)
 			.then((response) => {
 				console.log(response.data);
+				incrementOR();
 				invoiceId = response.data.data.id;
 			})
 			.catch((err) => {
@@ -106,10 +111,51 @@ const ChargeToAccount = (props) => {
 		return invoiceId;
 	};
 
-	const createInvoice = async () => {
+	const createInvoiceDetails = async (invoiceId) => {
+		await orderList.forEach((order) => {
+			order.invoiceId = invoiceId;
+
+			InvoiceDetailService.createInvoiceDetail(order)
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
+	const decreaseProductStock = async () => {
+		await orderList.forEach((product) => {
+			let data = {
+				Quantity: product.Quantity,
+			};
+
+			MedicineService.updateDecreaseMedicineStock(product.medicineId, data)
+				.then((response) => {
+					console.log(response.data);
+					setLoading(false);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	};
+
+	const createInvoice = async (event) => {
+		event.preventDefault();
 		if (!AlertPrompt("Are you sure you want to create this invoice?")) return;
 
+		setLoading(true);
 		let invoiceId = await createChargeToAccount();
+		await createInvoiceDetails(invoiceId);
+		await decreaseProductStock();
+	};
+
+	// set the ORNumber once the page loaded
+	const setORNumber = async () => {
+		let orNumber = await getOR();
+		setInvoice((prevState) => ({ ...prevState, ORNumber: orNumber.CurrentOR }));
 	};
 
 	const getHandlers = async () => {
@@ -181,13 +227,11 @@ const ChargeToAccount = (props) => {
 					Item: selectedProduct.ProductName,
 					OnHand: selectedProduct.Quantity,
 					Quantity: 1,
-					UnitCost: selectedProduct.SellingPrice,
+					UnitPrice: selectedProduct.SellingPrice,
 					Total: selectedProduct.SellingPrice,
 					medicineId: selectedProduct.id,
 					purchaseId: null,
 				};
-				setOrderList([...orderList, initialSelectedProduct]);
-
 				setOrderList([...orderList, initialSelectedProduct]);
 			} else {
 				alert("Insufficient Quantity!");
@@ -260,6 +304,7 @@ const ChargeToAccount = (props) => {
 							<InvoiceInformation
 								patientList={patientList}
 								handlerList={handlerList}
+								createInvoice={createInvoice}
 							/>
 							<SearchProduct
 								getAllProducts={getAllProducts}
@@ -288,6 +333,7 @@ const ChargeToAccount = (props) => {
 						<div className="w-auto">
 							<button
 								type="submit"
+								form="main-form"
 								className="btn btn-primary simple-shadow mt-2 me-3"
 								disabled={orderList.length === 0 ? true : false}
 							>
@@ -314,7 +360,7 @@ const ChargeToAccount = (props) => {
 	);
 };
 
-const InvoiceInformation = ({ handlerList, patientList }) => {
+const InvoiceInformation = ({ handlerList, patientList, createInvoice }) => {
 	const {
 		currentUser,
 		invoice,
@@ -324,7 +370,7 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 	} = useContext(InvoiceContext);
 
 	return (
-		<form>
+		<form id="main-form" onSubmit={(event) => createInvoice(event)}>
 			<div className="row mt-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
@@ -367,6 +413,7 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 					<select
 						name="handler"
 						className="form-select form-input"
+						required
 						value={activeDropDownValue.handler}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
@@ -417,6 +464,7 @@ const InvoiceInformation = ({ handlerList, patientList }) => {
 					<select
 						name="patient"
 						className="form-select form-input"
+						required
 						value={activeDropDownValue.patient}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
@@ -458,7 +506,7 @@ const ProductTable = ({ deleteOrder }) => {
 	const { orderList, setOrderList, invoice } = useContext(InvoiceContext);
 
 	const getProductTotal = (order) => {
-		order.Total = order.UnitCost * order.Quantity;
+		order.Total = order.UnitPrice * order.Quantity;
 		return order.Total.toFixed(2);
 	};
 
@@ -519,7 +567,7 @@ const ProductTable = ({ deleteOrder }) => {
 							onBlur={(event) => handleStockCheck(event, order, index)}
 						/>
 					</td>
-					<td>{order.UnitCost}</td>
+					<td>{order.UnitPrice}</td>
 					<td>{getProductTotal(order)}</td>
 					<td>
 						<span className="px-1">
