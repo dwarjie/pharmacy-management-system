@@ -295,6 +295,14 @@ const SalesModule = () => {
 					</Link>
 				</li>
 				<li>
+					<Link
+						to={"/pharmacy/sales/charge-to-account-list"}
+						className="dropdown-item"
+					>
+						Invoice List
+					</Link>
+				</li>
+				<li>
 					<Link to={"pharmacy/sales/return"} className="dropdown-item">
 						Return
 					</Link>
