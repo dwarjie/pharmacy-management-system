@@ -5,6 +5,8 @@ module.exports = (app) => {
 	router.post("/", invoice.create);
 	router.get("/", invoice.findAll);
 	router.get("/:id", invoice.findOne);
+	router.put("/:id", invoice.update);
+	router.delete("/:id", invoice.delete);
 
 	app.use("/api/invoice", router);
 };

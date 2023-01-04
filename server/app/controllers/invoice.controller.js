@@ -8,6 +8,7 @@ exports.create = (req, res) => {
 		InvoiceDate: req.body.InvoiceDate,
 		DueDate: req.body.DueDate,
 		VAT: req.body.VAT,
+		GrossAmount: req.body.GrossAmount,
 		Total: req.body.Total,
 		PaidAmount: req.body.PaidAmount,
 		Remarks: req.body.Remarks,
@@ -58,6 +59,62 @@ exports.findOne = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error fetching invoice ${id}`,
+			});
+		});
+};
+
+exports.update = (req, res) => {
+	const id = req.params.id;
+
+	Invoice.update(req.body, { where: { id: id } })
+		.then((row) => {
+			// check if affected row is equals to 1
+			if (row == 1) {
+				res.send({
+					message: `Updated successfully`,
+				});
+			} else {
+				res.send({
+					message: `Cannot update invoice`,
+				});
+			}
+		})
+		.catch((err) => {
+			switch (err.name) {
+				case "SequelizeUniqueConstraintError":
+					res.send({
+						message: `Record already exists.`,
+					});
+					break;
+				default:
+					res.status(500).send({
+						message: `Error updating invoice.`,
+					});
+					break;
+			}
+		});
+};
+
+exports.delete = (req, res) => {
+	const id = req.params.id;
+
+	Invoice.destroy({
+		where: { id: id },
+	})
+		.then((row) => {
+			if (row != 1) {
+				res.send({
+					message: `Cannot delete invoice ${id}`,
+				});
+			}
+
+			res.send({
+				message: `Deleted successfully`,
+			});
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error deleting invoice ${id}`,
 			});
 		});
 };

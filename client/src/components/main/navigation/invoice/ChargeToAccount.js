@@ -28,33 +28,15 @@ const InvoiceContext = createContext();
 const { Provider } = InvoiceContext;
 
 const ChargeToAccount = (props) => {
+	const {
+		mode,
+		initialInvoice,
+		initialDropDownValue,
+		initialOrderList,
+		getOrderList,
+	} = props;
 	let [currentUser] = useGlobalState("currentUser");
 	const navigate = useNavigate();
-
-	const initialInvoice = {
-		id: null,
-		InvoiceNo: generateOrderNumber(),
-		ORNumber: "",
-		InvoiceDate: getCurrentDate(),
-		DueDate: "",
-		VAT: 0,
-		Total: 0,
-		PaidAmount: 0,
-		GrossAmount: 0,
-		Status: "pending",
-		Remarks: "Charge Upon Use",
-		handlerId: null,
-		userId: currentUser.id,
-		patientId: null,
-	};
-
-	const initialDropDownValue = {
-		handler: "",
-		patient: "",
-		user: "",
-	};
-
-	const initialOrderList = [];
 
 	const [invoice, setInvoice] = useState(initialInvoice);
 	const [orderList, setOrderList] = useState(initialOrderList);
@@ -83,7 +65,20 @@ const ChargeToAccount = (props) => {
 		setSearchProductCode,
 		products,
 		setProducts,
+		setLoading,
 	};
+
+	useEffect(() => {
+		setLoading(true);
+		setInvoice(initialInvoice);
+		setLoading(false);
+	}, [initialInvoice]);
+
+	useEffect(() => {
+		setLoading(true);
+		setOrderList(initialOrderList);
+		setLoading(false);
+	}, [initialOrderList]);
 
 	useEffect(() => {
 		getHandlers();
@@ -125,6 +120,31 @@ const ChargeToAccount = (props) => {
 		});
 	};
 
+	const createSpecificItem = async (item) => {
+		await InvoiceDetailService.createInvoiceDetail(item)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const decreaseSpecificItemStock = async (item, value) => {
+		let data = {
+			Quantity: value,
+		};
+
+		MedicineService.updateDecreaseMedicineStock(item.medicineId, data)
+			.then((response) => {
+				console.log(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	const decreaseProductStock = async () => {
 		await orderList.forEach((product) => {
 			let data = {
@@ -151,6 +171,48 @@ const ChargeToAccount = (props) => {
 		await createInvoiceDetails(invoiceId);
 		await decreaseProductStock();
 		navigate(`/pharmacy/sales/charge-to-account/print/${invoiceId}`);
+	};
+
+	const updateInvoiceItem = async (item) => {
+		await InvoiceDetailService.updateItem(item.id, item)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const updateInvoice = async (event) => {
+		event.preventDefault();
+
+		await InvoiceService.updateInvoice(invoice.id, invoice)
+			.then((response) => {
+				console.log(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const deleteUpdateItem = async (item) => {
+		await InvoiceDetailService.deleteItem(item.id)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const deleteItem = async (event, item) => {
+		if (!AlertPrompt()) return;
+
+		setLoading(true);
+		await deleteUpdateItem(item);
+		await getOrderList(invoice.id);
+		await updateInvoice(event);
 	};
 
 	// set the ORNumber once the page loaded
@@ -218,22 +280,40 @@ const ChargeToAccount = (props) => {
 	};
 
 	// add product into the order list
-	const addProduct = (selectedProduct) => {
+	const addProduct = async (event, selectedProduct) => {
 		if (!checkOrderExist(selectedProduct)) {
 			// check if quantity is greater than 0 before adding to the order list
 			if (checkQuantity(selectedProduct.Quantity)) {
-				let initialSelectedProduct = {
-					id: -1,
-					PCode: selectedProduct.ProductCode,
-					Item: selectedProduct.ProductName,
-					OnHand: selectedProduct.Quantity,
-					Quantity: 1,
-					UnitPrice: selectedProduct.SellingPrice,
-					Total: selectedProduct.SellingPrice,
-					medicineId: selectedProduct.id,
-					purchaseId: null,
-				};
-				setOrderList([...orderList, initialSelectedProduct]);
+				// check if update mode
+				if (!isUpdate()) {
+					let initialSelectedProduct = {
+						id: -1,
+						PCode: selectedProduct.ProductCode,
+						Item: selectedProduct.ProductName,
+						OnHand: selectedProduct.Quantity,
+						Quantity: 1,
+						UnitPrice: selectedProduct.SellingPrice,
+						Total: selectedProduct.SellingPrice,
+						medicineId: selectedProduct.id,
+						invoiceId: null,
+					};
+					setOrderList([...orderList, initialSelectedProduct]);
+				} else {
+					let initialSelectedProduct = {
+						PCode: selectedProduct.ProductCode,
+						Item: selectedProduct.ProductName,
+						OnHand: selectedProduct.Quantity,
+						Quantity: 1,
+						UnitPrice: selectedProduct.SellingPrice,
+						Total: selectedProduct.SellingPrice,
+						medicineId: selectedProduct.id,
+						invoiceId: invoice.id,
+					};
+					setLoading(true);
+					await createSpecificItem(initialSelectedProduct);
+					await getOrderList(invoice.id);
+					await updateInvoice(event);
+				}
 			} else {
 				alert("Insufficient Quantity!");
 			}
@@ -292,6 +372,13 @@ const ChargeToAccount = (props) => {
 		setOrderList(newOrderList);
 	};
 
+	const isUpdate = () => {
+		if (mode !== "update") {
+			return false;
+		}
+		return true;
+	};
+
 	return (
 		<>
 			{loading ? (
@@ -306,6 +393,8 @@ const ChargeToAccount = (props) => {
 								patientList={patientList}
 								handlerList={handlerList}
 								createInvoice={createInvoice}
+								isUpdate={isUpdate}
+								updateInvoice={updateInvoice}
 							/>
 							<SearchProduct
 								getAllProducts={getAllProducts}
@@ -314,7 +403,14 @@ const ChargeToAccount = (props) => {
 						</div>
 						<div className="h-75 border border-dark rounded simple-shadow mt-3">
 							<div className="table-responsive max-height-100">
-								<ProductTable deleteOrder={deleteOrder} />
+								<ProductTable
+									isUpdate={isUpdate}
+									deleteOrder={deleteOrder}
+									deleteItem={deleteItem}
+									decreaseSpecificItemStock={decreaseSpecificItemStock}
+									updateInvoiceItem={updateInvoiceItem}
+									getOrderList={getOrderList}
+								/>
 							</div>
 						</div>
 						<div className="col-12 col-md-6">
@@ -338,7 +434,7 @@ const ChargeToAccount = (props) => {
 								className="btn btn-primary simple-shadow mt-2 me-3"
 								disabled={orderList.length === 0 ? true : false}
 							>
-								Create
+								{isUpdate() ? "Update" : "Create"}
 							</button>
 							<button
 								type="button"
@@ -361,7 +457,13 @@ const ChargeToAccount = (props) => {
 	);
 };
 
-const InvoiceInformation = ({ handlerList, patientList, createInvoice }) => {
+const InvoiceInformation = ({
+	handlerList,
+	patientList,
+	createInvoice,
+	updateInvoice,
+	isUpdate,
+}) => {
 	const {
 		currentUser,
 		invoice,
@@ -371,7 +473,12 @@ const InvoiceInformation = ({ handlerList, patientList, createInvoice }) => {
 	} = useContext(InvoiceContext);
 
 	return (
-		<form id="main-form" onSubmit={(event) => createInvoice(event)}>
+		<form
+			id="main-form"
+			onSubmit={(event) =>
+				isUpdate() ? updateInvoice(event) : createInvoice(event)
+			}
+		>
 			<div className="row mt-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
@@ -446,7 +553,7 @@ const InvoiceInformation = ({ handlerList, patientList, createInvoice }) => {
 					<input
 						type="date"
 						className="form-control form-input"
-						value={invoice.DueDate}
+						value={formatDate(invoice.DueDate)}
 						onChange={(event) =>
 							setInvoice({
 								...invoice,
@@ -495,7 +602,8 @@ const InvoiceInformation = ({ handlerList, patientList, createInvoice }) => {
 					<input
 						type="text"
 						className="form-control form-input"
-						defaultValue={`${currentUser.FirstName} ${currentUser.LastName}`}
+						disabled
+						defaultValue={activeDropDownValue.user}
 					/>
 				</div>
 			</div>
@@ -503,8 +611,18 @@ const InvoiceInformation = ({ handlerList, patientList, createInvoice }) => {
 	);
 };
 
-const ProductTable = ({ deleteOrder }) => {
-	const { orderList, setOrderList, invoice } = useContext(InvoiceContext);
+const ProductTable = ({
+	deleteOrder,
+	deleteItem,
+	isUpdate,
+	decreaseSpecificItemStock,
+	updateInvoiceItem,
+	getOrderList,
+}) => {
+	const { orderList, setOrderList, invoice, setLoading } =
+		useContext(InvoiceContext);
+
+	const [lastValue, setLastValue] = useState(-1);
 
 	const getProductTotal = (order) => {
 		order.Total = order.UnitPrice * order.Quantity;
@@ -537,13 +655,40 @@ const ProductTable = ({ deleteOrder }) => {
 				if (index !== i) return order;
 
 				if (checkQuantity(value)) {
-					return { ...order, Quantity: 1 };
+					if (isUpdate()) {
+						return { ...order, Quantity: lastValue };
+					} else {
+						return { ...order, Quantity: 1 };
+					}
 				} else {
 					return order;
 				}
 			});
 			setOrderList(newOrderList);
+		} else {
+			if (!isUpdate()) return;
+
+			updateQuantityStock(order, value);
 		}
+	};
+
+	const updateQuantityStock = async (item, value) => {
+		// check if mode is update, if yes decrease product quantity with the new value
+		console.log(value, lastValue);
+		if (value === parseInt(lastValue) || value < parseInt(lastValue)) return;
+
+		let newValue = value - lastValue;
+		setLoading(true);
+		await updateInvoiceItem(item);
+		await getOrderList(invoice.id);
+		await decreaseSpecificItemStock(item, newValue);
+	};
+
+	const getLastValue = (event) => {
+		if (!isUpdate()) return;
+
+		let value = event.target.value;
+		setLastValue(value);
 	};
 
 	const orderData = () => {
@@ -565,6 +710,7 @@ const ProductTable = ({ deleteOrder }) => {
 								getProductTotal(order);
 								orderData();
 							}}
+							onFocus={(event) => getLastValue(event)}
 							onBlur={(event) => handleStockCheck(event, order, index)}
 						/>
 					</td>
@@ -574,7 +720,9 @@ const ProductTable = ({ deleteOrder }) => {
 						<span className="px-1">
 							<MdDelete
 								className="icon-size-sm cursor-pointer"
-								onClick={() => deleteOrder(index)}
+								onClick={(event) =>
+									isUpdate() ? deleteItem(event, order) : deleteOrder(index)
+								}
 							/>
 						</span>
 					</td>
@@ -652,7 +800,7 @@ const SearchProduct = ({ getAllProducts, addProduct }) => {
 				<div
 					className="dropdown-row cursor-pointer"
 					key={index}
-					onClick={() => addProduct(item)}
+					onClick={(event) => addProduct(event, item)}
 				>
 					<h5>{item.ProductName}</h5>
 				</div>

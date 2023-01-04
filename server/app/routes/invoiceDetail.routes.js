@@ -5,6 +5,9 @@ module.exports = (app) => {
 
 	router.post("/", invoiceDetail.create);
 	router.get("/", invoiceDetail.findInvoiceItems);
+	router.put("/:id", invoiceDetail.update);
+	router.delete("/:id", invoiceDetail.deleteItem);
+	router.delete("/invoice-item/:id", invoiceDetail.deleteInvoiceItem);
 
 	app.use("/api/invoice-detail", router);
 };

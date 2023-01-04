@@ -22,6 +22,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.FLOAT,
 			allowNull: true,
 		},
+		GrossAmount: {
+			type: Sequelize.FLOAT,
+			allowNull: false,
+		},
 		Total: {
 			type: Sequelize.FLOAT,
 			allowNull: false,
@@ -34,6 +38,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 			defaultValue: "pending",
+		},
+		Remarks: {
+			type: Sequelize.STRING,
+			allowNull: true,
 		},
 	});
 
