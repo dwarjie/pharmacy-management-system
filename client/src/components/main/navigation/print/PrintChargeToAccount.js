@@ -120,6 +120,28 @@ class ComponentToPrint extends React.Component {
 			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
 				<div className="row">
+					<div className="col-xs-6 col-md-12 d-flex flex-column align-items-start">
+						<p>
+							<strong>Patient Information:</strong>
+							<br />
+							{`${invoice.patient.FirstName} ${invoice.patient.LastName}`}
+							<br />
+							{`${invoice.patient.Address}`}
+							<br />
+							{`${invoice.patient.Mobile}`}
+						</p>
+					</div>
+					<div className="col-xs-6 col-md-12 d-flex flex-column align-items-end">
+						<p>
+							<strong>Requested By:</strong>
+							<br />
+							{`${invoice.handler.FirstName} ${invoice.handler.LastName}`}
+							<br />
+							{`${invoice.handler.Address}`}
+							<br />
+							{`${invoice.handler.Mobile}`}
+						</p>
+					</div>
 					<div className="col-xs-12 mt-3">
 						<div className="invoice-title">
 							<h3 className="pull-right">Invoice # {invoice.InvoiceNo}</h3>
@@ -140,18 +162,6 @@ class ComponentToPrint extends React.Component {
 								<br />
 								{formatDate(invoice.DueDate)}
 								<br />
-							</p>
-							<p>
-								<strong>Requested By:</strong>
-								<br />
-								{`${invoice.handler.FirstName} ${invoice.handler.LastName}`}
-							</p>
-						</div>
-						<div className="col-xs-6 d-flex flex-row justify-content-between">
-							<p>
-								<strong>Patient name:</strong>
-								<br />
-								{`${invoice.patient.FirstName} ${invoice.patient.LastName}`}
 							</p>
 							<p>
 								<strong>Prepared By:</strong>
@@ -204,6 +214,16 @@ class ComponentToPrint extends React.Component {
 												</td>
 												<td className="no-line text-right">
 													&#8369;{invoice.Total}
+												</td>
+											</tr>
+											<tr>
+												<td className="thick-line"></td>
+												<td className="thick-line"></td>
+												<td className="thick-line text-center">
+													<strong>Paid Amount</strong>
+												</td>
+												<td className="thick-line text-right">
+													&#8369;{invoice.PaidAmount}
 												</td>
 											</tr>
 										</tbody>
