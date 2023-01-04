@@ -1,12 +1,15 @@
 // This module will include the login front end of the application
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 import AuthService from "../../services/AuthService";
 
 import { PersonCircle } from "react-bootstrap-icons";
 import { setGlobalState } from "../../state";
+import ReCaptchaService from "../../services/ReCaptchaService";
 
 const Login = () => {
+	const recaptchaRef = useRef(null);
 	let navigate = useNavigate();
 	const initialLogin = {
 		UserName: "",
@@ -14,6 +17,7 @@ const Login = () => {
 	};
 
 	const [credentials, setCredentials] = useState(initialLogin);
+	const [verified, setVerified] = useState(false);
 
 	useEffect(() => {
 		// AuthService.logout();
@@ -29,16 +33,39 @@ const Login = () => {
 		}
 	};
 
-	const loginUser = (event) => {
+	const loginUser = async (event) => {
 		event.preventDefault();
 
-		AuthService.loginUser(credentials)
+		if (!verified) return alert("Please verify reCaptcha first!");
+
+		let success = await verifyReCaptcha();
+
+		if (!success) return;
+
+		await AuthService.loginUser(credentials)
 			.then((response) => {
 				checkLoginSuccess(response.data);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const verifyReCaptcha = async () => {
+		const token = recaptchaRef.current.getValue();
+		recaptchaRef.current.reset();
+		let success = false;
+
+		await ReCaptchaService.verifyReCaptcha(token)
+			.then((response) => {
+				console.log(response.data);
+				success = response.data.success;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		return success;
 	};
 
 	const checkLoginSuccess = async (data) => {
@@ -92,6 +119,12 @@ const Login = () => {
 						value={credentials.Password}
 						onChange={handleInputChange}
 						required
+					/>
+					<ReCAPTCHA
+						className="d-block w-auto mx-auto mb-4"
+						ref={recaptchaRef}
+						sitekey={"6Lcx0s8jAAAAAKvokelqodEyghPFpSOPs03pvX-a"}
+						onChange={() => setVerified(true)}
 					/>
 					<button
 						type="submit"
