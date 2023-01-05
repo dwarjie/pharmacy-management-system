@@ -34,6 +34,14 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.FLOAT,
 			allowNull: false,
 		},
+		CashTendered: {
+			type: Sequelize.FLOAT,
+			allowNull: false,
+		},
+		ChangeAmount: {
+			type: Sequelize.FLOAT,
+			allowNull: false,
+		},
 	});
 
 	return Sales;

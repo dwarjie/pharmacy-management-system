@@ -12,6 +12,8 @@ exports.create = (req, res) => {
 		VAT: req.body.VAT,
 		Total: req.body.Total,
 		GrossAmount: req.body.GrossAmount,
+		CashTendered: req.body.CashTendered,
+		ChangeAmount: req.body.ChangeAmount,
 	};
 
 	Sales.create(sale)

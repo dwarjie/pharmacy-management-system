@@ -32,6 +32,8 @@ const POS = (props) => {
 		VAT: 0,
 		Total: 0,
 		GrossAmount: 0,
+		CashTendered: "",
+		ChangeAmount: 0,
 	};
 
 	const initialActiveDropDownValue = {
@@ -230,13 +232,25 @@ const POS = (props) => {
 			let discount = computeDiscount(total);
 			let vat = computeVAT(total);
 
-			setSale((previousSale) => ({
-				...previousSale,
-				GrossAmount: total,
-				Discount: discount.toFixed(2),
-				VAT: vat.toFixed(2),
-				Total: (total - discount + vat).toFixed(2),
-			}));
+			// check if special discount in true
+			if (specialDiscount) {
+				let specialSale = (total - vat - discount).toFixed(2);
+				setSale((previousSale) => ({
+					...previousSale,
+					GrossAmount: (total - vat).toFixed(2),
+					Discount: discount.toFixed(2),
+					VAT: vat.toFixed(2),
+					Total: specialSale,
+				}));
+			} else {
+				setSale((previousSale) => ({
+					...previousSale,
+					GrossAmount: (total - vat).toFixed(2),
+					Discount: discount.toFixed(2),
+					VAT: vat.toFixed(2),
+					Total: (total - discount).toFixed(2),
+				}));
+			}
 		} else {
 			setSale({
 				...sale,
@@ -276,7 +290,6 @@ const POS = (props) => {
 	// compute the VAT base on the selected VAT and current total
 	const computeVAT = (grossAmount) => {
 		if (activeDropDownValue.VATId === "" || grossAmount === 0) return 0;
-		if (specialDiscount) return 0;
 
 		let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
 		let amount = percentage * parseFloat(grossAmount);
@@ -433,28 +446,30 @@ const OrderInformation = (props) => {
 
 	useEffect(() => {
 		computeChange();
-	}, [cashTendered, sale.Total]);
+	}, [sale.CashTendered, sale.Total]);
 
 	// compute the change of the customer
 	const computeChange = () => {
-		if (cashTendered !== "") {
-			setChangeAmount(
-				(parseFloat(cashTendered) - parseFloat(sale.Total)).toFixed(2)
-			);
+		if (sale.CashTendered !== "") {
+			let changeAmount = (
+				parseFloat(sale.CashTendered) - parseFloat(sale.Total)
+			).toFixed(2);
+			setSale((prevState) => ({ ...prevState, ChangeAmount: changeAmount }));
 		} else {
-			setChangeAmount(0);
+			setSale((prevState) => ({ ...prevState, ChangeAmount: 0 }));
 		}
 	};
 
 	// check if the cash tendered is >= grand total
 	const checkPayment = () => {
-		if (parseFloat(cashTendered) - parseFloat(sale.Total) >= 0) return true;
+		if (parseFloat(sale.CashTendered) - parseFloat(sale.Total) >= 0)
+			return true;
 
 		return false;
 	};
 
 	return (
-		<div className="d-flex flex-column justify-content-between gap-1 p-3">
+		<div className="d-flex flex-column justify-content-between gap-3 p-3">
 			<div>
 				<h1 className="text-date">
 					<strong>{currentTime}</strong>
@@ -511,14 +526,14 @@ const OrderInformation = (props) => {
 							))}
 					</select>
 					{/* //TODO: CHANGE INTO INPUT, AND REMOVE VAT IF DISCOUNT IS SC OR PWD */}
-					<input
+					{/* <input
 						type="text"
 						className="form-control form-input"
 						name="VATId"
 						id="VATId"
 						disabled={true}
 						value={activeDropDownValue.VATId}
-					/>
+					/> */}
 					{/* <select
 						className="form-select form-input"
 						name="VATId"
@@ -564,7 +579,7 @@ const OrderInformation = (props) => {
 						<strong>VAT Exempt Sales &#8369;: </strong> {sale.GrossAmount}
 					</h6>
 					<h6>
-						<strong>VAT %:</strong> {sale.VAT}
+						<strong>VAT &#8369;:</strong> {sale.VAT}
 					</h6>
 					<h6>
 						<strong>Total Amount &#8369;: </strong> {sale.Total}
@@ -578,15 +593,18 @@ const OrderInformation = (props) => {
 						disabled={orderList.length > 0 ? false : true}
 						placeholder="Input cash tender"
 						type="number"
-						name="cashTendered"
-						id="cashTendered"
-						value={cashTendered}
+						name="CashTendered"
+						id="CashTendered"
+						value={sale.CashTendered}
 						onChange={(event) => {
-							setCashTendered(event.target.value);
+							setSale((prevState) => ({
+								...prevState,
+								CashTendered: event.target.value,
+							}));
 						}}
 					/>
 					<h6>
-						<strong>Change &#8369;:</strong> {changeAmount}
+						<strong>Change &#8369;:</strong> {sale.ChangeAmount}
 					</h6>
 					<div className="pt-3">
 						<button
@@ -651,7 +669,7 @@ const OrderTable = (props) => {
 
 	const getProductTotal = (product) => {
 		product.Total = product.UnitPrice * product.Quantity;
-		return product.Total.toFixed(1);
+		return product.Total.toFixed(2);
 	};
 
 	const handleQuantityChange = (event, order) => {
