@@ -4,6 +4,7 @@ import MedicineService from "../../../../services/MedicineService";
 import StockAdjustmentService from "../../../../services/StockAdjustmentService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import Loader from "../../../layout/Loader";
+import { getCurrentDate } from "../../../../helper/dateHelper";
 
 // create context API
 const AdjustmentContext = createContext();
@@ -14,6 +15,7 @@ const StockAdjustment = () => {
 		id: null,
 		Mode: "add",
 		Quantity: 0,
+		DateCreated: getCurrentDate(),
 		Reason: "",
 		medicineId: null,
 	};

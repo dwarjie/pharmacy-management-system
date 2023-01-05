@@ -66,6 +66,7 @@ import ManagePOS from "./navigation/pos/ManagePOS";
 import MasterList from "./navigation/reports/MasterList";
 import SupplierList from "./navigation/reports/SupplierList";
 import InventoryValuation from "./navigation/reports/InventoryValuation";
+import StockAdjustmentHistory from "./navigation/reports/StockAdjustmentHistory";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -195,6 +196,10 @@ const ContentContainer = (props) => {
 						<Route
 							path="/report/inventory-valuation"
 							element={<InventoryValuation />}
+						/>
+						<Route
+							path="/report/stock-adjustment-history"
+							element={<StockAdjustmentHistory />}
 						/>
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />

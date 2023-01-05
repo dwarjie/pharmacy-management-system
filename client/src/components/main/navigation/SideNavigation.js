@@ -350,6 +350,14 @@ const ReportsModule = () => {
 						Inventory Valuation
 					</Link>
 				</li>
+				<li>
+					<Link
+						to={"/pharmacy/report/stock-adjustment-history"}
+						className="dropdown-item"
+					>
+						Stock Adjustment History
+					</Link>
+				</li>
 			</ul>
 		</div>
 	);

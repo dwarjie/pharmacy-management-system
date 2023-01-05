@@ -4,6 +4,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
+		DateCreated: {
+			type: Sequelize.DATE,
+			allowNull: false,
+		},
 		Quantity: {
 			type: Sequelize.INTEGER,
 			allowNull: false,
