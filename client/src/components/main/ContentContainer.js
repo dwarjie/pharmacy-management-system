@@ -52,6 +52,8 @@ import InvoiceList from "./navigation/invoice/InvoiceList";
 import PrintChargeToAccount from "./navigation/print/PrintChargeToAccount";
 
 // Inventory Tab
+import OrderList from "./navigation/purchase_order/OrderList";
+import AddAllPO from "./navigation/purchase_order/AddAllPO";
 import AddPO from "./navigation/purchase_order/AddPO";
 import UpdatePO from "./navigation/purchase_order/UpdatePO";
 import ManagePO from "./navigation/purchase_order/ManagePO";
@@ -138,7 +140,6 @@ const ContentContainer = (props) => {
 						<Route path="/sales/pos" element={<POS />} />
 						<Route path="/sales/pos/print" element={<PrintInvoice />} />
 						<Route path="/sales/sales-list" element={<ManagePOS />} />
-						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
 						<Route
 							path="/sales/charge-to-account"
 							element={<AddChargeToAccount />}
@@ -157,6 +158,11 @@ const ContentContainer = (props) => {
 						/>
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
+						<Route path="/inventory/order-list" element={<OrderList />} />
+						<Route
+							path="/inventory/order-list/purchase-order"
+							element={<AddAllPO />}
+						/>
 						<Route path="/inventory/purchase-order" element={<AddPO />} />
 						<Route
 							path="/inventory/purchase-order/:id"
@@ -176,6 +182,9 @@ const ContentContainer = (props) => {
 							path="/inventory/stock-adjustment"
 							element={<StockAdjustment />}
 						/>
+					</Route>
+					<Route element={<ProtectedURL role={"reports"} />}>
+						<Route path="/reports/sales-report" element={<ViewSale />} />
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>

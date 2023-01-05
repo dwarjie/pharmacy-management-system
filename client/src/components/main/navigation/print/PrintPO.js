@@ -7,6 +7,8 @@ import ReactToPrint from "react-to-print";
 import PurchaseService from "../../../../services/PurchaseService";
 import PurchaseDetailService from "../../../../services/PurchaseDetailService";
 
+import logo from "../../../../asset/logo.png";
+
 const PrintPO = () => {
 	const { id } = useParams();
 	let componentRef = useRef();
@@ -74,9 +76,9 @@ const PrintPO = () => {
 								/>
 								<button
 									className="btn btn-secondary"
-									onClick={() => navigate(-1)}
+									onClick={() => navigate(`/pharmacy/inventory/purchase-list`)}
 								>
-									Cancel
+									Close
 								</button>
 							</div>
 						</div>
@@ -120,6 +122,12 @@ class ComponentToPrint extends React.Component {
 			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
 				<div className="row">
+					<div className="d-flex flex-column align-items-center">
+						<img src={logo} alt="" className="d-block col-12 mx-auto w-20" />
+						<br />
+						<h6>ActivCare Home Health Solution Inc.</h6>
+						<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
+					</div>
 					<div className="col-xs-12 mt-3">
 						<div className="invoice-title">
 							<h3 className="pull-right">PO Code: {purchase.POCode}</h3>

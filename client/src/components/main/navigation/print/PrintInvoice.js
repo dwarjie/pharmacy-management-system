@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 
+import logo from "../../../../asset/logo.png";
+
 const PrintInvoice = () => {
 	let componentRef = useRef();
 	let navigate = useNavigate();
@@ -16,6 +18,32 @@ const PrintInvoice = () => {
 		setItems(location.state.orderList);
 	}, []);
 
+	const pageStyle = `
+		@media all {
+		.page-break {
+			display: none;
+		}
+	}
+
+	@media print {
+		html, body {
+			height: initial !important;
+			overflow: initial !important;
+			-webkit-print-color-adjust: exact;
+		}
+	}
+
+	@media print {
+		.page-break {
+			margin-top: 1rem;
+			display: block;
+			page-break-before: auto;
+		}
+	}
+
+  @page {
+    size: 58mm 100mm;
+  }`;
 	return (
 		<div className="col-12 h-auto border border-dark rounded simple-shadow">
 			<div className="p-3">
@@ -40,7 +68,7 @@ const PrintInvoice = () => {
 							className="btn btn-secondary mx-2"
 							onClick={() => navigate(-1)}
 						>
-							Cancel
+							Close
 						</button>
 					</div>
 				</div>
@@ -82,10 +110,16 @@ class ComponentToPrint extends React.Component {
 			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
 				<div className="row">
+					<div className="d-flex flex-column align-items-center">
+						<img src={logo} alt="" className="d-block col-12 mx-auto w-20" />
+						<br />
+						<h6>ActivCare Home Health Solution Inc.</h6>
+						<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
+					</div>
 					<div className="col-xs-12 mt-3">
 						<div className="invoice-title">
 							<h3 className="pull-right">Order # {sale.OrderNo}</h3>
-							<h6 className="pull-left">OR # {sale.ORNumber}</h6>
+							<h6 className="pull-left">Official Receipt # {sale.ORNumber}</h6>
 						</div>
 						<hr />
 					</div>
@@ -125,7 +159,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Quantity</strong>
 												</td>
 												<td className="text-right">
-													<strong>Totals</strong>
+													<strong>Total</strong>
 												</td>
 											</tr>
 										</thead>
@@ -172,12 +206,38 @@ class ComponentToPrint extends React.Component {
 													&#8369;{sale.Total}
 												</td>
 											</tr>
+											<tr>
+												<td className="no-line"></td>
+												<td className="no-line"></td>
+												<td className="no-line text-center">
+													<strong>Cash Tendered</strong>
+												</td>
+												<td className="no-line text-right">
+													&#8369;{sale.CashTendered}
+												</td>
+											</tr>
+											<tr>
+												<td className="no-line"></td>
+												<td className="no-line"></td>
+												<td className="no-line text-center">
+													<strong>Change</strong>
+												</td>
+												<td className="no-line text-right">
+													&#8369;{sale.ChangeAmount}
+												</td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div className="d-flex flex-column align-items-center">
+					<p className="text-center">
+						Thank you, please come again <br /> This serves as an OFFICIAL
+						RECEIPT
+					</p>
 				</div>
 			</div>
 		);

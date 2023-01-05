@@ -142,7 +142,7 @@ exports.delete = (req, res) => {
 
 exports.findAllDeliver = (req, res) => {
 	Purchase.findAll({
-		where: { Status: "received" },
+		where: { Status: "received", Status: "settled" },
 		include: ["supplier"],
 	})
 		.then((data) => {

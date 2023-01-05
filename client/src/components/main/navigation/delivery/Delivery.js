@@ -295,7 +295,7 @@ const Delivery = () => {
 							className="btn btn-primary simple-shadow mt-2 me-3"
 							onClick={updateOrder}
 						>
-							Update
+							Settle
 						</button>
 						<button
 							type="button"
@@ -456,14 +456,14 @@ const ProductTable = ({
 					</td>
 					<td>{order.UnitCost}</td>
 					{/* <td>{getProductTotal(order)}</td> */}
-					<td>
+					{/* <td>
 						<span className="px-1">
 							<MdDelete
 								className="icon-size-sm cursor-pointer"
 								onClick={() => deleteItem(order)}
 							/>
 						</span>
-					</td>
+					</td> */}
 				</tr>
 			))
 		);
@@ -478,7 +478,7 @@ const ProductTable = ({
 					<th scope="col">Ordered Qty</th>
 					<th scope="col">Received Qty</th>
 					<th scope="col">Unit Cost</th>
-					<th scope="col">Action</th>
+					{/* <th scope="col">Action</th> */}
 				</tr>
 			</thead>
 			<tbody>

@@ -133,7 +133,6 @@ const POS = (props) => {
 
 	// ask the user if they want to print, else stay and reset the page
 	const printInvoice = () => {
-		// ask the user
 		navigate(`/pharmacy/sales/pos/print`, {
 			state: {
 				sale: sale,

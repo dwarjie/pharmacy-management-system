@@ -1,12 +1,15 @@
 // This component views the specific sale of the POS
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { formatDate } from "../../../../helper/dateHelper";
 import SaleService from "../../../../services/SaleService";
 import SalesDetailService from "../../../../services/SalesDetailService";
 
+import logo from "../../../../asset/logo.png";
+
 const ViewSale = () => {
+	let navigate = useNavigate();
 	let componentRef = useRef();
 	const { id } = useParams();
 
@@ -60,6 +63,12 @@ const ViewSale = () => {
 							)}
 							content={() => componentRef}
 						/>
+						<button
+							className="btn btn-secondary mx-2"
+							onClick={() => navigate(-1)}
+						>
+							Close
+						</button>
 					</div>
 				</div>
 			</div>
@@ -100,6 +109,12 @@ class ComponentToPrint extends React.Component {
 			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
 				<div className="row">
+					<div className="d-flex flex-column align-items-center">
+						<img src={logo} alt="" className="d-block col-12 mx-auto w-20" />
+						<br />
+						<h6>ActivCare Home Health Solution Inc.</h6>
+						<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
+					</div>
 					<div className="col-xs-12 mt-3">
 						<div className="invoice-title">
 							<h3 className="pull-right">Order # {sale.OrderNo}</h3>
@@ -190,12 +205,38 @@ class ComponentToPrint extends React.Component {
 													&#8369;{sale.Total}
 												</td>
 											</tr>
+											<tr>
+												<td className="no-line"></td>
+												<td className="no-line"></td>
+												<td className="no-line text-center">
+													<strong>Cash Tendered</strong>
+												</td>
+												<td className="no-line text-right">
+													&#8369;{sale.CashTendered}
+												</td>
+											</tr>
+											<tr>
+												<td className="no-line"></td>
+												<td className="no-line"></td>
+												<td className="no-line text-center">
+													<strong>Change</strong>
+												</td>
+												<td className="no-line text-right">
+													&#8369;{sale.ChangeAmount}
+												</td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div className="d-flex flex-column align-items-center">
+					<p className="text-center">
+						Thank you, please come again <br /> This serves as an OFFICIAL
+						RECEIPT
+					</p>
 				</div>
 			</div>
 		);

@@ -34,7 +34,7 @@ const SideNavigation = () => {
 		>
 			<div className="container-fluid flex-column gap-4 p-3">
 				<h5 className="text-center text-light">
-					ActiveCare Home Health Solution Inc.
+					ActivCare Home Health Solution Inc.
 				</h5>
 				<div className="d-flex flex-column gap-1 w-100">
 					{/* DASHBOARD */}
@@ -224,6 +224,11 @@ const InventoryModule = () => {
 				Inventory
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+				<li>
+					<Link to={"/pharmacy/inventory/order-list"} className="dropdown-item">
+						Order List
+					</Link>
+				</li>
 				<li>
 					<Link
 						to={"/pharmacy/inventory/purchase-order"}

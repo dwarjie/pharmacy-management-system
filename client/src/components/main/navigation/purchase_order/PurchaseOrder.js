@@ -275,8 +275,8 @@ const PurchaseOrder = (props) => {
 					OnHand: selectedProduct.Quantity,
 					ReorderPoint: selectedProduct.ReorderPoint,
 					Quantity: 1,
-					UnitCost: selectedProduct.SellingPrice,
-					Total: selectedProduct.SellingPrice,
+					UnitCost: selectedProduct.SupplierPrice,
+					Total: selectedProduct.SupplierPrice,
 					ReceivedDate: "",
 					medicineId: selectedProduct.id,
 					purchaseId: null,
@@ -289,8 +289,8 @@ const PurchaseOrder = (props) => {
 					OnHand: selectedProduct.Quantity,
 					ReorderPoint: selectedProduct.ReorderPoint,
 					Quantity: 1,
-					UnitCost: selectedProduct.SellingPrice,
-					Total: selectedProduct.SellingPrice,
+					UnitCost: selectedProduct.SupplierPrice,
+					Total: selectedProduct.SupplierPrice,
 					ReceivedDate: "",
 					medicineId: selectedProduct.id,
 					purchaseId: purchaseOrder.id,
@@ -342,6 +342,7 @@ const PurchaseOrder = (props) => {
 							setSupplierProducts={setSupplierProducts}
 							setPurchaseOrder={setPurchaseOrder}
 							setActiveDropDownValue={setActiveDropDownValue}
+							isUpdate={isUpdate}
 						/>
 					</div>
 					<div className="h-75 border border-dark rounded simple-shadow mt-3">
@@ -407,6 +408,7 @@ const OrderInformation = ({
 	setSearchProduct,
 	setSupplierProducts,
 	setActiveDropDownValue,
+	isUpdate,
 }) => {
 	const searchData = () => {
 		if (searchProduct === "") return;
@@ -417,7 +419,10 @@ const OrderInformation = ({
 				<div
 					className="dropdown-row cursor-pointer"
 					key={index}
-					onClick={() => addProduct(item)}
+					onClick={() => {
+						addProduct(item);
+						resetSearch();
+					}}
 				>
 					<h5>{item.ProductName}</h5>
 				</div>
@@ -471,6 +476,7 @@ const OrderInformation = ({
 						name="supplierId"
 						className="form-select form-input"
 						value={activeDropDownValue.supplier}
+						disabled={isUpdate() ? true : false}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
 							setActiveDropDownValue((prevState) => ({

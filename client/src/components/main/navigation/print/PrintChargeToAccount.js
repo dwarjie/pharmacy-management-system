@@ -7,6 +7,8 @@ import InvoiceDetailService from "../../../../services/InvoiceDetailService";
 import InvoiceService from "../../../../services/InvoiceService";
 import Loader from "../../../layout/Loader";
 
+import logo from "../../../../asset/logo.png";
+
 const PrintChargeToAccount = () => {
 	const { id } = useParams();
 	let componentRef = useRef();
@@ -17,9 +19,13 @@ const PrintChargeToAccount = () => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		getInvoice(id);
-		getOrderList(id);
+		getInformation();
 	}, []);
+
+	const getInformation = async () => {
+		await getInvoice(id);
+		await getOrderList(id);
+	};
 
 	const getInvoice = async (id) => {
 		await InvoiceService.getOneInvoice(id)
@@ -33,7 +39,7 @@ const PrintChargeToAccount = () => {
 	};
 
 	const getOrderList = async (id) => {
-		InvoiceDetailService.getAllInvoiceItems(id)
+		await InvoiceDetailService.getAllInvoiceItems(id)
 			.then((response) => {
 				console.log(response.data);
 				setItems(response.data);
@@ -76,7 +82,7 @@ const PrintChargeToAccount = () => {
 									className="btn btn-secondary mx-2"
 									onClick={() => navigate(-1)}
 								>
-									Cancel
+									Close
 								</button>
 							</div>
 						</div>
@@ -120,6 +126,12 @@ class ComponentToPrint extends React.Component {
 			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
 				<div className="row">
+					<div className="d-flex flex-column align-items-center">
+						<img src={logo} alt="" className="d-block col-12 mx-auto w-20" />
+						<br />
+						<h6>ActivCare Home Health Solution Inc.</h6>
+						<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
+					</div>
 					<div className="col-xs-6 col-md-12 d-flex flex-column align-items-start">
 						<p>
 							<strong>Patient Information:</strong>
