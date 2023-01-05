@@ -287,11 +287,6 @@ const SalesModule = () => {
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/sales/sales-list"} className="dropdown-item">
-						Sales List
-					</Link>
-				</li>
-				<li>
 					<Link
 						to={"/pharmacy/sales/charge-to-account"}
 						className="dropdown-item"
@@ -333,26 +328,26 @@ const ReportsModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"pharmacy/report/stock-report"} className="dropdown-item">
-						Stock Report
+					<Link to={"/pharmacy/report/sales-report"} className="dropdown-item">
+						Sales Record
 					</Link>
 				</li>
 				<li>
-					<Link to={"pharmacy/report/master-list"} className="dropdown-item">
+					<Link to={"/pharmacy/report/master-list"} className="dropdown-item">
 						Master List
 					</Link>
 				</li>
 				<li>
-					<Link to={"pharmacy/report/sales-report"} className="dropdown-item">
-						Sales Report
+					<Link to={"/pharmacy/report/supplier-list"} className="dropdown-item">
+						Supplier List
 					</Link>
 				</li>
 				<li>
 					<Link
-						to={"pharmacy/report/purchase-report"}
+						to={"/pharmacy/report/inventory-valuation"}
 						className="dropdown-item"
 					>
-						Purchase Report
+						Inventory Valuation
 					</Link>
 				</li>
 			</ul>

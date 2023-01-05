@@ -43,7 +43,6 @@ import HandlerList from "./navigation/handler/HandlerList";
 
 // Sales Tab
 import POS from "./navigation/pos/POS";
-import ManagePOS from "./navigation/pos/ManagePOS";
 import ViewSale from "./navigation/pos/ViewSale";
 import PrintInvoice from "./navigation/print/PrintInvoice";
 import AddChargeToAccount from "./navigation/invoice/AddChargeToAccount";
@@ -61,6 +60,12 @@ import PrintPO from "./navigation/print/PrintPO";
 import ManageDelivery from "./navigation/delivery/ManageDelivery";
 import Delivery from "./navigation/delivery/Delivery";
 import StockAdjustment from "./navigation/adjustment/StockAdjustment";
+
+// Reports tab
+import ManagePOS from "./navigation/pos/ManagePOS";
+import MasterList from "./navigation/reports/MasterList";
+import SupplierList from "./navigation/reports/SupplierList";
+import InventoryValuation from "./navigation/reports/InventoryValuation";
 
 // Utilities Tab
 import AddUser from "./navigation/user/AddUser";
@@ -139,7 +144,7 @@ const ContentContainer = (props) => {
 					<Route element={<ProtectedURL role={"sales"} />}>
 						<Route path="/sales/pos" element={<POS />} />
 						<Route path="/sales/pos/print" element={<PrintInvoice />} />
-						<Route path="/sales/sales-list" element={<ManagePOS />} />
+						<Route path="/sales/sales-list/:id" element={<ViewSale />} />
 						<Route
 							path="/sales/charge-to-account"
 							element={<AddChargeToAccount />}
@@ -184,7 +189,13 @@ const ContentContainer = (props) => {
 						/>
 					</Route>
 					<Route element={<ProtectedURL role={"reports"} />}>
-						<Route path="/reports/sales-report" element={<ViewSale />} />
+						<Route path="/report/sales-report" element={<ManagePOS />} />
+						<Route path="/report/master-list" element={<MasterList />} />
+						<Route path="/report/supplier-list" element={<SupplierList />} />
+						<Route
+							path="/report/inventory-valuation"
+							element={<InventoryValuation />}
+						/>
 					</Route>
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>
