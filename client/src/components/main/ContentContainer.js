@@ -5,6 +5,7 @@ import NotFound from "../layout/NotFound";
 
 // components
 import TopNavigation from "./navigation/TopNavigation";
+import Dashboard from "./navigation/dashboard/Dashboard";
 
 // Patient Tab
 import AddPatient from "./navigation/patient/AddPatient";
@@ -80,6 +81,7 @@ const ContentContainer = (props) => {
 
 			<div className="container-fluid col-12 mt-3 pb-3 h-auto">
 				<Routes>
+					<Route path="/dashboard" element={<Dashboard />} />
 					<Route element={<ProtectedURL role={"maintenance"} />}>
 						<Route path="/maintenance/patient" element={<AddPatient />} />
 						<Route

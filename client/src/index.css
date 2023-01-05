@@ -243,3 +243,8 @@ label {
 	width: 100px;
 	height: 100px;
 }
+
+/* dashboard */
+.dashboard-card {
+	max-width: 18rem;
+}

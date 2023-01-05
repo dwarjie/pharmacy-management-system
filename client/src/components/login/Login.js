@@ -73,7 +73,7 @@ const Login = () => {
 			AuthService.saveToken(data);
 			setGlobalState("currentUser", data);
 			setGlobalState("auth", true);
-			navigate(`pharmacy`);
+			navigate(`/pharmacy/dashboard`);
 			// window.location.reload();
 			return;
 		}

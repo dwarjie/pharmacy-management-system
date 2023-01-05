@@ -38,7 +38,7 @@ const SideNavigation = () => {
 				</h5>
 				<div className="d-flex flex-column gap-1 w-100">
 					{/* DASHBOARD */}
-					<Link to={"/dashboard"} className="btn btn-side-navigation">
+					<Link to={"/pharmacy/dashboard"} className="btn btn-side-navigation">
 						<span className="px-2">
 							<HouseFill className="icon-size-sm" />
 						</span>{" "}
