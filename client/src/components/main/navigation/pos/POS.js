@@ -454,14 +454,14 @@ const OrderInformation = (props) => {
 	};
 
 	return (
-		<div className="d-flex flex-column justify-content-between gap-6 p-3">
+		<div className="d-flex flex-column justify-content-between gap-1 p-3">
 			<div>
 				<h1 className="text-date">
 					<strong>{currentTime}</strong>
 				</h1>
 				<h5 className="text-weight-medium">{getCurrentDate()}</h5>
 			</div>
-			<div className="d-flex flex-column justify-content-between pt-4 gap-3">
+			<div className="d-flex flex-column justify-content-between gap-3">
 				<div>
 					<input
 						type="text"
@@ -727,8 +727,9 @@ const SearchProductCode = (props) => {
 	const { findByCode, searchCode, setSearchCode } = props;
 
 	const checkKeyPress = (e) => {
+		console.log(e.key);
 		if (searchCode !== "") {
-			if (e.keyCode === 32) {
+			if (e.key === "Enter") {
 				findByCode(searchCode);
 			}
 		}
