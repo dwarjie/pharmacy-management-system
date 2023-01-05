@@ -6,7 +6,7 @@ import { formatDate, getCurrentDate } from "../../../../helper/dateHelper";
 
 import logo from "../../../../asset/logo.png";
 
-const MasterList = () => {
+const DeliveryHistory = () => {
 	let componentRef = useRef();
 
 	const initialSearchDate = {
@@ -52,6 +52,36 @@ const MasterList = () => {
 					</div>
 					<div className="p-3">
 						<div className="d-flex flex-row gap-3 justify-content-start align-items-end pb-3">
+							<div>
+								<label htmlFor="">From:</label>
+								<input
+									type="date"
+									name="from"
+									className="form-control form-input w-auto"
+									value={formatDate(searchDate.from)}
+									onChange={(event) =>
+										setSearchDate((prevState) => ({
+											...prevState,
+											from: formatDate(event.target.value),
+										}))
+									}
+								/>
+							</div>
+							<div>
+								<label htmlFor="">To:</label>
+								<input
+									type="date"
+									name="to"
+									className="form-control form-input w-auto"
+									value={formatDate(searchDate.to)}
+									onChange={(event) =>
+										setSearchDate((prevState) => ({
+											...prevState,
+											to: formatDate(event.target.value),
+										}))
+									}
+								/>
+							</div>
 							<div>
 								<ReactToPrint
 									trigger={() => (
@@ -138,4 +168,4 @@ class ComponentToPrint extends React.Component {
 	}
 }
 
-export default MasterList;
+export default DeliveryHistory;

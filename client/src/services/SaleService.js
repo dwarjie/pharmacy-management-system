@@ -10,12 +10,17 @@ const getAllSales = () => {
 	return http.get("/sale/manage-sale");
 };
 
+const getAllByDate = (dateObj) => {
+	return http.post(`/sale/date-range`, dateObj);
+};
+
 const getOneSale = (id) => {
 	return http.get(`/sale/manage-sale/${id}`);
 };
 
 const SaleService = {
 	createSale,
+	getAllByDate,
 	getAllSales,
 	getOneSale,
 };

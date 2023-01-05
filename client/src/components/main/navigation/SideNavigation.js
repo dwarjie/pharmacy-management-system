@@ -329,7 +329,7 @@ const ReportsModule = () => {
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
 					<Link to={"/pharmacy/report/sales-report"} className="dropdown-item">
-						Sales Record
+						Sales List
 					</Link>
 				</li>
 				<li>

@@ -1,5 +1,6 @@
 // This module contains the controllers for sales model
 const db = require("../models");
+const { Op } = require("sequelize");
 const Sales = db.sales;
 
 exports.create = (req, res) => {
@@ -58,6 +59,23 @@ exports.findOne = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error fetching sales ${id}`,
+			});
+		});
+};
+
+exports.findAllByDate = (req, res) => {
+	const dateFrom = req.body.from;
+	const dateTo = req.body.to;
+
+	Sales.findAll({
+		where: { OrderDate: { [Op.between]: [dateFrom, dateTo] } },
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error retrieving sales record.`,
 			});
 		});
 };

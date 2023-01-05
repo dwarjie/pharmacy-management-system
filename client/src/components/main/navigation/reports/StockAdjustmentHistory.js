@@ -153,7 +153,7 @@ class ComponentToPrint extends React.Component {
 					<br />
 					<h6>ActivCare Home Health Solution Inc.</h6>
 					<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
-					<h2 className="mt-3">Master List</h2>
+					<h2 className="mt-3">Stock Adjustment History</h2>
 				</div>
 				<table className="table table-striped table-hover">
 					<thead className="table-dark">
