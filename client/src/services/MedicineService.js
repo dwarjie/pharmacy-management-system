@@ -50,6 +50,10 @@ const getByCode = (code) => {
 	return http.get(`/medicine/pos?code=${code}`);
 };
 
+const countMedicine = () => {
+	return http.get("/medicine/count-all");
+};
+
 const MedicineService = {
 	createMedicine,
 	updateMedicine,
@@ -61,6 +65,7 @@ const MedicineService = {
 	getByCode,
 	getOtherModel,
 	getByTitleAndSupplier,
+	countMedicine,
 };
 
 export default MedicineService;

@@ -333,3 +333,15 @@ exports.findByTitleSupplier = (req, res) => {
 			});
 		});
 };
+
+exports.countAllProducts = (req, res) => {
+	Medicine.findAndCountAll()
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error counting all products`,
+			});
+		});
+};

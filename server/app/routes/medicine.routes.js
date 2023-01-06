@@ -11,6 +11,7 @@ module.exports = (app) => {
 	router.put("/subtract-stock/:id", medicine.decreaseStockQuantity);
 	router.get("/medicine-list", medicine.findAll);
 	router.get("/", medicine.getOtherModel);
+	router.get("/count-all", medicine.countAllProducts);
 	router.delete("/medicine-list", medicine.delete);
 
 	// retrieve medicine using product code

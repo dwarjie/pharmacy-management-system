@@ -82,6 +82,7 @@ const ContentContainer = (props) => {
 			<div className="container-fluid col-12 mt-3 pb-3 h-auto">
 				<Routes>
 					<Route path="/dashboard" element={<Dashboard />} />
+					<Route path="/" element={<Dashboard />} />
 					<Route element={<ProtectedURL role={"maintenance"} />}>
 						<Route path="/maintenance/patient" element={<AddPatient />} />
 						<Route

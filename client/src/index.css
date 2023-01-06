@@ -246,5 +246,6 @@ label {
 
 /* dashboard */
 .dashboard-card {
+	width: 15rem;
 	max-width: 18rem;
 }
