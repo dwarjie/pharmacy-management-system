@@ -71,6 +71,7 @@ require("./app/routes/sale.routes")(app);
 require("./app/routes/salesDetail.routes")(app);
 require("./app/routes/invoice.routes")(app);
 require("./app/routes/invoiceDetail.routes")(app);
+require("./app/routes/return.routes")(app);
 
 require("./app/routes/purchase.routes")(app);
 require("./app/routes/purchaseDetail.routes")(app);

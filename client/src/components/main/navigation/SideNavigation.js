@@ -303,7 +303,7 @@ const SalesModule = () => {
 					</Link>
 				</li>
 				<li>
-					<Link to={"pharmacy/sales/return"} className="dropdown-item">
+					<Link to={"/pharmacy/sales/return"} className="dropdown-item">
 						Return
 					</Link>
 				</li>

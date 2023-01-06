@@ -197,7 +197,6 @@ const ChargeToAccount = (props) => {
 		if (!(invoice.PaidAmount >= invoice.Total)) return;
 
 		setLoading(true);
-		debugger;
 		let data = {
 			Status: "paid",
 			PaidDate: getCurrentDate(),

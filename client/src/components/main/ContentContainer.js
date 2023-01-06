@@ -50,6 +50,7 @@ import AddChargeToAccount from "./navigation/invoice/AddChargeToAccount";
 import UpdateChargeToAccount from "./navigation/invoice/UpdateChargeToAccount";
 import InvoiceList from "./navigation/invoice/InvoiceList";
 import PrintChargeToAccount from "./navigation/print/PrintChargeToAccount";
+import Return from "./navigation/return/Return";
 
 // Inventory Tab
 import OrderList from "./navigation/purchase_order/OrderList";
@@ -165,6 +166,7 @@ const ContentContainer = (props) => {
 							path="/sales/charge-to-account/print/:id"
 							element={<PrintChargeToAccount />}
 						/>
+						<Route path="/sales/return" element={<Return />} />
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
 						<Route path="/inventory/order-list" element={<OrderList />} />

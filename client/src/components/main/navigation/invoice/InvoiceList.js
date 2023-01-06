@@ -61,6 +61,28 @@ const InvoiceList = () => {
 		getAllInvoice();
 	};
 
+	const updateInvoiceStatus = async (id) => {
+		let data = {
+			Status: "void",
+		};
+
+		await InvoiceService.updateInvoice(id, data)
+			.then((response) => {
+				console.log(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const voidOrder = async (id) => {
+		if (!AlertPrompt()) return;
+
+		setLoading(true);
+		await updateInvoiceStatus(id);
+	};
+
 	const updateInvoice = (invoice) => {
 		navigate(`/pharmacy/sales/charge-to-account/${invoice.id}`, {
 			state: {

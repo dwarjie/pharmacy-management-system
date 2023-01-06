@@ -35,6 +35,7 @@ db.salesDetail = require("./salesDetail.model")(sequelize, Sequelize);
 db.sales = require("./sales.model")(sequelize, Sequelize);
 db.invoiceDetail = require("./invoiceDetails.model")(sequelize, Sequelize);
 db.invoice = require("./invoice.model")(sequelize, Sequelize);
+db.return = require("./return.model")(sequelize, Sequelize);
 
 db.purchaseDetail = require("./purchaseDetails.model")(sequelize, Sequelize);
 db.purchase = require("./purchaseOrder.model")(sequelize, Sequelize);
@@ -195,6 +196,23 @@ db.invoice.belongsTo(db.handler, {
 
 db.user.hasMany(db.invoice);
 db.invoice.belongsTo(db.user, {
+	as: "user",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+// add relationship between return to medicine and user
+db.medicine.hasMany(db.return);
+db.return.belongsTo(db.medicine, {
+	as: "medicine",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.user.hasMany(db.return);
+db.return.belongsTo(db.user, {
 	as: "user",
 	foreignKey: {
 		allowNull: false,
