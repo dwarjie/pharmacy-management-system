@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const db = require("../models");
 const Invoice = db.invoice;
 
@@ -115,6 +116,27 @@ exports.delete = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error deleting invoice ${id}`,
+			});
+		});
+};
+
+exports.findAllByDate = (req, res) => {
+	const dateFrom = req.body.from;
+	const dateTo = req.body.to;
+
+	Invoice.findAll({
+		where: {
+			PaidDate: { [Op.between]: [dateFrom, dateTo] },
+			Status: "paid",
+		},
+		include: ["patient", "handler", "user"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error retrieving invoice.`,
 			});
 		});
 };

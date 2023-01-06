@@ -20,12 +20,17 @@ const deleteInvoice = (id) => {
 	return http.delete(`/invoice/${id}`);
 };
 
+const getAllByDate = (dateObj) => {
+	return http.post(`/invoice/date-range`, dateObj);
+};
+
 const InvoiceService = {
 	createInvoice,
 	getAllInvoice,
 	getOneInvoice,
 	updateInvoice,
 	deleteInvoice,
+	getAllByDate,
 };
 
 export default InvoiceService;

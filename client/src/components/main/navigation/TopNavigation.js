@@ -29,8 +29,8 @@ const TopNavigation = (props) => {
 					</span>
 				</button>
 				<div className="d-flex flex-row gap-3">
-					<BellFill className="icon-size-md text-dark" />
-					<ExclamationTriangleFill className="icon-size-md text-dark" />
+					{/* <BellFill className="icon-size-md text-dark" /> */}
+					{/* <ExclamationTriangleFill className="icon-size-md text-dark" /> */}
 					<CgLogOff
 						className="icon-size-md text-dark cursor-pointer"
 						onClick={logOut}

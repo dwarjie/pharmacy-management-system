@@ -4,7 +4,7 @@ module.exports = (app) => {
 
 	router.post("/", returnInfo.create);
 	router.post("/date-range", returnInfo.findAllByDate);
-	router.get("/manage-return-info", returnInfo.findAll);
+	router.get("/", returnInfo.findAll);
 
 	app.use("/api/returns", router);
 };

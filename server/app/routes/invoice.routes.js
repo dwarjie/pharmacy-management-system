@@ -7,6 +7,7 @@ module.exports = (app) => {
 	router.get("/:id", invoice.findOne);
 	router.put("/:id", invoice.update);
 	router.delete("/:id", invoice.delete);
+	router.post("/date-range", invoice.findAllByDate);
 
 	app.use("/api/invoice", router);
 };

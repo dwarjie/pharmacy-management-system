@@ -6,6 +6,7 @@ import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import Loader from "../../../layout/Loader";
 import { getCurrentDate } from "../../../../helper/dateHelper";
 import { useGlobalState } from "../../../../state";
+import ReturnService from "../../../../services/ReturnService";
 
 // create context API
 const AdjustmentContext = createContext();
@@ -44,17 +45,6 @@ const Return = () => {
 		setTotal();
 	}, [returnInformation.Quantity]);
 
-	const createStockAdjustment = async () => {
-		await StockAdjustmentService.createStockAdjustment(returnInformation)
-			.then((response) => {
-				console.log(response.data);
-				setAlertMessage(response.data.message);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
 	const increaseProductStock = async () => {
 		let data = {
 			Quantity: returnInformation.Quantity,
@@ -72,36 +62,26 @@ const Return = () => {
 			});
 	};
 
-	const decreaseProductStock = async () => {
-		let data = {
-			Quantity: returnInformation.Quantity,
-		};
-		await MedicineService.updateDecreaseMedicineStock(
-			returnInformation.medicineId,
-			data
-		)
+	const createReturn = async () => {
+		await ReturnService.createReturn(returnInformation)
 			.then((response) => {
 				console.log(response.data);
-				setLoading(false);
+				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
 
-	const adjustStock = async (event) => {
+	const returnProduct = async (event) => {
 		event.preventDefault();
 		if (returnInformation.medicineId === null)
 			return alert("Pick product to adjust.");
 		if (!AlertPrompt()) return;
 
 		setLoading(true);
-		await createStockAdjustment();
-		if (returnInformation.Mode === "add") {
-			await increaseProductStock();
-		} else {
-			await decreaseProductStock();
-		}
+		await createReturn();
+		await increaseProductStock();
 		setReturnInformation(initialReturn);
 		setSelectedProduct({});
 	};
@@ -183,7 +163,7 @@ const Return = () => {
 							<div className="-75 border border-dark rounded simple-shadow mt-3">
 								<ProductDetails
 									selectedProduct={selectedProduct}
-									adjustStock={adjustStock}
+									adjustStock={returnProduct}
 								/>
 							</div>
 						</div>
@@ -273,7 +253,11 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 					/>
 				</div>
 			</div>
-			<button type="submit" className="btn btn-primary simple-shadow mt-3">
+			<button
+				type="submit"
+				className="btn btn-primary simple-shadow mt-3"
+				disabled={returnInformation.medicineId ? false : true}
+			>
 				Create
 			</button>
 		</form>
