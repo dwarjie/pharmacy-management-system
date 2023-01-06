@@ -13,6 +13,7 @@ const UpdateChargeToAccount = () => {
 		ORNumber: oldInvoice.ORNumber,
 		InvoiceDate: oldInvoice.InvoiceDate,
 		DueDate: oldInvoice.DueDate,
+		PaidDate: oldInvoice.PaidDate,
 		VAT: oldInvoice.VAT,
 		Total: oldInvoice.Total,
 		PaidAmount: oldInvoice.PaidAmount,

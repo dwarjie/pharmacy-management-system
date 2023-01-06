@@ -114,7 +114,11 @@ const InvoiceList = () => {
 											<td>{invoice.handler.FirstName}</td>
 											<td>{invoice.patient.FirstName}</td>
 											<td>
-												<span className="badge text-bg-warning">
+												<span
+													className={`badge text-bg-${
+														invoice.Status === "paid" ? "success" : "warning"
+													}`}
+												>
 													{invoice.Status}
 												</span>
 											</td>
@@ -125,12 +129,12 @@ const InvoiceList = () => {
 														onClick={() => updateInvoice(invoice)}
 													/>
 												</span>
-												<span className="px-2">
+												{/* <span className="px-2">
 													<MdDelete
 														className="icon-size-sm cursor-pointer"
 														onClick={() => deleteOrder(invoice.id)}
 													/>
-												</span>
+												</span> */}
 											</td>
 										</tr>
 									))}

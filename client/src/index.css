@@ -61,7 +61,15 @@ body {
 }
 
 .text-date {
-	font-size: 3rem;
+	font-size: 2rem;
+}
+
+.text-time {
+	font-size: 1rem;
+}
+
+.text-total {
+	font-size: 1.5rem;
 }
 
 /* NAVIGATION */

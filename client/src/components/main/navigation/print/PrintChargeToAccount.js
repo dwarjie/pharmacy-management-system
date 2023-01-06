@@ -175,6 +175,16 @@ class ComponentToPrint extends React.Component {
 								{formatDate(invoice.DueDate)}
 								<br />
 							</p>
+							{invoice.Status === "paid" ? (
+								<p>
+									<strong>Paid Date:</strong>
+									<br />
+									{formatDate(invoice.PaidDate)}
+									<br />
+								</p>
+							) : (
+								""
+							)}
 							<p>
 								<strong>Prepared By:</strong>
 								<br />

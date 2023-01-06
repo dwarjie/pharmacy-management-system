@@ -474,10 +474,10 @@ const OrderInformation = (props) => {
 	return (
 		<div className="d-flex flex-column justify-content-between gap-3 p-3">
 			<div>
-				<h1 className="text-date">
+				<h6 className="text-date">
 					<strong>{currentTime}</strong>
-				</h1>
-				<h5 className="text-weight-medium">{getCurrentDate()}</h5>
+				</h6>
+				<h5 className="text-weight-medium text-time">{getCurrentDate()}</h5>
 			</div>
 			<div className="d-flex flex-column justify-content-between gap-3">
 				<div>
@@ -584,7 +584,7 @@ const OrderInformation = (props) => {
 					<h6>
 						<strong>VAT &#8369;:</strong> {sale.VAT}
 					</h6>
-					<h6>
+					<h6 className="text-total">
 						<strong>Total Amount &#8369;: </strong> {sale.Total}
 					</h6>
 					<h6>

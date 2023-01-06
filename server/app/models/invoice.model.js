@@ -18,6 +18,10 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.DATE,
 			allowNull: false,
 		},
+		PaidDate: {
+			type: Sequelize.DATE,
+			allowNull: true,
+		},
 		VAT: {
 			type: Sequelize.FLOAT,
 			allowNull: true,

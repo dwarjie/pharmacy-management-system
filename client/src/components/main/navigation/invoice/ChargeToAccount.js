@@ -185,7 +185,36 @@ const ChargeToAccount = (props) => {
 
 	const updateInvoice = async (event) => {
 		event.preventDefault();
+		if (!AlertPrompt()) return;
 
+		setLoading(true);
+		await updateInvoiceRecord();
+		await updateInvoiceStatus();
+	};
+
+	const updateInvoiceStatus = async () => {
+		// check if invoice is fully paid
+		if (!(invoice.PaidAmount >= invoice.Total)) return;
+
+		setLoading(true);
+		debugger;
+		let data = {
+			Status: "paid",
+			PaidDate: getCurrentDate(),
+		};
+
+		await InvoiceService.updateInvoice(invoice.id, data)
+			.then((response) => {
+				console.log(response.data);
+				setInvoice((prevState) => ({ ...prevState, Status: "paid" }));
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const updateInvoiceRecord = async () => {
 		await InvoiceService.updateInvoice(invoice.id, invoice)
 			.then((response) => {
 				console.log(response.data);
@@ -266,6 +295,10 @@ const ChargeToAccount = (props) => {
 			});
 	};
 
+	const printInvoice = () => {
+		navigate(`/pharmacy/sales/charge-to-account/print/${invoice.id}`);
+	};
+
 	// this function will check if order already exists in order list
 	const checkOrderExist = (selectedProduct) => {
 		let isExist = false;
@@ -330,9 +363,9 @@ const ChargeToAccount = (props) => {
 
 			setInvoice((prevState) => ({
 				...prevState,
-				GrossAmount: grossAmount,
+				GrossAmount: (grossAmount - vat).toFixed(2),
 				VAT: vat,
-				Total: total,
+				Total: grossAmount,
 			}));
 		} else {
 			setInvoice((prevState) => ({
@@ -398,6 +431,7 @@ const ChargeToAccount = (props) => {
 							/>
 							<SearchProduct
 								getAllProducts={getAllProducts}
+								isUpdate={isUpdate}
 								addProduct={addProduct}
 							/>
 						</div>
@@ -432,19 +466,26 @@ const ChargeToAccount = (props) => {
 								type="submit"
 								form="main-form"
 								className="btn btn-primary simple-shadow mt-2 me-3"
-								disabled={orderList.length === 0 ? true : false}
+								disabled={
+									orderList.length === 0 || invoice.Status === "paid"
+										? true
+										: false
+								}
 							>
-								{isUpdate() ? "Update" : "Create"}
+								{isUpdate() ? "Save" : "Create"}
 							</button>
 							<button
 								type="button"
+								hidden={isUpdate() ? false : true}
 								className="btn btn-dark simple-shadow mt-2 me-3"
+								onClick={() => printInvoice()}
 							>
 								Print
 							</button>
 							<button
 								type="button"
 								className="btn btn-secondary simple-shadow mt-2 me-3"
+								hidden={isUpdate() ? false : true}
 								onClick={() => navigate(-1)}
 							>
 								Cancel
@@ -619,7 +660,7 @@ const ProductTable = ({
 	updateInvoiceItem,
 	getOrderList,
 }) => {
-	const { orderList, setOrderList, invoice, setLoading } =
+	const { orderList, setOrderList, invoice, setLoading, setInvoice } =
 		useContext(InvoiceContext);
 
 	const [lastValue, setLastValue] = useState(-1);
@@ -691,6 +732,18 @@ const ProductTable = ({
 		setLastValue(value);
 	};
 
+	const checkBalance = () => {
+		if (invoice.PaidAmount === 0) return invoice.Total;
+		if (invoice.PaidAmount >= invoice.Total) return 0;
+
+		let result = parseFloat(invoice.Total) - parseFloat(invoice.PaidAmount);
+		if (isNaN(result)) {
+			return invoice.Total;
+		} else {
+			return result.toFixed(2);
+		}
+	};
+
 	const orderData = () => {
 		return (
 			orderList &&
@@ -704,6 +757,7 @@ const ProductTable = ({
 							type="number"
 							min={1}
 							className="form-control form-input w-xs-auto w-20 p-1"
+							disabled={isUpdate() ? true : false}
 							value={order.Quantity}
 							onChange={(event) => {
 								handleQuantityChange(event, order, index);
@@ -716,7 +770,7 @@ const ProductTable = ({
 					</td>
 					<td>{order.UnitPrice}</td>
 					<td>{getProductTotal(order)}</td>
-					<td>
+					{/* <td>
 						<span className="px-1">
 							<MdDelete
 								className="icon-size-sm cursor-pointer"
@@ -725,7 +779,7 @@ const ProductTable = ({
 								}
 							/>
 						</span>
-					</td>
+					</td> */}
 				</tr>
 			))
 		);
@@ -739,9 +793,9 @@ const ProductTable = ({
 					<th scope="col">Item</th>
 					<th scope="col">On hand</th>
 					<th scope="col">Qty</th>
-					<th scope="col">Unit Cost</th>
+					<th scope="col">Price</th>
 					<th scope="col">Sub-Total</th>
-					<th scope="col">Action</th>
+					{/* <th scope="col">Action</th> */}
 				</tr>
 			</thead>
 			<tbody>
@@ -776,12 +830,55 @@ const ProductTable = ({
 					</td>
 					<td className="no-line text-right">&#8369;{invoice.Total}</td>
 				</tr>
+				{isUpdate() ? (
+					<tr>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line text-center">
+							<strong>Paid Amount: &#8369;</strong>
+						</td>
+						<td className="no-line text-right">
+							<input
+								type="number"
+								min={1}
+								disabled={invoice.Status === "paid" ? true : false}
+								className="form-control form-input w-40"
+								name="PaidAmount"
+								value={invoice.PaidAmount}
+								onChange={(event) => {
+									setInvoice((prevState) => ({
+										...prevState,
+										PaidAmount: event.target.value,
+									}));
+								}}
+							/>
+						</td>
+					</tr>
+				) : (
+					""
+				)}
+				{isUpdate() ? (
+					<tr>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line text-center">
+							<strong>Balance:</strong>
+						</td>
+						<td className="no-line text-right">&#8369;{checkBalance()}</td>
+					</tr>
+				) : (
+					""
+				)}
 			</tbody>
 		</table>
 	);
 };
 
-const SearchProduct = ({ getAllProducts, addProduct }) => {
+const SearchProduct = ({ getAllProducts, addProduct, isUpdate }) => {
 	const {
 		searchProduct,
 		setSearchProduct,
@@ -800,7 +897,10 @@ const SearchProduct = ({ getAllProducts, addProduct }) => {
 				<div
 					className="dropdown-row cursor-pointer"
 					key={index}
-					onClick={(event) => addProduct(event, item)}
+					onClick={(event) => {
+						addProduct(event, item);
+						resetSearchTitle();
+					}}
 				>
 					<h5>{item.ProductName}</h5>
 				</div>
@@ -837,6 +937,7 @@ const SearchProduct = ({ getAllProducts, addProduct }) => {
 							type="text"
 							className="form-control form-input"
 							placeholder="Search Product Name"
+							disabled={isUpdate() ? true : false}
 							name="searchProduct"
 							value={searchProduct}
 							onChange={handleSearchProduct}

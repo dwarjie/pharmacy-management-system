@@ -14,6 +14,7 @@ const AddChargeToAccount = () => {
 		ORNumber: "",
 		InvoiceDate: getCurrentDate(),
 		DueDate: "",
+		PaidDate: "",
 		VAT: 0,
 		Total: 0,
 		PaidAmount: 0,
