@@ -108,6 +108,14 @@ db.salesDetail.belongsTo(db.sales, {
 	},
 });
 
+db.user.hasMany(db.sales);
+db.sales.belongsTo(db.user, {
+	as: "user",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
 // add relationship for purchaseDetails with purchase
 
 db.purchase.hasMany(db.purchaseDetail);
@@ -138,6 +146,14 @@ db.purchaseDetail.belongsTo(db.medicine, {
 db.medicine.hasMany(db.stockAdjustment);
 db.stockAdjustment.belongsTo(db.medicine, {
 	as: "medicine",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.user.hasMany(db.stockAdjustment);
+db.stockAdjustment.belongsTo(db.user, {
+	as: "user",
 	foreignKey: {
 		allowNull: false,
 	},

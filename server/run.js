@@ -1,10 +1,10 @@
 // This async function will be called when the database is created for the first time
-const OR = require("./app/controllers/OR.controller");
 const bcrypt = require("bcryptjs");
 
-exports.Run = async () => {
+exports.Run = async (or) => {
 	// *create the only record for OR
-	const onlyOR = await OR.create({
+	const onlyOR = await or.create({
+		id: 1,
 		StartOR: 0,
 		MaxOR: 0,
 		CurrentOR: 0,

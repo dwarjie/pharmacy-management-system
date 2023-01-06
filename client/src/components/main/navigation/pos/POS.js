@@ -20,8 +20,10 @@ import { MdDelete } from "react-icons/md";
 import parseDropdownValue from "../../../../helper/parseJSON";
 import SalesDetailService from "../../../../services/SalesDetailService";
 import Loader from "../../../layout/Loader";
+import { useGlobalState } from "../../../../state";
 
 const POS = (props) => {
+	let [currentUser] = useGlobalState("currentUser");
 	let navigate = useNavigate();
 	const initialSalesValue = {
 		OrderNo: generateOrderNumber(),
@@ -34,6 +36,7 @@ const POS = (props) => {
 		GrossAmount: 0,
 		CashTendered: "",
 		ChangeAmount: 0,
+		userId: currentUser.id,
 	};
 
 	const initialActiveDropDownValue = {
@@ -137,6 +140,7 @@ const POS = (props) => {
 			state: {
 				sale: sale,
 				orderList: orderList,
+				user: currentUser,
 			},
 		});
 	};

@@ -140,6 +140,7 @@ class ComponentToPrint extends React.Component {
 						<td>{product.Mode}</td>
 						<td>{product.Reason}</td>
 						<td>{formatDate(product.DateCreated)}</td>
+						<td>{product.user.FirstName}</td>
 					</tr>
 				))
 			);
@@ -164,6 +165,7 @@ class ComponentToPrint extends React.Component {
 							<th scope="col">Mode</th>
 							<th scope="col">Reason</th>
 							<th scope="col">Date</th>
+							<th scope="col">Adjusted By</th>
 						</tr>
 					</thead>
 					<tbody>{renderItems()}</tbody>

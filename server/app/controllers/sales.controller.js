@@ -15,6 +15,7 @@ exports.create = (req, res) => {
 		GrossAmount: req.body.GrossAmount,
 		CashTendered: req.body.CashTendered,
 		ChangeAmount: req.body.ChangeAmount,
+		userId: req.body.userId,
 	};
 
 	Sales.create(sale)
@@ -32,7 +33,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-	Sales.findAll()
+	Sales.findAll({ include: ["user"] })
 		.then((data) => {
 			res.send(data);
 		})
@@ -46,7 +47,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 
-	Sales.findByPk(id)
+	Sales.findByPk(id, { include: ["user"] })
 		.then((data) => {
 			if (data) {
 				res.send(data);
@@ -68,6 +69,7 @@ exports.findAllByDate = (req, res) => {
 	const dateTo = req.body.to;
 
 	Sales.findAll({
+		include: ["user"],
 		where: { OrderDate: { [Op.between]: [dateFrom, dateTo] } },
 	})
 		.then((data) => {

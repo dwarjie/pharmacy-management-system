@@ -9,6 +9,7 @@ exports.create = (req, res) => {
 		DateCreated: req.body.DateCreated,
 		Reason: req.body.Reason,
 		medicineId: req.body.medicineId,
+		userId: req.body.userId,
 	};
 
 	StockAdjustment.create(adjustment)
@@ -26,7 +27,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-	StockAdjustment.findAll()
+	StockAdjustment.findAll({ include: ["user"] })
 		.then((data) => {
 			res.send(data);
 		})
@@ -43,7 +44,7 @@ exports.findAllByDate = (req, res) => {
 
 	StockAdjustment.findAll({
 		where: { DateCreated: { [Op.between]: [dateFrom, dateTo] } },
-		include: ["medicine"],
+		include: ["medicine", "user"],
 	})
 		.then((data) => {
 			res.send(data);

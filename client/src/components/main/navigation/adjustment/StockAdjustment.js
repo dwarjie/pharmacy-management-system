@@ -5,12 +5,14 @@ import StockAdjustmentService from "../../../../services/StockAdjustmentService"
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import Loader from "../../../layout/Loader";
 import { getCurrentDate } from "../../../../helper/dateHelper";
+import { useGlobalState } from "../../../../state";
 
 // create context API
 const AdjustmentContext = createContext();
 const { Provider } = AdjustmentContext;
 
 const StockAdjustment = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	const initialStockAdjustmentValue = {
 		id: null,
 		Mode: "add",
@@ -18,6 +20,7 @@ const StockAdjustment = () => {
 		DateCreated: getCurrentDate(),
 		Reason: "",
 		medicineId: null,
+		userId: currentUser.id,
 	};
 
 	const [adjustment, setAdjustment] = useState(initialStockAdjustmentValue);

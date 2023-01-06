@@ -7,6 +7,7 @@ import SaleService from "../../../../services/SaleService";
 import SalesDetailService from "../../../../services/SalesDetailService";
 
 import logo from "../../../../asset/logo.png";
+import Loader from "../../../layout/Loader";
 
 const ViewSale = () => {
 	let navigate = useNavigate();
@@ -15,6 +16,7 @@ const ViewSale = () => {
 
 	const [sale, setSale] = useState({});
 	const [items, setItems] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		getSale(id);
@@ -37,6 +39,7 @@ const ViewSale = () => {
 			.then((response) => {
 				console.log(response.data);
 				setItems(response.data);
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -44,35 +47,45 @@ const ViewSale = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
-				<h4>View Sale</h4>
-				<hr />
-			</div>
-			<div className="p-3">
-				<div className="container p-3">
-					<div className="container">
-						<ComponentToPrint
-							ref={(element) => (componentRef = element)}
-							sale={sale}
-							items={items}
-						/>
-						<ReactToPrint
-							trigger={() => (
-								<button className="btn btn-primary mx-2">Print Receipt</button>
-							)}
-							content={() => componentRef}
-						/>
-						<button
-							className="btn btn-secondary mx-2"
-							onClick={() => navigate(-1)}
-						>
-							Close
-						</button>
+		<>
+			{loading ? (
+				<div className="w-auto mt-8 d-flex justify-content-center align-items-center">
+					<Loader />
+				</div>
+			) : (
+				<div className="col-12 h-auto border border-dark rounded simple-shadow">
+					<div className="p-3">
+						<h4>View Sale</h4>
+						<hr />
+					</div>
+					<div className="p-3">
+						<div className="container p-3">
+							<div className="container">
+								<ComponentToPrint
+									ref={(element) => (componentRef = element)}
+									sale={sale}
+									items={items}
+								/>
+								<ReactToPrint
+									trigger={() => (
+										<button className="btn btn-primary mx-2">
+											Print Receipt
+										</button>
+									)}
+									content={() => componentRef}
+								/>
+								<button
+									className="btn btn-secondary mx-2"
+									onClick={() => navigate(-1)}
+								>
+									Close
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };
 
@@ -118,7 +131,10 @@ class ComponentToPrint extends React.Component {
 					<div className="col-xs-12 mt-3">
 						<div className="invoice-title">
 							<h3 className="pull-right">Order # {sale.OrderNo}</h3>
-							<h6 className="pull-left">OR # {sale.ORNumber}</h6>
+							<h6 className="pull-left">Official Receipt # {sale.ORNumber}</h6>
+							<h6 className="pull-left">
+								Cashier: {`${sale.user.FirstName} ${sale.user.LastName}`}
+							</h6>
 						</div>
 						<hr />
 					</div>

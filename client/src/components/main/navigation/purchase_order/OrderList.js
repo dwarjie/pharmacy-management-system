@@ -67,7 +67,7 @@ const OrderList = () => {
 			) : (
 				<div className="h-auto d-flex flex-column justify-content-between gap-1">
 					<div className="p-2">
-						<h4>Order List</h4>
+						<h4>Purchase Order List</h4>
 						<hr />
 					</div>
 					{/* <div className="col-12 col-md-3 h-auto">

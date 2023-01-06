@@ -12,10 +12,12 @@ const PrintInvoice = () => {
 
 	const [sale, setSale] = useState({});
 	const [items, setItems] = useState([]);
+	const [user, setUser] = useState({});
 
 	useEffect(() => {
 		setSale(location.state.sale);
 		setItems(location.state.orderList);
+		setUser(location.state.user);
 	}, []);
 
 	const pageStyle = `
@@ -57,6 +59,7 @@ const PrintInvoice = () => {
 							ref={(element) => (componentRef = element)}
 							sale={sale}
 							items={items}
+							user={user}
 						/>
 						<ReactToPrint
 							trigger={() => (
@@ -83,6 +86,7 @@ class ComponentToPrint extends React.Component {
 		// get the props
 		const sale = this.props.sale;
 		const items = this.props.items;
+		const user = this.props.user;
 
 		const getPageMargins = () => {
 			const marginTop = "50px";
@@ -120,6 +124,9 @@ class ComponentToPrint extends React.Component {
 						<div className="invoice-title">
 							<h3 className="pull-right">Order # {sale.OrderNo}</h3>
 							<h6 className="pull-left">Official Receipt # {sale.ORNumber}</h6>
+							<h6 className="pull-left">
+								Cashier: {`${user.FirstName} ${user.LastName}`}
+							</h6>
 						</div>
 						<hr />
 					</div>

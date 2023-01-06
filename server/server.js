@@ -9,6 +9,7 @@ const app = express();
 
 var corsOptions = {
 	origin: "http://localhost:8081",
+	// origin: "https://luxury-panda-117012.netlify.app",
 };
 
 app.use(cors(corsOptions));
@@ -33,7 +34,7 @@ db.sequelize
 // FOR DEVELOPMENT ONLY, DROP THE DATABASE AND RE-SYNC THE DATABASE
 // db.sequelize.sync({ force: true }).then(() => {
 // 	console.log("Drop and re-sync database");
-// 	initialize.Run();
+// 	initialize.Run(db.or);
 // 	initialize.User(db.user);
 // 	initialize.VAT(db.vat);
 // 	initialize.Discount(db.discount);
