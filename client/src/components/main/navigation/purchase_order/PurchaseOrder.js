@@ -552,7 +552,7 @@ const ProductTable = (props) => {
 
 	const getProductTotal = (order) => {
 		order.Total = order.UnitCost * order.Quantity;
-		return order.Total.toFixed(1);
+		return order.Total.toFixed(2);
 	};
 
 	// delete an order in the list

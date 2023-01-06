@@ -209,7 +209,7 @@ const Delivery = () => {
 				ReorderPoint: item.medicine.ReorderPoint,
 				Quantity: item.Quantity,
 				ReceivedQuantity: item.Quantity,
-				UnitCost: item.medicine.SellingPrice,
+				UnitCost: item.medicine.SupplierPrice,
 				Total: item.Total,
 				RecieveDate: item.RecieveDate,
 				Status: item.Status,

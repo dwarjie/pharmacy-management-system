@@ -47,7 +47,7 @@ const UpdatePO = () => {
 				OnHand: item.medicine.Quantity,
 				ReorderPoint: item.medicine.ReorderPoint,
 				Quantity: item.Quantity,
-				UnitCost: item.medicine.SellingPrice,
+				UnitCost: item.medicine.SupplierPrice,
 				Total: item.Total,
 				ReceivedDate: item.ReceivedDate,
 				medicineId: item.medicineId,
