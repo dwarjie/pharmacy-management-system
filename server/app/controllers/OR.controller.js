@@ -44,6 +44,7 @@ exports.findOne = (req, res) => {
 };
 
 // update the value of OR
+// testing for deploy
 exports.update = (req, res) => {
 	const id = 1; // * only 1 because OR has only 1 row
 
