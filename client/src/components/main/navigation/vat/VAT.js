@@ -95,8 +95,8 @@ const VAT = () => {
 
 	return (
 		<div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow">
-				<div className="p-3">
+			<div className="col-12 h-auto">
+				<div className="p-2">
 					<h4>Add VAT</h4>
 					<hr />
 				</div>
@@ -108,7 +108,7 @@ const VAT = () => {
 				) : (
 					""
 				)}
-				<div className="p-3">
+				<div className="p-2">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => updateVAT(event)}

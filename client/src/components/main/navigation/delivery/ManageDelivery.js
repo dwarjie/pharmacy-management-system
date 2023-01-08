@@ -67,60 +67,62 @@ const ManageDelivery = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>Delivered Order List</h4>
 				<hr />
 			</div>
-			<div className="p-3">
-				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+			<div className="p-2">
+				{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="medicine-search">Search:</label>
 					<input type="text" className="form-control" id="medicine-search" />
-				</form>
-				<table className="table table-striped table-hover">
-					<thead className="table-dark">
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Receive Date</th>
-							<th scope="col">Reference #</th>
-							<th scope="col">Supplier</th>
-							<th scope="col">Items</th>
-							<th scope="col">Status</th>
-							<th scope="col">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{purchases &&
-							purchases.map((purchase, index) => (
-								<tr key={index}>
-									<td>{index + 1}</td>
-									<td>{formatDate(purchase.OrderDate)}</td>
-									<td>{purchase.POCode}</td>
-									<td>{purchase.supplier.SupplierName}</td>
-									<td>{purchase.ItemQty}</td>
-									<td>
-										<span className="badge text-bg-success">
-											{purchase.Status}
-										</span>
-									</td>
-									<td>
-										<span className="px-2">
-											<FaEdit
-												className="icon-size-sm cursor-pointer"
-												onClick={() => openDelivery(purchase)}
-											/>
-										</span>
-										<span className="px-2">
-											<MdDelete
-												className="icon-size-sm cursor-pointer"
-												onClick={() => deleteOrder(purchase.id)}
-											/>
-										</span>
-									</td>
-								</tr>
-							))}
-					</tbody>
-				</table>
+				</form> */}
+				<div className="table-responsive">
+					<table className="table table-striped table-hover">
+						<thead className="table-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Receive Date</th>
+								<th scope="col">Reference #</th>
+								<th scope="col">Supplier</th>
+								<th scope="col">Items</th>
+								<th scope="col">Status</th>
+								<th scope="col">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{purchases &&
+								purchases.map((purchase, index) => (
+									<tr key={index}>
+										<td>{index + 1}</td>
+										<td>{formatDate(purchase.OrderDate)}</td>
+										<td>{purchase.POCode}</td>
+										<td>{purchase.supplier.SupplierName}</td>
+										<td>{purchase.ItemQty}</td>
+										<td>
+											<span className="badge text-bg-success">
+												{purchase.Status}
+											</span>
+										</td>
+										<td>
+											<span className="px-2">
+												<FaEdit
+													className="icon-size-sm cursor-pointer"
+													onClick={() => openDelivery(purchase)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdDelete
+													className="icon-size-sm cursor-pointer"
+													onClick={() => deleteOrder(purchase.id)}
+												/>
+											</span>
+										</td>
+									</tr>
+								))}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	);

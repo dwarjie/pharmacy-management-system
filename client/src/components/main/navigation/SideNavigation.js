@@ -193,7 +193,7 @@ const HandlerModule = () => {
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
 					<Link to={"/pharmacy/maintenance/handler"} className="dropdown-item">
-						Add Handler
+						Add NCM/Doctor
 					</Link>
 				</li>
 				<li>
@@ -201,7 +201,7 @@ const HandlerModule = () => {
 						to={"/pharmacy/maintenance/handler/handler-list"}
 						className="dropdown-item"
 					>
-						Handler List
+						NCM/Doctors List
 					</Link>
 				</li>
 			</ul>
@@ -299,7 +299,7 @@ const SalesModule = () => {
 						to={"/pharmacy/sales/charge-to-account-list"}
 						className="dropdown-item"
 					>
-						Invoice List
+						Invoices List
 					</Link>
 				</li>
 				<li>

@@ -54,9 +54,9 @@ const HandlerList = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
-				<h4>Handler List</h4>
+		<div className="col-12 h-auto">
+			<div className="p-2">
+				<h4>NCM/Doctors List</h4>
 				<hr />
 			</div>
 			{alertMessage ? (
@@ -67,49 +67,51 @@ const HandlerList = () => {
 			) : (
 				""
 			)}
-			<div className="p-3">
-				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+			<div className="p-2">
+				{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="handler-search">Search:</label>
 					<input type="text" className="form-control" id="handler-search" />
-				</form>
-				<table className="table table-striped table-hover">
-					<thead className="table-dark">
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Name</th>
-							<th scope="col">Category</th>
-							<th scope="col">Address</th>
-							<th scope="col">Mobile</th>
-							<th scope="col">Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						{handlers &&
-							handlers.map((handler, index) => (
-								<tr key={index}>
-									<td>{index + 1}</td>
-									<td>{`${handler.FirstName} ${handler.LastName}`}</td>
-									<td>{handler.Category}</td>
-									<td>{handler.Address}</td>
-									<td>{handler.Mobile}</td>
-									<td>
-										<span className="px-2">
-											<FaEdit
-												className="icon-size-sm cursor-pointer"
-												onClick={() => updateHandler(handler)}
-											/>
-										</span>
-										<span className="px-2">
-											<MdDelete
-												className="icon-size-sm cursor-pointer"
-												onClick={() => deleteHandler(handler)}
-											/>
-										</span>
-									</td>
-								</tr>
-							))}
-					</tbody>
-				</table>
+				</form> */}
+				<div className="table-responsive">
+					<table className="table table-striped table-hover">
+						<thead className="table-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Name</th>
+								<th scope="col">Category</th>
+								<th scope="col">Address</th>
+								<th scope="col">Mobile</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{handlers &&
+								handlers.map((handler, index) => (
+									<tr key={index}>
+										<td>{index + 1}</td>
+										<td>{`${handler.FirstName} ${handler.LastName}`}</td>
+										<td>{handler.Category}</td>
+										<td>{handler.Address}</td>
+										<td>{handler.Mobile}</td>
+										<td>
+											<span className="px-2">
+												<FaEdit
+													className="icon-size-sm cursor-pointer"
+													onClick={() => updateHandler(handler)}
+												/>
+											</span>
+											<span className="px-2">
+												<MdDelete
+													className="icon-size-sm cursor-pointer"
+													onClick={() => deleteHandler(handler)}
+												/>
+											</span>
+										</td>
+									</tr>
+								))}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	);

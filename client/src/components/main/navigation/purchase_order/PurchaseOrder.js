@@ -329,6 +329,10 @@ const PurchaseOrder = (props) => {
 				</div>
 			) : (
 				<div className="h-auto d-flex flex-column justify-content-between gap-1">
+					<div className="p-2">
+						<h4>Purchase Order</h4>
+						<hr />
+					</div>
 					<div className="col-12 h-auto">
 						<OrderInformation
 							searchProduct={searchProduct}
@@ -345,7 +349,7 @@ const PurchaseOrder = (props) => {
 							isUpdate={isUpdate}
 						/>
 					</div>
-					<div className="h-75 border border-dark rounded simple-shadow mt-3">
+					<div className="h-75 border border-dark rounded simple-shadow mb-sm-3">
 						<div className="table-responsive max-height-100">
 							<ProductTable
 								orderList={orderList}
@@ -437,7 +441,7 @@ const OrderInformation = ({
 
 	return (
 		<>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
 						Reference #:
@@ -467,7 +471,7 @@ const OrderInformation = ({
 					/>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
 						Supplier:
@@ -515,7 +519,7 @@ const OrderInformation = ({
 					/>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md-6">
 					<label htmlFor="searchProduct">Search:</label>
 					<div className="search-inner">

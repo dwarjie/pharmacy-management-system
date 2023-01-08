@@ -56,8 +56,8 @@ const PatientList = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>Patient List</h4>
 				<hr />
 			</div>
@@ -69,11 +69,11 @@ const PatientList = () => {
 			) : (
 				""
 			)}
-			<div className="p-3">
-				<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+			<div className="p-2">
+				{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="patient-search">Search:</label>
 					<input type="text" className="form-control" id="patient-search" />
-				</form>
+				</form> */}
 				<PatientTable
 					patientsData={patients}
 					updatePatient={updatePatient}
@@ -115,20 +115,22 @@ const PatientTable = (props) => {
 	));
 
 	return (
-		<table className="table table-striped table-hover">
-			<thead className="table-dark">
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">Name</th>
-					<th scope="col">Sex</th>
-					<th scope="col">Address</th>
-					<th scope="col">Contact #</th>
-					<th scope="col">Reffered by</th>
-					<th scope="col">Actions</th>
-				</tr>
-			</thead>
-			<tbody>{patientRows}</tbody>
-		</table>
+		<div className="table-responsive">
+			<table className="table table-striped table-hover">
+				<thead className="table-dark">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">Sex</th>
+						<th scope="col">Address</th>
+						<th scope="col">Contact #</th>
+						<th scope="col">Reffered by</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>{patientRows}</tbody>
+			</table>
+		</div>
 	);
 };
 

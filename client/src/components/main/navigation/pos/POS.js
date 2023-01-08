@@ -472,7 +472,7 @@ const OrderInformation = (props) => {
 	};
 
 	return (
-		<div className="d-flex flex-column justify-content-between gap-3 p-3">
+		<div className="d-flex flex-column justify-content-between gap-3 p-3 ">
 			<div>
 				<h6 className="text-date">
 					<strong>{currentTime}</strong>

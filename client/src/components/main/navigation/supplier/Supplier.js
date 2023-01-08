@@ -106,8 +106,8 @@ const Supplier = () => {
 
 	return (
 		<div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow">
-				<div className="p-3">
+			<div className="col-12 h-auto">
+				<div className="p-2">
 					<h4>Add Supplier</h4>
 					<hr />
 				</div>
@@ -119,12 +119,12 @@ const Supplier = () => {
 				) : (
 					""
 				)}
-				<div className="p-3">
+				<div className="p-2">
 					<form
 						className="col-12 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => createSupplier(event)}
 					>
-						<div className="row mb-3">
+						<div className="row mb-sm-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="SupplierName">
 									Supplier Name:
@@ -154,7 +154,7 @@ const Supplier = () => {
 								/>
 							</div>
 						</div>
-						<div className="row mb-3">
+						<div className="row mb-sm-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="Mobile">
 									Contact #:
@@ -202,12 +202,12 @@ const Supplier = () => {
 					</form>
 				</div>
 			</div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
-				<div className="p-3">
+			<div className="col-12 h-auto mt-3">
+				<div className="p-2">
 					<h4>Supplier List</h4>
 					<hr />
 				</div>
-				<div className="p-3">
+				<div className="p-2">
 					{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 						<label htmlFor="supplier-search">Search:</label>
 						<input
@@ -216,44 +216,46 @@ const Supplier = () => {
 							id="supplier-search"
 						/>
 					</form> */}
-					<table className="table table-striped table-hover">
-						<thead className="table-dark">
-							<tr>
-								<th>#</th>
-								<th scope="col">Supplier Name</th>
-								<th scope="col">Contact Person</th>
-								<th scope="col">Mobile</th>
-								<th scope="col">Address</th>
-								<th scope="col">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{suppliers &&
-								suppliers.map((supplier, index) => (
-									<tr key={index}>
-										<td>{index + 1}</td>
-										<td>{supplier.SupplierName}</td>
-										<td>{supplier.ContactPerson}</td>
-										<td>{supplier.Mobile}</td>
-										<td>{supplier.Address}</td>
-										<td>
-											<span className="px-2">
-												<FaEdit
-													className="icon-size-sm cursor-pointer"
-													onClick={() => updateSupplier(supplier)}
-												/>
-											</span>
-											<span className="px-2">
-												<MdDelete
-													className="icon-size-sm cursor-pointer"
-													onClick={() => deleteSupplier(supplier)}
-												/>
-											</span>
-										</td>
-									</tr>
-								))}
-						</tbody>
-					</table>
+					<div className="table-responsive">
+						<table className="table table-striped table-hover">
+							<thead className="table-dark">
+								<tr>
+									<th>#</th>
+									<th scope="col">Supplier Name</th>
+									<th scope="col">Contact Person</th>
+									<th scope="col">Mobile</th>
+									<th scope="col">Address</th>
+									<th scope="col">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{suppliers &&
+									suppliers.map((supplier, index) => (
+										<tr key={index}>
+											<td>{index + 1}</td>
+											<td>{supplier.SupplierName}</td>
+											<td>{supplier.ContactPerson}</td>
+											<td>{supplier.Mobile}</td>
+											<td>{supplier.Address}</td>
+											<td>
+												<span className="px-2">
+													<FaEdit
+														className="icon-size-sm cursor-pointer"
+														onClick={() => updateSupplier(supplier)}
+													/>
+												</span>
+												<span className="px-2">
+													<MdDelete
+														className="icon-size-sm cursor-pointer"
+														onClick={() => deleteSupplier(supplier)}
+													/>
+												</span>
+											</td>
+										</tr>
+									))}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

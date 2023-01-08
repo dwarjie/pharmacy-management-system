@@ -21,7 +21,7 @@ const UpdateHandler = () => {
 
 	return (
 		<Handler
-			title="Update Handler"
+			title="Update NCM/Doctor"
 			initialHandler={initialHandler}
 			mode="update"
 		/>

@@ -102,8 +102,8 @@ const Discount = () => {
 
 	return (
 		<div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow">
-				<div className="p-3">
+			<div className="col-12 h-auto">
+				<div className="p-2">
 					<h4>Add Discount</h4>
 					<hr />
 				</div>
@@ -115,9 +115,9 @@ const Discount = () => {
 				) : (
 					""
 				)}
-				<div className="p-3">
+				<div className="p-2">
 					<form
-						className="col-12 col-lg-10 pb-5 mx-auto"
+						className="col-11 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => createDiscount(event)}
 					>
 						<label className="required" htmlFor="DiscountName">
@@ -132,7 +132,7 @@ const Discount = () => {
 							onChange={handleInputChange}
 							required
 						/>
-						<div className="row mt-3">
+						<div className="row mb-sm-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="DiscountAmount">
 									Discount Value:
@@ -174,12 +174,12 @@ const Discount = () => {
 					</form>
 				</div>
 			</div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow mt-3">
-				<div className="p-3">
+			<div className="col-12 h-auto mt-3">
+				<div className="p-2">
 					<h4>Discount List</h4>
 					<hr />
 				</div>
-				<div className="p-3">
+				<div className="p-2 table-responsive">
 					<table className="table table-striped table-hover">
 						<thead className="table-dark">
 							<tr>

@@ -92,8 +92,8 @@ const User = (props) => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>{title}</h4>
 				<hr />
 			</div>
@@ -105,14 +105,14 @@ const User = (props) => {
 			) : (
 				""
 			)}
-			<div className="p-3">
+			<div className="p-2">
 				<form
 					className="col-11 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => {
 						mode === "update" ? updateUser(event) : registerUser(event);
 					}}
 				>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="FirstName">
 								First Name:
@@ -140,7 +140,7 @@ const User = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md-6">
 							<label className="required" htmlFor="UserName">
 								Username:
@@ -175,7 +175,7 @@ const User = (props) => {
 							</div>
 						)}
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="status">Status:</label>
 							<select

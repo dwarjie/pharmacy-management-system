@@ -59,14 +59,14 @@ const UpdateDiscount = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>Add Discount</h4>
 				<hr />
 			</div>
-			<div className="p-3">
+			<div className="p-2">
 				<form
-					className="col-12 col-lg-10 pb-5 mx-auto"
+					className="col-11 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => updateDiscount(event)}
 				>
 					<label className="required" htmlFor="DiscountName">
@@ -81,7 +81,7 @@ const UpdateDiscount = () => {
 						onChange={handleInputChange}
 						required
 					/>
-					<div className="row mt-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="DiscountAmount">
 								Discount Amount:

@@ -86,8 +86,8 @@ const OR = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>Current OR</h4>
 				<hr />
 			</div>
@@ -99,12 +99,12 @@ const OR = () => {
 			) : (
 				""
 			)}
-			<div className="p-3">
+			<div className="p-2">
 				<form
-					className="col-12 col-lg-10 pb-5 mx-auto"
+					className="col-11 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => updateCurrentOR(event)}
 				>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md-6">
 							<label className="required" htmlFor="StartOR">
 								Start:
@@ -122,7 +122,7 @@ const OR = () => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md-6">
 							<label className="required" htmlFor="MaxOR">
 								End
@@ -140,7 +140,7 @@ const OR = () => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md-6">
 							<label className="required" htmlFor="CurrentOR">
 								Current:

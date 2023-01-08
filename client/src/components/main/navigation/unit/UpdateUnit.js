@@ -58,14 +58,14 @@ const UnitList = () => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>Update Unit of Measure</h4>
 				<hr />
 			</div>
-			<div className="p-3">
+			<div className="p-2">
 				<form
-					className="col-12 col-lg-10 pb-5 mx-auto"
+					className="col-11 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => updateUnitOfMeasure(event)}
 				>
 					<label className="required" htmlFor="UnitName">

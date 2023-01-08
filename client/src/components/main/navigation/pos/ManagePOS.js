@@ -60,13 +60,13 @@ const ManagePOS = () => {
 					<Loader />
 				</div>
 			) : (
-				<div className="col-12 h-auto border border-dark rounded simple-shadow">
-					<div className="p-3">
+				<div className="col-12 h-auto">
+					<div className="p-2">
 						<h4>Sales List</h4>
 						<hr />
 					</div>
-					<div className="p-3">
-						<div className="d-flex flex-row gap-3 justify-content-start align-items-end pb-3">
+					<div className="p-2">
+						<div className=" d-flex flex-row flex-wrap gap-3 justify-content-start align-items-end pb-3">
 							<div>
 								<label htmlFor="">From:</label>
 								<input
@@ -162,7 +162,7 @@ class ComponentToPrint extends React.Component {
 		};
 
 		return (
-			<div className="container" style={{ color: "black" }}>
+			<div className="" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
 				<div className="d-flex flex-column align-items-center">
 					<img src={logo} alt="" className="d-block col-12 mx-auto w-20" />
@@ -171,27 +171,29 @@ class ComponentToPrint extends React.Component {
 					<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
 					<h2 className="mt-3">Sales List</h2>
 				</div>
-				<table className="table table-striped table-hover">
-					<thead className="table-dark">
-						<tr>
-							<th scope="col">Order No</th>
-							<th scope="col">Customer Name</th>
-							<th scope="col">Date</th>
-							<th scope="col">Total</th>
-						</tr>
-					</thead>
-					<tbody>
-						{renderItems()}
-						<tr>
-							<td className="no-line"></td>
-							<td className="no-line"></td>
-							<td className="no-line text-center">
-								<strong>Grand Total</strong>
-							</td>
-							<td className="no-line text-right">&#8369;{getPriceTotal()}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div className="table-responsive">
+					<table className="table table-striped table-hover">
+						<thead className="table-dark">
+							<tr>
+								<th scope="col">Order No</th>
+								<th scope="col">Customer Name</th>
+								<th scope="col">Date</th>
+								<th scope="col">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							{renderItems()}
+							<tr>
+								<td className="no-line"></td>
+								<td className="no-line"></td>
+								<td className="no-line text-center">
+									<strong>Grand Total</strong>
+								</td>
+								<td className="no-line text-right">&#8369;{getPriceTotal()}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		);
 	}

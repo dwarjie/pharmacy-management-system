@@ -92,8 +92,8 @@ const Patient = (props) => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>{title}</h4>
 				<hr />
 			</div>
@@ -105,14 +105,14 @@ const Patient = (props) => {
 			) : (
 				""
 			)}
-			<div className="p-3">
+			<div className="p-2">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => {
 						mode === "update" ? updatePatient(event) : createPatient(event);
 					}}
 				>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="FirstName">
 								First Name:
@@ -142,7 +142,7 @@ const Patient = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Sex">
 								Sex:
@@ -175,7 +175,7 @@ const Patient = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md-9">
 							<label className="required" htmlFor="Address">
 								Address:
@@ -213,7 +213,7 @@ const Patient = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Mobile">
 								Mobile #:
@@ -246,7 +246,7 @@ const Patient = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="handlerId">
 								Reffered By:
@@ -295,7 +295,7 @@ const Patient = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Note">Medical Note:</label>
 							<textarea

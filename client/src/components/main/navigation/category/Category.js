@@ -99,8 +99,8 @@ const Category = () => {
 
 	return (
 		<div>
-			<div className="col-12 h-auto border border-dark rounded simple-shadow">
-				<div className="p-3">
+			<div className="col-12 h-auto">
+				<div className="p-2">
 					<h4>Add Category</h4>
 					<hr />
 				</div>
@@ -112,7 +112,7 @@ const Category = () => {
 				) : (
 					""
 				)}
-				<div className="p-3">
+				<div className="p-2">
 					<form
 						className="col-11 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => createCategory(event)}
@@ -160,12 +160,12 @@ const CategoryList = (props) => {
 	} = props;
 
 	return (
-		<div className="col-12 col-lg-6 h-auto border border-dark rounded simple-shadow mt-3">
-			<div className="p-3">
+		<div className="col-12 col-lg-6 h-auto mt-3">
+			<div className="p-2">
 				<h4>Category List</h4>
 				<hr />
 			</div>
-			<div className="p-3">
+			<div className="p-2">
 				{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 					<label htmlFor="manufacturer-search">Search:</label>
 					<input
@@ -217,12 +217,12 @@ const SubCategoryList = (props) => {
 	const { subCategories } = props;
 
 	return (
-		<div className="col-12 col-lg-6 h-auto border border-dark rounded simple-shadow mt-3">
-			<div className="p-3">
+		<div className="col-12 col-lg-6 h-auto mt-3">
+			<div className="p-2">
 				<h4>Sub Category</h4>
 				<hr />
 			</div>
-			<div className="p-3">
+			<div className="p-2">
 				<table className="table table-striped">
 					<thead className="table-dark">
 						<tr>

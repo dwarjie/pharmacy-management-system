@@ -16,7 +16,7 @@ const AddHandler = () => {
 		Email: "",
 	};
 
-	return <Handler title="Add Handlers" initialHandler={initialHandler} />;
+	return <Handler title="Add Doctor/NCM" initialHandler={initialHandler} />;
 };
 
 export default AddHandler;

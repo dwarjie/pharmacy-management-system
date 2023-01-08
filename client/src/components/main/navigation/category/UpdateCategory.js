@@ -88,12 +88,12 @@ const UpdateCategory = () => {
 			{/* <div className="alert alert-success" role="alert">
 				Update successfully!
 			</div> */}
-			<div className="col-12 h-auto border border-dark rounded simple-shadow">
-				<div className="p-3">
+			<div className="col-12 h-auto">
+				<div className="p-2">
 					<h4>Update Category</h4>
 					<hr />
 				</div>
-				<div className="p-3">
+				<div className="p-2">
 					<form
 						className="col-11 col-lg-10 pb-5 mx-auto"
 						onSubmit={(event) => updateCategory(event)}

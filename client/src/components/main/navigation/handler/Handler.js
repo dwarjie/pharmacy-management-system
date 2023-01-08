@@ -57,8 +57,8 @@ const Handler = (props) => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>{title}</h4>
 				<hr />
 			</div>
@@ -70,14 +70,14 @@ const Handler = (props) => {
 			) : (
 				""
 			)}
-			<div className="p-3">
+			<div className="p-2">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) =>
 						mode === "update" ? updateHandler(event) : createHandler(event)
 					}
 				>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="FirstName">
 								First Name:
@@ -115,7 +115,7 @@ const Handler = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Category">
 								Profession:
@@ -151,7 +151,7 @@ const Handler = (props) => {
 							</select>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Address">
 								Address Line 1:
@@ -167,7 +167,7 @@ const Handler = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label htmlFor="City">Address Line 2:</label>
 							<input
@@ -199,7 +199,7 @@ const Handler = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="phone">Phone:</label>
 							<input

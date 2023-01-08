@@ -420,6 +420,10 @@ const ChargeToAccount = (props) => {
 			) : (
 				<Provider value={contextValue}>
 					<div className="h-auto d-flex flex-column justify-content-between gap-1">
+						<div className="p-2">
+							<h4>Charge to Account</h4>
+							<hr />
+						</div>
 						<div className="col-12 h-auto">
 							<InvoiceInformation
 								patientList={patientList}
@@ -519,7 +523,7 @@ const InvoiceInformation = ({
 				isUpdate() ? updateInvoice(event) : createInvoice(event)
 			}
 		>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
 						Invoice #:
@@ -553,7 +557,7 @@ const InvoiceInformation = ({
 					/>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
 						Requested By:
@@ -604,7 +608,7 @@ const InvoiceInformation = ({
 					/>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
 						Patient:
@@ -785,95 +789,97 @@ const ProductTable = ({
 	};
 
 	return (
-		<table className="table table-condensed">
-			<thead>
-				<tr>
-					<th scope="col">PCode</th>
-					<th scope="col">Item</th>
-					<th scope="col">On hand</th>
-					<th scope="col">Qty</th>
-					<th scope="col">Price</th>
-					<th scope="col">Sub-Total</th>
-					{/* <th scope="col">Action</th> */}
-				</tr>
-			</thead>
-			<tbody>
-				{orderData()}
-				<tr>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line text-center">
-						<strong>VAT Exempt Sale:</strong>
-					</td>
-					<td className="no-line text-right">&#8369;{invoice.GrossAmount}</td>
-				</tr>
-				<tr>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line text-center">
-						<strong>VAT:</strong>
-					</td>
-					<td className="no-line text-right">&#8369;{invoice.VAT}</td>
-				</tr>
-				<tr>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line"></td>
-					<td className="no-line text-center">
-						<strong>Total:</strong>
-					</td>
-					<td className="no-line text-right">&#8369;{invoice.Total}</td>
-				</tr>
-				{isUpdate() ? (
+		<div className="table-responsive">
+			<table className="table">
+				<thead>
+					<tr>
+						<th scope="col">PCode</th>
+						<th scope="col">Item</th>
+						<th scope="col">On hand</th>
+						<th scope="col">Qty</th>
+						<th scope="col">Price</th>
+						<th scope="col">Sub-Total</th>
+						{/* <th scope="col">Action</th> */}
+					</tr>
+				</thead>
+				<tbody>
+					{orderData()}
 					<tr>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line text-center">
-							<strong>Paid Amount: &#8369;</strong>
+							<strong>VAT Exempt Sale:</strong>
 						</td>
-						<td className="no-line text-right">
-							<input
-								type="number"
-								min={1}
-								disabled={invoice.Status === "paid" ? true : false}
-								className="form-control form-input w-40"
-								name="PaidAmount"
-								value={invoice.PaidAmount}
-								onChange={(event) => {
-									setInvoice((prevState) => ({
-										...prevState,
-										PaidAmount: event.target.value,
-									}));
-								}}
-							/>
-						</td>
+						<td className="no-line text-right">&#8369;{invoice.GrossAmount}</td>
 					</tr>
-				) : (
-					""
-				)}
-				{isUpdate() ? (
 					<tr>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line text-center">
-							<strong>Balance:</strong>
+							<strong>VAT:</strong>
 						</td>
-						<td className="no-line text-right">&#8369;{checkBalance()}</td>
+						<td className="no-line text-right">&#8369;{invoice.VAT}</td>
 					</tr>
-				) : (
-					""
-				)}
-			</tbody>
-		</table>
+					<tr>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line"></td>
+						<td className="no-line text-center">
+							<strong>Total:</strong>
+						</td>
+						<td className="no-line text-right">&#8369;{invoice.Total}</td>
+					</tr>
+					{isUpdate() ? (
+						<tr>
+							<td className="no-line"></td>
+							<td className="no-line"></td>
+							<td className="no-line"></td>
+							<td className="no-line"></td>
+							<td className="no-line text-center">
+								<strong>Paid Amount: &#8369;</strong>
+							</td>
+							<td className="no-line text-right">
+								<input
+									type="number"
+									min={1}
+									disabled={invoice.Status === "paid" ? true : false}
+									className="form-control form-input w-40"
+									name="PaidAmount"
+									value={invoice.PaidAmount}
+									onChange={(event) => {
+										setInvoice((prevState) => ({
+											...prevState,
+											PaidAmount: event.target.value,
+										}));
+									}}
+								/>
+							</td>
+						</tr>
+					) : (
+						""
+					)}
+					{isUpdate() ? (
+						<tr>
+							<td className="no-line"></td>
+							<td className="no-line"></td>
+							<td className="no-line"></td>
+							<td className="no-line"></td>
+							<td className="no-line text-center">
+								<strong>Balance:</strong>
+							</td>
+							<td className="no-line text-right">&#8369;{checkBalance()}</td>
+						</tr>
+					) : (
+						""
+					)}
+				</tbody>
+			</table>
+		</div>
 	);
 };
 

@@ -98,20 +98,22 @@ const InvoiceList = () => {
 					<Loader />
 				</div>
 			) : (
-				<div className="col-12 h-auto border border-dark rounded simple-shadow">
-					<div className="p-3">
+				<div className="col-12 h-auto">
+					<div className="p-2">
 						<h4>Invoices List</h4>
 						<hr />
 					</div>
-					<div className="p-3">
-						<form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
+					<div className="p-2">
+						{/* <form className="col-12 col-md-8 col-lg-6 d-flex flex-row align-items-center gap-2 pb-5">
 							<label htmlFor="medicine-search">Search:</label>
 							<input
 								type="text"
 								className="form-control"
 								id="medicine-search"
 							/>
-						</form>
+						</form> */}
+					</div>
+					<div className="table-responsive">
 						<table className="table table-striped table-hover">
 							<thead className="table-dark">
 								<tr>

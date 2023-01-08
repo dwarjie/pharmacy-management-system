@@ -130,6 +130,10 @@ const StockAdjustment = () => {
 			) : (
 				<Provider value={contextValue}>
 					<div className="h-auto d-flex flex-column justify-content-between gap-1">
+						<div className="p-2">
+							<h4>Stock Adjustment</h4>
+							<hr />
+						</div>
 						{alertMessage ? (
 							<AlertInfoLayout
 								content={alertMessage}
@@ -138,7 +142,7 @@ const StockAdjustment = () => {
 						) : (
 							""
 						)}
-						<div className="h-75 border border-dark rounded simple-shadow">
+						<div className="h-75">
 							<div className="table-responsive max-height-100">
 								<div className="p-3 w-100">
 									<SearchProduct
@@ -155,7 +159,11 @@ const StockAdjustment = () => {
 							</div>
 						</div>
 						<div className="col-12 h-auto">
-							<div className="-75 border border-dark rounded simple-shadow mt-3">
+							<div className="mt-3">
+								<div className="p-2">
+									<h4>Product Details</h4>
+									<hr />
+								</div>
 								<ProductDetails
 									selectedProduct={selectedProduct}
 									adjustStock={adjustStock}
@@ -182,7 +190,7 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 			className="col-12 col-md-11 p-3 mb-3 mx-auto"
 			onSubmit={(event) => adjustStock(event)}
 		>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label htmlFor="">Item:</label>
 					<input
@@ -209,7 +217,7 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 					</select>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label htmlFor="">Stock On Hand:</label>
 					<input
@@ -236,7 +244,7 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 					/>
 				</div>
 			</div>
-			<div className="row mt-3 col-12">
+			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label htmlFor="">Supplier:</label>
 					<input

@@ -72,6 +72,15 @@ body {
 	font-size: 1.5rem;
 }
 
+th {
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+td {
+	font-size: 0.9rem;
+}
+
 /* NAVIGATION */
 .top-navigation {
 	height: 4rem;

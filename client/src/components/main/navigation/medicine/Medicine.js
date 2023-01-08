@@ -177,8 +177,8 @@ const Medicine = (props) => {
 	};
 
 	return (
-		<div className="col-12 h-auto border border-dark rounded simple-shadow">
-			<div className="p-3">
+		<div className="col-12 h-auto">
+			<div className="p-2">
 				<h4>{props.title}</h4>
 				<hr />
 			</div>
@@ -190,7 +190,7 @@ const Medicine = (props) => {
 			) : (
 				""
 			)}
-			<div className="p-3">
+			<div className="p-2">
 				<form
 					className="col-12 col-lg-10 pb-5 mx-auto"
 					onSubmit={(event) => {
@@ -199,7 +199,7 @@ const Medicine = (props) => {
 							: createProduct(event);
 					}}
 				>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="ProductCode">
 								Product Code:
@@ -226,7 +226,7 @@ const Medicine = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="ProductName">
 								Product Name:
@@ -253,7 +253,7 @@ const Medicine = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="category">
 								Category:
@@ -326,7 +326,7 @@ const Medicine = (props) => {
 							</select>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="subCategoryId">
 								Sub Category:
@@ -388,7 +388,7 @@ const Medicine = (props) => {
 							/>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="SupplierPrice">
 								Unit Price:
@@ -432,7 +432,7 @@ const Medicine = (props) => {
 							</select>
 						</div>
 					</div>
-					<div className="row mb-3">
+					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="supplierId">
 								Supplier:
