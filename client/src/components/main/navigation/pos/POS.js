@@ -232,13 +232,16 @@ const POS = (props) => {
 
 			// check if special discount in true
 			if (specialDiscount) {
-				let specialSale = (total - vat - discount).toFixed(2);
+				// let specialSale = (total - vat - discount).toFixed(2);
+				let netPrice = (total - vat).toFixed(2);
+				let discountAmount = computeDiscount(netPrice);
+				let totalAmount = (netPrice - discountAmount).toFixed(2);
 				setSale((previousSale) => ({
 					...previousSale,
 					GrossAmount: (total - vat).toFixed(2),
-					Discount: discount.toFixed(2),
+					Discount: discountAmount.toFixed(2),
 					VAT: vat.toFixed(2),
-					Total: specialSale,
+					Total: totalAmount,
 				}));
 			} else {
 				setSale((previousSale) => ({
@@ -289,10 +292,13 @@ const POS = (props) => {
 	const computeVAT = (grossAmount) => {
 		if (activeDropDownValue.VATId === "" || grossAmount === 0) return 0;
 
-		let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
-		let amount = percentage * parseFloat(grossAmount);
+		let taxAmount =
+			parseFloat(grossAmount) -
+			parseFloat(grossAmount) * (100 / (100 + activeDropDownValue.VATAmount));
+		// let percentage = parseFloat(activeDropDownValue.VATAmount) / 100;
+		// let amount = percentage * parseFloat(grossAmount);
 
-		return amount;
+		return taxAmount;
 	};
 
 	// this function will check if order already exists in order list

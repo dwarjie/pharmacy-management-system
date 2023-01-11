@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { MultiSelect } from "react-multi-select-component";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AuthService from "../../../../services/AuthService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,7 +12,16 @@ const User = (props) => {
 	const { id } = useParams();
 	const { title, mode, initialUser, initialSelected } = props;
 
+	const initialFormErrors = {
+		FirstName: "",
+		LastName: "",
+		UserName: "",
+		Password: "",
+		ConfirmPassword: "",
+	};
+
 	const [user, setUser] = useState(initialUser);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [alertMessage, setAlertMessage] = useState("");
 	const [selected, setSelected] = useState(initialSelected);
 
@@ -49,6 +59,9 @@ const User = (props) => {
 	const registerUser = (event) => {
 		event.preventDefault();
 
+		setFormErrors(validateForm(user));
+		if (!isFormValid(formErrors)) return;
+
 		if (!AlertPrompt()) return;
 
 		if (checkRoles()) {
@@ -83,6 +96,42 @@ const User = (props) => {
 		} else {
 			setAlertMessage("Choose user role/s");
 		}
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+		const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$%^&]).*$/;
+
+		if (!values.FirstName.trim()) {
+			errors.FirstName = "First name is required!";
+		}
+		if (!values.LastName.trim()) {
+			errors.LastName = "Last name is required!";
+		}
+		if (!values.UserName.trim()) {
+			errors.UserName = "Username is required!";
+		}
+		if (!values.Password.trim()) {
+			errors.Password = "Password is required!";
+		} else if (values.Password.trim().length < 6) {
+			errors.Password = "Password must be at least 6 characters";
+		} else if (
+			values.Password.trim() &&
+			!regexPassword.test(values.Password.trim())
+		) {
+			errors.Password =
+				"Password should contain uppercase, lowercase, number, and special character!";
+		}
+		if (!values.ConfirmPassword.trim()) {
+			errors.ConfirmPassword = "Confirm password is required!";
+		} else if (
+			values.ConfirmPassword.trim() &&
+			values.ConfirmPassword.trim() !== values.Password.trim()
+		) {
+			errors.ConfirmPassword = "Should match password!";
+		}
+
+		return errors;
 	};
 
 	const updateMode = () => {
@@ -121,10 +170,10 @@ const User = (props) => {
 								type="text"
 								className="form-control form-input"
 								name="FirstName"
-								required
 								value={user.FirstName}
 								onChange={handleInputChange}
 							/>
+							<p className="text-error">{formErrors.FirstName}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="LastName">
@@ -134,10 +183,10 @@ const User = (props) => {
 								type="text"
 								className="form-control form-input"
 								name="LastName"
-								required
 								value={user.LastName}
 								onChange={handleInputChange}
 							/>
+							<p className="text-error">{formErrors.LastName}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -149,10 +198,10 @@ const User = (props) => {
 								type="text"
 								className="form-control form-input"
 								name="UserName"
-								required
 								value={user.UserName}
 								onChange={handleInputChange}
 							/>
+							<p className="text-error">{formErrors.UserName}</p>
 						</div>
 						{updateMode() ? (
 							""
@@ -165,13 +214,13 @@ const User = (props) => {
 									Password:
 								</label>
 								<input
-									type="password"
+									type="text"
 									className="form-control form-input"
 									name="Password"
-									required
 									value={user.Password}
 									onChange={handleInputChange}
 								/>
+								<p className="text-error">{formErrors.Password}</p>
 							</div>
 						)}
 					</div>
@@ -190,7 +239,7 @@ const User = (props) => {
 								<option value="inactive">Inactive</option>
 							</select>
 						</div> */}
-						<div className="col-sm-12 col-md-6">
+						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="role">
 								Role:
 							</label>
@@ -200,6 +249,22 @@ const User = (props) => {
 								onChange={setSelected}
 								labelledBy="Select Role/s"
 							/>
+						</div>
+						<div className="col-sm-12 col-md">
+							<label
+								className={mode === "update" ? "" : "required"}
+								htmlFor="Password"
+							>
+								Confirm Password:
+							</label>
+							<input
+								type="password"
+								className="form-control form-input"
+								name="ConfirmPassword"
+								value={user.ConfirmPassword}
+								onChange={handleInputChange}
+							/>
+							<p className="text-error">{formErrors.ConfirmPassword}</p>
 						</div>
 					</div>
 					<button

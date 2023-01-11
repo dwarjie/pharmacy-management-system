@@ -143,10 +143,7 @@ const ProductTable = ({ productList, supplier }) => {
 					</thead>
 					<tbody>{orderData()}</tbody>
 				</table>
-				<span
-					className="badge text-bg-primary m-2 cursor-pointer text-light"
-					onClick={() => orderAll()}
-				>
+				<span className="btn btn-primary m-2" onClick={() => orderAll()}>
 					Order All
 				</span>
 			</div>

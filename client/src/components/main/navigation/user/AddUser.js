@@ -9,6 +9,7 @@ const AddUser = () => {
 		LastName: "",
 		UserName: "",
 		Password: "",
+		ConfirmPassword: "",
 		Role: [],
 	};
 

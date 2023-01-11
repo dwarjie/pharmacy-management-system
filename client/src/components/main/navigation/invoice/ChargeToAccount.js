@@ -388,10 +388,12 @@ const ChargeToAccount = (props) => {
 
 	// compute the VAT base on the selected VAT and current total
 	const computeVAT = (grossAmount) => {
-		let percentage = parseFloat(vat) / 100;
-		let amount = percentage * parseFloat(grossAmount);
+		let taxAmount =
+			parseFloat(grossAmount) - parseFloat(grossAmount) * (100 / (100 + vat));
+		// let percentage = parseFloat(vat) / 100;
+		// let amount = percentage * parseFloat(grossAmount);
 
-		return amount.toFixed(2);
+		return taxAmount.toFixed(2);
 	};
 
 	// delete an order in the list
@@ -475,7 +477,7 @@ const ChargeToAccount = (props) => {
 										: false
 								}
 							>
-								{isUpdate() ? "Save" : "Create"}
+								{isUpdate() ? "Update" : "Create"}
 							</button>
 							<button
 								type="button"
@@ -569,9 +571,10 @@ const InvoiceInformation = ({
 						value={activeDropDownValue.handler}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
+							let value = data.FirstName + " " + data.LastName;
 							setActiveDropDownValue((prevState) => ({
 								...prevState,
-								handler: data.FirstName,
+								handler: value,
 							}));
 							setInvoice((prevState) => ({ ...prevState, handlerId: data.id }));
 						}}
@@ -580,12 +583,12 @@ const InvoiceInformation = ({
 						{handlerList &&
 							handlerList.map((handler, index) => (
 								<option
-									value={handler.FirstName}
+									value={`${handler.FirstName} ${handler.LastName}`}
 									className="dropdown-item"
 									key={index}
 									data-value={JSON.stringify(handler)}
 								>
-									{handler.FirstName}
+									{`${handler.FirstName} ${handler.LastName}`}
 								</option>
 							))}
 					</select>
@@ -620,9 +623,10 @@ const InvoiceInformation = ({
 						value={activeDropDownValue.patient}
 						onChange={(event) => {
 							let data = parseDropdownValue(event);
+							let value = data.FirstName + " " + data.LastName;
 							setActiveDropDownValue((prevState) => ({
 								...prevState,
-								patient: data.FirstName,
+								patient: value,
 							}));
 							setInvoice((prevState) => ({ ...prevState, patientId: data.id }));
 						}}
@@ -631,12 +635,12 @@ const InvoiceInformation = ({
 						{patientList &&
 							patientList.map((patient, index) => (
 								<option
-									value={patient.FirstName}
+									value={`${patient.FirstName} ${patient.LastName}`}
 									className="dropdown-item"
 									key={index}
 									data-value={JSON.stringify(patient)}
 								>
-									{patient.FirstName}
+									{`${patient.FirstName} ${patient.LastName}`}
 								</option>
 							))}
 					</select>
@@ -741,7 +745,7 @@ const ProductTable = ({
 
 		let result = parseFloat(invoice.Total) - parseFloat(invoice.PaidAmount);
 		if (isNaN(result)) {
-			return invoice.Total;
+			return parseFloat(invoice.Total).toFixed(2);
 		} else {
 			return result.toFixed(2);
 		}
@@ -771,7 +775,7 @@ const ProductTable = ({
 							onBlur={(event) => handleStockCheck(event, order, index)}
 						/>
 					</td>
-					<td>{order.UnitPrice}</td>
+					<td>{parseFloat(order.UnitPrice).toFixed(2)}</td>
 					<td>{getProductTotal(order)}</td>
 					{/* <td>
 						<span className="px-1">
@@ -809,30 +813,36 @@ const ProductTable = ({
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
-						<td className="no-line text-center">
-							<strong>VAT Exempt Sale:</strong>
+						<td className="no-line text-right">
+							<strong>Sub-Total:</strong>
 						</td>
-						<td className="no-line text-right">&#8369;{invoice.GrossAmount}</td>
+						<td className="no-line text-right">
+							&#8369;{parseFloat(invoice.GrossAmount).toFixed(2)}
+						</td>
 					</tr>
 					<tr>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
-						<td className="no-line text-center">
-							<strong>VAT:</strong>
+						<td className="no-line text-right">
+							<strong>VATable:</strong>
 						</td>
-						<td className="no-line text-right">&#8369;{invoice.VAT}</td>
+						<td className="no-line text-right">
+							&#8369;{parseFloat(invoice.VAT).toFixed(2)}
+						</td>
 					</tr>
 					<tr>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line"></td>
-						<td className="no-line text-center">
-							<strong>Total:</strong>
+						<td className="no-line text-right">
+							<strong>Total Due:</strong>
 						</td>
-						<td className="no-line text-right">&#8369;{invoice.Total}</td>
+						<td className="no-line text-right">
+							&#8369;{parseFloat(invoice.Total).toFixed(2)}
+						</td>
 					</tr>
 					{isUpdate() ? (
 						<tr>
@@ -840,15 +850,15 @@ const ProductTable = ({
 							<td className="no-line"></td>
 							<td className="no-line"></td>
 							<td className="no-line"></td>
-							<td className="no-line text-center">
-								<strong>Paid Amount: &#8369;</strong>
+							<td className="no-line text-right">
+								<strong>Paid Amount:</strong>
 							</td>
 							<td className="no-line text-right">
 								<input
 									type="number"
 									min={1}
 									disabled={invoice.Status === "paid" ? true : false}
-									className="form-control form-input w-40"
+									className="form-control form-input w-40 text-right m-0"
 									name="PaidAmount"
 									value={invoice.PaidAmount}
 									onChange={(event) => {
@@ -869,10 +879,12 @@ const ProductTable = ({
 							<td className="no-line"></td>
 							<td className="no-line"></td>
 							<td className="no-line"></td>
-							<td className="no-line text-center">
+							<td className="no-line text-right">
 								<strong>Balance:</strong>
 							</td>
-							<td className="no-line text-right">&#8369;{checkBalance()}</td>
+							<td className="no-line text-right">
+								&#8369;{parseFloat(checkBalance()).toFixed(2)}
+							</td>
 						</tr>
 					) : (
 						""

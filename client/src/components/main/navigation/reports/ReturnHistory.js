@@ -141,7 +141,7 @@ class ComponentToPrint extends React.Component {
 						<td>{product.Reason}</td>
 						<td>{formatDate(product.DateCreated)}</td>
 						<td>{product.user.FirstName}</td>
-						<td>{product.Total}</td>
+						<td>{parseFloat(product.Total).toFixed(2)}</td>
 					</tr>
 				))
 			);
@@ -188,10 +188,12 @@ class ComponentToPrint extends React.Component {
 								<td className="no-line"></td>
 								<td className="no-line"></td>
 								<td className="no-line"></td>
-								<td className="no-line text-center">
-									<strong>Grand Total</strong>
+								<td className="no-line text-right">
+									<strong>Grand Total: </strong>
 								</td>
-								<td className="no-line text-right">&#8369;{getPriceTotal()}</td>
+								<td className="no-line text-right">
+									&#8369;{parseFloat(getPriceTotal()).toFixed(2)}
+								</td>
 							</tr>
 						</tbody>
 					</table>

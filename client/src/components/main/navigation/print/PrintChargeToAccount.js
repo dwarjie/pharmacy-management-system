@@ -116,7 +116,7 @@ class ComponentToPrint extends React.Component {
 						<td>{item.medicine.ProductName}</td>
 						<td className="text-center">{item.UnitPrice}</td>
 						<td className="text-center">{item.Quantity}</td>
-						<td className="text-right">{item.Total}</td>
+						<td className="text-right">{parseFloat(item.Total).toFixed(2)}</td>
 					</tr>
 				))
 			);
@@ -211,7 +211,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Quantity</strong>
 												</td>
 												<td className="text-right">
-													<strong>Totals</strong>
+													<strong>Sub-Total</strong>
 												</td>
 											</tr>
 										</thead>
@@ -221,33 +221,37 @@ class ComponentToPrint extends React.Component {
 											<tr>
 												<td className="thick-line"></td>
 												<td className="thick-line"></td>
-												<td className="thick-line text-center">
-													<strong>VAT</strong>
+												<td className="thick-line text-right">
+													<strong>VATable:</strong>
 												</td>
 												<td className="thick-line text-right">
-													&#8369;{invoice.VAT}
+													&#8369;{parseFloat(invoice.VAT).toFixed(2)}
 												</td>
 											</tr>
 											<tr>
 												<td className="no-line"></td>
 												<td className="no-line"></td>
-												<td className="no-line text-center">
-													<strong>Total</strong>
+												<td className="no-line text-right">
+													<strong>Total Due: </strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{invoice.Total}
+													&#8369;{parseFloat(invoice.Total).toFixed(2)}
 												</td>
 											</tr>
-											<tr>
-												<td className="thick-line"></td>
-												<td className="thick-line"></td>
-												<td className="thick-line text-center">
-													<strong>Paid Amount</strong>
-												</td>
-												<td className="thick-line text-right">
-													&#8369;{invoice.PaidAmount}
-												</td>
-											</tr>
+											{invoice.PaidAmount > 0 ? (
+												<tr>
+													<td className="thick-line"></td>
+													<td className="thick-line"></td>
+													<td className="thick-line text-right">
+														<strong>Paid Amount:</strong>
+													</td>
+													<td className="thick-line text-right">
+														&#8369;{parseFloat(invoice.PaidAmount).toFixed(2)}
+													</td>
+												</tr>
+											) : (
+												""
+											)}
 										</tbody>
 									</table>
 								</div>

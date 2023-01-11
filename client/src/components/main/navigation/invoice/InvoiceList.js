@@ -100,7 +100,7 @@ const InvoiceList = () => {
 			) : (
 				<div className="col-12 h-auto">
 					<div className="p-2">
-						<h4>Invoices List</h4>
+						<h4>Charge to Accounts List</h4>
 						<hr />
 					</div>
 					<div className="p-2">

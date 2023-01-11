@@ -104,7 +104,7 @@ class ComponentToPrint extends React.Component {
 						<td>{item.name}</td>
 						<td className="text-center">{item.UnitPrice}</td>
 						<td className="text-center">{item.Quantity}</td>
-						<td className="text-right">{item.Total}</td>
+						<td className="text-right">{parseFloat(item.Total).toFixed(2)}</td>
 					</tr>
 				))
 			);
@@ -176,7 +176,7 @@ class ComponentToPrint extends React.Component {
 											<tr>
 												<td className="thick-line"></td>
 												<td className="thick-line"></td>
-												<td className="thick-line text-center">
+												<td className="thick-line text-right">
 													<strong>Subtotal</strong>
 												</td>
 												<td className="thick-line text-right">
@@ -186,7 +186,7 @@ class ComponentToPrint extends React.Component {
 											<tr>
 												<td className="thick-line"></td>
 												<td className="thick-line"></td>
-												<td className="thick-line text-center">
+												<td className="thick-line text-right">
 													<strong>Discount</strong>
 												</td>
 												<td className="thick-line text-right">
@@ -196,7 +196,7 @@ class ComponentToPrint extends React.Component {
 											<tr>
 												<td className="thick-line"></td>
 												<td className="thick-line"></td>
-												<td className="thick-line text-center">
+												<td className="thick-line text-right">
 													<strong>VAT</strong>
 												</td>
 												<td className="thick-line text-right">
@@ -206,7 +206,7 @@ class ComponentToPrint extends React.Component {
 											<tr>
 												<td className="no-line"></td>
 												<td className="no-line"></td>
-												<td className="no-line text-center">
+												<td className="no-line text-right">
 													<strong>Total</strong>
 												</td>
 												<td className="no-line text-right">
@@ -216,17 +216,17 @@ class ComponentToPrint extends React.Component {
 											<tr>
 												<td className="no-line"></td>
 												<td className="no-line"></td>
-												<td className="no-line text-center">
+												<td className="no-line text-right">
 													<strong>Cash Tendered</strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{sale.CashTendered}
+													&#8369;{parseFloat(sale.CashTendered).toFixed(2)}
 												</td>
 											</tr>
 											<tr>
 												<td className="no-line"></td>
 												<td className="no-line"></td>
-												<td className="no-line text-center">
+												<td className="no-line text-right">
 													<strong>Change</strong>
 												</td>
 												<td className="no-line text-right">
