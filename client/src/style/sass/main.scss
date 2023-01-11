@@ -50,9 +50,15 @@ $utilities: map-merge(
 // media query
 @include media-breakpoint-down(md) {
   .text-date {
-    font-size: 2rem !important;
+    display: none 
   }
 }
+
+// @include media-breakpoint-up(sm) {
+//   .text-date {
+//     font-size: .5rem;
+//   }
+// }
 
 // import the main boostrap
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";

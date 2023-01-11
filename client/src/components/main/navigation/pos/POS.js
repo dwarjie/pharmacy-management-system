@@ -30,12 +30,12 @@ const POS = (props) => {
 		ORNumber: "",
 		OrderDate: getCurrentDate(),
 		CustomerName: "Walk in",
-		Discount: 0,
-		VAT: 0,
-		Total: 0,
-		GrossAmount: 0,
+		Discount: 0.0,
+		VAT: 0.0,
+		Total: 0.0,
+		GrossAmount: 0.0,
 		CashTendered: "",
-		ChangeAmount: 0,
+		ChangeAmount: 0.0,
 		userId: currentUser.id,
 	};
 
@@ -66,11 +66,6 @@ const POS = (props) => {
 	useEffect(() => {
 		setSaleInformation();
 	}, [orderList, activeDropDownValue]);
-
-	// get current time and auto update every second
-	useEffect(() => {
-		setInterval(() => setCurrentTime(getCurrentTime()), 1000);
-	}, []);
 
 	// get the discounts and vat
 	useEffect(() => {
@@ -472,64 +467,64 @@ const OrderInformation = (props) => {
 	};
 
 	return (
-		<div className="d-flex flex-column justify-content-between gap-3 p-3 ">
-			<div>
-				<h6 className="text-date">
-					<strong>{currentTime}</strong>
-				</h6>
-				<h5 className="text-weight-medium text-time">{getCurrentDate()}</h5>
-			</div>
-			<div className="d-flex flex-column justify-content-between gap-3">
+		<div className="h-100 d-flex flex-column justify-content-around gap-3 p-3 ">
+			<div className="d-flex flex-column justify-content-evenly gap-3">
 				<div>
-					<input
-						type="text"
-						className="form-control form-input mb-3"
-						name="CustomerName"
-						id="CustomerName"
-						placeholder="Customer Name"
-						value={sale.CustomerName}
-						onChange={(event) =>
-							setSale({ ...sale, CustomerName: event.target.value })
-						}
-					/>
-					<select
-						className="form-select form-input mb-3"
-						name="discountId"
-						id="discountId"
-						disabled={orderList.length > 0 ? false : true}
-						value={activeDropDownValue.discountId}
-						onChange={(event) => {
-							let data = parseDropdownValue(event);
-							console.log(data);
-							setActiveDropDownValue({
-								...activeDropDownValue,
-								discountId: data.DiscountName,
-								discountAmount: data.DiscountAmount,
-								discountType: data.DiscountType,
-							});
-							// if senior/pwd is discount, set special discount true
-							if (data.id === 1) {
-								setSpecialDiscount(true);
-							} else {
-								setSpecialDiscount(false);
+					<h1 className="text-currency">
+						<strong>{parseFloat(sale.Total).toFixed(2)}</strong>
+					</h1>
+				</div>
+				<div>
+					<div>
+						<input
+							type="text"
+							className="form-control form-input mb-3"
+							name="CustomerName"
+							id="CustomerName"
+							placeholder="Customer Name"
+							value={sale.CustomerName}
+							onChange={(event) =>
+								setSale({ ...sale, CustomerName: event.target.value })
 							}
-						}}
-					>
-						<DropDownDefaultOption content={"Select Discount"} />
-						{discountList &&
-							discountList.map((discount, index) => (
-								<option
-									className="dropdown-item"
-									value={discount.DiscountName}
-									key={index}
-									data-value={JSON.stringify(discount)}
-								>
-									{discount.DiscountName}
-								</option>
-							))}
-					</select>
-					{/* //TODO: CHANGE INTO INPUT, AND REMOVE VAT IF DISCOUNT IS SC OR PWD */}
-					{/* <input
+						/>
+						<select
+							className="form-select form-input mb-3"
+							name="discountId"
+							id="discountId"
+							disabled={orderList.length > 0 ? false : true}
+							value={activeDropDownValue.discountId}
+							onChange={(event) => {
+								let data = parseDropdownValue(event);
+								console.log(data);
+								setActiveDropDownValue({
+									...activeDropDownValue,
+									discountId: data.DiscountName,
+									discountAmount: data.DiscountAmount,
+									discountType: data.DiscountType,
+								});
+								// if senior/pwd is discount, set special discount true
+								if (data.id === 1) {
+									setSpecialDiscount(true);
+								} else {
+									setSpecialDiscount(false);
+								}
+							}}
+						>
+							<DropDownDefaultOption content={"Select Discount"} />
+							{discountList &&
+								discountList.map((discount, index) => (
+									<option
+										className="dropdown-item"
+										value={discount.DiscountName}
+										key={index}
+										data-value={JSON.stringify(discount)}
+									>
+										{discount.DiscountName}
+									</option>
+								))}
+						</select>
+						{/* //TODO: CHANGE INTO INPUT, AND REMOVE VAT IF DISCOUNT IS SC OR PWD */}
+						{/* <input
 						type="text"
 						className="form-control form-input"
 						name="VATId"
@@ -537,7 +532,7 @@ const OrderInformation = (props) => {
 						disabled={true}
 						value={activeDropDownValue.VATId}
 					/> */}
-					{/* <select
+						{/* <select
 						className="form-select form-input"
 						name="VATId"
 						id="VATId"
@@ -565,36 +560,51 @@ const OrderInformation = (props) => {
 								</option>
 							))}
 					</select> */}
+					</div>
 				</div>
+			</div>
+			<div>
 				<div>
-					<h6>
+					{/* <h6>
 						<strong>Discount Percentage/Fixed:</strong>{" "}
 						{`${activeDropDownValue.discountAmount} ${
 							activeDropDownValue.discountType !== ""
 								? "(" + activeDropDownValue.discountType + ")"
 								: ""
 						}`}
-					</h6>
-					<h6>
-						<strong>Discount Amount &#8369;:</strong> {sale.Discount}
-					</h6>
-					<h6 className="text-weight-regular">
-						<strong>VAT Exempt Sales &#8369;: </strong> {sale.GrossAmount}
-					</h6>
-					<h6>
-						<strong>VAT &#8369;:</strong> {sale.VAT}
-					</h6>
-					<h6 className="text-total">
-						<strong>Total Amount &#8369;: </strong> {sale.Total}
-					</h6>
-					<h6>
-						<strong>Cash Tendered &#8369;:</strong>
-					</h6>
+					</h6> */}
+					<div className="currency-container">
+						<h6>Disc.:</h6>
+						<h6>
+							<strong>{parseFloat(sale.Discount).toFixed(2)}</strong>
+						</h6>
+					</div>
+					<div className="currency-container">
+						<h6 className="text-weight-regular">Sub-Total:</h6>
+						<h6>
+							<strong>{parseFloat(sale.GrossAmount).toFixed(2)}</strong>
+						</h6>
+					</div>
+					<div className="currency-container">
+						<h6>VATable:</h6>
+						<h6>
+							<strong>{parseFloat(sale.VAT).toFixed(2)}</strong>
+						</h6>
+					</div>
+					<div className="currency-container">
+						<h6>Total Due:</h6>
+						<h6>
+							<strong>{parseFloat(sale.Total).toFixed(2)}</strong>
+						</h6>
+					</div>
+				</div>
+				<div>
+					<h6>Cash Tendered:</h6>
 					<input
-						className="form-control form-input mb-3"
+						className="form-control form-input text-right mb-1"
 						min={1}
 						disabled={orderList.length > 0 ? false : true}
-						placeholder="Input cash tender"
+						placeholder="0.00"
 						type="number"
 						name="CashTendered"
 						id="CashTendered"
@@ -606,9 +616,12 @@ const OrderInformation = (props) => {
 							}));
 						}}
 					/>
-					<h6>
-						<strong>Change &#8369;:</strong> {sale.ChangeAmount}
-					</h6>
+					<div className="currency-container">
+						<h6>Change:</h6>
+						<h6>
+							<strong>{parseFloat(sale.ChangeAmount).toFixed(2)}</strong>
+						</h6>
+					</div>
 					<div className="pt-3">
 						<button
 							className="btn btn-primary w-100 mb-2"
@@ -619,7 +632,6 @@ const OrderInformation = (props) => {
 						</button>
 						<button
 							className="btn btn-secondary w-100"
-							disabled={orderList.length > 0 ? false : true}
 							onClick={() => window.location.reload()}
 						>
 							Cancel order
@@ -638,12 +650,10 @@ const ProductTable = (props) => {
 		<table className="table table-hover">
 			<thead>
 				<tr>
-					<th scope="col">Barcode</th>
 					<th scope="col">Item</th>
 					<th scope="col">Generic Name</th>
-					<th scope="col">Formulation</th>
+					<th scope="col">Desc.</th>
 					<th scope="col">Price</th>
-					<th scope="col">Stock</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -654,12 +664,10 @@ const ProductTable = (props) => {
 							className="cursor-pointer"
 							onClick={() => addProduct(product)}
 						>
-							<td>{product.ProductCode}</td>
 							<td>{product.ProductName}</td>
 							<td>{product.GenericName}</td>
 							<td>{product.ProductDetails}</td>
-							<td>&#8369; {product.SellingPrice}</td>
-							<td>{product.Quantity}</td>
+							<td>{product.SellingPrice}</td>
 						</tr>
 					))}
 			</tbody>
@@ -696,7 +704,7 @@ const OrderTable = (props) => {
 					<th scope="col">Price</th>
 					<th scope="col">Qty</th>
 					<th scope="col">Sub-Total</th>
-					<th scope="col">Actions</th>
+					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>

@@ -299,7 +299,7 @@ const SalesModule = () => {
 						to={"/pharmacy/sales/charge-to-account-list"}
 						className="dropdown-item"
 					>
-						Invoices List
+						Charge to Account List
 					</Link>
 				</li>
 				<li>

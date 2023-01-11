@@ -4833,7 +4833,7 @@
 }
 @media (max-width: 767.98px) {
   .text-date {
-    font-size: 2rem !important;
+    display: none;
   }
 }
 /*!

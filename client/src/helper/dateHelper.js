@@ -17,7 +17,7 @@ const getCurrentTime = () => {
 	let time =
 		date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
-	return moment(time, "HH:mm:ss").format("hh:mm:ss A");
+	return moment(time, "HH:mm").format("hh:mm A");
 };
 
 const generateOrderNumber = () => {

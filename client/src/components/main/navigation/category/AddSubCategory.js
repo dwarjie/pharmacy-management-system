@@ -14,6 +14,7 @@ import { MdDelete } from "react-icons/md";
 const AddSubCategory = () => {
 	let location = useLocation();
 	let navigate = useNavigate();
+	let categoryName = location.state.category.CategoryName;
 
 	const initialSubCategory = {
 		id: null,
@@ -124,7 +125,7 @@ const AddSubCategory = () => {
 		<div>
 			<div className="col-12 h-auto border border-dark rounded simple-shadow">
 				<div className="p-3">
-					<h4>Add Sub Category</h4>
+					<h4>{categoryName} Sub-Category</h4>
 					<hr />
 				</div>
 				{alertMessage ? (
