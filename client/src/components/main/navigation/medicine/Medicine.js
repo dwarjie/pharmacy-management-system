@@ -2,12 +2,27 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import MedicineService from "../../../../services/MedicineService";
 
 const Medicine = (props) => {
 	// this is for the status drop down
 	const statusList = ["Active", "Inactive"];
+
+	const initialFormErrors = {
+		ProductCode: "",
+		ProductName: "",
+		ProductDetails: "",
+		GenericName: "",
+		SupplierPrice: "",
+		SellingPrice: "",
+		ReorderPoint: "",
+		SafetyStock: "",
+		supplierId: null,
+		unitId: null,
+		subCategoryId: null,
+	};
 
 	const [medicine, setMedicine] = useState(props.initialMedicine);
 	const [extraModel, setExtraModel] = useState([]); // this state is for other models that are needed for drop downs
@@ -17,6 +32,7 @@ const Medicine = (props) => {
 	const [status, setStatus] = useState(props.status);
 	const [subCategory, setSubCategory] = useState(props.subCategory);
 	const [alertMessage, setAlertMessage] = useState("");
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 
 	useEffect(() => {
 		setMedicine(props.initialMedicine);
@@ -49,6 +65,9 @@ const Medicine = (props) => {
 	// create new product
 	const createProduct = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(medicine));
+		if (!isFormValid(formErrors)) return;
 
 		// ask for confirmation
 		if (!AlertPrompt()) return;
@@ -87,6 +106,9 @@ const Medicine = (props) => {
 	const updateMedicine = (event) => {
 		event.preventDefault();
 
+		setFormErrors(validateForm(medicine));
+		if (!isFormValid(formErrors)) return;
+
 		MedicineService.updateMedicine(medicine.id, medicine)
 			.then((response) => {
 				console.log(response.data);
@@ -107,6 +129,45 @@ const Medicine = (props) => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.ProductCode.trim()) {
+			errors.ProductCode = "Product code is required!";
+		}
+		if (!values.ProductName.trim()) {
+			errors.ProductName = "Product name is required!";
+		}
+		if (!values.SupplierPrice) {
+			errors.SupplierPrice = "Unit Price is required!";
+		} else if (parseFloat(values.SupplierPrice) <= 0) {
+			errors.SupplierPrice = "Please enter valid unit price!";
+		}
+		if (!values.ReorderPoint) {
+			errors.ReorderPoint = "Reorder point is required!";
+		} else if (parseInt(values.ReorderPoint) <= 0) {
+			errors.ReorderPoint = "Please enter valid reorder point!";
+		}
+		if (!values.SafetyStock) {
+			errors.SafetyStock = "Safety stock is required!";
+		} else if (parseInt(values.SafetyStock) <= 0) {
+			errors.SafetyStock = "Please enter valid safety stock!";
+		} else if (parseInt(values.SafetyStock) >= parseInt(values.ReorderPoint)) {
+			errors.SafetyStock = "Safety stock should be greater than reorder point!";
+		}
+		if (!values.subCategoryId || values.subCategoryId === null) {
+			errors.subCategoryId = "Product Code is required!";
+		}
+		if (!values.unitId || values.unitId === null) {
+			errors.unitId = "Unit is required!";
+		}
+		if (!values.supplierId || values.supplierId === null) {
+			errors.supplierId = "Supplier is required!";
+		}
+
+		return errors;
 	};
 
 	// this function will get the markup amount
@@ -211,8 +272,8 @@ const Medicine = (props) => {
 								id="ProductCode"
 								value={medicine.ProductCode}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.ProductCode}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="GenericName">Generic Name:</label>
@@ -238,8 +299,8 @@ const Medicine = (props) => {
 								id="ProductName"
 								value={medicine.ProductName}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.ProductName}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="ProductDetails">Product Details:</label>
@@ -262,7 +323,6 @@ const Medicine = (props) => {
 								name="category"
 								id="category"
 								className="form-select form-input"
-								required
 								value={activeDropDownValue.category}
 								// set the sub category
 								onChange={(event) => {
@@ -301,7 +361,6 @@ const Medicine = (props) => {
 								name="unitId"
 								id="unitId"
 								className="form-select form-input"
-								required
 								value={activeDropDownValue.unitId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -324,6 +383,7 @@ const Medicine = (props) => {
 										</option>
 									))}
 							</select>
+							<p className="text-error">{formErrors.unitId}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -335,7 +395,6 @@ const Medicine = (props) => {
 								name="subCategoryId"
 								id="subCategoryId"
 								className="form-select form-input"
-								required
 								value={activeDropDownValue.subCategoryId}
 								onChange={(event) => {
 									// handle the value for subCategoryId name
@@ -371,6 +430,7 @@ const Medicine = (props) => {
 										</option>
 									))}
 							</select>
+							<p className="text-error">{formErrors.subCategoryId}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="SellingPrice">
@@ -384,7 +444,6 @@ const Medicine = (props) => {
 								value={medicine.SellingPrice}
 								onChange={handleInputChange}
 								disabled
-								required
 							/>
 						</div>
 					</div>
@@ -395,14 +454,13 @@ const Medicine = (props) => {
 							</label>
 							<input
 								type="number"
-								min={1}
 								className="form-control form-input"
 								name="SupplierPrice"
 								id="SupplierPrice"
 								value={medicine.SupplierPrice}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.SupplierPrice}</p>
 						</div>
 						<div className="col-sm-12 col-md-6">
 							<label className="required" htmlFor="status">
@@ -412,7 +470,6 @@ const Medicine = (props) => {
 								className="form-select form-input"
 								name="status"
 								id="status"
-								required
 								value={status}
 								onChange={(event) => {
 									let data = event.target.value;
@@ -441,7 +498,6 @@ const Medicine = (props) => {
 								name="supplierId"
 								id="supplierId"
 								className="form-select form-input"
-								required
 								value={activeDropDownValue.supplierId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -464,6 +520,7 @@ const Medicine = (props) => {
 										</option>
 									))}
 							</select>
+							<p className="text-error">{formErrors.supplierId}</p>
 						</div>
 						<div className="col-sm-12 col-md-3">
 							<label htmlFor="ReorderPoint" className="required">
@@ -471,14 +528,13 @@ const Medicine = (props) => {
 							</label>
 							<input
 								type="number"
-								min={medicine.SafetyStock}
 								className="form-control form-input"
 								name="ReorderPoint"
 								id="ReorderPoint"
 								value={medicine.ReorderPoint}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.ReorderPoint}</p>
 						</div>
 						<div className="col-sm-12 col-md-3">
 							<label htmlFor="SafetyStock" className="required">
@@ -486,15 +542,14 @@ const Medicine = (props) => {
 							</label>
 							<input
 								type="number"
-								min={1}
 								max={medicine.ReorderPoint}
 								className="form-control form-input"
 								name="SafetyStock"
 								id="SafetyStock"
 								value={medicine.SafetyStock}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.SafetyStock}</p>
 						</div>
 					</div>
 					<button

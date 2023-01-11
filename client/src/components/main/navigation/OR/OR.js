@@ -1,6 +1,7 @@
 // This component is responsible for viewing the start, end, and current OR for the system
 import { useState, useEffect } from "react";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import ORService from "../../../../services/ORService";
 
@@ -11,7 +12,13 @@ const OR = () => {
 		CurrentOR: 0,
 	};
 
+	const initialFormErrors = {
+		StartOR: "",
+		MaxOR: "",
+	};
+
 	const [valueOR, setValueOR] = useState(initialOR);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [editMode, setEditMode] = useState(false);
 	const [alertMessage, setAlertMessage] = useState("");
 
@@ -42,8 +49,11 @@ const OR = () => {
 	const updateCurrentOR = async (event) => {
 		event.preventDefault();
 
-		if (valueOR.StartOR >= valueOR.MaxOR)
-			return alert("End should be greated than Start.");
+		setFormErrors(validateForm(valueOR));
+		if (!isFormValid(formErrors)) return;
+
+		// if (valueOR.StartOR >= valueOR.MaxOR)
+		// 	return alert("End should be greater than Start.");
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -56,6 +66,23 @@ const OR = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.StartOR) {
+			errors.StartOR = "OR Start is required!";
+		} else if (parseInt(values.StartOR) >= parseInt(values.MaxOR)) {
+			errors.StartOR = "End should be greater than Start!";
+		}
+		if (!values.MaxOR) {
+			errors.MaxOR = "OR End is required!";
+		} else if (parseInt(values.StartOR) >= parseInt(values.MaxOR)) {
+			errors.StartOR = "End should be greater than Start!";
+		}
+
+		return errors;
 	};
 
 	// const computeCurrentOR = () => {
@@ -118,8 +145,8 @@ const OR = () => {
 								disabled={editMode === true ? false : true}
 								value={valueOR.StartOR}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.StartOR}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -130,14 +157,14 @@ const OR = () => {
 							<input
 								type="number"
 								className="form-control form-input"
-								min={valueOR.StartOR}
+								// min={valueOR.StartOR}
 								name="MaxOR"
 								id="MaxOR"
 								disabled={editMode === true ? false : true}
 								value={valueOR.MaxOR}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.MaxOR}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">

@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
+import REGEX from "../../../../helper/regexHelper";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import SupplierService from "../../../../services/SupplierService";
 
@@ -30,6 +32,7 @@ const Supplier = () => {
 	let navigate = useNavigate();
 
 	const [suppliers, setSuppliers] = useState([]);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [newSupplier, setNewSupplier] = useState(initialSupplier);
 	const [alertMessage, setAlertMessage] = useState("");
 
@@ -53,6 +56,10 @@ const Supplier = () => {
 	// create a new Supplier
 	const createSupplier = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(newSupplier));
+		if (!isFormValid(formErrors)) return;
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -73,6 +80,32 @@ const Supplier = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+		const regexNumber = /^[0-9]{11}$/;
+		const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+		if (!values.SupplierName.trim()) {
+			errors.SupplierName = "Supplier name is required!";
+		}
+		if (!values.ContactPerson.trim()) {
+			errors.ContactPerson = "Contact person is required!";
+		}
+		if (!values.Mobile) {
+			errors.Mobile = "Mobile # is required!";
+		} else if (!regexNumber.test(values.Mobile)) {
+			errors.Mobile = "Please enter valid mobile number!";
+		}
+		if (!values.Address.trim()) {
+			errors.Address = "Address is required!";
+		}
+		if (values.Email.trim() && !regexEmail.test(values.Email.trim())) {
+			errors.Email = "Please enter valid email address!";
+		}
+
+		return errors;
 	};
 
 	// delete the supplier
@@ -145,8 +178,8 @@ const Supplier = () => {
 									id="SupplierName"
 									value={newSupplier.SupplierName}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.SupplierName}</p>
 							</div>
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="SupplierName">
@@ -159,8 +192,8 @@ const Supplier = () => {
 									id="ContactPerson"
 									value={newSupplier.ContactPerson}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.ContactPerson}</p>
 							</div>
 						</div>
 						<div className="row mb-sm-3">
@@ -170,16 +203,16 @@ const Supplier = () => {
 								</label>
 								<input
 									type="text"
-									pattern="[0-9]+"
-									minLength={11}
-									maxLength={11}
+									// pattern="[0-9]+"
+									// minLength={11}
+									// maxLength={11}
 									className="form-control form-input"
 									name="Mobile"
 									id="Mobile"
 									value={newSupplier.Mobile}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.Mobile}</p>
 							</div>
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="Address">
@@ -192,19 +225,20 @@ const Supplier = () => {
 									id="Address"
 									value={newSupplier.Address}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.Address}</p>
 							</div>
 							<div className="col-sm-12 col-md">
 								<label htmlFor="Email">Email:</label>
 								<input
-									type="email"
+									type="text"
 									className="form-control form-input"
 									name="Email"
 									id="Email"
 									value={newSupplier.Email}
 									onChange={handleInputChange}
 								/>
+								<p className="text-error">{formErrors.Email}</p>
 							</div>
 						</div>
 						<button className="btn btn-primary simple-shadow mt-3">Add</button>

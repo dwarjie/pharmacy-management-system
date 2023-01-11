@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import DiscountService from "../../../../services/DiscountService";
 
@@ -17,9 +18,15 @@ const Discount = () => {
 		DiscountType: "%",
 	};
 
+	const initialFormErrors = {
+		DiscountName: "",
+		DiscountAmount: "",
+	};
+
 	let navigate = useNavigate();
 
 	const [discounts, setDiscounts] = useState([]);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [newDiscount, setNewDiscount] = useState(initialDiscount);
 	const [alertMessage, setAlertMessage] = useState("");
 
@@ -30,6 +37,10 @@ const Discount = () => {
 	// add new discount
 	const createDiscount = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(newDiscount));
+		if (!isFormValid(formErrors)) return;
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -48,6 +59,21 @@ const Discount = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.DiscountName) {
+			errors.DiscountName = "Discount name is required!";
+		}
+		if (!values.DiscountAmount) {
+			errors.DiscountAmount = "Discount amount is required!";
+		} else if (parseFloat(values.DiscountAmount) <= 0) {
+			errors.DiscountAmount = "Enter valid discount amount!";
+		}
+
+		return errors;
 	};
 
 	// delete the discount
@@ -130,8 +156,8 @@ const Discount = () => {
 							name="DiscountName"
 							value={newDiscount.DiscountName}
 							onChange={handleInputChange}
-							required
 						/>
+						<p className="text-error">{formErrors.DiscountName}</p>
 						<div className="row mb-sm-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="DiscountAmount">
@@ -139,14 +165,13 @@ const Discount = () => {
 								</label>
 								<input
 									type="number"
-									min={1}
 									className="form-control form-input"
 									name="DiscountAmount"
 									id="DiscountAmount"
 									value={newDiscount.DiscountAmount}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.DiscountAmount}</p>
 							</div>
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="DiscountType">
@@ -158,7 +183,6 @@ const Discount = () => {
 									className="form-select form-input"
 									value={newDiscount.DiscountType}
 									onChange={handleInputChange}
-									required
 								>
 									<option value="fixed">Fixed</option>
 									<option value="%">%</option>

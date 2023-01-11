@@ -45,14 +45,14 @@ const SideNavigation = () => {
 						Dashboard
 					</Link>
 
-					{/* PATIENT */}
-					{checkRoles(ROLES.maintenance) ? <PatientModule /> : ""}
-
 					{/* FILE MAINTENANCE*/}
 					{checkRoles(ROLES.maintenance) ? <MaintenanceModule /> : ""}
 
 					{/* HANDLERS */}
 					{checkRoles(ROLES.maintenance) ? <HandlerModule /> : ""}
+
+					{/* PATIENT */}
+					{checkRoles(ROLES.maintenance) ? <PatientModule /> : ""}
 
 					{/* INVENTORY */}
 					{checkRoles(ROLES.inventory) ? <InventoryModule /> : ""}

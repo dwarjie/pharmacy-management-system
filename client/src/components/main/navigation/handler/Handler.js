@@ -74,7 +74,7 @@ const Handler = (props) => {
 		} else if (!regexNumber.test(values.Mobile)) {
 			errors.Mobile = "Please enter a valid mobile number!";
 		}
-		if (!regexEmail.test(values.Email)) {
+		if (values.Email.trim() && !regexEmail.test(values.Email.trim())) {
 			errors.Email = "Please enter a valid email!";
 		}
 

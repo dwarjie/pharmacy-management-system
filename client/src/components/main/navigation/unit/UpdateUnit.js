@@ -1,6 +1,7 @@
 // This module is responsible for showing the list of the medicine units
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
@@ -9,10 +10,16 @@ const UnitList = () => {
 		id: null,
 		UnitName: "",
 	};
+
+	const initialFormErrors = {
+		UnitName: "",
+	};
+
 	let navigate = useNavigate();
 	let location = useLocation();
 
 	const [unit, setUnit] = useState(initialUnit);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [success, setSuccess] = useState(true);
 
 	useEffect(() => {
@@ -25,6 +32,9 @@ const UnitList = () => {
 	// update the unit
 	const updateUnitOfMeasure = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(unit));
+		if (!isFormValid(formErrors)) return;
 
 		// ask for confirmation
 		if (!AlertPrompt()) return;
@@ -40,6 +50,16 @@ const UnitList = () => {
 				setSuccess(false);
 			});
 		checkSuccess();
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.UnitName.trim()) {
+			errors.UnitName = "Unit name is required!";
+		}
+
+		return errors;
 	};
 
 	// handle input change event for form
@@ -78,8 +98,8 @@ const UnitList = () => {
 						name="UnitName"
 						value={unit.UnitName}
 						onChange={handleInputChange}
-						required
 					/>
+					<p className="text-error">{formErrors.UnitName}</p>
 					<button
 						type="submit"
 						className="btn btn-primary simple-shadow me-3 mt-3"

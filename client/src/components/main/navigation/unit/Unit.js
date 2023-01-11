@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
 
@@ -14,10 +15,16 @@ const AddUnit = () => {
 		id: null,
 		UnitName: "",
 	};
+
+	const initialFormErrors = {
+		UnitName: "",
+	};
+
 	let navigate = useNavigate();
 
 	const [units, setUnits] = useState([]);
 	const [newUnit, setNewUnit] = useState(initialUnit);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
@@ -40,6 +47,9 @@ const AddUnit = () => {
 	const createUnitOfMeasure = (event) => {
 		event.preventDefault();
 
+		setFormErrors(validateForm(newUnit));
+		if (!isFormValid(formErrors)) return;
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -56,6 +66,16 @@ const AddUnit = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.UnitName.trim()) {
+			errors.UnitName = "Unit name is required!";
+		}
+
+		return errors;
 	};
 
 	// delete the unit
@@ -126,8 +146,8 @@ const AddUnit = () => {
 							name="UnitName"
 							value={newUnit.UnitName}
 							onChange={handleInputChange}
-							required
 						/>
+						<p className="text-error">{formErrors.UnitName}</p>
 						<button
 							type="submit"
 							className="btn btn-primary simple-shadow mt-3"
