@@ -42,6 +42,7 @@ db.purchase = require("./purchaseOrder.model")(sequelize, Sequelize);
 db.stockAdjustment = require("./stockAdjustment.model")(sequelize, Sequelize);
 
 db.user = require("./user.model")(sequelize, Sequelize);
+db.auditTrail = require("./auditTrail.model")(sequelize, Sequelize);
 // db.role = require("./role.model")(sequelize, Sequelize);
 
 // define model relationships
@@ -213,6 +214,14 @@ db.return.belongsTo(db.medicine, {
 
 db.user.hasMany(db.return);
 db.return.belongsTo(db.user, {
+	as: "user",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
+db.user.hasMany(db.auditTrail);
+db.auditTrail.belongsTo(db.user, {
 	as: "user",
 	foreignKey: {
 		allowNull: false,

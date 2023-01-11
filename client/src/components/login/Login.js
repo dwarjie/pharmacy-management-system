@@ -7,6 +7,7 @@ import AuthService from "../../services/AuthService";
 import { PersonCircle } from "react-bootstrap-icons";
 import { setGlobalState } from "../../state";
 import ReCaptchaService from "../../services/ReCaptchaService";
+import { createAuditTrail } from "../../helper/AuditTrailHelper";
 
 const Login = () => {
 	const recaptchaRef = useRef(null);
@@ -97,6 +98,7 @@ const Login = () => {
 			AuthService.saveToken(data);
 			setGlobalState("currentUser", data);
 			setGlobalState("auth", true);
+			createAuditTrail("User logged in successfully.", "Logged in", data.id);
 			navigate(`/pharmacy/dashboard`);
 			// window.location.reload();
 			return;
@@ -140,7 +142,7 @@ const Login = () => {
 						className="form-control form-input"
 						name="Password"
 						id="Password"
-						placeholder="at least 8 characters"
+						placeholder="at least 6 characters"
 						value={credentials.Password}
 						onChange={handleInputChange}
 					/>

@@ -10,10 +10,14 @@ import { CgLogOff } from "react-icons/cg";
 import AuthService from "../../../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { getCurrentTime } from "../../../helper/dateHelper";
+import { createAuditTrail } from "../../../helper/AuditTrailHelper";
+import { useGlobalState } from "../../../state";
 
 const TopNavigation = (props) => {
+	let [currentUser] = useGlobalState("currentUser");
 	let navigate = useNavigate();
 	const logOut = () => {
+		createAuditTrail("Logged out successfully.", "Logged Out", currentUser.id);
 		AuthService.logout();
 		navigate(`/`);
 	};

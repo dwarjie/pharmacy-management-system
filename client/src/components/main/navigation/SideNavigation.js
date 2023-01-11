@@ -4,6 +4,12 @@ import { Link } from "react-router-dom";
 import { HouseFill, PeopleFill, Cart4, Receipt } from "react-bootstrap-icons";
 import { AiFillMedicineBox, AiFillFile, AiFillSetting } from "react-icons/ai";
 import { useGlobalState } from "../../../state";
+import { createAuditTrail } from "../../../helper/AuditTrailHelper";
+import { createContext, useContext } from "react";
+
+// create context API
+const NavigationContext = createContext();
+const { Provider } = NavigationContext;
 
 const SideNavigation = () => {
 	let [currentUser] = useGlobalState("currentUser");
@@ -14,6 +20,10 @@ const SideNavigation = () => {
 		sales: "sales",
 		reports: "reports",
 		utilities: "utilities",
+	};
+
+	const contextValue = {
+		currentUser,
 	};
 
 	// check if user has the role in order to use the module
@@ -32,47 +42,60 @@ const SideNavigation = () => {
 			className="collapse navbar navbar-expand d-flex flex-column align-item-start bg-dark h-100 side-navigation"
 			id="sideNavigation"
 		>
-			<div className="container-fluid flex-column gap-4 p-3">
-				<h5 className="text-center text-light">
-					ActivCare Home Health Solution Inc.
-				</h5>
-				<div className="d-flex flex-column gap-1 w-100">
-					{/* DASHBOARD */}
-					<Link to={"/pharmacy/dashboard"} className="btn btn-side-navigation">
-						<span className="px-2">
-							<HouseFill className="icon-size-sm" />
-						</span>{" "}
-						Dashboard
-					</Link>
+			<Provider value={contextValue}>
+				<div className="container-fluid flex-column gap-4 p-3">
+					<h5 className="text-center text-light">
+						ActivCare Home Health Solution Inc.
+					</h5>
+					<div className="d-flex flex-column gap-1 w-100">
+						{/* DASHBOARD */}
+						<Link
+							to={"/pharmacy/dashboard"}
+							className="btn btn-side-navigation"
+							onClick={() =>
+								createAuditTrail(
+									"Dashboard is clicked in navigation",
+									"Click",
+									currentUser.id
+								)
+							}
+						>
+							<span className="px-2">
+								<HouseFill className="icon-size-sm" />
+							</span>{" "}
+							Dashboard
+						</Link>
 
-					{/* FILE MAINTENANCE*/}
-					{checkRoles(ROLES.maintenance) ? <MaintenanceModule /> : ""}
+						{/* FILE MAINTENANCE*/}
+						{checkRoles(ROLES.maintenance) ? <MaintenanceModule /> : ""}
 
-					{/* HANDLERS */}
-					{checkRoles(ROLES.maintenance) ? <HandlerModule /> : ""}
+						{/* HANDLERS */}
+						{checkRoles(ROLES.maintenance) ? <HandlerModule /> : ""}
 
-					{/* PATIENT */}
-					{checkRoles(ROLES.maintenance) ? <PatientModule /> : ""}
+						{/* PATIENT */}
+						{checkRoles(ROLES.maintenance) ? <PatientModule /> : ""}
 
-					{/* INVENTORY */}
-					{checkRoles(ROLES.inventory) ? <InventoryModule /> : ""}
+						{/* INVENTORY */}
+						{checkRoles(ROLES.inventory) ? <InventoryModule /> : ""}
 
-					{/* SALES */}
-					{checkRoles(ROLES.sales) ? <SalesModule /> : ""}
+						{/* SALES */}
+						{checkRoles(ROLES.sales) ? <SalesModule /> : ""}
 
-					{/* REPORT */}
-					{checkRoles(ROLES.reports) ? <ReportsModule /> : ""}
+						{/* REPORT */}
+						{checkRoles(ROLES.reports) ? <ReportsModule /> : ""}
 
-					{/* UTILITIES */}
-					{checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""}
-					{/* <UtilitiesModule /> */}
+						{/* UTILITIES */}
+						{checkRoles(ROLES.utilities) ? <UtilitiesModule /> : ""}
+						{/* <UtilitiesModule /> */}
+					</div>
 				</div>
-			</div>
+			</Provider>
 		</nav>
 	);
 };
 
 const PatientModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -88,7 +111,17 @@ const PatientModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/maintenance/patient"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/patient"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Add patient is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Add Patient
 					</Link>
 				</li>
@@ -96,6 +129,13 @@ const PatientModule = () => {
 					<Link
 						to={"/pharmacy/maintenance/patient/patient-list"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Patient List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Patient List
 					</Link>
@@ -106,6 +146,7 @@ const PatientModule = () => {
 };
 
 const MaintenanceModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -121,27 +162,77 @@ const MaintenanceModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/maintenance/category"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/category"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Category is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Category
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/maintenance/supplier"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/supplier"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Supplier is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Supplier
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/maintenance/vat"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/vat"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"VAT is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						VAT
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/maintenance/or"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/or"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"OR is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						OR
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/maintenance/discount"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/discount"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Discount is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Discount
 					</Link>
 				</li>
@@ -154,12 +245,32 @@ const MaintenanceModule = () => {
 								</Link>
 							</li> */}
 				<li>
-					<Link to={"/pharmacy/maintenance/unit"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/unit"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Unit of Measure is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Unit of Measure
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/maintenance/medicine"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/medicine"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Add Product is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Add Product
 					</Link>
 				</li>
@@ -167,6 +278,13 @@ const MaintenanceModule = () => {
 					<Link
 						to={"/pharmacy/maintenance/medicine/medicine-list"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Product List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Product List
 					</Link>
@@ -177,6 +295,7 @@ const MaintenanceModule = () => {
 };
 
 const HandlerModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -192,7 +311,17 @@ const HandlerModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/maintenance/handler"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/maintenance/handler"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Add NCM/Doctor is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Add NCM/Doctor
 					</Link>
 				</li>
@@ -200,6 +329,13 @@ const HandlerModule = () => {
 					<Link
 						to={"/pharmacy/maintenance/handler/handler-list"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"NCM/Doctors List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						NCM/Doctors List
 					</Link>
@@ -210,6 +346,7 @@ const HandlerModule = () => {
 };
 
 const InventoryModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -225,7 +362,17 @@ const InventoryModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/inventory/order-list"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/inventory/order-list"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Purchase Order List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Purchase Order List
 					</Link>
 				</li>
@@ -233,6 +380,13 @@ const InventoryModule = () => {
 					<Link
 						to={"/pharmacy/inventory/purchase-order"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Purchase Order is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Purchase Order
 					</Link>
@@ -241,6 +395,13 @@ const InventoryModule = () => {
 					<Link
 						to={"/pharmacy/inventory/purchase-list"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Manage PO is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Manage PO
 					</Link>
@@ -249,6 +410,13 @@ const InventoryModule = () => {
 					<Link
 						to={"/pharmacy/inventory/delivery-list"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Delivery List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Delivery List
 					</Link>
@@ -257,6 +425,13 @@ const InventoryModule = () => {
 					<Link
 						to={"/pharmacy/inventory/stock-adjustment"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Stock Adjustment is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Stock Adjustment
 					</Link>
@@ -267,6 +442,7 @@ const InventoryModule = () => {
 };
 
 const SalesModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -282,7 +458,17 @@ const SalesModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/sales/pos"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/sales/pos"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"POS is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						POS
 					</Link>
 				</li>
@@ -290,6 +476,13 @@ const SalesModule = () => {
 					<Link
 						to={"/pharmacy/sales/charge-to-account"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Charge to Account is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Charge to Account
 					</Link>
@@ -298,12 +491,29 @@ const SalesModule = () => {
 					<Link
 						to={"/pharmacy/sales/charge-to-account-list"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Charge to Accounts List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Charge to Accounts List
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/sales/return"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/sales/return"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Return List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Return
 					</Link>
 				</li>
@@ -313,6 +523,7 @@ const SalesModule = () => {
 };
 
 const ReportsModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -328,7 +539,17 @@ const ReportsModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/report/sales-report"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/report/sales-report"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Sales List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Sales List
 					</Link>
 				</li>
@@ -336,17 +557,44 @@ const ReportsModule = () => {
 					<Link
 						to={"/pharmacy/report/invoice-report"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Invoice Report is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Invoice Report
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/report/master-list"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/report/master-list"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Master List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Master List
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/report/supplier-list"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/report/supplier-list"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Supplier List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Supplier List
 					</Link>
 				</li>
@@ -354,6 +602,13 @@ const ReportsModule = () => {
 					<Link
 						to={"/pharmacy/report/inventory-valuation"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Inventory Valuation is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Inventory Valuation
 					</Link>
@@ -362,6 +617,13 @@ const ReportsModule = () => {
 					<Link
 						to={"/pharmacy/report/stock-adjustment-history"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Stock Adjustment History is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Stock Adjustment History
 					</Link>
@@ -370,6 +632,13 @@ const ReportsModule = () => {
 					<Link
 						to={"/pharmacy/report/return-history"}
 						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Return History is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
 					>
 						Return History
 					</Link>
@@ -380,6 +649,7 @@ const ReportsModule = () => {
 };
 
 const UtilitiesModule = () => {
+	const { currentUser } = useContext(NavigationContext);
 	return (
 		<div className="dropdown">
 			<button
@@ -395,23 +665,63 @@ const UtilitiesModule = () => {
 			</button>
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
-					<Link to={"/pharmacy/utilities/add-user"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/utilities/add-user"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Add User is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Add User
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/utilities/user-list"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/utilities/user-list"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"User List is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						User List
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/dashboard"} className="dropdown-item">
+					<Link
+						to={"/pharmacy/dashboard"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Backup is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
 						Download Backup
 					</Link>
 				</li>
 				<li>
-					<Link to={"/pharmacy/dashboard"} className="dropdown-item">
-						Restose Database
+					<Link
+						to={"/pharmacy/dashboard"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Restore Backup is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
+						Restore Database
 					</Link>
 				</li>
 			</ul>

@@ -9,7 +9,7 @@ const formatDate = (date) => {
 };
 
 const getCurrentDate = () => {
-	return moment().format("dddd, MMMM, D YYYY");
+	return moment().format();
 };
 
 const getCurrentTime = () => {
