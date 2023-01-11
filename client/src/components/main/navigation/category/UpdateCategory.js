@@ -1,11 +1,14 @@
 // This module is responsible for updating the Category
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 import { isFormValid } from "../../../../helper/checkFormValid";
 import CategoryService from "../../../../services/CategoryService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { useGlobalState } from "../../../../state";
 
 const UpdateCategory = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	const initialCategory = {
 		id: null,
 		CategoryName: "",
@@ -34,8 +37,14 @@ const UpdateCategory = () => {
 	}, []);
 
 	// update the current category
-	const updateCategory = (event) => {
+	const updateCategory = async (event) => {
 		event.preventDefault();
+
+		await createAuditTrail(
+			"Clicked update in category.",
+			"Click",
+			currentUser.id
+		);
 
 		setFormErrors(validateForm(newCategory));
 		if (!isFormValid(formErrors)) return;
@@ -44,6 +53,11 @@ const UpdateCategory = () => {
 			.then((response) => {
 				console.log(response.data);
 				alert(response.data.message);
+				createAuditTrail(
+					`Updated ${oldCategory.CategoryName} in category`,
+					"Edit",
+					currentUser.id
+				);
 				setSuccess(true);
 			})
 			.catch((err) => {
@@ -64,7 +78,13 @@ const UpdateCategory = () => {
 	};
 
 	// delete the category
-	const deleteCategory = () => {
+	const deleteCategory = async () => {
+		await createAuditTrail(
+			"Clicked delete in category.",
+			"Click",
+			currentUser.id
+		);
+
 		if (newCategory.subCategory.length !== 0)
 			return alert("Category has sub-categories."); // don't delete if is has sub category
 		// ask for confirmation
@@ -73,6 +93,11 @@ const UpdateCategory = () => {
 		CategoryService.deleteCategory(newCategory.id)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(
+					`Deleted ${oldCategory.CategoryName} in category.`,
+					"Delete",
+					currentUser.id
+				);
 				navigate("/pharmacy/maintenance/category");
 			})
 			.catch((err) => {

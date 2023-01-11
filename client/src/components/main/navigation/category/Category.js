@@ -3,6 +3,8 @@ import { useState, useEffect, isValidElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { isFormValid } from "../../../../helper/checkFormValid";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import { useGlobalState } from "../../../../state";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import CategoryService from "../../../../services/CategoryService";
 
@@ -11,6 +13,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdOutlineAddBox } from "react-icons/md";
 
 const Category = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	// initial state for a category when creating new category
 	const initialCategory = {
 		id: null,
@@ -47,8 +50,10 @@ const Category = () => {
 	};
 
 	// create a new category
-	const createCategory = (event) => {
+	const createCategory = async (event) => {
 		event.preventDefault();
+
+		await createAuditTrail("Clicked Add in category.", "Click", currentUser.id);
 
 		setFormErrors(validateForm(category));
 		if (!isFormValid(formErrors)) return;
@@ -65,6 +70,11 @@ const Category = () => {
 			.then((response) => {
 				console.log(response.data);
 				setAlertMessage(response.data.message);
+				createAuditTrail(
+					`Added ${data.CategoryName} in category.`,
+					"Create",
+					currentUser.id
+				);
 				refreshList();
 			})
 			.catch((err) => {
@@ -84,6 +94,7 @@ const Category = () => {
 
 	const setActiveCategory = (category) => {
 		setCategory(category);
+		createAuditTrail(`Clicked edit in category.`, "Click", currentUser.id);
 		navigate(`/pharmacy/maintenance/category/${category.id}`, {
 			state: {
 				category: category,
@@ -97,6 +108,11 @@ const Category = () => {
 	};
 
 	const addSubCategory = (category) => {
+		createAuditTrail(
+			`Clicked add sub-category in category.`,
+			"Click",
+			currentUser.id
+		);
 		navigate(`/pharmacy/maintenance/category/sub-category`, {
 			state: {
 				category: category,
