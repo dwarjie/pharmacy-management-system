@@ -1,7 +1,8 @@
 // This component is responsible for adding new medicine category
-import { useState, useEffect } from "react";
+import { useState, useEffect, isValidElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import CategoryService from "../../../../services/CategoryService";
 
@@ -16,9 +17,14 @@ const Category = () => {
 		CategoryName: "",
 		subCategory: [],
 	};
+
+	const initialFormError = {
+		CategoryName: "",
+	};
 	let navigate = useNavigate();
 
 	const [category, setCategory] = useState(initialCategory);
+	const [formErrors, setFormErrors] = useState(initialFormError);
 	const [categories, setCategories] = useState([]);
 	const [subCategories, setSubCategories] = useState([]);
 	const [alertMessage, setAlertMessage] = useState("");
@@ -43,6 +49,10 @@ const Category = () => {
 	// create a new category
 	const createCategory = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(category));
+		if (!isFormValid(formErrors)) return;
+
 		// confirm the user if they want to proceed
 		if (!AlertPrompt()) return;
 
@@ -60,6 +70,16 @@ const Category = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.CategoryName.trim()) {
+			errors.CategoryName = "Category name is required!";
+		}
+
+		return errors;
 	};
 
 	const setActiveCategory = (category) => {
@@ -127,8 +147,8 @@ const Category = () => {
 							name="CategoryName"
 							value={category.CategoryName}
 							onChange={handleInputChange}
-							required
 						/>
+						<p className="text-error">{formErrors.CategoryName}</p>
 						<button
 							className="btn btn-primary simple-shadow mt-3 me-3"
 							type="submit"

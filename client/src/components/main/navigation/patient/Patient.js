@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import PatientService from "../../../../services/PatientService";
 import CheckBox from "../../../layout/CheckBox";
@@ -14,12 +15,31 @@ const Patient = (props) => {
 	// get the value of the props
 	const { title, mode, initialPatient, initialDropDownValue, isSenior } = props;
 
+	const initialFormErrors = {
+		id: null,
+		FirstName: "",
+		LastName: "",
+		Sex: "",
+		DateOfBirth: "",
+		City: "",
+		ZIP: "",
+		Address: "",
+		FirstVisit: "",
+		Mobile: "",
+		EmergencyContact: "",
+		isSenior: false,
+		SeniorId: "",
+		Note: "",
+		handlerId: null,
+	};
+
 	const [newPatient, setNewPatient] = useState(initialPatient);
 	const [handlers, sethandlers] = useState([]);
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
 	const [checked, setChecked] = useState(isSenior); // for the checkbox of PWD/Senior
 	const [alertMessage, setAlertMessage] = useState("");
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 
 	useEffect(() => {
 		getAllHandler();
@@ -39,6 +59,10 @@ const Patient = (props) => {
 	// create a new patient
 	const createPatient = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(newPatient));
+		if (!isFormValid(formErrors)) return;
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -55,9 +79,54 @@ const Patient = (props) => {
 			});
 	};
 
+	const validateForm = (values) => {
+		const errors = {};
+		const regex = /^[0-9]{11}$/;
+		if (!values.FirstName.trim()) {
+			errors.FirstName = "First name is required!";
+		}
+		if (!values.LastName.trim()) {
+			errors.LastName = "Last name is required!";
+		}
+		if (!values.Sex) {
+			errors.Sex = "Please select patient's sex";
+		}
+		if (!values.Address.trim()) {
+			errors.Address = "Address is required!";
+		}
+		if (!values.DateOfBirth) {
+			errors.DateOfBirth = "Date of Birth is required!";
+		}
+		if (!values.Mobile.trim()) {
+			errors.Mobile = "Mobile # is required!";
+		} else if (!regex.test(values.Mobile.trim())) {
+			errors.Mobile = "Please enter a valid mobile number!";
+		}
+		if (!regex.test(values.EmergencyContact.trim())) {
+			errors.EmergencyContact = "Please enter a valid emergency number!";
+		}
+		if (!values.handlerId || values.handlerId === null) {
+			errors.handlerId = "Please select a Doctor/NCM";
+		}
+		if (!values.FirstVisit) {
+			errors.FirstVisit = "Please select patient's sex";
+		}
+		if (values.isSenior) {
+			if (!values.SeniorId.trim()) {
+				errors.SeniorId = "Senior ID is required!";
+			}
+		}
+
+		return errors;
+	};
+
 	// update the patient
 	const updatePatient = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(newPatient));
+		if (!isFormValid(formErrors)) return;
+
 		PatientService.updatePatient(newPatient.id, newPatient)
 			.then((response) => {
 				console.log(response.data);
@@ -124,8 +193,8 @@ const Patient = (props) => {
 								id="FirstName"
 								value={newPatient.FirstName}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.FirstName}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="LastName">
@@ -138,8 +207,8 @@ const Patient = (props) => {
 								id="LastName"
 								value={newPatient.LastName}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.LastName}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -153,12 +222,12 @@ const Patient = (props) => {
 								id="Sex"
 								value={newPatient.Sex}
 								onChange={handleInputChange}
-								required
 							>
 								<DropDownDefaultOption content={"Select Sex"} />
 								<option value="Male">Male</option>
 								<option value="Female">Female</option>
 							</select>
+							<p className="text-error">{formErrors.Sex}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="DateOfBirth">
@@ -171,8 +240,8 @@ const Patient = (props) => {
 								id="DateOfBirth"
 								value={formatDate(newPatient.DateOfBirth)}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.DateOfBirth}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -187,8 +256,8 @@ const Patient = (props) => {
 								id="Address"
 								value={newPatient.Address}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.Address}</p>
 						</div>
 						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="city">City:</label>
@@ -220,42 +289,42 @@ const Patient = (props) => {
 							</label>
 							<input
 								type="text"
-								pattern="[0-9]+"
-								minLength={11}
-								maxLength={11}
+								// pattern="[0-9]+"
+								// minLength={11}
+								// maxLength={11}
 								className="form-control form-input"
 								name="Mobile"
 								id="Mobile"
-								required
 								value={newPatient.Mobile}
 								onChange={handleInputChange}
 							/>
+							<p className="text-error">{formErrors.Mobile}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label htmlFor="EmergencyContact">Emergency Contact:</label>
 							<input
 								type="text"
-								pattern="[0-9]+"
-								minLength={11}
-								maxLength={11}
+								// pattern="[0-9]+"
+								// minLength={11}
+								// maxLength={11}
 								className="form-control form-input"
 								name="EmergencyContact"
 								id="EmergencyContact"
 								value={newPatient.EmergencyContact}
 								onChange={handleInputChange}
 							/>
+							<p className="text-error">{formErrors.EmergencyContact}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="handlerId">
-								Reffered By:
+								Referred By:
 							</label>
 							<select
 								name="handlerId"
 								id="handlerId"
 								className="form-select form-input"
-								required
 								value={activeDropDownValue.handlerId}
 								onChange={(event) => {
 									let data = parseDropdownValue(event);
@@ -266,7 +335,7 @@ const Patient = (props) => {
 									setNewPatient({ ...newPatient, handlerId: data.id });
 								}}
 							>
-								<DropDownDefaultOption content={"Select handler"} />
+								<DropDownDefaultOption content={"Select NCM/Doctor"} />
 								{handlers &&
 									handlers.map((handler, index) => (
 										<option
@@ -279,6 +348,7 @@ const Patient = (props) => {
 										</option>
 									))}
 							</select>
+							<p className="text-error">{formErrors.handlerId}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="FirstVisit">
@@ -291,8 +361,8 @@ const Patient = (props) => {
 								id="FirstVisit"
 								value={formatDate(newPatient.FirstVisit)}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.FirstVisit}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -326,8 +396,10 @@ const Patient = (props) => {
 									value={newPatient.SeniorId}
 									onChange={handleInputChange}
 									disabled={!checked}
-									required={checked}
 								/>
+								<p className="text-error">
+									{newPatient.isSenior ? formErrors.SeniorId : ""}
+								</p>
 							</div>
 						</div>
 					</div>

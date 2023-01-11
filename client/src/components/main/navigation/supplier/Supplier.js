@@ -18,6 +18,15 @@ const Supplier = () => {
 		Mobile: "",
 		Email: "",
 	};
+
+	const initialFormErrors = {
+		SupplierName: "",
+		ContactPerson: "",
+		Address: "",
+		Mobile: "",
+		Email: "",
+	};
+
 	let navigate = useNavigate();
 
 	const [suppliers, setSuppliers] = useState([]);

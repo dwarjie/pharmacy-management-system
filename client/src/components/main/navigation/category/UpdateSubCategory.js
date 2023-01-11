@@ -1,6 +1,7 @@
 // this module is responsible for Updating SubCategory
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
@@ -16,6 +17,11 @@ const UpdateSubCategory = () => {
 		MarkUpUnit: "%",
 	};
 
+	const initialFormErrors = {
+		SubCategoryName: "",
+		MarkUp: "",
+	};
+
 	useEffect(() => {
 		setSubCategory({
 			id: oldCategory.id,
@@ -26,11 +32,15 @@ const UpdateSubCategory = () => {
 	}, []);
 
 	const [subCategory, setSubCategory] = useState(initialSubCategory);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [success, setSuccess] = useState(true);
 
 	// update the subCategory
 	const updateSubCategory = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(subCategory));
+		if (!isFormValid(formErrors)) return;
 
 		SubCategoryService.updateSubCategory(subCategory.id, subCategory)
 			.then((response) => {
@@ -43,6 +53,19 @@ const UpdateSubCategory = () => {
 				setSuccess(false);
 			});
 		checkSuccess();
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.SubCategoryName) {
+			errors.SubCategoryName = "Sub category name is required!";
+		}
+		if (!values.MarkUp) {
+			errors.MarkUp = "Mark up is required!";
+		}
+
+		return errors;
 	};
 
 	// handle the on change event in forms
@@ -82,8 +105,8 @@ const UpdateSubCategory = () => {
 						name="SubCategoryName"
 						value={subCategory.SubCategoryName}
 						onChange={handleInputChange}
-						required
 					/>
+					<p className="text-error">{formErrors.SubCategoryName}</p>
 					<div className="row mt-3">
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="MarkUpUnit">
@@ -113,8 +136,8 @@ const UpdateSubCategory = () => {
 								id="MarkUp"
 								value={subCategory.MarkUp}
 								onChange={handleInputChange}
-								required
 							/>
+							<p className="text-error">{formErrors.MarkUp}</p>
 						</div>
 					</div>
 					<button className="btn btn-primary simple-shadow me-3 mt-3">

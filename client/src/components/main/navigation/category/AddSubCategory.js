@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import CategoryService from "../../../../services/CategoryService";
@@ -22,7 +23,13 @@ const AddSubCategory = () => {
 		categoryId: location.state.category.id,
 	};
 
+	const initialFormErrors = {
+		SubCategoryName: "",
+		MarkUp: "",
+	};
+
 	const [subCategory, setSubCategory] = useState(initialSubCategory);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [subCategories, setSubCategories] = useState([]);
 	const [alertMessage, setAlertMessage] = useState("");
 
@@ -46,6 +53,9 @@ const AddSubCategory = () => {
 	const createSubCategory = (event) => {
 		event.preventDefault();
 
+		setFormErrors(validateForm(subCategory));
+		if (!isFormValid(formErrors)) return;
+
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
@@ -58,6 +68,19 @@ const AddSubCategory = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.SubCategoryName) {
+			errors.SubCategoryName = "Sub category name is required!";
+		}
+		if (!values.MarkUp) {
+			errors.MarkUp = "Mark up is required!";
+		}
+
+		return errors;
 	};
 
 	// delete the subCategory
@@ -127,8 +150,8 @@ const AddSubCategory = () => {
 							name="SubCategoryName"
 							value={subCategory.SubCategoryName}
 							onChange={handleInputChange}
-							required
 						/>
+						<p className="text-error">{formErrors.SubCategoryName}</p>
 						<div className="row mt-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="MarkUpUnit">
@@ -138,7 +161,6 @@ const AddSubCategory = () => {
 									name="MarkUpUnit"
 									id="MarkUpUnit"
 									className="form-select form-input"
-									required
 									value={subCategory.MarkUpUnit}
 									onChange={handleInputChange}
 								>
@@ -158,8 +180,8 @@ const AddSubCategory = () => {
 									id="MarkUp"
 									value={subCategory.MarkUp}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.MarkUp}</p>
 							</div>
 						</div>
 						<button

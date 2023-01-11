@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import VatService from "../../../../services/VatService";
 
@@ -15,8 +16,13 @@ const VAT = () => {
 		VatAmount: 0,
 	};
 
+	const initialFormError = {
+		VatAmount: "",
+	};
+
 	// const [vats, setVats] = useState([]);
 	const [newVAT, setNewVAT] = useState(initialVat);
+	const [formErrors, setFormErrors] = useState(initialFormError);
 	const [alertMessage, setAlertMessage] = useState("");
 
 	useEffect(() => {
@@ -26,6 +32,9 @@ const VAT = () => {
 	// create a new VAT
 	const updateVAT = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(newVAT));
+		if (!isFormValid(formErrors)) return;
 
 		// ask for confirmation
 		// if (!AlertPrompt()) return;
@@ -43,6 +52,19 @@ const VAT = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+		const regexDigit = /^\d+$/;
+		if (!values.VatAmount) {
+			errors.VatAmount = "VAT amount is required!";
+			// if (!regexDigit.test(values.VatAmount)) {
+			// 	errors.VatAmount = "Enter valid VAT amount!";
+			// }
+		}
+
+		return errors;
 	};
 
 	// get all vats in the database
@@ -126,7 +148,6 @@ const VAT = () => {
 									disabled
 									value={newVAT.VatName}
 									onChange={handleInputChange}
-									required
 								/>
 							</div>
 							<div className="col-sm-12 col-md">
@@ -141,8 +162,8 @@ const VAT = () => {
 									id="VatAmount"
 									value={newVAT.VatAmount}
 									onChange={handleInputChange}
-									required
 								/>
+								<p className="text-error">{formErrors.VatAmount}</p>
 							</div>
 						</div>
 						<button className="btn btn-primary simple-shadow mt-3">

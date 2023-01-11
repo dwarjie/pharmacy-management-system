@@ -57,7 +57,7 @@ exports.User = async (user) => {
 		FirstName: "Mark Darius",
 		LastName: "Pagaduan",
 		UserName: "admin",
-		Password: bcrypt.hashSync("admin", 8),
+		Password: bcrypt.hashSync("administrator", 8),
 		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
 	});
 };

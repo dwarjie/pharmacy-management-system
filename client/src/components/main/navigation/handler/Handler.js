@@ -2,20 +2,36 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import HandlerService from "../../../../services/HandlerService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 
 const Handler = (props) => {
 	const { title, mode, initialHandler } = props;
+
+	const initialFormErrors = {
+		Category: "",
+		FirstName: "",
+		LastName: "",
+		Sex: "",
+		Address: "",
+		Mobile: "",
+		Email: "",
+	};
+
 	const navigate = useNavigate();
 
 	const [handler, setHandler] = useState(initialHandler);
+	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [alertMessage, setAlertMessage] = useState("");
 
 	// set onClick function for button to trigger
 	const createHandler = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(handler));
+		if (!isFormValid(formErrors)) return;
 
 		// ask for confirmation
 		if (!AlertPrompt()) return;
@@ -33,9 +49,44 @@ const Handler = (props) => {
 			});
 	};
 
+	const validateForm = (values) => {
+		const errors = {};
+		const regexNumber = /^[0-9]{11}$/;
+		const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+		if (!values.FirstName.trim()) {
+			errors.FirstName = "First name is required!";
+		}
+		if (!values.LastName.trim()) {
+			errors.LastName = "Last name is required!";
+		}
+		if (!values.Category) {
+			errors.Category = "Please select profession!";
+		}
+		if (!values.Sex) {
+			errors.Sex = "Please select Doctor/NCM's sex!";
+		}
+		if (!values.Address.trim()) {
+			errors.Address = "Address is required!";
+		}
+		if (!values.Mobile) {
+			errors.Mobile = "Mobile # is required!";
+		} else if (!regexNumber.test(values.Mobile)) {
+			errors.Mobile = "Please enter a valid mobile number!";
+		}
+		if (!regexEmail.test(values.Email)) {
+			errors.Email = "Please enter a valid email!";
+		}
+
+		return errors;
+	};
+
 	// update handler
 	const updateHandler = (event) => {
 		event.preventDefault();
+
+		setFormErrors(validateForm(handler));
+		if (!isFormValid(formErrors)) return;
 
 		HandlerService.updateHandler(handler.id, handler)
 			.then((response) => {
@@ -89,8 +140,8 @@ const Handler = (props) => {
 								id="FirstName"
 								value={handler.FirstName}
 								onChange={handleChangeEvent}
-								required
 							/>
+							<p className="text-error">{formErrors.FirstName}</p>
 						</div>
 						{/* <div className="col-sm-12 col-md">
 							<label htmlFor="middleName">Middle Name:</label>
@@ -111,8 +162,8 @@ const Handler = (props) => {
 								id="LastName"
 								value={handler.LastName}
 								onChange={handleChangeEvent}
-								required
 							/>
+							<p className="text-error">{formErrors.LastName}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -126,12 +177,12 @@ const Handler = (props) => {
 								className="form-select form-input"
 								value={handler.Category}
 								onChange={handleChangeEvent}
-								required
 							>
 								<DropDownDefaultOption content={"Select Profession"} />
 								<option value="NCM">NCM</option>
 								<option value="Doctor">Doctor</option>
 							</select>
+							<p className="text-error">{formErrors.Category}</p>
 						</div>
 						<div className="col-sm-12 col-md">
 							<label className="required" htmlFor="Sex">
@@ -143,12 +194,12 @@ const Handler = (props) => {
 								className="form-select form-input"
 								value={handler.Sex}
 								onChange={handleChangeEvent}
-								required
 							>
 								<DropDownDefaultOption content={"Select Sex"} />
 								<option value="Male">Male</option>
 								<option value="Female">Female</option>
 							</select>
+							<p className="text-error">{formErrors.Sex}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -163,8 +214,8 @@ const Handler = (props) => {
 								id="Address"
 								value={handler.Address}
 								onChange={handleChangeEvent}
-								required
 							/>
+							<p className="text-error">{formErrors.Address}</p>
 						</div>
 					</div>
 					<div className="row mb-sm-3">
@@ -215,27 +266,28 @@ const Handler = (props) => {
 							</label>
 							<input
 								type="text"
-								pattern="[0-9]+"
-								minLength={11}
-								maxLength={11}
+								// pattern="[0-9]+"
+								// minLength={11}
+								// maxLength={11}
 								className="form-control form-input"
 								name="Mobile"
 								id="Mobile"
 								value={handler.Mobile}
 								onChange={handleChangeEvent}
-								required
 							/>
+							<p className="text-error">{formErrors.Mobile}</p>
 						</div>
 						<div className="col-sm-12 col-md-6">
 							<label htmlFor="Email">Email:</label>
 							<input
-								type="email"
+								type="text"
 								className="form-control form-input"
 								name="Email"
 								id="Email"
 								value={handler.Email}
 								onChange={handleChangeEvent}
 							/>
+							<p className="text-error">{formErrors.Email}</p>
 						</div>
 					</div>
 					<button

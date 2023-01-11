@@ -1,6 +1,7 @@
 // This module is responsible for updating the Category
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { isFormValid } from "../../../../helper/checkFormValid";
 import CategoryService from "../../../../services/CategoryService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
@@ -10,12 +11,18 @@ const UpdateCategory = () => {
 		CategoryName: "",
 		subCategory: [],
 	};
+
+	const initialFormError = {
+		CategoryName: "",
+	};
+
 	// initial state for the category
 	let location = useLocation();
 	let navigate = useNavigate();
 	let oldCategory = location.state.category;
 
 	const [newCategory, setNewCategory] = useState(initialCategory);
+	const [formErrors, setFormErrors] = useState(initialFormError);
 	const [success, setSuccess] = useState(true);
 
 	useEffect(() => {
@@ -30,6 +37,9 @@ const UpdateCategory = () => {
 	const updateCategory = (event) => {
 		event.preventDefault();
 
+		setFormErrors(validateForm(newCategory));
+		if (!isFormValid(formErrors)) return;
+
 		CategoryService.updateCategory(newCategory.id, newCategory)
 			.then((response) => {
 				console.log(response.data);
@@ -41,6 +51,16 @@ const UpdateCategory = () => {
 				setSuccess(false);
 			});
 		checkSucess();
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+
+		if (!values.CategoryName.trim()) {
+			errors.CategoryName = "Category name is required!";
+		}
+
+		return errors;
 	};
 
 	// delete the category
@@ -108,8 +128,8 @@ const UpdateCategory = () => {
 							name="CategoryName"
 							value={newCategory.CategoryName}
 							onChange={handleInputChange}
-							required
 						/>
+						<p className="text-error">{formErrors.CategoryName}</p>
 						<button
 							type="submit"
 							className="btn btn-primary simple-shadow me-3 mt-3"

@@ -17,6 +17,8 @@ const Login = () => {
 	};
 
 	const [credentials, setCredentials] = useState(initialLogin);
+	const [formErrors, setFormErrors] = useState(initialLogin);
+	const [isSubmit, setIsSubmit] = useState(false);
 	const [verified, setVerified] = useState(false);
 
 	useEffect(() => {
@@ -37,10 +39,11 @@ const Login = () => {
 		event.preventDefault();
 
 		if (!verified) return alert("Please verify reCaptcha first!");
-
 		let success = await verifyReCaptcha();
-
 		if (!success) return;
+
+		setFormErrors(validateForm(credentials));
+		if (!isValidForm()) return;
 
 		await AuthService.loginUser(credentials)
 			.then((response) => {
@@ -49,6 +52,27 @@ const Login = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+	};
+
+	const validateForm = (values) => {
+		const errors = {};
+		if (!values.UserName) {
+			errors.UserName = "Username is required!";
+		}
+		if (!values.Password) {
+			errors.Password = "Password is required!";
+		} else if (values.Password.trim().length < 8) {
+			errors.Password = "Password must be at least 8 characters!";
+		}
+
+		return errors;
+	};
+
+	const isValidForm = () => {
+		if (Object.keys(formErrors).length === 0) return true;
+
+		setVerified(false);
+		return false;
 	};
 
 	const verifyReCaptcha = async () => {
@@ -87,39 +111,40 @@ const Login = () => {
 	};
 
 	return (
-		<div className="container-fluid d-flex align-content-center justify-content-center mt-8 px-0">
+		<div className="container-fluid d-flex align-content-center justify-content-center mt-5 mt-lg-8 px-0">
 			<div className="col-12 col-lg-6">
 				<PersonCircle className="d-block mx-auto w-25 h-auto mb-5" />
 				<form
 					className="d-block mx-auto col-10 col-md-6 col-lg-8 col-xl-6"
 					onSubmit={(event) => loginUser(event)}
+					autoComplete="off"
 				>
 					<label htmlFor="username" className="form-lg-label">
 						Username:
 					</label>
 					<input
 						type="text"
-						className="form-control form-input mb-4"
+						className="form-control form-input"
 						name="UserName"
 						id="UserName"
 						placeholder="Username"
 						value={credentials.UserName}
 						onChange={handleInputChange}
-						required
 					/>
+					<p className="text-error">{formErrors.UserName}</p>
 					<label htmlFor="password" className="form-lg-label">
 						Password:
 					</label>
 					<input
 						type="password"
-						className="form-control form-input mb-4"
+						className="form-control form-input"
 						name="Password"
 						id="Password"
-						placeholder="at least 6 characters"
+						placeholder="at least 8 characters"
 						value={credentials.Password}
 						onChange={handleInputChange}
-						required
 					/>
+					<p className="text-error">{formErrors.Password}</p>
 					<ReCAPTCHA
 						className="d-block w-auto mx-auto mb-4"
 						ref={recaptchaRef}
