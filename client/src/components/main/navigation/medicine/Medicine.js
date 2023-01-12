@@ -7,6 +7,7 @@ import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import MedicineService from "../../../../services/MedicineService";
 import ModalCategory from "../../../layout/ModalCategory";
 import ModalSubCategory from "../../../layout/ModalSubCategory";
+import ModalSupplier from "../../../layout/ModalSupplier";
 
 const Medicine = (props) => {
 	// this is for the status drop down
@@ -260,6 +261,11 @@ const Medicine = (props) => {
 		getOtherModel();
 	};
 
+	const closeSupplierModal = () => {
+		setSupplierModal(false);
+		getOtherModel();
+	};
+
 	return (
 		<>
 			{categoryModal ? (
@@ -272,6 +278,11 @@ const Medicine = (props) => {
 					closeSubCategoryModal={closeSubCategoryModal}
 					currentCategory={currentCategory}
 				/>
+			) : (
+				""
+			)}
+			{supplierModal ? (
+				<ModalSupplier closeSupplierModal={closeSupplierModal} />
 			) : (
 				""
 			)}
@@ -555,6 +566,10 @@ const Medicine = (props) => {
 									className="form-select form-input"
 									value={activeDropDownValue.supplierId}
 									onChange={(event) => {
+										if (event.target.value === "new-value") {
+											return setSupplierModal(true);
+										}
+
 										let data = parseDropdownValue(event);
 										handleSelectChange(event);
 										setMedicine({ ...medicine, supplierId: data.id });
@@ -574,6 +589,7 @@ const Medicine = (props) => {
 												{item.SupplierName}
 											</option>
 										))}
+									<option value={"new-value"}>{"<...>"}</option>
 								</select>
 								<p className="text-error">{formErrors.supplierId}</p>
 							</div>
