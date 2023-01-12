@@ -4,6 +4,11 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.INTEGER,
 			allowNull: false,
 		},
+		ReceivedQty: {
+			type: Sequelize.INTEGER,
+			allowNull: true,
+			defaultValue: 0,
+		},
 		Total: {
 			type: Sequelize.FLOAT,
 			allowNull: false,

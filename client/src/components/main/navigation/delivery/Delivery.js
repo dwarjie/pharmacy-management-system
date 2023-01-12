@@ -84,11 +84,13 @@ const Delivery = () => {
 	const updateItems = async () => {
 		await orderList.map(async (item) => {
 			// update items properties
+			// item.Quantity = subtractReceivedItem(item); // subtract the received item to ordered items
+			item.ReceivedQty += item.ReceiveQuantity; // set the received item
 			checkItemStatus(item); // check if item is already delivered
-			item.Quantity = subtractReceivedItem(item); // subtract the received item to ordered items
 			console.log(item);
 			await updateItem(item);
 			await updateItemStock(item);
+			navigate("/pharmacy/inventory/delivery-list");
 		});
 	};
 
@@ -104,7 +106,7 @@ const Delivery = () => {
 
 	const updateItemStock = (item) => {
 		let data = {
-			Quantity: item.ReceivedQuantity,
+			Quantity: item.ReceivedQty,
 		};
 		MedicineService.updateMedicineStock(item.medicineId, data)
 			.then((response) => {
@@ -208,7 +210,8 @@ const Delivery = () => {
 				OnHand: item.medicine.Quantity,
 				ReorderPoint: item.medicine.ReorderPoint,
 				Quantity: item.Quantity,
-				ReceivedQuantity: item.Quantity,
+				ReceivedQty: item.ReceivedQty,
+				ReceiveQuantity: 0,
 				UnitCost: item.medicine.SupplierPrice,
 				Total: item.Total,
 				RecieveDate: item.RecieveDate,
@@ -249,7 +252,7 @@ const Delivery = () => {
 
 	// check if item status is received
 	const checkItemStatus = (item) => {
-		if (item.ReceivedQuantity === item.Quantity) {
+		if (item.ReceivedQty === item.Quantity) {
 			item.RecieveDate = getCurrentDate();
 			return (item.Status = "received");
 		}
@@ -293,6 +296,7 @@ const Delivery = () => {
 						<button
 							type="button"
 							className="btn btn-primary simple-shadow mt-2 me-3"
+							disabled={purchaseOrder.Status === "settled" ? true : false}
 							onClick={updateOrder}
 						>
 							Settle
@@ -416,7 +420,7 @@ const ProductTable = ({
 			if (index !== i) return order;
 
 			if (checkQuantity(value)) {
-				return { ...order, ReceivedQuantity: value };
+				return { ...order, ReceiveQuantity: value };
 			} else {
 				return order;
 			}
@@ -426,7 +430,6 @@ const ProductTable = ({
 
 	// check if this item quantity matches with the received quantity
 	const changeOrderStatus = (order) => {
-		if (order.ReceivedQuantity < order.Quantity) return "item-back-order";
 		if (order.Status === "received") return " item-received";
 
 		return "";
@@ -440,12 +443,13 @@ const ProductTable = ({
 					<td>{order.PCode}</td>
 					<td>{order.Item}</td>
 					<td>{order.Quantity}</td>
+					<td>{order.ReceivedQty}</td>
 					<td>
 						<input
 							type="number"
 							min={0}
 							className="form-control form-input w-xs-auto w-20 p-1"
-							value={order.ReceivedQuantity}
+							value={order.ReceiveQuantity}
 							disabled={order.Status === "received" ? true : false}
 							onChange={(event) => {
 								handleQuantityChange(event, index);
@@ -454,7 +458,12 @@ const ProductTable = ({
 							}}
 						/>
 					</td>
-					<td>{order.UnitCost}</td>
+					<td>
+						{isNaN(order.Quantity - order.ReceivedQty)
+							? 0
+							: order.Quantity - order.ReceivedQty}
+					</td>
+					<td>{parseFloat(order.UnitCost).toFixed(2)}</td>
 					{/* <td>{getProductTotal(order)}</td> */}
 					{/* <td>
 						<span className="px-1">
@@ -477,6 +486,8 @@ const ProductTable = ({
 					<th scope="col">Item</th>
 					<th scope="col">Ordered Qty</th>
 					<th scope="col">Received Qty</th>
+					<th scope="col">To Be Receive</th>
+					<th scope="col">Back Order</th>
 					<th scope="col">Unit Cost</th>
 					{/* <th scope="col">Action</th> */}
 				</tr>

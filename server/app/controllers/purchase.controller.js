@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const db = require("../models");
 const Purchase = db.purchase;
 
@@ -6,6 +7,7 @@ exports.create = (req, res) => {
 		POCode: req.body.POCode,
 		OrderDate: req.body.OrderDate,
 		ItemQty: req.body.ItemQty,
+		ReceivedQty: req.body.ReceivedQty,
 		Total: req.body.Total,
 		supplierId: req.body.supplierId,
 	};
@@ -142,7 +144,7 @@ exports.delete = (req, res) => {
 
 exports.findAllDeliver = (req, res) => {
 	Purchase.findAll({
-		where: { Status: "received", Status: "settled" },
+		where: { Status: { [Op.or]: ["settled", "received"] } },
 		include: ["supplier"],
 	})
 		.then((data) => {

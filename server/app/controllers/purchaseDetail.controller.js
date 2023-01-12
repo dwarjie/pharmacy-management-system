@@ -4,6 +4,7 @@ const PurchaseDetail = db.purchaseDetail;
 exports.create = (req, res) => {
 	const order = {
 		Quantity: req.body.Quantity,
+		ReceivedQty: req.body.ReceivedQty,
 		Total: req.body.Total,
 		ReceivedDate: req.body.ReceivedDate,
 		medicineId: req.body.medicineId,
