@@ -174,9 +174,9 @@ class ComponentToPrint extends React.Component {
 								<th scope="col">Invoice #</th>
 								<th scope="col">Order Date</th>
 								<th scope="col">Paid Date</th>
-								<th scope="col">Requested</th>
+								<th scope="col">Requested by</th>
 								<th scope="col">Patient</th>
-								<th scope="col">Prepared</th>
+								<th scope="col">Prepared by</th>
 								<th scope="col">Total</th>
 							</tr>
 						</thead>

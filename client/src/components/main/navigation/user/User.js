@@ -147,6 +147,9 @@ const User = (props) => {
 		) {
 			errors.ConfirmPassword = "Should match password!";
 		}
+		if (values.roleGroupId === null) {
+			errors.roleGroupId = "Please select user role group!";
+		}
 
 		return errors;
 	};
@@ -289,6 +292,7 @@ const User = (props) => {
 										</option>
 									))}
 							</select>
+							<p className="text-error">{formErrors.roleGroupId}</p>
 							{/* <MultiSelect
 								options={options}
 								value={selected}

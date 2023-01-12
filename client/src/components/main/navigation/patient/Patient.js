@@ -9,6 +9,7 @@ import CheckBox from "../../../layout/CheckBox";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import parseDropdownValue from "../../../../helper/parseJSON";
 import { formatDate } from "../../../../helper/dateHelper";
+import ModalHandler from "../../../layout/ModalHandler";
 
 const Patient = (props) => {
 	let navigate = useNavigate();
@@ -40,6 +41,9 @@ const Patient = (props) => {
 	const [checked, setChecked] = useState(isSenior); // for the checkbox of PWD/Senior
 	const [alertMessage, setAlertMessage] = useState("");
 	const [formErrors, setFormErrors] = useState(initialFormErrors);
+
+	// modal state
+	const [handlerModal, setHandlerModal] = useState(false);
 
 	useEffect(() => {
 		getAllHandler();
@@ -160,106 +164,113 @@ const Patient = (props) => {
 		setChecked(isSenior);
 	};
 
+	const closeModal = () => {
+		setHandlerModal(false);
+		getAllHandler();
+	};
+
 	return (
-		<div className="col-12 h-auto">
-			<div className="p-2">
-				<h4>{title}</h4>
-				<hr />
-			</div>
-			{alertMessage ? (
-				<AlertInfoLayout
-					content={alertMessage}
-					onClick={(value) => setAlertMessage(value)}
-				/>
-			) : (
-				""
-			)}
-			<div className="p-2">
-				<form
-					className="col-12 col-lg-10 pb-5 mx-auto"
-					onSubmit={(event) => {
-						mode === "update" ? updatePatient(event) : createPatient(event);
-					}}
-				>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="FirstName">
-								First Name:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="FirstName"
-								id="FirstName"
-								value={newPatient.FirstName}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.FirstName}</p>
+		<>
+			{handlerModal ? <ModalHandler closeModal={closeModal} /> : ""}
+			<div className="col-12 h-auto">
+				<div className="p-2">
+					<h4>{title}</h4>
+					<hr />
+				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
+				<div className="p-2">
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => {
+							mode === "update" ? updatePatient(event) : createPatient(event);
+						}}
+					>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="FirstName">
+									First Name:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="FirstName"
+									id="FirstName"
+									value={newPatient.FirstName}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.FirstName}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="LastName">
+									Last Name:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="LastName"
+									id="LastName"
+									value={newPatient.LastName}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.LastName}</p>
+							</div>
 						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="LastName">
-								Last Name:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="LastName"
-								id="LastName"
-								value={newPatient.LastName}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.LastName}</p>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="Sex">
+									Sex:
+								</label>
+								<select
+									className="form-select form-input"
+									name="Sex"
+									id="Sex"
+									value={newPatient.Sex}
+									onChange={handleInputChange}
+								>
+									<DropDownDefaultOption content={"Select Sex"} />
+									<option value="Male">Male</option>
+									<option value="Female">Female</option>
+								</select>
+								<p className="text-error">{formErrors.Sex}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="DateOfBirth">
+									Date of Birth:
+								</label>
+								<input
+									type="date"
+									className="form-control form-input"
+									name="DateOfBirth"
+									id="DateOfBirth"
+									value={formatDate(newPatient.DateOfBirth)}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.DateOfBirth}</p>
+							</div>
 						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="Sex">
-								Sex:
-							</label>
-							<select
-								className="form-select form-input"
-								name="Sex"
-								id="Sex"
-								value={newPatient.Sex}
-								onChange={handleInputChange}
-							>
-								<DropDownDefaultOption content={"Select Sex"} />
-								<option value="Male">Male</option>
-								<option value="Female">Female</option>
-							</select>
-							<p className="text-error">{formErrors.Sex}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="DateOfBirth">
-								Date of Birth:
-							</label>
-							<input
-								type="date"
-								className="form-control form-input"
-								name="DateOfBirth"
-								id="DateOfBirth"
-								value={formatDate(newPatient.DateOfBirth)}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.DateOfBirth}</p>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md-9">
-							<label className="required" htmlFor="Address">
-								Address:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="Address"
-								id="Address"
-								value={newPatient.Address}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.Address}</p>
-						</div>
-						{/* <div className="col-sm-12 col-md">
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md-9">
+								<label className="required" htmlFor="Address">
+									Address:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="Address"
+									id="Address"
+									value={newPatient.Address}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.Address}</p>
+							</div>
+							{/* <div className="col-sm-12 col-md">
 							<label htmlFor="city">City:</label>
 							<input
 								type="text"
@@ -270,159 +281,168 @@ const Patient = (props) => {
 								onChange={handleInputChange}
 							/>
 						</div> */}
-						<div className="col-sm-12 col-md">
-							<label htmlFor="ZIP">ZIP:</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="ZIP"
-								id="ZIP"
-								value={newPatient.ZIP}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="Mobile">
-								Mobile #:
-							</label>
-							<input
-								type="text"
-								// pattern="[0-9]+"
-								// minLength={11}
-								// maxLength={11}
-								className="form-control form-input"
-								name="Mobile"
-								id="Mobile"
-								value={newPatient.Mobile}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.Mobile}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="EmergencyContact">Emergency Contact:</label>
-							<input
-								type="text"
-								// pattern="[0-9]+"
-								// minLength={11}
-								// maxLength={11}
-								className="form-control form-input"
-								name="EmergencyContact"
-								id="EmergencyContact"
-								value={newPatient.EmergencyContact}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.EmergencyContact}</p>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="handlerId">
-								Referred By:
-							</label>
-							<select
-								name="handlerId"
-								id="handlerId"
-								className="form-select form-input"
-								value={activeDropDownValue.handlerId}
-								onChange={(event) => {
-									let data = parseDropdownValue(event);
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										handlerId: data.FirstName,
-									});
-									setNewPatient({ ...newPatient, handlerId: data.id });
-								}}
-							>
-								<DropDownDefaultOption content={"Select NCM/Doctor"} />
-								{handlers &&
-									handlers.map((handler, index) => (
-										<option
-											className="dropdown-item"
-											value={handler.FirstName}
-											data-value={JSON.stringify(handler)}
-											key={index}
-										>
-											{handler.FirstName}
-										</option>
-									))}
-							</select>
-							<p className="text-error">{formErrors.handlerId}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="FirstVisit">
-								First Visit:
-							</label>
-							<input
-								type="date"
-								className="form-control form-input"
-								name="FirstVisit"
-								id="FirstVisit"
-								value={formatDate(newPatient.FirstVisit)}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.FirstVisit}</p>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md-6">
-							<label htmlFor="Note">Medical Note:</label>
-							<textarea
-								className="form-control form-input"
-								name="Note"
-								id="Note"
-								value={newPatient.Note}
-								onChange={handleInputChange}
-							></textarea>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="Status">Status: </label>
-							<CheckBox
-								label="PWD/Senior"
-								inputName="Status"
-								value={checked}
-								onChange={handleChecked}
-							/>
 							<div className="col-sm-12 col-md">
-								<label className={checked ? "required" : ""} htmlFor="SeniorId">
-									Senior ID:
-								</label>
+								<label htmlFor="ZIP">ZIP:</label>
 								<input
 									type="text"
 									className="form-control form-input"
-									name="SeniorId"
-									id="SeniorId"
-									value={newPatient.SeniorId}
+									name="ZIP"
+									id="ZIP"
+									value={newPatient.ZIP}
 									onChange={handleInputChange}
-									disabled={!checked}
 								/>
-								<p className="text-error">
-									{newPatient.isSenior ? formErrors.SeniorId : ""}
-								</p>
 							</div>
 						</div>
-					</div>
-					<button
-						type="submit"
-						className="btn btn-primary simple-shadow mt-3 me-3"
-					>
-						{mode === "update" ? "Update" : "Save"}
-					</button>
-					{mode === "update" ? (
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="Mobile">
+									Mobile #:
+								</label>
+								<input
+									type="text"
+									// pattern="[0-9]+"
+									// minLength={11}
+									// maxLength={11}
+									className="form-control form-input"
+									name="Mobile"
+									id="Mobile"
+									value={newPatient.Mobile}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.Mobile}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label htmlFor="EmergencyContact">Emergency Contact:</label>
+								<input
+									type="text"
+									// pattern="[0-9]+"
+									// minLength={11}
+									// maxLength={11}
+									className="form-control form-input"
+									name="EmergencyContact"
+									id="EmergencyContact"
+									value={newPatient.EmergencyContact}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.EmergencyContact}</p>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="handlerId">
+									Referred By:
+								</label>
+								<select
+									name="handlerId"
+									id="handlerId"
+									className="form-select form-input"
+									value={activeDropDownValue.handlerId}
+									onChange={(event) => {
+										if (event.target.value === "new-value") {
+											return setHandlerModal(true);
+										}
+
+										let data = parseDropdownValue(event);
+										setActiveDropDownValue({
+											...activeDropDownValue,
+											handlerId: data.FirstName,
+										});
+										setNewPatient({ ...newPatient, handlerId: data.id });
+									}}
+								>
+									<DropDownDefaultOption content={"Select NCM/Doctor"} />
+									{handlers &&
+										handlers.map((handler, index) => (
+											<option
+												className="dropdown-item"
+												value={handler.FirstName}
+												data-value={JSON.stringify(handler)}
+												key={index}
+											>
+												{handler.FirstName}
+											</option>
+										))}
+									<option value={"new-value"}>{"<...>"}</option>
+								</select>
+								<p className="text-error">{formErrors.handlerId}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="FirstVisit">
+									First Visit:
+								</label>
+								<input
+									type="date"
+									className="form-control form-input"
+									name="FirstVisit"
+									id="FirstVisit"
+									value={formatDate(newPatient.FirstVisit)}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.FirstVisit}</p>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md-6">
+								<label htmlFor="Note">Medical Note:</label>
+								<textarea
+									className="form-control form-input"
+									name="Note"
+									id="Note"
+									value={newPatient.Note}
+									onChange={handleInputChange}
+								></textarea>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label htmlFor="Status">Status: </label>
+								<CheckBox
+									label="PWD/Senior"
+									inputName="Status"
+									value={checked}
+									onChange={handleChecked}
+								/>
+								<div className="col-sm-12 col-md">
+									<label
+										className={checked ? "required" : ""}
+										htmlFor="SeniorId"
+									>
+										Senior ID:
+									</label>
+									<input
+										type="text"
+										className="form-control form-input"
+										name="SeniorId"
+										id="SeniorId"
+										value={newPatient.SeniorId}
+										onChange={handleInputChange}
+										disabled={!checked}
+									/>
+									<p className="text-error">
+										{newPatient.isSenior ? formErrors.SeniorId : ""}
+									</p>
+								</div>
+							</div>
+						</div>
 						<button
-							type="button"
-							className="btn btn-secondary simple-shadow me-3 mt-3"
-							onClick={() => navigate(-1)}
+							type="submit"
+							className="btn btn-primary simple-shadow mt-3 me-3"
 						>
-							Back
+							{mode === "update" ? "Update" : "Save"}
 						</button>
-					) : (
-						""
-					)}
-				</form>
+						{mode === "update" ? (
+							<button
+								type="button"
+								className="btn btn-secondary simple-shadow me-3 mt-3"
+								onClick={() => navigate(-1)}
+							>
+								Back
+							</button>
+						) : (
+							""
+						)}
+					</form>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

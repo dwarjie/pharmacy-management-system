@@ -124,7 +124,7 @@ const PatientTable = (props) => {
 						<th scope="col">Sex</th>
 						<th scope="col">Address</th>
 						<th scope="col">Contact #</th>
-						<th scope="col">Reffered by</th>
+						<th scope="col">Referred by</th>
 						<th scope="col">Actions</th>
 					</tr>
 				</thead>

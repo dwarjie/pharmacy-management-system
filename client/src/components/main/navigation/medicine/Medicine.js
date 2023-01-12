@@ -326,6 +326,10 @@ const Medicine = (props) => {
 								value={activeDropDownValue.category}
 								// set the sub category
 								onChange={(event) => {
+									if (event.target.value === "new-value") {
+										return console.log("modal");
+									}
+
 									let data = parseDropdownValue(event);
 									resetSubCategory();
 									setActiveCategory(data);
@@ -351,6 +355,7 @@ const Medicine = (props) => {
 											{item.CategoryName}
 										</option>
 									))}
+								<option value={"new-value"}>{"<...>"}</option>
 							</select>
 						</div>
 						<div className="col-sm-12 col-md">

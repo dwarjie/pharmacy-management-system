@@ -56,7 +56,7 @@ const MedicineList = () => {
 	return (
 		<div className="col-12 h-auto">
 			<div className="p-2">
-				<h4>Medicine List</h4>
+				<h4>Product List</h4>
 				<hr />
 			</div>
 			{alertMessage ? (
