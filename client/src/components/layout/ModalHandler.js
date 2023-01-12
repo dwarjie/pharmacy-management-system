@@ -18,10 +18,7 @@ const ModalHandler = (props) => {
 	return (
 		<div className="modal-overlay">
 			<div className="modal-content simple-shadow rounded">
-				<span
-					className="close text-right m-0"
-					onClick={() => closeModal(false)}
-				>
+				<span className="close text-right m-0" onClick={() => closeModal()}>
 					&times;
 				</span>
 				<Handler title="Add NCM/Doctor" initialHandler={initialHandler} />

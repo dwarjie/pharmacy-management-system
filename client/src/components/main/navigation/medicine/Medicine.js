@@ -5,6 +5,8 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import MedicineService from "../../../../services/MedicineService";
+import ModalCategory from "../../../layout/ModalCategory";
+import ModalSubCategory from "../../../layout/ModalSubCategory";
 
 const Medicine = (props) => {
 	// this is for the status drop down
@@ -33,6 +35,13 @@ const Medicine = (props) => {
 	const [subCategory, setSubCategory] = useState(props.subCategory);
 	const [alertMessage, setAlertMessage] = useState("");
 	const [formErrors, setFormErrors] = useState(initialFormErrors);
+
+	// for modal
+	const [categoryModal, setCategoryModal] = useState(false);
+	const [subCategoryModal, setSubCategoryModal] = useState(false);
+	const [unitModal, setUnitModal] = useState(false);
+	const [supplierModal, setSupplierModal] = useState(false);
+	const [currentCategory, setCurrentCategory] = useState({});
 
 	useEffect(() => {
 		setMedicine(props.initialMedicine);
@@ -237,346 +246,388 @@ const Medicine = (props) => {
 		);
 	};
 
+	const closeCategoryModal = () => {
+		setCategoryModal(false);
+		getOtherModel();
+	};
+
+	const closeSubCategoryModal = () => {
+		setSubCategoryModal(false);
+		setActiveDropDownValue((prevValue) => ({
+			...prevValue,
+			category: "",
+		}));
+		getOtherModel();
+	};
+
 	return (
-		<div className="col-12 h-auto">
-			<div className="p-2">
-				<h4>{props.title}</h4>
-				<hr />
-			</div>
-			{alertMessage ? (
-				<AlertInfoLayout
-					content={alertMessage}
-					onClick={(value) => setAlertMessage(value)}
+		<>
+			{categoryModal ? (
+				<ModalCategory closeCategoryModal={closeCategoryModal} />
+			) : (
+				""
+			)}
+			{subCategoryModal ? (
+				<ModalSubCategory
+					closeSubCategoryModal={closeSubCategoryModal}
+					currentCategory={currentCategory}
 				/>
 			) : (
 				""
 			)}
-			<div className="p-2">
-				<form
-					className="col-12 col-lg-10 pb-5 mx-auto"
-					onSubmit={(event) => {
-						props.mode === "update"
-							? updateMedicine(event)
-							: createProduct(event);
-					}}
-				>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="ProductCode">
-								Product Code:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="ProductCode"
-								id="ProductCode"
-								value={medicine.ProductCode}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.ProductCode}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="GenericName">Generic Name:</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="GenericName"
-								id="GenericName"
-								value={medicine.GenericName}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="ProductName">
-								Product Name:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="ProductName"
-								id="ProductName"
-								value={medicine.ProductName}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.ProductName}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label htmlFor="ProductDetails">Product Details:</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="ProductDetails"
-								id="ProductDetails"
-								value={medicine.ProductDetails}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="category">
-								Category:
-							</label>
-							<select
-								name="category"
-								id="category"
-								className="form-select form-input"
-								value={activeDropDownValue.category}
-								// set the sub category
-								onChange={(event) => {
-									if (event.target.value === "new-value") {
-										return console.log("modal");
-									}
-
-									let data = parseDropdownValue(event);
-									resetSubCategory();
-									setActiveCategory(data);
-								}}
-							>
-								{/* check if props category has value
-									if yes, don'i show the default value */}
-								{props.initialDropDownValue.category === "" ? (
-									<option disabled={true} hidden value="">
-										Select category
-									</option>
-								) : (
-									""
-								)}
-								{extraModel.category &&
-									extraModel.category.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={item.CategoryName}
-											data-value={JSON.stringify(item)}
-										>
-											{item.CategoryName}
-										</option>
-									))}
-								<option value={"new-value"}>{"<...>"}</option>
-							</select>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="unitId">
-								Unit of Measure:
-							</label>
-							<select
-								name="unitId"
-								id="unitId"
-								className="form-select form-input"
-								value={activeDropDownValue.unitId}
-								onChange={(event) => {
-									let data = parseDropdownValue(event);
-									handleSelectChange(event);
-									setMedicine({ ...medicine, unitId: data.id });
-								}}
-							>
-								<option disabled hidden value="">
-									Select Unit
-								</option>
-								{extraModel.unit &&
-									extraModel.unit.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={item.UnitName}
-											data-value={JSON.stringify(item)}
-										>
-											{item.UnitName}
-										</option>
-									))}
-							</select>
-							<p className="text-error">{formErrors.unitId}</p>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="subCategoryId">
-								Sub Category:
-							</label>
-							<select
-								name="subCategoryId"
-								id="subCategoryId"
-								className="form-select form-input"
-								value={activeDropDownValue.subCategoryId}
-								onChange={(event) => {
-									// handle the value for subCategoryId name
-									// and also add the subcategory items
-									let data = parseDropdownValue(event);
-									setActiveDropDownValue({
-										...activeDropDownValue,
-										subCategoryId: event.target.value,
-										subCategoryItem: data,
-									});
-									setMedicine({ ...medicine, subCategoryId: data.id });
-								}}
-							>
-								{/* check if props subCategory has value
-									if yes, don't show the default value */}
-								{props.subCategory === "" ||
-								activeDropDownValue.subCategoryId === "" ? (
-									<option disabled={true} hidden value="">
-										Select Sub category
-									</option>
-								) : (
-									""
-								)}
-								{subCategory &&
-									subCategory.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={item.SubCategoryName}
-											data-value={JSON.stringify(item)}
-										>
-											{item.SubCategoryName}
-										</option>
-									))}
-							</select>
-							<p className="text-error">{formErrors.subCategoryId}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="SellingPrice">
-								Selling Price:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="SellingPrice"
-								id="SellingPrice"
-								value={medicine.SellingPrice}
-								onChange={handleInputChange}
-								disabled
-							/>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="SupplierPrice">
-								Unit Price:
-							</label>
-							<input
-								type="number"
-								className="form-control form-input"
-								name="SupplierPrice"
-								id="SupplierPrice"
-								value={medicine.SupplierPrice}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.SupplierPrice}</p>
-						</div>
-						<div className="col-sm-12 col-md-6">
-							<label className="required" htmlFor="status">
-								Status:
-							</label>
-							<select
-								className="form-select form-input"
-								name="status"
-								id="status"
-								value={status}
-								onChange={(event) => {
-									let data = event.target.value;
-									setStatus(data);
-									setMedicine({
-										...medicine,
-										Status: data === "Active" ? 1 : 0,
-									});
-								}}
-							>
-								{statusList &&
-									statusList.map((item, index) => (
-										<option className="dropdown-item" key={index} value={item}>
-											{item}
-										</option>
-									))}
-							</select>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="supplierId">
-								Supplier:
-							</label>
-							<select
-								name="supplierId"
-								id="supplierId"
-								className="form-select form-input"
-								value={activeDropDownValue.supplierId}
-								onChange={(event) => {
-									let data = parseDropdownValue(event);
-									handleSelectChange(event);
-									setMedicine({ ...medicine, supplierId: data.id });
-								}}
-							>
-								<option disabled hidden value="">
-									Select supplier
-								</option>
-								{extraModel.supplier &&
-									extraModel.supplier.map((item, index) => (
-										<option
-											className="dropdown-item"
-											key={index}
-											value={item.SupplierName}
-											data-value={JSON.stringify(item)}
-										>
-											{item.SupplierName}
-										</option>
-									))}
-							</select>
-							<p className="text-error">{formErrors.supplierId}</p>
-						</div>
-						<div className="col-sm-12 col-md-3">
-							<label htmlFor="ReorderPoint" className="required">
-								Reorder Point:
-							</label>
-							<input
-								type="number"
-								className="form-control form-input"
-								name="ReorderPoint"
-								id="ReorderPoint"
-								value={medicine.ReorderPoint}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.ReorderPoint}</p>
-						</div>
-						<div className="col-sm-12 col-md-3">
-							<label htmlFor="SafetyStock" className="required">
-								Safety Stock:
-							</label>
-							<input
-								type="number"
-								max={medicine.ReorderPoint}
-								className="form-control form-input"
-								name="SafetyStock"
-								id="SafetyStock"
-								value={medicine.SafetyStock}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.SafetyStock}</p>
-						</div>
-					</div>
-					<button
-						type="submit"
-						className="btn btn-primary simple-shadow me-3 mt-3"
+			<div className="col-12 h-auto">
+				<div className="p-2">
+					<h4>{props.title}</h4>
+					<hr />
+				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
+				<div className="p-2">
+					<form
+						className="col-12 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => {
+							props.mode === "update"
+								? updateMedicine(event)
+								: createProduct(event);
+						}}
 					>
-						{props.mode === "update" ? "Update" : "Save"}
-					</button>
-					{props.mode === "update" ? (
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="ProductCode">
+									Product Code:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="ProductCode"
+									id="ProductCode"
+									value={medicine.ProductCode}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.ProductCode}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label htmlFor="GenericName">Generic Name:</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="GenericName"
+									id="GenericName"
+									value={medicine.GenericName}
+									onChange={handleInputChange}
+								/>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="ProductName">
+									Product Name:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="ProductName"
+									id="ProductName"
+									value={medicine.ProductName}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.ProductName}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label htmlFor="ProductDetails">Product Details:</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="ProductDetails"
+									id="ProductDetails"
+									value={medicine.ProductDetails}
+									onChange={handleInputChange}
+								/>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="category">
+									Category:
+								</label>
+								<select
+									name="category"
+									id="category"
+									className="form-select form-input"
+									value={activeDropDownValue.category}
+									// set the sub category
+									onChange={(event) => {
+										if (event.target.value === "new-value") {
+											return setCategoryModal(true);
+										}
+
+										let data = parseDropdownValue(event);
+										resetSubCategory();
+										setActiveCategory(data);
+										setCurrentCategory(data);
+									}}
+								>
+									{/* check if props category has value
+									if yes, don'i show the default value */}
+									{props.initialDropDownValue.category === "" ? (
+										<option disabled={true} hidden value="">
+											Select category
+										</option>
+									) : (
+										""
+									)}
+									{extraModel.category &&
+										extraModel.category.map((item, index) => (
+											<option
+												className="dropdown-item"
+												key={index}
+												value={item.CategoryName}
+												data-value={JSON.stringify(item)}
+											>
+												{item.CategoryName}
+											</option>
+										))}
+									<option value={"new-value"}>{"<...>"}</option>
+								</select>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="unitId">
+									Unit of Measure:
+								</label>
+								<select
+									name="unitId"
+									id="unitId"
+									className="form-select form-input"
+									value={activeDropDownValue.unitId}
+									onChange={(event) => {
+										let data = parseDropdownValue(event);
+										handleSelectChange(event);
+										setMedicine({ ...medicine, unitId: data.id });
+									}}
+								>
+									<option disabled hidden value="">
+										Select Unit
+									</option>
+									{extraModel.unit &&
+										extraModel.unit.map((item, index) => (
+											<option
+												className="dropdown-item"
+												key={index}
+												value={item.UnitName}
+												data-value={JSON.stringify(item)}
+											>
+												{item.UnitName}
+											</option>
+										))}
+								</select>
+								<p className="text-error">{formErrors.unitId}</p>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="subCategoryId">
+									Sub Category:
+								</label>
+								<select
+									name="subCategoryId"
+									id="subCategoryId"
+									className="form-select form-input"
+									value={activeDropDownValue.subCategoryId}
+									onChange={(event) => {
+										if (event.target.value === "new-value") {
+											return setSubCategoryModal(true);
+										}
+										// handle the value for subCategoryId name
+										// and also add the subcategory items
+										let data = parseDropdownValue(event);
+										setActiveDropDownValue({
+											...activeDropDownValue,
+											subCategoryId: event.target.value,
+											subCategoryItem: data,
+										});
+										setMedicine({ ...medicine, subCategoryId: data.id });
+									}}
+								>
+									{/* check if props subCategory has value
+									if yes, don't show the default value */}
+									{props.subCategory === "" ||
+									activeDropDownValue.subCategoryId === "" ? (
+										<option disabled={true} hidden value="">
+											Select Sub category
+										</option>
+									) : (
+										""
+									)}
+									{subCategory &&
+										subCategory.map((item, index) => (
+											<option
+												className="dropdown-item"
+												key={index}
+												value={item.SubCategoryName}
+												data-value={JSON.stringify(item)}
+											>
+												{item.SubCategoryName}
+											</option>
+										))}
+									{activeDropDownValue.category ? (
+										<option value={"new-value"}>{"<...>"}</option>
+									) : (
+										""
+									)}
+								</select>
+								<p className="text-error">{formErrors.subCategoryId}</p>
+							</div>
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="SellingPrice">
+									Selling Price:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="SellingPrice"
+									id="SellingPrice"
+									value={medicine.SellingPrice}
+									onChange={handleInputChange}
+									disabled
+								/>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="SupplierPrice">
+									Unit Price:
+								</label>
+								<input
+									type="number"
+									className="form-control form-input"
+									name="SupplierPrice"
+									id="SupplierPrice"
+									value={medicine.SupplierPrice}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.SupplierPrice}</p>
+							</div>
+							<div className="col-sm-12 col-md-6">
+								<label className="required" htmlFor="status">
+									Status:
+								</label>
+								<select
+									className="form-select form-input"
+									name="status"
+									id="status"
+									value={status}
+									onChange={(event) => {
+										let data = event.target.value;
+										setStatus(data);
+										setMedicine({
+											...medicine,
+											Status: data === "Active" ? 1 : 0,
+										});
+									}}
+								>
+									{statusList &&
+										statusList.map((item, index) => (
+											<option
+												className="dropdown-item"
+												key={index}
+												value={item}
+											>
+												{item}
+											</option>
+										))}
+								</select>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="supplierId">
+									Supplier:
+								</label>
+								<select
+									name="supplierId"
+									id="supplierId"
+									className="form-select form-input"
+									value={activeDropDownValue.supplierId}
+									onChange={(event) => {
+										let data = parseDropdownValue(event);
+										handleSelectChange(event);
+										setMedicine({ ...medicine, supplierId: data.id });
+									}}
+								>
+									<option disabled hidden value="">
+										Select supplier
+									</option>
+									{extraModel.supplier &&
+										extraModel.supplier.map((item, index) => (
+											<option
+												className="dropdown-item"
+												key={index}
+												value={item.SupplierName}
+												data-value={JSON.stringify(item)}
+											>
+												{item.SupplierName}
+											</option>
+										))}
+								</select>
+								<p className="text-error">{formErrors.supplierId}</p>
+							</div>
+							<div className="col-sm-12 col-md-3">
+								<label htmlFor="ReorderPoint" className="required">
+									Reorder Point:
+								</label>
+								<input
+									type="number"
+									className="form-control form-input"
+									name="ReorderPoint"
+									id="ReorderPoint"
+									value={medicine.ReorderPoint}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.ReorderPoint}</p>
+							</div>
+							<div className="col-sm-12 col-md-3">
+								<label htmlFor="SafetyStock" className="required">
+									Safety Stock:
+								</label>
+								<input
+									type="number"
+									max={medicine.ReorderPoint}
+									className="form-control form-input"
+									name="SafetyStock"
+									id="SafetyStock"
+									value={medicine.SafetyStock}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.SafetyStock}</p>
+							</div>
+						</div>
 						<button
-							type="button"
-							className="btn btn-secondary simple-shadow me-3 mt-3"
-							onClick={() => navigate(-1)}
+							type="submit"
+							className="btn btn-primary simple-shadow me-3 mt-3"
 						>
-							Back
+							{props.mode === "update" ? "Update" : "Save"}
 						</button>
-					) : (
-						""
-					)}
-				</form>
+						{props.mode === "update" ? (
+							<button
+								type="button"
+								className="btn btn-secondary simple-shadow me-3 mt-3"
+								onClick={() => navigate(-1)}
+							>
+								Back
+							</button>
+						) : (
+							""
+						)}
+					</form>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
