@@ -20,6 +20,7 @@ const SideNavigation = () => {
 		sales: "sales",
 		reports: "reports",
 		utilities: "utilities",
+		request: "request-form",
 	};
 
 	const contextValue = {
@@ -29,8 +30,8 @@ const SideNavigation = () => {
 	// check if user has the role in order to use the module
 	const checkRoles = (role) => {
 		if (
-			currentUser.roles.includes(role) ||
-			currentUser.roles.includes(ROLES.admin)
+			currentUser.roleGroup.Role.includes(role) ||
+			currentUser.roleGroup.Role.includes(ROLES.admin)
 		) {
 			return true;
 		}

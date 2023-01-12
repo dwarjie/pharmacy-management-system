@@ -5,12 +5,15 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { isFormValid } from "../../../../helper/checkFormValid";
 import AuthService from "../../../../services/AuthService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
+import RoleGroupService from "../../../../services/RoleGroupService";
+import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import { useNavigate, useParams } from "react-router-dom";
+import parseDropdownValue from "../../../../helper/parseJSON";
 
 const User = (props) => {
 	let navigate = useNavigate();
 	const { id } = useParams();
-	const { title, mode, initialUser, initialSelected } = props;
+	const { title, mode, initialUser, initialActiveDropdownValue } = props;
 
 	const initialFormErrors = {
 		FirstName: "",
@@ -21,14 +24,17 @@ const User = (props) => {
 	};
 
 	const [user, setUser] = useState(initialUser);
+	const [roleList, setRoleList] = useState([]);
 	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [alertMessage, setAlertMessage] = useState("");
-	const [selected, setSelected] = useState(initialSelected);
+	const [selected, setSelected] = useState([]);
+	const [activeDropdownValue, setActiveDropdownValue] = useState(
+		initialActiveDropdownValue
+	);
 
 	useEffect(() => {
-		setSelected(initialSelected);
-		console.log(initialSelected);
-	}, [initialSelected]);
+		getAllRoleGroup();
+	}, []);
 
 	useEffect(() => {
 		let userRoles = selected.map((role) => {
@@ -36,6 +42,17 @@ const User = (props) => {
 		});
 		setUser((prevState) => ({ ...prevState, Role: userRoles }));
 	}, [selected]);
+
+	const getAllRoleGroup = async () => {
+		await RoleGroupService.getAllRoleGroup()
+			.then((response) => {
+				console.log(response.data);
+				setRoleList(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const options = [
 		{ label: "Maintenance", value: "maintenance" },
@@ -51,7 +68,7 @@ const User = (props) => {
 	};
 
 	const checkRoles = () => {
-		if (user.Role.length === 0) return false;
+		if (user.roleGroupId === null) return false;
 
 		return true;
 	};
@@ -214,7 +231,7 @@ const User = (props) => {
 									Password:
 								</label>
 								<input
-									type="text"
+									type="password"
 									className="form-control form-input"
 									name="Password"
 									value={user.Password}
@@ -243,12 +260,41 @@ const User = (props) => {
 							<label className="required" htmlFor="role">
 								Role:
 							</label>
-							<MultiSelect
+							<select
+								name="roleId"
+								className="form-select form-input"
+								value={activeDropdownValue.role}
+								onChange={(event) => {
+									let data = parseDropdownValue(event);
+									setActiveDropdownValue((prevState) => ({
+										...prevState,
+										role: data.RoleName,
+									}));
+									setUser((prevState) => ({
+										...prevState,
+										roleGroupId: data.id,
+									}));
+								}}
+							>
+								<DropDownDefaultOption content={"Select Role Group"} />
+								{roleList &&
+									roleList.map((role, index) => (
+										<option
+											className="dropdown-item"
+											value={role.RoleName}
+											data-value={JSON.stringify(role)}
+											key={index}
+										>
+											{role.RoleName}
+										</option>
+									))}
+							</select>
+							{/* <MultiSelect
 								options={options}
 								value={selected}
 								onChange={setSelected}
 								labelledBy="Select Role/s"
-							/>
+							/> */}
 						</div>
 						<div className="col-sm-12 col-md">
 							<label

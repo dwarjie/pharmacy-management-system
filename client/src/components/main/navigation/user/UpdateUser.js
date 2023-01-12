@@ -20,6 +20,11 @@ const UpdateUser = () => {
 		UserName: oldUser.UserName,
 		Password: "",
 		Role: [],
+		roleGroupId: oldUser.roleGroup.id,
+	};
+
+	const initialActiveDropdownValue = {
+		role: oldUser.roleGroup.RoleName,
 	};
 
 	const getUser = (id) => {
@@ -49,7 +54,8 @@ const UpdateUser = () => {
 			title="Update User"
 			mode="update"
 			initialUser={initialUser}
-			initialSelected={initialSelected()}
+			initialActiveDropdownValue={initialActiveDropdownValue}
+			// initialSelected={initialSelected()}
 		/>
 	);
 };

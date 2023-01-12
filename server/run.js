@@ -52,6 +52,14 @@ exports.Role = async (role) => {
 	});
 };
 
+exports.RoleGroup = async (roleGroup) => {
+	roleGroup.create({
+		id: 1,
+		RoleName: "admin",
+		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
+	});
+};
+
 exports.User = async (user) => {
 	user.create({
 		FirstName: "Mark Darius",
@@ -59,6 +67,7 @@ exports.User = async (user) => {
 		UserName: "admin",
 		Password: bcrypt.hashSync("administrator", 8),
 		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
+		roleGroupId: 1,
 	});
 };
 

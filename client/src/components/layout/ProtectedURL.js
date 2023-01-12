@@ -7,9 +7,9 @@ const ProtectedURL = ({ role }) => {
 
 	const checkRole = () => {
 		// console.log(user);
-		if (user[0].roles.length === 0) return false;
+		if (user[0].roleGroup.Role.length === 0) return false;
 
-		if (user[0].roles.includes(role)) {
+		if (user[0].roleGroup.Role.includes(role)) {
 			return true;
 		} else {
 			return false;

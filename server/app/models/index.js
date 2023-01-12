@@ -229,6 +229,14 @@ db.auditTrail.belongsTo(db.user, {
 	},
 });
 
+db.role.hasMany(db.user);
+db.user.belongsTo(db.role, {
+	as: "roleGroup",
+	foreignKey: {
+		allowNull: false,
+	},
+});
+
 // // add relationship for users and roles for authorization
 // db.role.belongsToMany(db.user, {
 // 	through: "user_roles",

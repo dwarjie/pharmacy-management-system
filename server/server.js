@@ -35,6 +35,7 @@ db.sequelize
 // db.sequelize.sync({ force: true }).then(() => {
 // 	console.log("Drop and re-sync database");
 // 	initialize.Run(db.or);
+// 	initialize.RoleGroup(db.role);
 // 	initialize.User(db.user);
 // 	initialize.VAT(db.vat);
 // 	initialize.Discount(db.discount);

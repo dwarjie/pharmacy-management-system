@@ -11,10 +11,20 @@ const AddUser = () => {
 		Password: "",
 		ConfirmPassword: "",
 		Role: [],
+		roleGroupId: null,
+	};
+
+	const initialActiveDropdownValue = {
+		role: "",
 	};
 
 	return (
-		<User title="Add User" initialUser={initialUser} initialSelected={[]} />
+		<User
+			title="Add User"
+			initialUser={initialUser}
+			initialSelected={[]}
+			initialActiveDropdownValue={initialActiveDropdownValue}
+		/>
 	);
 };
 

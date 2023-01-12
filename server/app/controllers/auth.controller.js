@@ -10,6 +10,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
+const RoleGroup = db.role;
 
 const Op = db.Sequelize.Op;
 const jwt = require("jsonwebtoken");
@@ -55,6 +56,7 @@ exports.signup = (req, res) => {
 		UserName: req.body.UserName,
 		Password: bcrypt.hashSync(req.body.Password, 8),
 		Role: req.body.Role,
+		roleGroupId: req.body.roleGroupId,
 	})
 		.then((data) => {
 			res.send({
@@ -100,16 +102,21 @@ exports.signin = (req, res) => {
 				expiresIn: 86400, // 24 hrs
 			});
 
-			let roles = user.getDataValue("Role").split(";");
-			res.send({
-				id: user.id,
-				FirstName: user.FirstName,
-				LastName: user.LastName,
-				UserName: user.UserName,
-				roles: roles,
-				accessToken: token,
-			});
-
+			console.log(user);
+			if (user.roleGroupId) {
+				RoleGroup.findByPk(user.roleGroupId).then((data) => {
+					let roles = user.getDataValue("Role").split(";");
+					res.send({
+						id: user.id,
+						FirstName: user.FirstName,
+						LastName: user.LastName,
+						UserName: user.UserName,
+						roles: roles,
+						roleGroup: data,
+						accessToken: token,
+					});
+				});
+			}
 			// let authorities = [];
 			// user.getRoles().then((roles) => {
 			// 	for (let i = 0; i < roles.length; i++) {
@@ -134,7 +141,7 @@ exports.signin = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-	User.findAll()
+	User.findAll({ include: ["roleGroup"] })
 		.then((data) => {
 			res.send(data);
 		})
@@ -185,6 +192,7 @@ exports.update = (req, res) => {
 		LastName: req.body.LastName,
 		UserName: req.body.UserName,
 		Role: req.body.Role,
+		roleGroupId: req.body.roleGroupId,
 	};
 
 	User.update(data, { where: { id: id } })
