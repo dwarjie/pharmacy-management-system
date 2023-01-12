@@ -8,6 +8,7 @@ import MedicineService from "../../../../services/MedicineService";
 import ModalCategory from "../../../layout/ModalCategory";
 import ModalSubCategory from "../../../layout/ModalSubCategory";
 import ModalSupplier from "../../../layout/ModalSupplier";
+import ModalUnit from "../../../layout/ModalUnit";
 
 const Medicine = (props) => {
 	// this is for the status drop down
@@ -266,6 +267,11 @@ const Medicine = (props) => {
 		getOtherModel();
 	};
 
+	const closeUnitModal = () => {
+		setUnitModal(false);
+		getOtherModel();
+	};
+
 	return (
 		<>
 			{categoryModal ? (
@@ -286,6 +292,7 @@ const Medicine = (props) => {
 			) : (
 				""
 			)}
+			{unitModal ? <ModalUnit closeUnitModal={closeUnitModal} /> : ""}
 			<div className="col-12 h-auto">
 				<div className="p-2">
 					<h4>{props.title}</h4>
@@ -417,6 +424,10 @@ const Medicine = (props) => {
 									className="form-select form-input"
 									value={activeDropDownValue.unitId}
 									onChange={(event) => {
+										if (event.target.value === "new-value") {
+											return setUnitModal(true);
+										}
+
 										let data = parseDropdownValue(event);
 										handleSelectChange(event);
 										setMedicine({ ...medicine, unitId: data.id });
@@ -436,6 +447,7 @@ const Medicine = (props) => {
 												{item.UnitName}
 											</option>
 										))}
+									<option value={"new-value"}>{"<...>"}</option>
 								</select>
 								<p className="text-error">{formErrors.unitId}</p>
 							</div>
