@@ -106,7 +106,10 @@ const Patient = (props) => {
 		} else if (!regex.test(values.Mobile.trim())) {
 			errors.Mobile = "Please enter a valid mobile number!";
 		}
-		if (!regex.test(values.EmergencyContact.trim())) {
+		if (
+			values.EmergencyContact.trim() &&
+			!regex.test(values.EmergencyContact.trim())
+		) {
 			errors.EmergencyContact = "Please enter a valid emergency number!";
 		}
 		if (!values.handlerId || values.handlerId === null) {
@@ -164,14 +167,18 @@ const Patient = (props) => {
 		setChecked(isSenior);
 	};
 
-	const closeModal = () => {
+	const closeHandlerModal = () => {
 		setHandlerModal(false);
 		getAllHandler();
 	};
 
 	return (
 		<>
-			{handlerModal ? <ModalHandler closeModal={closeModal} /> : ""}
+			{handlerModal ? (
+				<ModalHandler closeHandlerModal={closeHandlerModal} />
+			) : (
+				""
+			)}
 			<div className="col-12 h-auto">
 				<div className="p-2">
 					<h4>{title}</h4>

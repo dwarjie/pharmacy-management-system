@@ -287,7 +287,7 @@ const ProductTable = ({ productList, setSelectedProduct }) => {
 						});
 					}}
 				>
-					<td>{index}</td>
+					<td>{index + 1}</td>
 					<td>{product.ProductCode}</td>
 					<td>{product.ProductName}</td>
 					<td>{product.Quantity}</td>

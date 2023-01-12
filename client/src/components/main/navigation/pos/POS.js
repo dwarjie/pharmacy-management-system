@@ -21,6 +21,7 @@ import parseDropdownValue from "../../../../helper/parseJSON";
 import SalesDetailService from "../../../../services/SalesDetailService";
 import Loader from "../../../layout/Loader";
 import { useGlobalState } from "../../../../state";
+import ModalDiscount from "../../../layout/ModalDiscount";
 
 const POS = (props) => {
 	let [currentUser] = useGlobalState("currentUser");
@@ -61,6 +62,9 @@ const POS = (props) => {
 	const [currentTime, setCurrentTime] = useState(null);
 	const [specialDiscount, setSpecialDiscount] = useState(false);
 	const [loading, setLoading] = useState(true);
+
+	// for modal
+	const [discountModal, setDiscountModal] = useState(false);
 
 	// compute the Grand Total amount
 	useEffect(() => {
@@ -362,6 +366,11 @@ const POS = (props) => {
 		setChangeAmount(0);
 	};
 
+	const closeModal = () => {
+		setDiscountModal(false);
+		getAllDiscount();
+	};
+
 	return (
 		<>
 			{loading ? (
@@ -369,61 +378,65 @@ const POS = (props) => {
 					<Loader />
 				</div>
 			) : (
-				<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
-					<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
-						<div className="h-50 border border-dark rounded simple-shadow">
-							<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
-								<SearchProductCode
-									findByCode={findByCode}
-									searchCode={searchCode}
-									setSearchCode={setSearchCode}
-								/>
-								<div className="col-8">
-									<SearchProduct
-										findByTitle={findByTitle}
-										setProducts={setProducts}
+				<>
+					{discountModal ? <ModalDiscount closeModal={closeModal} /> : ""}
+					<div className="min-height-85 d-flex flex-row justify-content-between gap-1">
+						<div className="d-flex flex-column justify-content-between gap-1 col h-auto">
+							<div className="h-50 border border-dark rounded simple-shadow">
+								<form className="p-2 col-12 d-flex flex-row justify-content-between gap-1">
+									<SearchProductCode
+										findByCode={findByCode}
+										searchCode={searchCode}
+										setSearchCode={setSearchCode}
+									/>
+									<div className="col-8">
+										<SearchProduct
+											findByTitle={findByTitle}
+											setProducts={setProducts}
+										/>
+									</div>
+								</form>
+								<div className="table-responsive max-height-85">
+									<ProductTable
+										products={products}
+										orderList={orderList}
+										setOrderList={setOrderList}
+										addProduct={addProduct}
 									/>
 								</div>
-							</form>
-							<div className="table-responsive max-height-85">
-								<ProductTable
-									products={products}
-									orderList={orderList}
-									setOrderList={setOrderList}
-									addProduct={addProduct}
-								/>
+							</div>
+							<div className="h-50 border border-dark rounded simple-shadow">
+								<div className="table-responsive max-height-100">
+									<OrderTable
+										orderList={orderList}
+										setSaleInformation={setSaleInformation}
+										deleteOrder={deleteOrder}
+									/>
+								</div>
 							</div>
 						</div>
-						<div className="h-50 border border-dark rounded simple-shadow">
-							<div className="table-responsive max-height-100">
-								<OrderTable
-									orderList={orderList}
-									setSaleInformation={setSaleInformation}
-									deleteOrder={deleteOrder}
-								/>
-							</div>
+						<div className="col-4 h-auto border border-dark rounded simple-shadow">
+							<OrderInformation
+								currentTime={currentTime}
+								sale={sale}
+								changeAmount={changeAmount}
+								setChangeAmount={setChangeAmount}
+								orderList={orderList}
+								cashTendered={cashTendered}
+								activeDropDownValue={activeDropDownValue}
+								discountList={discountList}
+								vatList={vatList}
+								setSale={setSale}
+								setCashTendered={setCashTendered}
+								setActiveDropDownValue={setActiveDropDownValue}
+								setSpecialDiscount={setSpecialDiscount}
+								checkOut={checkOut}
+								refreshPage={refreshPage}
+								setDiscountModal={setDiscountModal}
+							/>
 						</div>
 					</div>
-					<div className="col-4 h-auto border border-dark rounded simple-shadow">
-						<OrderInformation
-							currentTime={currentTime}
-							sale={sale}
-							changeAmount={changeAmount}
-							setChangeAmount={setChangeAmount}
-							orderList={orderList}
-							cashTendered={cashTendered}
-							activeDropDownValue={activeDropDownValue}
-							discountList={discountList}
-							vatList={vatList}
-							setSale={setSale}
-							setCashTendered={setCashTendered}
-							setActiveDropDownValue={setActiveDropDownValue}
-							setSpecialDiscount={setSpecialDiscount}
-							checkOut={checkOut}
-							refreshPage={refreshPage}
-						/>
-					</div>
-				</div>
+				</>
 			)}
 		</>
 	);
@@ -446,6 +459,7 @@ const OrderInformation = (props) => {
 		checkOut,
 		setSpecialDiscount,
 		refreshPage,
+		setDiscountModal,
 	} = props;
 
 	useEffect(() => {
@@ -500,6 +514,10 @@ const OrderInformation = (props) => {
 							disabled={orderList.length > 0 ? false : true}
 							value={activeDropDownValue.discountId}
 							onChange={(event) => {
+								if (event.target.value === "new-value") {
+									return setDiscountModal(true);
+								}
+
 								let data = parseDropdownValue(event);
 								console.log(data);
 								setActiveDropDownValue({
@@ -528,6 +546,7 @@ const OrderInformation = (props) => {
 										{discount.DiscountName}
 									</option>
 								))}
+							<option value={"new-value"}>{"<...>"}</option>
 						</select>
 						{/* //TODO: CHANGE INTO INPUT, AND REMOVE VAT IF DISCOUNT IS SC OR PWD */}
 						{/* <input

@@ -22,6 +22,8 @@ import PatientService from "../../../../services/PatientService";
 // icons
 import { MdDelete } from "react-icons/md";
 import { getOR, incrementOR } from "../../../../helper/ORHelper";
+import ModalPatient from "../../../layout/ModalPatient";
+import ModalHandler from "../../../layout/ModalHandler";
 
 // creating context API
 const InvoiceContext = createContext();
@@ -49,6 +51,10 @@ const ChargeToAccount = (props) => {
 	const [activeDropDownValue, setActiveDropDownValue] =
 		useState(initialDropDownValue);
 	const [loading, setLoading] = useState(true);
+
+	// for modal
+	const [patientModal, setPatientModal] = useState(false);
+	const [handlerModal, setHandlerModal] = useState(false);
 
 	// create context value
 	const contextValue = {
@@ -413,6 +419,16 @@ const ChargeToAccount = (props) => {
 		return true;
 	};
 
+	const closePatientModal = () => {
+		setPatientModal(false);
+		getPatients();
+	};
+
+	const closeHandlerModal = () => {
+		setHandlerModal(false);
+		getHandlers();
+	};
+
 	return (
 		<>
 			{loading ? (
@@ -420,84 +436,98 @@ const ChargeToAccount = (props) => {
 					<Loader />
 				</div>
 			) : (
-				<Provider value={contextValue}>
-					<div className="h-auto d-flex flex-column justify-content-between gap-1">
-						<div className="p-2">
-							<h4>Charge to Account</h4>
-							<hr />
-						</div>
-						<div className="col-12 h-auto">
-							<InvoiceInformation
-								patientList={patientList}
-								handlerList={handlerList}
-								createInvoice={createInvoice}
-								isUpdate={isUpdate}
-								updateInvoice={updateInvoice}
-							/>
-							<SearchProduct
-								getAllProducts={getAllProducts}
-								isUpdate={isUpdate}
-								addProduct={addProduct}
-							/>
-						</div>
-						<div className="h-75 border border-dark rounded simple-shadow mt-3">
-							<div className="table-responsive max-height-100">
-								<ProductTable
+				<>
+					{patientModal ? (
+						<ModalPatient closePatientModal={closePatientModal} />
+					) : (
+						""
+					)}
+					{handlerModal ? (
+						<ModalHandler closeHandlerModal={closeHandlerModal} />
+					) : (
+						""
+					)}
+					<Provider value={contextValue}>
+						<div className="h-auto d-flex flex-column justify-content-between gap-1">
+							<div className="p-2">
+								<h4>Charge to Account</h4>
+								<hr />
+							</div>
+							<div className="col-12 h-auto">
+								<InvoiceInformation
+									patientList={patientList}
+									handlerList={handlerList}
+									createInvoice={createInvoice}
 									isUpdate={isUpdate}
-									deleteOrder={deleteOrder}
-									deleteItem={deleteItem}
-									decreaseSpecificItemStock={decreaseSpecificItemStock}
-									updateInvoiceItem={updateInvoiceItem}
-									getOrderList={getOrderList}
+									updateInvoice={updateInvoice}
+									setPatientModal={setPatientModal}
+									setHandlerModal={setHandlerModal}
+								/>
+								<SearchProduct
+									getAllProducts={getAllProducts}
+									isUpdate={isUpdate}
+									addProduct={addProduct}
 								/>
 							</div>
+							<div className="h-75 border border-dark rounded simple-shadow mt-3">
+								<div className="table-responsive max-height-100">
+									<ProductTable
+										isUpdate={isUpdate}
+										deleteOrder={deleteOrder}
+										deleteItem={deleteItem}
+										decreaseSpecificItemStock={decreaseSpecificItemStock}
+										updateInvoiceItem={updateInvoiceItem}
+										getOrderList={getOrderList}
+									/>
+								</div>
+							</div>
+							<div className="col-12 col-md-6">
+								<label htmlFor="">Remarks:</label>
+								<textarea
+									className="form-control form-input"
+									placeholder="Invoice Remarks"
+									value={invoice.Remarks}
+									onChange={(event) => {
+										setInvoice((prevState) => ({
+											...prevState,
+											Remarks: event.target.value,
+										}));
+									}}
+								></textarea>
+							</div>
+							<div className="w-auto">
+								<button
+									type="submit"
+									form="main-form"
+									className="btn btn-primary simple-shadow mt-2 me-3"
+									disabled={
+										orderList.length === 0 || invoice.Status === "paid"
+											? true
+											: false
+									}
+								>
+									{isUpdate() ? "Update" : "Create"}
+								</button>
+								<button
+									type="button"
+									hidden={isUpdate() ? false : true}
+									className="btn btn-dark simple-shadow mt-2 me-3"
+									onClick={() => printInvoice()}
+								>
+									Print
+								</button>
+								<button
+									type="button"
+									className="btn btn-secondary simple-shadow mt-2 me-3"
+									hidden={isUpdate() ? false : true}
+									onClick={() => navigate(-1)}
+								>
+									Cancel
+								</button>
+							</div>
 						</div>
-						<div className="col-12 col-md-6">
-							<label htmlFor="">Remarks:</label>
-							<textarea
-								className="form-control form-input"
-								placeholder="Invoice Remarks"
-								value={invoice.Remarks}
-								onChange={(event) => {
-									setInvoice((prevState) => ({
-										...prevState,
-										Remarks: event.target.value,
-									}));
-								}}
-							></textarea>
-						</div>
-						<div className="w-auto">
-							<button
-								type="submit"
-								form="main-form"
-								className="btn btn-primary simple-shadow mt-2 me-3"
-								disabled={
-									orderList.length === 0 || invoice.Status === "paid"
-										? true
-										: false
-								}
-							>
-								{isUpdate() ? "Update" : "Create"}
-							</button>
-							<button
-								type="button"
-								hidden={isUpdate() ? false : true}
-								className="btn btn-dark simple-shadow mt-2 me-3"
-								onClick={() => printInvoice()}
-							>
-								Print
-							</button>
-							<button
-								type="button"
-								className="btn btn-secondary simple-shadow mt-2 me-3"
-								hidden={isUpdate() ? false : true}
-								onClick={() => navigate(-1)}
-							>
-								Cancel
-							</button>
-						</div>
-					</div>
-				</Provider>
+					</Provider>
+				</>
 			)}
 		</>
 	);
@@ -509,6 +539,8 @@ const InvoiceInformation = ({
 	createInvoice,
 	updateInvoice,
 	isUpdate,
+	setPatientModal,
+	setHandlerModal,
 }) => {
 	const {
 		currentUser,
@@ -570,6 +602,10 @@ const InvoiceInformation = ({
 						required
 						value={activeDropDownValue.handler}
 						onChange={(event) => {
+							if (event.target.value === "new-value") {
+								return setHandlerModal(true);
+							}
+
 							let data = parseDropdownValue(event);
 							let value = data.FirstName + " " + data.LastName;
 							setActiveDropDownValue((prevState) => ({
@@ -591,6 +627,7 @@ const InvoiceInformation = ({
 									{`${handler.FirstName} ${handler.LastName}`}
 								</option>
 							))}
+						<option value={"new-value"}>{"<...>"}</option>
 					</select>
 				</div>
 				<div className="col-sm-12 col-md">
@@ -622,6 +659,10 @@ const InvoiceInformation = ({
 						required
 						value={activeDropDownValue.patient}
 						onChange={(event) => {
+							if (event.target.value === "new-value") {
+								return setPatientModal(true);
+							}
+
 							let data = parseDropdownValue(event);
 							let value = data.FirstName + " " + data.LastName;
 							setActiveDropDownValue((prevState) => ({
@@ -643,6 +684,7 @@ const InvoiceInformation = ({
 									{`${patient.FirstName} ${patient.LastName}`}
 								</option>
 							))}
+						<option value={"new-value"}>{"<...>"}</option>
 					</select>
 				</div>
 				<div className="col-sm-12 col-md">
