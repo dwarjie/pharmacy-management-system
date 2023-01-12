@@ -78,6 +78,7 @@ require("./app/routes/purchaseDetail.routes")(app);
 require("./app/routes/stockAdjustment.routes")(app);
 
 require("./app/routes/auth.routes")(app);
+require("./app/routes/roleGroup.routes")(app);
 require("./app/routes/auditTrail.routes")(app);
 require("./app/routes/recaptchat.routes")(app);
 

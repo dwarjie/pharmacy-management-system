@@ -42,6 +42,7 @@ db.purchase = require("./purchaseOrder.model")(sequelize, Sequelize);
 db.stockAdjustment = require("./stockAdjustment.model")(sequelize, Sequelize);
 
 db.user = require("./user.model")(sequelize, Sequelize);
+db.role = require("./roleGroup.model")(sequelize, Sequelize);
 db.auditTrail = require("./auditTrail.model")(sequelize, Sequelize);
 // db.role = require("./role.model")(sequelize, Sequelize);
 

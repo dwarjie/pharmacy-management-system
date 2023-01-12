@@ -666,6 +666,21 @@ const UtilitiesModule = () => {
 			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 				<li>
 					<Link
+						to={"/pharmacy/utilities/add-role"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Role Group is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
+						Role Group
+					</Link>
+				</li>
+				<li>
+					<Link
 						to={"/pharmacy/utilities/add-user"}
 						className="dropdown-item"
 						onClick={() =>

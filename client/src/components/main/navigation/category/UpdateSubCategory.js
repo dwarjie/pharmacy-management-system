@@ -2,10 +2,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isFormValid } from "../../../../helper/checkFormValid";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import { useGlobalState } from "../../../../state";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 
 const UpdateSubCategory = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	let location = useLocation();
 	let navigate = useNavigate();
 	const oldCategory = location.state.subCategory;

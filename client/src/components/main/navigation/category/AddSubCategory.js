@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { isFormValid } from "../../../../helper/checkFormValid";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import { useGlobalState } from "../../../../state";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import SubCategoryService from "../../../../services/SubCategoryService";
 import CategoryService from "../../../../services/CategoryService";
@@ -12,6 +14,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const AddSubCategory = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	let location = useLocation();
 	let navigate = useNavigate();
 	let categoryName = location.state.category.CategoryName;
@@ -51,8 +54,14 @@ const AddSubCategory = () => {
 	};
 
 	// create a new SubCategory
-	const createSubCategory = (event) => {
+	const createSubCategory = async (event) => {
 		event.preventDefault();
+
+		await createAuditTrail(
+			`Clicked add in ${categoryName} sub-category.`,
+			"Click",
+			currentUser.id
+		);
 
 		setFormErrors(validateForm(subCategory));
 		if (!isFormValid(formErrors)) return;
@@ -63,6 +72,11 @@ const AddSubCategory = () => {
 		SubCategoryService.createSubCategory(subCategory)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(
+					`Added in ${categoryName} sub-category.`,
+					"Create",
+					currentUser.id
+				);
 				refreshList();
 				setAlertMessage(response.data.message);
 			})
@@ -85,13 +99,23 @@ const AddSubCategory = () => {
 	};
 
 	// delete the subCategory
-	const deleteSubCategory = (subCategory) => {
+	const deleteSubCategory = async (subCategory) => {
+		await createAuditTrail(
+			`Clicked delete in ${categoryName} sub-category.`,
+			"Click",
+			currentUser.id
+		);
 		// ask for confirmation
 		if (!AlertPrompt()) return;
 
 		SubCategoryService.deleteCategory(subCategory.id)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(
+					`Deleted ${subCategory.SubCategoryName} in ${categoryName} sub-category.`,
+					"Delete",
+					currentUser.id
+				);
 				refreshList();
 				setAlertMessage(response.data.message);
 			})
@@ -102,6 +126,11 @@ const AddSubCategory = () => {
 
 	// edit a sub category
 	const editSubCategory = (subCategory) => {
+		createAuditTrail(
+			`Clicked edit in ${categoryName} sub-category.`,
+			"Click",
+			currentUser.id
+		);
 		navigate(`/pharmacy/maintenance/category/sub-category/${subCategory.id}`, {
 			state: {
 				subCategory: subCategory,

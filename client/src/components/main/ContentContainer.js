@@ -73,6 +73,7 @@ import StockAdjustmentHistory from "./navigation/reports/StockAdjustmentHistory"
 import ReturnHistory from "./navigation/reports/ReturnHistory";
 
 // Utilities Tab
+import Role from "./navigation/roles/Roles";
 import AddUser from "./navigation/user/AddUser";
 import UpdateUser from "./navigation/user/UpdateUser";
 import UserList from "./navigation/user/UserList";
@@ -144,6 +145,7 @@ const ContentContainer = (props) => {
 						/>
 					</Route>
 					<Route element={<ProtectedURL role={"utilities"} />}>
+						<Route path="/utilities/add-role" element={<Role />} />
 						<Route path="/utilities/add-user" element={<AddUser />} />
 						<Route path="/utilities/user-list" element={<UserList />} />
 						<Route path="/utilities/:id" element={<UpdateUser />} />
