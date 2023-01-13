@@ -8,6 +8,13 @@ const formatDate = (date) => {
 	return moment(date).format("YYYY-MM-DD");
 };
 
+const formatDateTime = (date) => {
+	// check if date is empty
+	if (date === "") return "";
+
+	return moment(date).format("YYYY-MM-DD HH:mm:ss");
+};
+
 const getCurrentDate = () => {
 	return moment().format();
 };
@@ -25,4 +32,10 @@ const generateOrderNumber = () => {
 	return `${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
 };
 
-export { formatDate, getCurrentTime, getCurrentDate, generateOrderNumber };
+export {
+	formatDate,
+	getCurrentTime,
+	getCurrentDate,
+	generateOrderNumber,
+	formatDateTime,
+};

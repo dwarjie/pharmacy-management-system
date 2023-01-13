@@ -75,6 +75,7 @@ import SupplierList from "./navigation/reports/SupplierList";
 import InventoryValuation from "./navigation/reports/InventoryValuation";
 import StockAdjustmentHistory from "./navigation/reports/StockAdjustmentHistory";
 import ReturnHistory from "./navigation/reports/ReturnHistory";
+import AuditTrailReport from "./navigation/reports/AuditTrailReport";
 
 // Utilities Tab
 import Role from "./navigation/roles/Roles";
@@ -217,6 +218,10 @@ const ContentContainer = (props) => {
 							element={<StockAdjustmentHistory />}
 						/>
 						<Route path="/report/return-history" element={<ReturnHistory />} />
+						<Route
+							path="/report/audit-trail-history"
+							element={<AuditTrailReport />}
+						/>
 					</Route>
 					<Route path="/request/request-form" element={<RequestForm />} />
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />

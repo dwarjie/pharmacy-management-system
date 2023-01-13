@@ -8,8 +8,13 @@ const getAllAuditTrail = () => {
 	return http.get("/audit-trail");
 };
 
+const getAllByDate = (dateObj) => {
+	return http.post(`/audit-trail/date-range`, dateObj);
+};
+
 const AuditTrailService = {
 	createAuditTrail,
+	getAllByDate,
 	getAllAuditTrail,
 };
 

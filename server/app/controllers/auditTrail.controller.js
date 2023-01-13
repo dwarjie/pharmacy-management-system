@@ -1,5 +1,5 @@
 const db = require("../models");
-const { QueryTypes } = db.Sequelize;
+const { QueryTypes, Op } = db.Sequelize;
 const AuditTrail = db.auditTrail;
 
 exports.create = (req, res) => {
@@ -32,6 +32,26 @@ exports.findAll = (req, res) => {
 		.catch((err) => {
 			res.send({
 				message: err.message || "Error fetching audit trails.",
+			});
+		});
+};
+
+exports.findAllByDate = (req, res) => {
+	const dateFrom = req.body.from;
+	const dateTo = req.body.to;
+
+	AuditTrail.findAll({
+		where: {
+			AuditDate: { [Op.between]: [dateFrom, dateTo] },
+		},
+		include: ["user"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || `Error retrieving audit trails.`,
 			});
 		});
 };

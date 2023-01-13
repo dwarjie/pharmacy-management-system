@@ -671,6 +671,21 @@ const ReportsModule = () => {
 						Return History
 					</Link>
 				</li>
+				<li>
+					<Link
+						to={"/pharmacy/report/audit-trail-history"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Audit Trail History is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
+						Audit Trail History
+					</Link>
+				</li>
 			</ul>
 		</div>
 	);
