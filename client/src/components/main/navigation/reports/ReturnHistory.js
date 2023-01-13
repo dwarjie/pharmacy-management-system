@@ -135,6 +135,7 @@ class ComponentToPrint extends React.Component {
 				items &&
 				items.map((product, index) => (
 					<tr key={index}>
+						<td>{product.ReferenceNo}</td>
 						<td>{product.medicine.ProductCode}</td>
 						<td>{product.medicine.ProductName}</td>
 						<td>{product.Quantity}</td>
@@ -170,6 +171,7 @@ class ComponentToPrint extends React.Component {
 					<table className="table table-striped table-hover">
 						<thead className="table-dark">
 							<tr>
+								<th scope="col">OrderNo</th>
 								<th scope="col">PCode</th>
 								<th scope="col">Name</th>
 								<th scope="col">Stock Adjusted</th>
@@ -188,10 +190,11 @@ class ComponentToPrint extends React.Component {
 								<td className="no-line"></td>
 								<td className="no-line"></td>
 								<td className="no-line"></td>
+								<td className="no-line"></td>
 								<td className="no-line text-right">
 									<strong>Grand Total: </strong>
 								</td>
-								<td className="no-line text-right">
+								<td className="no-line text-left">
 									&#8369;{parseFloat(getPriceTotal()).toFixed(2)}
 								</td>
 							</tr>

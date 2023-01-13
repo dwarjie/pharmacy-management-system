@@ -1,12 +1,13 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import MedicineService from "../../../../services/MedicineService";
-import StockAdjustmentService from "../../../../services/StockAdjustmentService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import Loader from "../../../layout/Loader";
 import { getCurrentDate } from "../../../../helper/dateHelper";
 import { useGlobalState } from "../../../../state";
 import ReturnService from "../../../../services/ReturnService";
+import { useLocation, useParams } from "react-router-dom";
+import SalesDetailService from "../../../../services/SalesDetailService";
 
 // create context API
 const AdjustmentContext = createContext();
@@ -14,8 +15,13 @@ const { Provider } = AdjustmentContext;
 
 const Return = () => {
 	let [currentUser] = useGlobalState("currentUser");
+	let location = useLocation();
+	let saleInformation = location.state.sale;
+	let { id } = useParams();
+
 	const initialReturn = {
 		id: null,
+		ReferenceNo: saleInformation.OrderNo,
 		Quantity: 0,
 		DateCreated: getCurrentDate(),
 		Total: 0,
@@ -27,7 +33,6 @@ const Return = () => {
 	const [returnInformation, setReturnInformation] = useState(initialReturn);
 	const [productList, setProductList] = useState([]);
 	const [selectedProduct, setSelectedProduct] = useState({});
-	const [searchInput, setSearchInput] = useState("");
 	const [alertMessage, setAlertMessage] = useState("");
 	const [loading, setLoading] = useState(true);
 
@@ -38,12 +43,24 @@ const Return = () => {
 	};
 
 	useEffect(() => {
-		getProductList();
+		getAllPurchaseItem();
 	}, []);
 
 	useEffect(() => {
 		setTotal();
 	}, [returnInformation.Quantity]);
+
+	const getAllPurchaseItem = async () => {
+		await SalesDetailService.getSaleItems(id)
+			.then((response) => {
+				console.log(response.data);
+				setProductList(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const increaseProductStock = async () => {
 		let data = {
@@ -86,32 +103,9 @@ const Return = () => {
 		setSelectedProduct({});
 	};
 
-	const getProductList = async () => {
-		await MedicineService.getAllMedicine()
-			.then((response) => {
-				console.log(response.data);
-				setProductList(response.data);
-				setLoading(false);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
-	const findByTitle = (title) => {
-		MedicineService.getByTitle(title)
-			.then((response) => {
-				console.log(response.data);
-				setProductList(response.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
 	const computeTotal = () => {
 		let total =
-			parseFloat(selectedProduct.SellingPrice) *
+			parseFloat(selectedProduct.UnitPrice) *
 			parseInt(returnInformation.Quantity);
 
 		if (isNaN(total)) return 0;
@@ -192,7 +186,11 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 						type="text"
 						className="form-control form-input"
 						disabled={true}
-						defaultValue={selectedProduct ? selectedProduct.ProductName : ""}
+						defaultValue={
+							selectedProduct.medicine
+								? selectedProduct.medicine.ProductName
+								: ""
+						}
 					/>
 				</div>
 				<div className="col-sm-12 col-md">
@@ -212,7 +210,11 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 						type="text"
 						className="form-control form-input"
 						disabled={true}
-						defaultValue={selectedProduct ? selectedProduct.SellingPrice : ""}
+						defaultValue={
+							selectedProduct.medicine
+								? selectedProduct.medicine.SellingPrice
+								: ""
+						}
 					/>
 				</div>
 				<div className="col-sm-12 col-md">
@@ -241,7 +243,8 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 						name="Quantity"
 						id="Quantity"
 						min={1}
-						disabled={selectedProduct.SellingPrice ? false : true}
+						max={selectedProduct.Quantity}
+						disabled={selectedProduct.UnitPrice ? false : true}
 						placeholder="Quantity to adjust"
 						className="form-control form-input"
 						value={returnInformation.Quantity}
@@ -281,10 +284,10 @@ const ProductTable = ({ productList, setSelectedProduct }) => {
 					}}
 				>
 					<td>{index + 1}</td>
-					<td>{product.ProductCode}</td>
-					<td>{product.ProductName}</td>
+					<td>{product.medicine.ProductCode}</td>
+					<td>{product.medicine.ProductName}</td>
 					<td>{product.Quantity}</td>
-					<td>{product.SellingPrice}</td>
+					<td>{product.medicine.SellingPrice}</td>
 				</tr>
 			))
 		);
@@ -298,7 +301,7 @@ const ProductTable = ({ productList, setSelectedProduct }) => {
 						<th scope="col">#</th>
 						<th scope="col">PCode</th>
 						<th scope="col">Item</th>
-						<th scope="col">On hand</th>
+						<th scope="col">Sold Qty</th>
 						<th scope="col">Unit Price</th>
 					</tr>
 				</thead>

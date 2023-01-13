@@ -175,6 +175,7 @@ const ContentContainer = (props) => {
 							element={<PrintChargeToAccount />}
 						/>
 						<Route path="/sales/return" element={<SalesList />} />
+						<Route path="/sales/return/:id" element={<Return />} />
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
 						<Route path="/inventory/order-list" element={<OrderList />} />

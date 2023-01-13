@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../helper/dateHelper";
 import SaleService from "../../../../services/SaleService";
 import Loader from "../../../layout/Loader";
 
 const SalesList = () => {
+	let navigate = useNavigate();
+
 	const [loading, setLoading] = useState(true);
 	const [sales, setSales] = useState([]);
 
@@ -23,11 +26,23 @@ const SalesList = () => {
 			});
 	};
 
+	const navigateSale = (sale) => {
+		navigate(`/pharmacy/sales/return/${sale.id}`, {
+			state: {
+				sale: sale,
+			},
+		});
+	};
+
 	const renderItems = () => {
 		return (
 			sales &&
 			sales.map((sale, index) => (
-				<tr key={index} className="cursor-pointer">
+				<tr
+					key={index}
+					className="cursor-pointer"
+					onClick={() => navigateSale(sale)}
+				>
 					<td>{index + 1}</td>
 					<td>{sale.OrderNo}</td>
 					<td>{sale.CustomerName}</td>
