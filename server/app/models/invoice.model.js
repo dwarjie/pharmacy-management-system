@@ -38,6 +38,11 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.FLOAT,
 			allowNull: true,
 		},
+		Balance: {
+			type: Sequelize.FLOAT,
+			allowNull: true,
+			defaultValue: 0,
+		},
 		Status: {
 			type: Sequelize.STRING,
 			allowNull: false,

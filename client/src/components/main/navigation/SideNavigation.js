@@ -20,7 +20,7 @@ const SideNavigation = () => {
 		sales: "sales",
 		reports: "reports",
 		utilities: "utilities",
-		request: "request-form",
+		user: "user",
 	};
 
 	const contextValue = {
@@ -66,6 +66,8 @@ const SideNavigation = () => {
 							</span>{" "}
 							Dashboard
 						</Link>
+
+						<RequestModule />
 
 						{/* FILE MAINTENANCE*/}
 						{checkRoles(ROLES.maintenance) ? <MaintenanceModule /> : ""}
@@ -292,6 +294,31 @@ const MaintenanceModule = () => {
 				</li>
 			</ul>
 		</div>
+	);
+};
+
+const RequestModule = () => {
+	const { currentUser } = useContext(NavigationContext);
+	return (
+		<>
+			{/* DASHBOARD */}
+			<Link
+				to={"/pharmacy/request/request-form"}
+				className="btn btn-side-navigation"
+				onClick={() =>
+					createAuditTrail(
+						"Request is clicked in navigation",
+						"Click",
+						currentUser.id
+					)
+				}
+			>
+				<span className="px-2">
+					<Receipt className="icon-size-sm" />
+				</span>{" "}
+				Request Form
+			</Link>
+		</>
 	);
 };
 

@@ -18,9 +18,9 @@ const UpdateUser = () => {
 		FirstName: oldUser.FirstName,
 		LastName: oldUser.LastName,
 		UserName: oldUser.UserName,
-		Password: "",
 		Role: [],
 		roleGroupId: oldUser.roleGroup.id,
+		isLock: oldUser.isLock,
 	};
 
 	const initialActiveDropdownValue = {

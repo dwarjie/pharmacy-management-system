@@ -18,9 +18,10 @@ const Login = () => {
 	};
 
 	const [credentials, setCredentials] = useState(initialLogin);
-	const [formErrors, setFormErrors] = useState(initialLogin);
+	const [formErrors, setFormErrors] = useState({});
 	const [isSubmit, setIsSubmit] = useState(false);
 	const [verified, setVerified] = useState(false);
+	const [loginCounter, setLoginCounter] = useState(0);
 
 	useEffect(() => {
 		// AuthService.logout();
@@ -44,7 +45,7 @@ const Login = () => {
 		if (!success) return;
 
 		setFormErrors(validateForm(credentials));
-		if (!isValidForm()) return;
+		if (!isValidForm(formErrors)) return;
 
 		await AuthService.loginUser(credentials)
 			.then((response) => {
@@ -62,8 +63,8 @@ const Login = () => {
 		}
 		if (!values.Password) {
 			errors.Password = "Password is required!";
-		} else if (values.Password.trim().length < 8) {
-			errors.Password = "Password must be at least 8 characters!";
+		} else if (values.Password.trim().length < 6) {
+			errors.Password = "Password must be at least 6 characters!";
 		}
 
 		return errors;
@@ -78,7 +79,7 @@ const Login = () => {
 
 	const verifyReCaptcha = async () => {
 		const token = recaptchaRef.current.getValue();
-		recaptchaRef.current.reset();
+		// recaptchaRef.current.reset();
 		let success = false;
 
 		await ReCaptchaService.verifyReCaptcha(token)
@@ -95,6 +96,8 @@ const Login = () => {
 
 	const checkLoginSuccess = async (data) => {
 		if (data.message === undefined) {
+			if (checkStatus(data)) return;
+
 			AuthService.saveToken(data);
 			setGlobalState("currentUser", data);
 			setGlobalState("auth", true);
@@ -105,6 +108,39 @@ const Login = () => {
 		}
 
 		alert(data.message);
+		if (data.invalid) {
+			setLoginCounter(loginCounter + 1);
+			lockAccount(data.userId);
+		}
+	};
+
+	const checkStatus = (data) => {
+		if (data.locked) {
+			alert("This account is locked. Please contact your administrator.");
+			return true;
+		}
+
+		return false;
+	};
+
+	const lockAccount = async (id) => {
+		if (loginCounter < 3) return;
+
+		let data = {
+			Role: [],
+			isLock: true,
+		};
+
+		AuthService.updateUser(id, data)
+			.then((response) => {
+				console.log(response.data);
+				alert(
+					"Your account has been locked. Please contact your administrator."
+				);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const handleInputChange = (event) => {

@@ -58,6 +58,12 @@ exports.RoleGroup = async (roleGroup) => {
 		RoleName: "admin",
 		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
 	});
+
+	roleGroup.create({
+		id: 2,
+		RoleName: "user",
+		Role: ["user"],
+	});
 };
 
 exports.User = async (user) => {

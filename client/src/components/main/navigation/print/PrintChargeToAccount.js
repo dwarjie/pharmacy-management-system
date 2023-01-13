@@ -122,6 +122,12 @@ class ComponentToPrint extends React.Component {
 			);
 		};
 
+		const checkBalance = () => {
+			let result = parseFloat(invoice.Total) - parseFloat(invoice.PaidAmount);
+
+			return result.toFixed(2);
+		};
+
 		return (
 			<div className="container" style={{ color: "black" }}>
 				<style>{getPageMargins()}</style>
@@ -132,8 +138,31 @@ class ComponentToPrint extends React.Component {
 						<h6>ActivCare Home Health Solution Inc.</h6>
 						<h6>3 Santa Rosa St, Pasig, 1603 Metro Manila</h6>
 					</div>
-					<div className="col-xs-6 col-md-12 d-flex flex-column align-items-start">
+					<div className="col-xs-6 col-md-12 d-flex flex-column align-items-end mt-3">
 						<p>
+							<strong>Order Date:</strong>
+							<br />
+							{formatDate(invoice.InvoiceDate)}
+							<br />
+						</p>
+						{invoice.Status === "paid" ? (
+							<p>
+								<strong>Paid Date:</strong>
+								<br />
+								{formatDate(invoice.PaidDate)}
+								<br />
+							</p>
+						) : (
+							<p>
+								<strong>Due Date:</strong>
+								<br />
+								{formatDate(invoice.DueDate)}
+								<br />
+							</p>
+						)}
+					</div>
+					<div className="col-xs-6 col-md-12 d-flex flex-row justify-content-between mt-5">
+						<p className="text-left text-information">
 							<strong>Patient Information:</strong>
 							<br />
 							{`${invoice.patient.FirstName} ${invoice.patient.LastName}`}
@@ -142,9 +171,7 @@ class ComponentToPrint extends React.Component {
 							<br />
 							{`${invoice.patient.Mobile}`}
 						</p>
-					</div>
-					<div className="col-xs-6 col-md-12 d-flex flex-column align-items-end">
-						<p>
+						<p className="text-left text-information">
 							<strong>Requested By:</strong>
 							<br />
 							{`${invoice.handler.FirstName} ${invoice.handler.LastName}`}
@@ -154,44 +181,17 @@ class ComponentToPrint extends React.Component {
 							{`${invoice.handler.Mobile}`}
 						</p>
 					</div>
-					<div className="col-xs-12 mt-3">
-						<div className="invoice-title">
-							<h3 className="pull-right">Invoice # {invoice.InvoiceNo}</h3>
-							<h6 className="pull-left">OR # {invoice.ORNumber}</h6>
+					{invoice.Status === "paid" ? (
+						<div className="col-xs-12 mt-3">
+							<div className="invoice-title">
+								<h3 className="pull-right">Invoice # {invoice.InvoiceNo}</h3>
+								<h6 className="pull-left">OR # {invoice.ORNumber}</h6>
+							</div>
+							<hr />
 						</div>
-						<hr />
-					</div>
-					<div className="row">
-						<div className="col-xs-6 d-flex flex-row justify-content-between">
-							<p>
-								<strong>Order Date:</strong>
-								<br />
-								{formatDate(invoice.InvoiceDate)}
-								<br />
-							</p>
-							<p>
-								<strong>Due Date:</strong>
-								<br />
-								{formatDate(invoice.DueDate)}
-								<br />
-							</p>
-							{invoice.Status === "paid" ? (
-								<p>
-									<strong>Paid Date:</strong>
-									<br />
-									{formatDate(invoice.PaidDate)}
-									<br />
-								</p>
-							) : (
-								""
-							)}
-							<p>
-								<strong>Prepared By:</strong>
-								<br />
-								{`${invoice.user.FirstName} ${invoice.user.LastName}`}
-							</p>
-						</div>
-					</div>
+					) : (
+						""
+					)}
 				</div>
 				<div className="row">
 					<div className="col-md-12">
@@ -252,10 +252,41 @@ class ComponentToPrint extends React.Component {
 											) : (
 												""
 											)}
+											{invoice.PaidAmount > 0 ? (
+												<tr>
+													<td className="thick-line"></td>
+													<td className="thick-line"></td>
+													<td className="thick-line text-right">
+														<strong>Balance:</strong>
+													</td>
+													<td className="thick-line text-right">
+														&#8369;{parseFloat(checkBalance()).toFixed(2)}
+													</td>
+												</tr>
+											) : (
+												""
+											)}
 										</tbody>
 									</table>
 								</div>
 							</div>
+						</div>
+					</div>
+					<p>
+						<strong>Prepared By:</strong>
+						<br />
+						{`${invoice.user.FirstName} ${invoice.user.LastName}`}
+					</p>
+					<div className="row mt-6">
+						<div className="col-xs-6 d-flex flex-row justify-content-center gap-6">
+							<p className="w-30">
+								<hr className="w-100" />
+								<strong>Company Signature</strong>
+							</p>
+							<p className="w-30">
+								<hr className="w-100" />
+								<strong>Client's Signature</strong>
+							</p>
 						</div>
 					</div>
 				</div>

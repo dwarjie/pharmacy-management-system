@@ -3,9 +3,9 @@ import {
 	getCurrentDate,
 } from "../../../../helper/dateHelper";
 import { useGlobalState } from "../../../../state";
-import ChargeToAccount from "./ChargeToAccount";
+import ChargeToAccount from "../invoice/ChargeToAccount";
 
-const AddChargeToAccount = () => {
+const RequestForm = () => {
 	let [currentUser] = useGlobalState("currentUser");
 
 	const initialInvoice = {
@@ -18,7 +18,6 @@ const AddChargeToAccount = () => {
 		VAT: 0,
 		Total: 0,
 		PaidAmount: 0,
-		Balance: 0,
 		GrossAmount: 0,
 		Status: "pending",
 		Remarks: "Charge Upon Use",
@@ -34,7 +33,6 @@ const AddChargeToAccount = () => {
 	};
 
 	const initialOrderList = [];
-
 	return (
 		<ChargeToAccount
 			initialInvoice={initialInvoice}
@@ -44,4 +42,4 @@ const AddChargeToAccount = () => {
 	);
 };
 
-export default AddChargeToAccount;
+export default RequestForm;

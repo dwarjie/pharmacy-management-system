@@ -149,14 +149,7 @@ const Return = () => {
 						)}
 						<div className="h-75 border border-dark rounded simple-shadow">
 							<div className="table-responsive max-height-100">
-								<div className="p-3 w-100">
-									<SearchProduct
-										setSearchInput={setSearchInput}
-										searchInput={searchInput}
-										findByTitle={findByTitle}
-										getProductList={getProductList}
-									/>
-								</div>
+								<div className="p-3 w-100"></div>
 								<ProductTable
 									productList={productList}
 									setSelectedProduct={setSelectedProduct}

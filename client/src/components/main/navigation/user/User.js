@@ -6,9 +6,11 @@ import { isFormValid } from "../../../../helper/checkFormValid";
 import AuthService from "../../../../services/AuthService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import RoleGroupService from "../../../../services/RoleGroupService";
+import PatientService from "../../../../services/PatientService";
 import DropDownDefaultOption from "../../../layout/DropDownDefaultOption.layout";
 import { useNavigate, useParams } from "react-router-dom";
 import parseDropdownValue from "../../../../helper/parseJSON";
+import ModalHandler from "../../../layout/ModalHandler";
 
 const User = (props) => {
 	let navigate = useNavigate();
@@ -25,16 +27,39 @@ const User = (props) => {
 
 	const [user, setUser] = useState(initialUser);
 	const [roleList, setRoleList] = useState([]);
+	const [handlers, setHandlers] = useState([]);
 	const [formErrors, setFormErrors] = useState(initialFormErrors);
 	const [alertMessage, setAlertMessage] = useState("");
 	const [selected, setSelected] = useState([]);
 	const [activeDropdownValue, setActiveDropdownValue] = useState(
 		initialActiveDropdownValue
 	);
+	const [addDoctor, setAddDoctor] = useState(false);
+
+	// modal state
+	const [handlerModal, setHandlerModal] = useState(false);
 
 	useEffect(() => {
-		getAllRoleGroup();
+		getAllInformation();
 	}, []);
+
+	useEffect(() => {
+		if (updateMode()) return;
+
+		if (addDoctor === true) {
+			setUser((prevState) => ({
+				...prevState,
+				roleGroupId: 2,
+			}));
+		}
+		if (addDoctor === false) {
+			setUser(initialUser);
+			setActiveDropdownValue((prevState) => ({
+				...prevState,
+				handler: "",
+			}));
+		}
+	}, [addDoctor]);
 
 	useEffect(() => {
 		let userRoles = selected.map((role) => {
@@ -42,6 +67,22 @@ const User = (props) => {
 		});
 		setUser((prevState) => ({ ...prevState, Role: userRoles }));
 	}, [selected]);
+
+	const getAllInformation = async () => {
+		await getAllRoleGroup();
+		await getAllHandler();
+	};
+
+	const getAllHandler = async () => {
+		await PatientService.getAllHandler()
+			.then((response) => {
+				console.log(response.data);
+				setHandlers(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const getAllRoleGroup = async () => {
 		await RoleGroupService.getAllRoleGroup()
@@ -160,92 +201,160 @@ const User = (props) => {
 		return false;
 	};
 
+	const closeHandlerModal = () => {
+		setHandlerModal(false);
+		getAllHandler();
+	};
+
+	const handlerDoctorButton = () => {
+		setAddDoctor(!addDoctor);
+	};
+
 	return (
-		<div className="col-12 h-auto">
-			<div className="p-2">
-				<h4>{title}</h4>
-				<hr />
-			</div>
-			{alertMessage ? (
-				<AlertInfoLayout
-					content={alertMessage}
-					onClick={(value) => setAlertMessage(value)}
-				/>
+		<>
+			{handlerModal ? (
+				<ModalHandler closeHandlerModal={closeHandlerModal} />
 			) : (
 				""
 			)}
-			<div className="p-2">
-				<form
-					className="col-11 col-lg-10 pb-5 mx-auto"
-					onSubmit={(event) => {
-						mode === "update" ? updateUser(event) : registerUser(event);
-					}}
-				>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="FirstName">
-								First Name:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="FirstName"
-								value={user.FirstName}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.FirstName}</p>
-						</div>
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="LastName">
-								Last Name:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="LastName"
-								value={user.LastName}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.LastName}</p>
-						</div>
-					</div>
-					<div className="row mb-sm-3">
-						<div className="col-sm-12 col-md-6">
-							<label className="required" htmlFor="UserName">
-								Username:
-							</label>
-							<input
-								type="text"
-								className="form-control form-input"
-								name="UserName"
-								value={user.UserName}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.UserName}</p>
-						</div>
-						{updateMode() ? (
-							""
-						) : (
-							<div className="col-sm-12 col-md">
-								<label
-									className={mode === "update" ? "" : "required"}
-									htmlFor="Password"
+			<div className="col-12 h-auto">
+				<div className="p-2">
+					<h4>{title}</h4>
+					<hr />
+				</div>
+				{alertMessage ? (
+					<AlertInfoLayout
+						content={alertMessage}
+						onClick={(value) => setAlertMessage(value)}
+					/>
+				) : (
+					""
+				)}
+				<div className="p-2">
+					{updateMode() ? (
+						""
+					) : (
+						<button
+							className="btn btn-secondary mb-3"
+							onClick={() => handlerDoctorButton()}
+						>
+							Doctor/NCM
+						</button>
+					)}
+					<form
+						className="col-11 col-lg-10 pb-5 mx-auto"
+						onSubmit={(event) => {
+							mode === "update" ? updateUser(event) : registerUser(event);
+						}}
+					>
+						{addDoctor ? (
+							<div className="col-sm-12 col-md-6 mb-sm-3">
+								<label htmlFor="">Select Doctor</label>
+								<select
+									name="handlerId"
+									id="handlerId"
+									className="form-select form-input"
+									value={activeDropdownValue.handler}
+									onChange={(event) => {
+										if (event.target.value === "new-value") {
+											return setHandlerModal(true);
+										}
+
+										let data = parseDropdownValue(event);
+										setActiveDropdownValue((prevState) => ({
+											...prevState,
+											handler: `${data.FirstName} ${data.LastName}`,
+										}));
+										setUser((prevState) => ({
+											...prevState,
+											FirstName: data.FirstName,
+											LastName: data.LastName,
+										}));
+									}}
 								>
-									Password:
+									<DropDownDefaultOption content={"Select NCM/Doctor"} />
+									{handlers &&
+										handlers.map((handler, index) => (
+											<option
+												className="dropdown-item"
+												value={`${handler.FirstName} ${handler.LastName}`}
+												data-value={JSON.stringify(handler)}
+												key={index}
+											>
+												{`${handler.FirstName} ${handler.LastName}`}
+											</option>
+										))}
+									<option value={"new-value"}>{"<...>"}</option>
+								</select>
+							</div>
+						) : (
+							""
+						)}
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="FirstName">
+									First Name:
 								</label>
 								<input
-									type="password"
+									type="text"
 									className="form-control form-input"
-									name="Password"
-									value={user.Password}
+									name="FirstName"
+									value={user.FirstName}
 									onChange={handleInputChange}
 								/>
-								<p className="text-error">{formErrors.Password}</p>
+								<p className="text-error">{formErrors.FirstName}</p>
 							</div>
-						)}
-					</div>
-					<div className="row mb-sm-3">
-						{/* <div className="col-sm-12 col-md">
+							<div className="col-sm-12 col-md">
+								<label className="required" htmlFor="LastName">
+									Last Name:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="LastName"
+									value={user.LastName}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.LastName}</p>
+							</div>
+						</div>
+						<div className="row mb-sm-3">
+							<div className="col-sm-12 col-md-6">
+								<label className="required" htmlFor="UserName">
+									Username:
+								</label>
+								<input
+									type="text"
+									className="form-control form-input"
+									name="UserName"
+									value={user.UserName}
+									onChange={handleInputChange}
+								/>
+								<p className="text-error">{formErrors.UserName}</p>
+							</div>
+							{updateMode() ? (
+								""
+							) : (
+								<div className="col-sm-12 col-md">
+									<label
+										className={mode === "update" ? "" : "required"}
+										htmlFor="Password"
+									>
+										Password:
+									</label>
+									<input
+										type="password"
+										className="form-control form-input"
+										name="Password"
+										value={user.Password}
+										onChange={handleInputChange}
+									/>
+									<p className="text-error">{formErrors.Password}</p>
+								</div>
+							)}
+						</div>
+						<div className="row mb-sm-3">
+							{/* <div className="col-sm-12 col-md">
 							<label htmlFor="status">Status:</label>
 							<select
 								name="status"
@@ -259,84 +368,106 @@ const User = (props) => {
 								<option value="inactive">Inactive</option>
 							</select>
 						</div> */}
-						<div className="col-sm-12 col-md">
-							<label className="required" htmlFor="role">
-								Role:
-							</label>
-							<select
-								name="roleId"
-								className="form-select form-input"
-								value={activeDropdownValue.role}
-								onChange={(event) => {
-									let data = parseDropdownValue(event);
-									setActiveDropdownValue((prevState) => ({
-										...prevState,
-										role: data.RoleName,
-									}));
-									setUser((prevState) => ({
-										...prevState,
-										roleGroupId: data.id,
-									}));
-								}}
-							>
-								<DropDownDefaultOption content={"Select Role Group"} />
-								{roleList &&
-									roleList.map((role, index) => (
-										<option
-											className="dropdown-item"
-											value={role.RoleName}
-											data-value={JSON.stringify(role)}
-											key={index}
-										>
-											{role.RoleName}
-										</option>
-									))}
-							</select>
-							<p className="text-error">{formErrors.roleGroupId}</p>
-							{/* <MultiSelect
-								options={options}
-								value={selected}
-								onChange={setSelected}
-								labelledBy="Select Role/s"
-							/> */}
+							{addDoctor ? (
+								""
+							) : (
+								<div className="col-sm-12 col-md-6">
+									<label className="required" htmlFor="role">
+										Role:
+									</label>
+									<select
+										name="roleId"
+										className="form-select form-input"
+										value={activeDropdownValue.role}
+										onChange={(event) => {
+											let data = parseDropdownValue(event);
+											setActiveDropdownValue((prevState) => ({
+												...prevState,
+												role: data.RoleName,
+											}));
+											setUser((prevState) => ({
+												...prevState,
+												roleGroupId: data.id,
+											}));
+										}}
+									>
+										<DropDownDefaultOption content={"Select Role Group"} />
+										{roleList &&
+											roleList.map((role, index) => (
+												<option
+													className="dropdown-item"
+													value={role.RoleName}
+													data-value={JSON.stringify(role)}
+													key={index}
+												>
+													{role.RoleName}
+												</option>
+											))}
+									</select>
+									<p className="text-error">{formErrors.roleGroupId}</p>
+								</div>
+							)}
+							{updateMode() ? (
+								""
+							) : (
+								<div className="col-sm-12 col-md-6">
+									<label
+										className={mode === "update" ? "" : "required"}
+										htmlFor="Password"
+									>
+										Confirm Password:
+									</label>
+									<input
+										type="password"
+										className="form-control form-input"
+										name="ConfirmPassword"
+										value={user.ConfirmPassword}
+										onChange={handleInputChange}
+									/>
+									<p className="text-error">{formErrors.ConfirmPassword}</p>
+								</div>
+							)}
 						</div>
-						<div className="col-sm-12 col-md">
-							<label
-								className={mode === "update" ? "" : "required"}
-								htmlFor="Password"
-							>
-								Confirm Password:
-							</label>
-							<input
-								type="password"
-								className="form-control form-input"
-								name="ConfirmPassword"
-								value={user.ConfirmPassword}
-								onChange={handleInputChange}
-							/>
-							<p className="text-error">{formErrors.ConfirmPassword}</p>
-						</div>
-					</div>
-					<button
-						className="btn btn-primary simple-shadow mt-3 me-3"
-						type="submit"
-					>
-						{updateMode() ? "Update" : "Save"}
-					</button>
-					{updateMode() ? (
+						{updateMode() ? (
+							<div className="col-sm-12 col-md d-flex flex-row justify-content-start gap-2">
+								<input
+									type="checkbox"
+									className="form-check-input"
+									name="isLock"
+									checked={user.isLock}
+									onChange={(event) =>
+										setUser((prevState) => ({
+											...prevState,
+											isLock: event.target.checked,
+										}))
+									}
+								/>
+								<label htmlFor="">Lock:</label>
+							</div>
+						) : (
+							""
+						)}
 						<button
-							type="button"
-							className="btn btn-secondary simple-shadow mt-3 me-3"
-							onClick={() => navigate(-1)}
+							className="btn btn-primary simple-shadow mt-3 me-3"
+							type="submit"
 						>
-							Cancel
+							{updateMode() ? "Update" : "Save"}
 						</button>
-					) : (
-						""
-					)}
-				</form>
+						{updateMode() ? (
+							<button
+								type="button"
+								className="btn btn-secondary simple-shadow mt-3 me-3"
+								onClick={() => navigate(-1)}
+							>
+								Cancel
+							</button>
+						) : (
+							""
+						)}
+					</form>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

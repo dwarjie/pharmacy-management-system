@@ -49,9 +49,10 @@ const TopNavigation = (props) => {
 				{/* <div>
 						<h5 className="text-weight-medium text-time">{getCurrentDate()}</h5>
 					</div> */}
-				<div className="d-flex flex-row gap-3">
+				<div className="d-flex flex-row align-items-center gap-3">
 					{/* <BellFill className="icon-size-md text-dark" /> */}
 					{/* <ExclamationTriangleFill className="icon-size-md text-dark" /> */}
+					<p className="m-0 current-user">{`${currentUser.FirstName} ${currentUser.LastName}`}</p>
 					<CgLogOff
 						className="icon-size-md text-dark cursor-pointer"
 						onClick={logOut}

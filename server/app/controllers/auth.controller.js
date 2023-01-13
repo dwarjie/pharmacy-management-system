@@ -95,6 +95,8 @@ exports.signin = (req, res) => {
 				return res.send({
 					accessToken: null,
 					message: `Invalid password.`,
+					userId: user.id,
+					invalid: true,
 				});
 			}
 
@@ -114,6 +116,7 @@ exports.signin = (req, res) => {
 						roles: roles,
 						roleGroup: data,
 						accessToken: token,
+						locked: user.isLock,
 					});
 				});
 			}
@@ -187,15 +190,16 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
 	const id = req.params.id;
 
-	let data = {
-		FirstName: req.body.FirstName,
-		LastName: req.body.LastName,
-		UserName: req.body.UserName,
-		Role: req.body.Role,
-		roleGroupId: req.body.roleGroupId,
-	};
+	// let data = {
+	// 	FirstName: req.body.FirstName,
+	// 	LastName: req.body.LastName,
+	// 	UserName: req.body.UserName,
+	// 	Role: req.body.Role,
+	// 	roleGroupId: req.body.roleGroupId,
+	// 	isLock: req.body.isLock,
+	// };
 
-	User.update(data, { where: { id: id } })
+	User.update(req.body, { where: { id: id } })
 		.then((row) => {
 			if (row != 1) {
 				res.send({

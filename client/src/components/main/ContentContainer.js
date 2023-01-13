@@ -37,6 +37,9 @@ import OR from "./navigation/OR/OR";
 import Discount from "./navigation/discount/Discount";
 import UpdateDiscount from "./navigation/discount/UpdateDiscount";
 
+// Request Tab
+import RequestForm from "./navigation/request/RequestForm";
+
 // Handler Tab
 import AddHandler from "./navigation/handler/AddHandler";
 import UpdateHandler from "./navigation/handler/UpdateHandler";
@@ -50,6 +53,7 @@ import AddChargeToAccount from "./navigation/invoice/AddChargeToAccount";
 import UpdateChargeToAccount from "./navigation/invoice/UpdateChargeToAccount";
 import InvoiceList from "./navigation/invoice/InvoiceList";
 import PrintChargeToAccount from "./navigation/print/PrintChargeToAccount";
+import SalesList from "./navigation/return/SalesList";
 import Return from "./navigation/return/Return";
 
 // Inventory Tab
@@ -170,7 +174,7 @@ const ContentContainer = (props) => {
 							path="/sales/charge-to-account/print/:id"
 							element={<PrintChargeToAccount />}
 						/>
-						<Route path="/sales/return" element={<Return />} />
+						<Route path="/sales/return" element={<SalesList />} />
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
 						<Route path="/inventory/order-list" element={<OrderList />} />
@@ -213,6 +217,7 @@ const ContentContainer = (props) => {
 						/>
 						<Route path="/report/return-history" element={<ReturnHistory />} />
 					</Route>
+					<Route path="/request/request-form" element={<RequestForm />} />
 					<Route path="*" element={<NotFound content={"NO ACCESS"} />} />
 				</Routes>
 			</div>

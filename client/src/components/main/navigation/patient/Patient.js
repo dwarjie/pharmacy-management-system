@@ -352,7 +352,7 @@ const Patient = (props) => {
 										let data = parseDropdownValue(event);
 										setActiveDropDownValue({
 											...activeDropDownValue,
-											handlerId: data.FirstName,
+											handlerId: `${data.FirstName} ${data.LastName}`,
 										});
 										setNewPatient({ ...newPatient, handlerId: data.id });
 									}}
@@ -362,11 +362,11 @@ const Patient = (props) => {
 										handlers.map((handler, index) => (
 											<option
 												className="dropdown-item"
-												value={handler.FirstName}
+												value={`${handler.FirstName} ${handler.LastName}`}
 												data-value={JSON.stringify(handler)}
 												key={index}
 											>
-												{handler.FirstName}
+												{`${handler.FirstName} ${handler.LastName}`}
 											</option>
 										))}
 									<option value={"new-value"}>{"<...>"}</option>

@@ -18,6 +18,7 @@ const Handler = (props) => {
 		Address: "",
 		Mobile: "",
 		Email: "",
+		CreditLimit: "",
 	};
 
 	const navigate = useNavigate();
@@ -76,6 +77,11 @@ const Handler = (props) => {
 		}
 		if (values.Email.trim() && !regexEmail.test(values.Email.trim())) {
 			errors.Email = "Please enter a valid email!";
+		}
+		if (!values.CreditLimit) {
+			errors.CreditLimit = "Credit Limit is required!";
+		} else if (values.CreditLimit <= 0) {
+			errors.CreditLimit = "Please enter a valid credit limit!";
 		}
 
 		return errors;
@@ -288,6 +294,51 @@ const Handler = (props) => {
 								onChange={handleChangeEvent}
 							/>
 							<p className="text-error">{formErrors.Email}</p>
+						</div>
+					</div>
+					<div className="p-2">
+						<h4>Accounting Details</h4>
+						<hr />
+					</div>
+					<div className="row mb-sm-3">
+						<div className="col-sm-12 col-md-5">
+							<label className="required" htmlFor="CreditLimit">
+								Credit Limit:
+							</label>
+							<input
+								type="number"
+								className="form-control form-input"
+								name="CreditLimit"
+								value={handler.CreditLimit}
+								onChange={handleChangeEvent}
+							/>
+							<p className="text-error">{formErrors.CreditLimit}</p>
+						</div>
+						<div className="col-sm-12 col-md-5">
+							<label htmlFor="">Balance:</label>
+							<input
+								type="number"
+								className="form-control form-input"
+								disabled
+								name="Balance"
+								value={parseFloat(handler.Balance).toFixed(2)}
+								onChange={handleChangeEvent}
+							/>
+						</div>
+						<div className="col-sm-12 col-md d-flex flex-row justify-content-start gap-2">
+							<input
+								type="checkbox"
+								className="form-check-input"
+								name="OnHold"
+								checked={handler.OnHold}
+								onChange={(event) =>
+									setHandler((prevState) => ({
+										...prevState,
+										OnHold: event.target.checked,
+									}))
+								}
+							/>
+							<label htmlFor="">On Hold</label>
 						</div>
 					</div>
 					<button

@@ -13,6 +13,9 @@ const ModalHandler = (props) => {
 		Address: "",
 		Mobile: "",
 		Email: "",
+		CreditLimit: 10000,
+		Balance: 0,
+		OnHold: false,
 	};
 
 	return (

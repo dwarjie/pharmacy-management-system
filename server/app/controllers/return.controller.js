@@ -4,6 +4,7 @@ const Return = db.return;
 
 exports.create = (req, res) => {
 	const adjustment = {
+		ReferenceNo: req.body.ReferenceNo,
 		Quantity: req.body.Quantity,
 		DateCreated: req.body.DateCreated,
 		Total: req.body.Total,

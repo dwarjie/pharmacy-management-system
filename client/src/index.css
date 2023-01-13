@@ -52,6 +52,14 @@ body {
 }
 
 /* TEXT */
+.current-user {
+	font-size: 0.9rem;
+}
+
+.text-information {
+	font-size: 1rem;
+}
+
 .text-weight-regular {
 	font-weight: 400;
 }

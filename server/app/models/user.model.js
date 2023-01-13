@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
 		},
 		Role: {
 			type: Sequelize.STRING,
-			allowNull: false,
+			allowNull: true,
 			get() {
 				const storedValue = this.getDataValue("Role");
 				return storedValue.split(";");
@@ -30,6 +30,11 @@ module.exports = (sequelize, Sequelize) => {
 			set(val) {
 				this.setDataValue("Role", val.join(";"));
 			},
+		},
+		isLock: {
+			type: Sequelize.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
 		},
 	});
 

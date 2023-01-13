@@ -14,6 +14,9 @@ exports.create = (req, res) => {
 		Address: req.body.Address.replace(/\s+/g, " ").trim(),
 		Mobile: req.body.Mobile.replace(/\s+/g, " ").trim(),
 		Email: req.body.Email,
+		CreditLimit: req.body.CreditLimit,
+		Balance: req.body.Balance,
+		OnHold: req.body.OnHold,
 	};
 
 	// check if handler already exists
@@ -77,6 +80,9 @@ exports.update = (req, res) => {
 		Address: req.body.Address.replace(/\s+/g, " ").trim(),
 		Mobile: req.body.Mobile.replace(/\s+/g, " ").trim(),
 		Email: req.body.Email,
+		CreditLimit: req.body.CreditLimit,
+		Balance: req.body.Balance,
+		OnHold: req.body.OnHold,
 	};
 
 	Handler.update(handler, { where: { id: id } })

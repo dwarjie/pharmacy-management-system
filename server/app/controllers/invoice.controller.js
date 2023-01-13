@@ -12,6 +12,7 @@ exports.create = (req, res) => {
 		GrossAmount: req.body.GrossAmount,
 		Total: req.body.Total,
 		PaidAmount: req.body.PaidAmount,
+		Balance: req.body.Balance,
 		Remarks: req.body.Remarks,
 		handlerId: req.body.handlerId,
 		userId: req.body.userId,

@@ -1,22 +1,4 @@
 // This module is responsible for creating handlers model table
-/* 
-CREATE TABLE `Handler` (
-  `HandlerID` <type>,
-  `Category` <type>,
-  `FirstName` <type>,
-  `MiddleName` <type>, ?
-  `LastName` <type>,
-  `Sex` <type>,
-  `City` <type>,
-  `ZIP` <type>,
-  `Address` <type>,
-  `Phone` <type>,
-  `Mobile` <type>,
-  `Email` <type>,
-  PRIMARY KEY (`HandlerID`),
-  KEY `Key` (`Category`, `FirstName`, `MiddleName`, `LastName`, `Sex`, `City`, `ZIP`, `Address`, `Phone`, `Mobile`, `Email`)
-);
-*/
 module.exports = (sequelize, Sequelize) => {
 	const Handler = sequelize.define("handler", {
 		Category: {
@@ -54,6 +36,20 @@ module.exports = (sequelize, Sequelize) => {
 		Email: {
 			type: Sequelize.STRING,
 			allowNull: true,
+		},
+		CreditLimit: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+		},
+		Balance: {
+			type: Sequelize.INTEGER,
+			allowNull: true,
+			defaultValue: 0,
+		},
+		OnHold: {
+			type: Sequelize.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
 		},
 	});
 

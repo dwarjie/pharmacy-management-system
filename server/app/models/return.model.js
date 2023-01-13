@@ -1,5 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
 	const Return = sequelize.define("return", {
+		ReferenceNo: {
+			type: Sequelize.STRING,
+			allowNull: false,
+		},
 		Quantity: {
 			type: Sequelize.INTEGER,
 			allowNull: false,

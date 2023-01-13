@@ -14,6 +14,9 @@ const AddHandler = () => {
 		Address: "",
 		Mobile: "",
 		Email: "",
+		CreditLimit: 10000,
+		Balance: 0,
+		OnHold: false,
 	};
 
 	return <Handler title="Add Doctor/NCM" initialHandler={initialHandler} />;

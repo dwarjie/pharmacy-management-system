@@ -16,6 +16,7 @@ const AddUser = () => {
 
 	const initialActiveDropdownValue = {
 		role: "",
+		handler: "",
 	};
 
 	return (

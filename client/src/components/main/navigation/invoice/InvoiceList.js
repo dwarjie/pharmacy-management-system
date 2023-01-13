@@ -118,7 +118,7 @@ const InvoiceList = () => {
 							<thead className="table-dark">
 								<tr>
 									<th scope="col">#</th>
-									<th scope="col">Invoice #</th>
+									<th scope="col">Reference #</th>
 									<th scope="col">Order Date</th>
 									<th scope="col">Due Date</th>
 									<th scope="col">Requested</th>

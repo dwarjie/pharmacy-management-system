@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 
 import logo from "../../../../asset/logo.png";
+import { formatDate } from "../../../../helper/dateHelper";
 
 const PrintInvoice = () => {
 	let componentRef = useRef();
@@ -135,7 +136,7 @@ class ComponentToPrint extends React.Component {
 							<p>
 								<strong>Order Date:</strong>
 								<br />
-								{sale.OrderDate}
+								{formatDate(sale.OrderDate)}
 								<br />
 							</p>
 						</div>

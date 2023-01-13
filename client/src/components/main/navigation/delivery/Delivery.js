@@ -299,7 +299,7 @@ const Delivery = () => {
 							disabled={purchaseOrder.Status === "settled" ? true : false}
 							onClick={updateOrder}
 						>
-							Settle
+							Update
 						</button>
 						<button
 							type="button"
@@ -486,7 +486,7 @@ const ProductTable = ({
 					<th scope="col">Item</th>
 					<th scope="col">Ordered Qty</th>
 					<th scope="col">Received Qty</th>
-					<th scope="col">To Be Receive</th>
+					<th scope="col">To Receive</th>
 					<th scope="col">Back Order</th>
 					<th scope="col">Unit Cost</th>
 					{/* <th scope="col">Action</th> */}

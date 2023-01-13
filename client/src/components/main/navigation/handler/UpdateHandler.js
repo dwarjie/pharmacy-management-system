@@ -17,6 +17,9 @@ const UpdateHandler = () => {
 		Address: oldHandler.Address,
 		Mobile: oldHandler.Mobile,
 		Email: oldHandler.Email,
+		CreditLimit: oldHandler.CreditLimit,
+		Balance: oldHandler.Balance,
+		OnHold: oldHandler.OnHold,
 	};
 
 	return (

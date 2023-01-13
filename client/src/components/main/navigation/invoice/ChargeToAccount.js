@@ -560,7 +560,7 @@ const InvoiceInformation = ({
 			<div className="row mb-sm-3 col-12">
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
-						Invoice #:
+						Reference #:
 					</label>
 					<input
 						type="text"
@@ -575,7 +575,7 @@ const InvoiceInformation = ({
 				</div>
 				<div className="col-sm-12 col-md">
 					<label className="required" htmlFor="">
-						Invoice Date:
+						Request Date:
 					</label>
 					<input
 						type="date"
@@ -782,15 +782,18 @@ const ProductTable = ({
 	};
 
 	const checkBalance = () => {
-		if (invoice.PaidAmount === 0) return invoice.Total;
-		if (invoice.PaidAmount >= invoice.Total) return 0;
-
 		let result = parseFloat(invoice.Total) - parseFloat(invoice.PaidAmount);
-		if (isNaN(result)) {
-			return parseFloat(invoice.Total).toFixed(2);
-		} else {
-			return result.toFixed(2);
-		}
+
+		return result.toFixed(2);
+		// if (invoice.PaidAmount === 0) return invoice.Total;
+		// if (invoice.PaidAmount >= invoice.Total) return 0;
+
+		// let result = parseFloat(invoice.Total) - parseFloat(invoice.PaidAmount);
+		// if (isNaN(result)) {
+		// 	return parseFloat(invoice.Total).toFixed(2);
+		// } else {
+		// 	return result.toFixed(2);
+		// }
 	};
 
 	const orderData = () => {
@@ -893,23 +896,10 @@ const ProductTable = ({
 							<td className="no-line"></td>
 							<td className="no-line"></td>
 							<td className="no-line text-right">
-								<strong>Paid Amount:</strong>
+								<strong>Balance:</strong>
 							</td>
 							<td className="no-line text-right">
-								<input
-									type="number"
-									min={1}
-									disabled={invoice.Status === "paid" ? true : false}
-									className="form-control form-input w-40 text-right m-0"
-									name="PaidAmount"
-									value={invoice.PaidAmount}
-									onChange={(event) => {
-										setInvoice((prevState) => ({
-											...prevState,
-											PaidAmount: event.target.value,
-										}));
-									}}
-								/>
+								&#8369;{parseFloat(checkBalance()).toFixed(2)}
 							</td>
 						</tr>
 					) : (
@@ -922,10 +912,23 @@ const ProductTable = ({
 							<td className="no-line"></td>
 							<td className="no-line"></td>
 							<td className="no-line text-right">
-								<strong>Balance:</strong>
+								<strong>Paid Amount:</strong>
 							</td>
 							<td className="no-line text-right">
-								&#8369;{parseFloat(checkBalance()).toFixed(2)}
+								<input
+									type="number"
+									min={1}
+									hidden={invoice.Status === "paid" ? true : false}
+									className="form-control form-input w-40 text-right m-0"
+									name="PaidAmount"
+									value={invoice.PaidAmount}
+									onChange={(event) => {
+										setInvoice((prevState) => ({
+											...prevState,
+											PaidAmount: event.target.value,
+										}));
+									}}
+								/>
 							</td>
 						</tr>
 					) : (
