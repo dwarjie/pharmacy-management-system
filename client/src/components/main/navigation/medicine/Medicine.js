@@ -106,7 +106,11 @@ const Medicine = (props) => {
 				console.log(response.data);
 				// reset the form
 				setAlertMessage(response.data.message);
-				createAuditTrail(`Added ${product.ProductName} in Product`, "Create", currentUser.id);
+				createAuditTrail(
+					`Added ${product.ProductName} in Product`,
+					"Create",
+					currentUser.id
+				);
 				if (response.data.data) {
 					setMedicine(props.initialMedicine);
 					setActiveDropDownValue(props.initialDropDownValue);
@@ -127,7 +131,11 @@ const Medicine = (props) => {
 		MedicineService.updateMedicine(medicine.id, medicine)
 			.then((response) => {
 				console.log(response.data);
-				createAuditTrail(`Updated ${medicine.ProductName} in Product`, "Update", currentUser.id);
+				createAuditTrail(
+					`Updated ${medicine.ProductName} in Product`,
+					"Update",
+					currentUser.id
+				);
 				alert(response.data.message);
 				navigate(-1);
 			})
@@ -203,16 +211,17 @@ const Medicine = (props) => {
 		let subCategory = activeDropDownValue.subCategoryItem;
 		if (subCategory.MarkUpUnit === "%") {
 			let percentage = 0; // if the type is percentage
-			percentage = subCategory.MarkUp / supplierPrice;
-			price = supplierPrice + percentage;
+			percentage = parseFloat(subCategory.MarkUp / 100).toFixed(2);
+			let markUp = parseFloat(percentage * supplierPrice).toFixed(2);
+			price = parseFloat(supplierPrice) + parseFloat(markUp);
 		} else {
 			// if amount
-			price = supplierPrice + subCategory.MarkUp;
+			price = parseFloat(supplierPrice) + parseFloat(subCategory.MarkUp);
 		}
 
 		// check if price is NaN
 		if (isNaN(price)) return 0;
-		return price.toFixed(2);
+		return parseFloat(price).toFixed(2);
 	};
 
 	// this will set the current category
