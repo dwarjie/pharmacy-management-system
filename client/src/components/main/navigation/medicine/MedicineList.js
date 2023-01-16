@@ -12,7 +12,7 @@ import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 import { useGlobalState } from "../../../../state";
 
 const MedicineList = () => {
-	let [currentUser] = useGlobalState("currentUser")
+	let [currentUser] = useGlobalState("currentUser");
 	let navigate = useNavigate();
 
 	const [medicines, setMedicines] = useState([]);
@@ -48,7 +48,11 @@ const MedicineList = () => {
 		MedicineService.deleteMedicine(medicine.id)
 			.then((response) => {
 				console.log(response.data);
-				createAuditTrail(`Deleted ${medicine.ProductName} in Product.`, "Delete", currentUser.id);
+				createAuditTrail(
+					`Deleted ${medicine.ProductName} in Product.`,
+					"Delete",
+					currentUser.id
+				);
 				getAllMedicine();
 				setAlertMessage(response.data.message);
 			})
@@ -85,8 +89,8 @@ const MedicineList = () => {
 								<th scope="col">Generic Name</th>
 								<th scope="col">Category</th>
 								<th scope="col">Supplier</th>
-								<th scope="col">Price</th>
 								<th scope="col">Unit Price</th>
+								<th scope="col">Unit Cost</th>
 								<th scope="col">Details</th>
 								<th scope="col">Actions</th>
 							</tr>

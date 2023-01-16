@@ -39,7 +39,7 @@ const AddAllPO = () => {
 				OnHand: item.Quantity,
 				ReorderPoint: item.ReorderPoint,
 				Quantity: 1,
-				UnitCost: item.SellingPrice,
+				UnitCost: item.SupplierPrice,
 				Total: item.Total,
 				ReceivedDate: "",
 				medicineId: item.id,

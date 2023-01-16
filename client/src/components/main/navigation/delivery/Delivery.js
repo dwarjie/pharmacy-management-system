@@ -21,7 +21,7 @@ import Loader from "../../../layout/Loader";
 import { useGlobalState } from "../../../../state";
 
 const Delivery = () => {
-	let [currentUser] = useGlobalState("currentUser")
+	let [currentUser] = useGlobalState("currentUser");
 	const navigate = useNavigate();
 	const location = useLocation();
 	const purchase = location.state.purchase;
@@ -88,12 +88,17 @@ const Delivery = () => {
 		await orderList.map(async (item) => {
 			// update items properties
 			// item.Quantity = subtractReceivedItem(item); // subtract the received item to ordered items
-			item.ReceivedQty += item.ReceiveQuantity; // set the received item
+			item.ReceivedQty =
+				parseFloat(item.ReceivedQty) + parseFloat(item.ReceiveQuantity); // set the received item
 			checkItemStatus(item); // check if item is already delivered
 			console.log(item);
 			await updateItem(item);
 			await updateItemStock(item);
-			createAuditTrail(`Updated ${purchaseOrder.POCode} in Delivery.`, "Update", currentUser.id)
+			createAuditTrail(
+				`Updated ${purchaseOrder.POCode} in Delivery.`,
+				"Update",
+				currentUser.id
+			);
 			navigate("/pharmacy/inventory/delivery-list");
 		});
 	};
@@ -110,7 +115,7 @@ const Delivery = () => {
 
 	const updateItemStock = (item) => {
 		let data = {
-			Quantity: item.ReceivedQty,
+			Quantity: item.ReceiveQuantity,
 		};
 		MedicineService.updateMedicineStock(item.medicineId, data)
 			.then((response) => {

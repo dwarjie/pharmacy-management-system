@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import Loader from "../../../layout/Loader";
 import BackupService from "../../../../services/BackupService";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 import { useGlobalState } from "../../../../state";
+import FileDownload from "js-file-download";
 
-import {MdRestorePage} from "react-icons/md"
+import { MdRestorePage, MdDownload } from "react-icons/md";
 
 const Backup = () => {
-	let [currentUser] = useGlobalState("currentUser")
+	let [currentUser] = useGlobalState("currentUser");
 
-  const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [fileList, setFileList] = useState([]);
 	const [alertMessage, setAlertMessage] = useState("");
 
@@ -21,55 +22,80 @@ const Backup = () => {
 
 	const getAllFiles = async () => {
 		await BackupService.getFileList()
-			.then(response => {
-				console.log(response.data)
+			.then((response) => {
+				console.log(response.data);
 				setFileList(response.data);
-				setLoading(false)
+				setLoading(false);
 			})
-			.catch(err => {
-				console.log(err)
+			.catch((err) => {
+				console.log(err);
 			});
-	}
+	};
 
 	const backupData = async () => {
-		setLoading(true)
+		setLoading(true);
 		await BackupService.backupData()
-			.then(response => {
-				console.log(response.data)
-				setAlertMessage(response.data.message)
+			.then((response) => {
+				console.log(response.data);
+				setAlertMessage(response.data.message);
 				createAuditTrail(`Backup the database.`, "Backup", currentUser.id);
 			})
-			.catch(err => {
-				console.log(err)
+			.catch((err) => {
+				console.log(err);
 			});
-			getAllFiles();
-	}
+		getAllFiles();
+	};
 
 	const restoreData = async (fileName) => {
-		if(!AlertPrompt("Restore " + fileName + " data?")) return;
+		if (!AlertPrompt("Restore " + fileName + " data?")) return;
 
-		setLoading(true)
+		setLoading(true);
 
 		let data = {
-			fileName: fileName
-		}
+			fileName: fileName,
+		};
 		await BackupService.restoreData(data)
-			.then(response => {
-				console.log(response.data)
-				setAlertMessage("Restored Successfully!")
-				createAuditTrail(`Restored ${fileName} data.`, "Restore", currentUser.id);
+			.then((response) => {
+				console.log(response.data);
+				setAlertMessage("Restored Successfully!");
+				createAuditTrail(
+					`Restored ${fileName} data.`,
+					"Restore",
+					currentUser.id
+				);
 			})
-			.catch(err => {
-				console.log(err)
+			.catch((err) => {
+				console.log(err);
 			});
-			setLoading(false)
-	}
+		setLoading(false);
+	};
 
-  return (
-   <>
+	const downloadData = async (fileName) => {
+		if (!AlertPrompt(`Download file ${fileName}?`)) return;
+
+		setLoading(true);
+
+		await BackupService.downloadFile(fileName)
+			.then((response) => {
+				FileDownload(response.data, fileName);
+				setAlertMessage("Downloaded successfully!");
+				createAuditTrail(
+					`Downloaded ${fileName} data.`,
+					"Download",
+					currentUser.id
+				);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		setLoading(false);
+	};
+
+	return (
+		<>
 			{loading ? (
 				<div className="w-auto mt-8 d-flex justify-content-center align-items-center">
-          <Loader />
+					<Loader />
 				</div>
 			) : (
 				<>
@@ -86,18 +112,24 @@ const Backup = () => {
 						) : (
 							""
 						)}
-            <div className="d-flex flex-row justify-content-center py-5">
-              <button className="btn btn-primary" onClick={backupData}>Backup Data</button>
-            </div>
+						<div className="d-flex flex-row justify-content-center py-5">
+							<button className="btn btn-primary" onClick={backupData}>
+								Backup Data
+							</button>
+						</div>
 					</div>
-					<FileList fileList={fileList} restoreData={restoreData}/>
+					<FileList
+						fileList={fileList}
+						restoreData={restoreData}
+						downloadData={downloadData}
+					/>
 				</>
 			)}
-		</> 
-  )
-}
+		</>
+	);
+};
 
-const FileList = ({ fileList, restoreData }) => {
+const FileList = ({ fileList, restoreData, downloadData }) => {
 	return (
 		<div className="col-12 h-auto mt-3">
 			<div className="p-2">
@@ -122,6 +154,12 @@ const FileList = ({ fileList, restoreData }) => {
 											<MdRestorePage
 												className="icon-size-sm cursor-pointer"
 												onClick={() => restoreData(file)}
+											/>
+										</span>
+										<span className="px-2">
+											<MdDownload
+												className="icon-size-sm cursor-pointer"
+												onClick={() => downloadData(file)}
 											/>
 										</span>
 									</td>

@@ -522,7 +522,7 @@ const Medicine = (props) => {
 							</div>
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="SellingPrice">
-									Selling Price:
+									Unit Price:
 								</label>
 								<input
 									type="text"
@@ -538,7 +538,7 @@ const Medicine = (props) => {
 						<div className="row mb-sm-3">
 							<div className="col-sm-12 col-md">
 								<label className="required" htmlFor="SupplierPrice">
-									Unit Price:
+									Unit Cost:
 								</label>
 								<input
 									type="number"
