@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../helper/dateHelper";
 import SaleService from "../../../../services/SaleService";
 import Loader from "../../../layout/Loader";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper"
+import { useGlobalState } from "../../../../state";
 
 const SalesList = () => {
+	let [currentUser] = useGlobalState("currentUser")
 	let navigate = useNavigate();
 
 	const [loading, setLoading] = useState(true);
@@ -27,6 +30,7 @@ const SalesList = () => {
 	};
 
 	const navigateSale = (sale) => {
+		createAuditTrail(`Clicked ${sale.OrderNo} in return.`, "Click", currentUser.id)
 		navigate(`/pharmacy/sales/return/${sale.id}`, {
 			state: {
 				sale: sale,

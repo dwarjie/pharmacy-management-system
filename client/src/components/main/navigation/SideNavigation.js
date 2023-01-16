@@ -67,7 +67,7 @@ const SideNavigation = () => {
 							Dashboard
 						</Link>
 
-						<RequestModule />
+						{/* <RequestModule /> */}
 
 						{/* FILE MAINTENANCE*/}
 						{checkRoles(ROLES.maintenance) ? <MaintenanceModule /> : ""}
@@ -462,7 +462,7 @@ const InventoryModule = () => {
 						}
 					>
 						Stock Adjustment
-					</Link>
+				</Link>
 				</li>
 			</ul>
 		</div>
@@ -754,32 +754,17 @@ const UtilitiesModule = () => {
 				</li>
 				<li>
 					<Link
-						to={"/pharmacy/dashboard"}
+						to={"/pharmacy/utilities/backup-restore"}
 						className="dropdown-item"
 						onClick={() =>
 							createAuditTrail(
-								"Backup is clicked in navigation",
+								"Backup and Restore is clicked in navigation",
 								"Click",
 								currentUser.id
 							)
 						}
 					>
-						Download Backup
-					</Link>
-				</li>
-				<li>
-					<Link
-						to={"/pharmacy/dashboard"}
-						className="dropdown-item"
-						onClick={() =>
-							createAuditTrail(
-								"Restore Backup is clicked in navigation",
-								"Click",
-								currentUser.id
-							)
-						}
-					>
-						Restore Database
+						Backup and Restore
 					</Link>
 				</li>
 			</ul>

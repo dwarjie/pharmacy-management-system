@@ -13,12 +13,15 @@ import MedicineService from "../../../../services/MedicineService";
 import SupplierService from "../../../../services/SupplierService";
 import PurchaseService from "../../../../services/PurchaseService";
 import PurchaseDetailService from "../../../../services/PurchaseDetailService";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 // icons
 import { MdDelete } from "react-icons/md";
 import Loader from "../../../layout/Loader";
+import { useGlobalState } from "../../../../state";
 
 const Delivery = () => {
+	let [currentUser] = useGlobalState("currentUser")
 	const navigate = useNavigate();
 	const location = useLocation();
 	const purchase = location.state.purchase;
@@ -90,6 +93,7 @@ const Delivery = () => {
 			console.log(item);
 			await updateItem(item);
 			await updateItemStock(item);
+			createAuditTrail(`Updated ${purchaseOrder.POCode} in Delivery.`, "Update", currentUser.id)
 			navigate("/pharmacy/inventory/delivery-list");
 		});
 	};
@@ -272,6 +276,10 @@ const Delivery = () => {
 				</div>
 			) : (
 				<div className="h-auto d-flex flex-column justify-content-between gap-1">
+					<div className="p-2">
+						<h4>Delivery</h4>
+						<hr />
+					</div>
 					<div className="col-12 h-auto">
 						<OrderInformation
 							purchaseOrder={purchaseOrder}

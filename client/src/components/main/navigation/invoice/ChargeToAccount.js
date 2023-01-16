@@ -18,6 +18,7 @@ import InvoiceDetailService from "../../../../services/InvoiceDetailService";
 import MedicineService from "../../../../services/MedicineService";
 import HandlerService from "../../../../services/HandlerService";
 import PatientService from "../../../../services/PatientService";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper"
 
 // icons
 import { MdDelete } from "react-icons/md";
@@ -170,14 +171,39 @@ const ChargeToAccount = (props) => {
 
 	const createInvoice = async (event) => {
 		event.preventDefault();
+		if (activeDropDownValue.onHold) return alert("Handler's currently on hold from request!");
+
 		if (!AlertPrompt("Are you sure you want to create this invoice?")) return;
 
+		if (!canRequest()) return alert("Request total exceed from handler's credit limit.") 
+
 		setLoading(true);
+		await increaseBalance();
 		let invoiceId = await createChargeToAccount();
 		await createInvoiceDetails(invoiceId);
 		await decreaseProductStock();
+		await createAuditTrail(`Processed ${invoice.InvoiceNo} in Charge to Account`, "Create", currentUser.id);
 		navigate(`/pharmacy/sales/charge-to-account/print/${invoiceId}`);
 	};
+
+	const increaseBalance = async () => {
+		let data = {
+			amount: invoice.Total
+		}
+		await HandlerService.increaseBalance(activeDropDownValue.handlerId, data)
+			.then(response => {
+				console.log(response.data)
+			})
+			.catch(err => {
+				console.log(err)
+			});
+	}
+
+	const canRequest = () => {
+		if (parseFloat(activeDropDownValue.balance + invoice.Total) > activeDropDownValue.creditLimit) return false;
+
+		return true;
+	}
 
 	const updateInvoiceItem = async (item) => {
 		await InvoiceDetailService.updateItem(item.id, item)
@@ -611,6 +637,10 @@ const InvoiceInformation = ({
 							setActiveDropDownValue((prevState) => ({
 								...prevState,
 								handler: value,
+								creditLimit: data.CreditLimit,
+								balance: data.Balance,
+								onHold: data.OnHold,
+								handlerId: data.id
 							}));
 							setInvoice((prevState) => ({ ...prevState, handlerId: data.id }));
 						}}

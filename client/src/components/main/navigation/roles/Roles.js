@@ -28,7 +28,7 @@ const Role = () => {
 		{ label: "Sales", value: "sales" },
 		{ label: "Reports", value: "reports" },
 		{ label: "Utilities", value: "utilities" },
-		{ label: "Request Form", value: "request-form" },
+		// { label: "Request Form", value: "request-form" },
 	];
 
 	const [role, setRole] = useState(initialRole);

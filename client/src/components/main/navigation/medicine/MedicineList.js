@@ -8,8 +8,11 @@ import MedicineService from "../../../../services/MedicineService";
 // icons
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import { useGlobalState } from "../../../../state";
 
 const MedicineList = () => {
+	let [currentUser] = useGlobalState("currentUser")
 	let navigate = useNavigate();
 
 	const [medicines, setMedicines] = useState([]);
@@ -45,6 +48,7 @@ const MedicineList = () => {
 		MedicineService.deleteMedicine(medicine.id)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Deleted ${medicine.ProductName} in Product.`, "Delete", currentUser.id);
 				getAllMedicine();
 				setAlertMessage(response.data.message);
 			})

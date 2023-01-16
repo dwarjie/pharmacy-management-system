@@ -6,6 +6,7 @@ import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import Loader from "../../../layout/Loader";
 import { getCurrentDate } from "../../../../helper/dateHelper";
 import { useGlobalState } from "../../../../state";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper"
 
 // create context API
 const AdjustmentContext = createContext();
@@ -44,6 +45,7 @@ const StockAdjustment = () => {
 		await StockAdjustmentService.createStockAdjustment(adjustment)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Created a product adjustment for ${selectedProduct.ProductName}.`, "Create", currentUser.id)
 				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {

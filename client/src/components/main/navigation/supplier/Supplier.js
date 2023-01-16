@@ -6,12 +6,15 @@ import { isFormValid } from "../../../../helper/checkFormValid";
 import REGEX from "../../../../helper/regexHelper";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import SupplierService from "../../../../services/SupplierService";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 // icons
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useGlobalState } from "../../../../state";
 
 const Supplier = () => {
+	let [ currentUser ] = useGlobalState("currentUser");
 	const initialSupplier = {
 		id: null,
 		SupplierName: "",
@@ -54,8 +57,10 @@ const Supplier = () => {
 	};
 
 	// create a new Supplier
-	const createSupplier = (event) => {
+	const createSupplier = async (event) => {
 		event.preventDefault();
+
+		await createAuditTrail("Clicked Add in Supplier", "Click", currentUser.id)
 
 		setFormErrors(validateForm(newSupplier));
 		if (!isFormValid(formErrors)) return;
@@ -74,6 +79,7 @@ const Supplier = () => {
 		SupplierService.createSupplier(data)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Added ${data.SupplierName} in Supplier`, "Create", currentUser.id)
 				refreshList();
 				setAlertMessage(response.data.message);
 			})

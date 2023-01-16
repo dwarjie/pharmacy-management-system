@@ -5,12 +5,15 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import UnitOfMeasureService from "../../../../services/UnitOfMeasureService";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 // icon
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useGlobalState } from "../../../../state";
 
 const AddUnit = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	const initialUnit = {
 		id: null,
 		UnitName: "",
@@ -60,6 +63,7 @@ const AddUnit = () => {
 		UnitOfMeasureService.createUnitOfMeasure(data)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Added ${data.UnitName} in Unit`, "Create", currentUser.id);
 				refreshList();
 				setAlertMessage(response.data.message);
 			})

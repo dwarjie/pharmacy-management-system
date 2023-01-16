@@ -29,7 +29,11 @@ const AddChargeToAccount = () => {
 
 	const initialDropDownValue = {
 		handler: "",
+		creditLimit: 0,
+		balance: 0,
+		onHold: false,
 		patient: "",
+		handlerId: null,
 		user: `${currentUser.FirstName} ${currentUser.LastName}`,
 	};
 

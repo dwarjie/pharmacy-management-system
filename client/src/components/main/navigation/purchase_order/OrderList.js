@@ -4,8 +4,12 @@ import SupplierService from "../../../../services/SupplierService";
 import MedicineService from "../../../../services/MedicineService";
 import Loader from "../../../layout/Loader";
 import { useNavigate } from "react-router-dom";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper"
+import { useGlobalState } from "../../../../state";
 
 const OrderList = () => {
+
+
 	const [supplierList, setSupplierList] = useState([]);
 	const [productList, setProductList] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -81,6 +85,8 @@ const OrderList = () => {
 };
 
 const GroupedList = ({ productList }) => {
+
+
 	const iterateObject = () => {
 		if (productList === []) return;
 
@@ -97,6 +103,7 @@ const GroupedList = ({ productList }) => {
 };
 
 const ProductTable = ({ productList, supplier }) => {
+	let [currentUser] = useGlobalState("currentUser");
 	const navigate = useNavigate();
 	const products = productList[supplier];
 
@@ -117,6 +124,7 @@ const ProductTable = ({ productList, supplier }) => {
 	};
 
 	const orderAll = () => {
+		createAuditTrail(`Clicked Order All in PO List for ${supplier}`, "Click", currentUser.id);
 		navigate(`/pharmacy/inventory/order-list/purchase-order`, {
 			state: {
 				products: products,

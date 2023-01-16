@@ -9,10 +9,13 @@ import ModalCategory from "../../../layout/ModalCategory";
 import ModalSubCategory from "../../../layout/ModalSubCategory";
 import ModalSupplier from "../../../layout/ModalSupplier";
 import ModalUnit from "../../../layout/ModalUnit";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import { useGlobalState } from "../../../../state";
 
 const Medicine = (props) => {
 	// this is for the status drop down
 	const statusList = ["Active", "Inactive"];
+	let [currentUser] = useGlobalState("currentUser");
 
 	const initialFormErrors = {
 		ProductCode: "",
@@ -103,6 +106,7 @@ const Medicine = (props) => {
 				console.log(response.data);
 				// reset the form
 				setAlertMessage(response.data.message);
+				createAuditTrail(`Added ${product.ProductName} in Product`, "Create", currentUser.id);
 				if (response.data.data) {
 					setMedicine(props.initialMedicine);
 					setActiveDropDownValue(props.initialDropDownValue);
@@ -123,6 +127,7 @@ const Medicine = (props) => {
 		MedicineService.updateMedicine(medicine.id, medicine)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Updated ${medicine.ProductName} in Product`, "Update", currentUser.id);
 				alert(response.data.message);
 				navigate(-1);
 			})

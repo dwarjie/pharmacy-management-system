@@ -8,6 +8,7 @@ import { useGlobalState } from "../../../../state";
 import ReturnService from "../../../../services/ReturnService";
 import { useLocation, useParams } from "react-router-dom";
 import SalesDetailService from "../../../../services/SalesDetailService";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 // create context API
 const AdjustmentContext = createContext();
@@ -83,6 +84,7 @@ const Return = () => {
 		await ReturnService.createReturn(returnInformation)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Created return process for Order ${saleInformation.OrderNo} for product ${selectedProduct.medicine.ProductName}.`, "Create	", currentUser.id)
 				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
@@ -130,7 +132,7 @@ const Return = () => {
 				<Provider value={contextValue}>
 					<div className="h-auto d-flex flex-column justify-content-between gap-1">
 						<div className="p-2">
-							<h4>Return</h4>
+							<h4>Order #: {saleInformation.OrderNo}</h4>
 							<hr />
 						</div>
 						{alertMessage ? (

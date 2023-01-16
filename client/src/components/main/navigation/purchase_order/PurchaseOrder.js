@@ -13,12 +13,15 @@ import MedicineService from "../../../../services/MedicineService";
 import SupplierService from "../../../../services/SupplierService";
 import PurchaseService from "../../../../services/PurchaseService";
 import PurchaseDetailService from "../../../../services/PurchaseDetailService";
+import { createAuditTrail} from "../../../../helper/AuditTrailHelper"
 
 // icons
 import { MdDelete } from "react-icons/md";
 import Loader from "../../../layout/Loader";
+import { useGlobalState } from "../../../../state";
 
 const PurchaseOrder = (props) => {
+	let [currentUser] = useGlobalState("currentUser")
 	const navigate = useNavigate();
 	const {
 		mode,
@@ -98,6 +101,7 @@ const PurchaseOrder = (props) => {
 
 		let purchaseId = await createPurchase();
 		createPurchaseDetails(purchaseId);
+		createAuditTrail(`Processed ${purchaseOrder.POCode} in Purchase Order.`, "Create", currentUser.id)
 		navigate(`/pharmacy/inventory/purchase-order/print/${purchaseId}`);
 		resetPage();
 	};
@@ -125,6 +129,7 @@ const PurchaseOrder = (props) => {
 		await PurchaseService.updateStatus(purchaseOrder.id, data)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Updated ${purchaseOrder.POCode} status in Purchase Order.`, "Update", currentUser.id)
 				redirectDelivery();
 			})
 			.catch((err) => {
@@ -155,6 +160,7 @@ const PurchaseOrder = (props) => {
 	const updateOrder = async () => {
 		await updatePurchase();
 		await updateItems();
+		createAuditTrail(`Updated ${purchaseOrder.POCode} in Purchase Order.`, "Update", currentUser.id)
 	};
 
 	const updatePurchaseQuantity = async () => {

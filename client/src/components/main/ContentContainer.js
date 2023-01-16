@@ -82,6 +82,7 @@ import Role from "./navigation/roles/Roles";
 import AddUser from "./navigation/user/AddUser";
 import UpdateUser from "./navigation/user/UpdateUser";
 import UserList from "./navigation/user/UserList";
+import Backup from "./navigation/backup/Backup";
 
 const ContentContainer = (props) => {
 	return (
@@ -154,6 +155,7 @@ const ContentContainer = (props) => {
 						<Route path="/utilities/add-user" element={<AddUser />} />
 						<Route path="/utilities/user-list" element={<UserList />} />
 						<Route path="/utilities/:id" element={<UpdateUser />} />
+						<Route path="/utilities/backup-restore" element={<Backup/>} />
 					</Route>
 					<Route element={<ProtectedURL role={"sales"} />}>
 						<Route path="/sales/pos" element={<POS />} />

@@ -40,6 +40,7 @@ db.sequelize
 // 	initialize.VAT(db.vat);
 // 	initialize.Discount(db.discount);
 // });
+// db.sequelize.drop();
 
 // sample route
 app.get("/", function (req, res) {
@@ -82,6 +83,7 @@ require("./app/routes/auth.routes")(app);
 require("./app/routes/roleGroup.routes")(app);
 require("./app/routes/auditTrail.routes")(app);
 require("./app/routes/recaptchat.routes")(app);
+require("./app/routes/backup.routes")(app);
 
 // set the server port and listen for requests
 const PORT = process.env.PORT || 8080;

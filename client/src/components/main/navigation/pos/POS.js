@@ -22,6 +22,7 @@ import SalesDetailService from "../../../../services/SalesDetailService";
 import Loader from "../../../layout/Loader";
 import { useGlobalState } from "../../../../state";
 import ModalDiscount from "../../../layout/ModalDiscount";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 const POS = (props) => {
 	let [currentUser] = useGlobalState("currentUser");
@@ -159,6 +160,7 @@ const POS = (props) => {
 		let saleId = await createSale();
 		await createSalesDetails(saleId);
 		await decreaseProductStock();
+		await createAuditTrail(`Processed transaction ${sale.OrderNo} in POS.`, "Create", currentUser.id);
 		printInvoice();
 	};
 

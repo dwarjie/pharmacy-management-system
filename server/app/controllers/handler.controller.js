@@ -1,6 +1,9 @@
 // This module contains the handlers controller
 const db = require("../models");
 const Handler = db.handler;
+const { Sequelize } = require("../models");
+const { QueryTypes } = db.Sequelize;
+const Op = db.Sequelize.Op;
 
 // Create new handler
 exports.create = (req, res) => {
@@ -135,4 +138,44 @@ exports.delete = (req, res) => {
 				message: err.message || `Error deleting handler ${id}`,
 			});
 		});
+};
+
+// increment product on stock quantity
+exports.increaseBalance = async (req, res) => {
+	const amount = req.body.amount;
+	const id = req.params.id;
+
+	try {
+		let result = await db.sequelize.query(
+			`UPDATE handlers SET Balance = Balance + ${amount} WHERE id = ${id}`,
+			{
+				type: Sequelize.UPDATE,
+			}
+		);
+		res.send(result);
+	} catch (err) {
+		res.status(500).send({
+			message: err.message || `Error incrementing balance.`,
+		});
+	}
+};
+
+// increment product on stock quantity
+exports.decreaseBalance = async (req, res) => {
+	const amount = req.body.amount;
+	const id = req.params.id;
+
+	try {
+		let result = await db.sequelize.query(
+			`UPDATE handlers SET Balance = Balance - ${amount} WHERE id = ${id}`,
+			{
+				type: Sequelize.UPDATE,
+			}
+		);
+		res.send(result);
+	} catch (err) {
+		res.status(500).send({
+			message: err.message || `Error decrementing balance.`,
+		});
+	}
 };

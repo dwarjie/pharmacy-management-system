@@ -5,11 +5,14 @@ import { AlertPrompt } from "../../../layout/AlertModal.layout";
 import { isFormValid } from "../../../../helper/checkFormValid";
 import AlertInfoLayout from "../../../layout/AlertInfo.layout";
 import VatService from "../../../../services/VatService";
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 // icons
 import { MdDelete } from "react-icons/md";
+import { useGlobalState } from "../../../../state";
 
 const VAT = () => {
+	let [currentUser] = useGlobalState("currentUser");
 	const initialVat = {
 		id: null,
 		VatName: "",
@@ -46,6 +49,7 @@ const VAT = () => {
 		VatService.updateVAT(data)
 			.then((response) => {
 				console.log(response.data);
+				createAuditTrail(`Added ${data.VatName} in VAT`, "Create", currentUser.id);
 				refreshList();
 				setAlertMessage(response.data.message);
 			})

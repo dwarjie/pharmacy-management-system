@@ -18,11 +18,21 @@ const deleteHandler = (id) => {
 	return http.delete(`/handler/handler-list?handlerId=${id}`);
 };
 
+const increaseBalance = (id, data) => {
+	return http.put(`/handler/add-balance/${id}`, data);
+};
+
+const decreaseBalance = (id, data) => {
+	return http.put(`/handler/subtract-balance/${id}`, data);
+};
+
 const HandlerService = {
 	createHandler,
 	getAllHandler,
 	updateHandler,
 	deleteHandler,
+	increaseBalance,
+	decreaseBalance
 };
 
 export default HandlerService;
