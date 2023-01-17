@@ -8,6 +8,7 @@ import InvoiceService from "../../../../services/InvoiceService";
 import Loader from "../../../layout/Loader";
 
 import logo from "../../../../asset/logo.png";
+import { formatCurrency } from "../../../../helper/currencyFormat";
 
 const PrintChargeToAccount = () => {
 	const { id } = useParams();
@@ -114,9 +115,13 @@ class ComponentToPrint extends React.Component {
 				items.map((item, index) => (
 					<tr key={index}>
 						<td>{item.medicine.ProductName}</td>
-						<td className="text-center">{item.UnitPrice}</td>
+						<td className="text-center">
+							{parseFloat(item.UnitPrice).toFixed(2)}
+						</td>
 						<td className="text-center">{item.Quantity}</td>
-						<td className="text-right">{parseFloat(item.Total).toFixed(2)}</td>
+						<td className="text-right">
+							{formatCurrency(parseFloat(item.Total).toFixed(2))}
+						</td>
 					</tr>
 				))
 			);
@@ -205,7 +210,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Item</strong>
 												</td>
 												<td className="text-center">
-													<strong>Price</strong>
+													<strong>Unit Price</strong>
 												</td>
 												<td className="text-center">
 													<strong>Quantity</strong>
@@ -225,7 +230,7 @@ class ComponentToPrint extends React.Component {
 													<strong>VATable:</strong>
 												</td>
 												<td className="thick-line text-right">
-													&#8369;{parseFloat(invoice.VAT).toFixed(2)}
+													{formatCurrency(parseFloat(invoice.VAT).toFixed(2))}
 												</td>
 											</tr>
 											<tr>
@@ -235,7 +240,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Total Due: </strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{parseFloat(invoice.Total).toFixed(2)}
+													{formatCurrency(parseFloat(invoice.Total).toFixed(2))}
 												</td>
 											</tr>
 											{invoice.PaidAmount > 0 ? (
@@ -246,7 +251,9 @@ class ComponentToPrint extends React.Component {
 														<strong>Paid Amount:</strong>
 													</td>
 													<td className="thick-line text-right">
-														&#8369;{parseFloat(invoice.PaidAmount).toFixed(2)}
+														{formatCurrency(
+															parseFloat(invoice.PaidAmount).toFixed(2)
+														)}
 													</td>
 												</tr>
 											) : (
@@ -260,7 +267,9 @@ class ComponentToPrint extends React.Component {
 														<strong>Balance:</strong>
 													</td>
 													<td className="thick-line text-right">
-														&#8369;{parseFloat(checkBalance()).toFixed(2)}
+														{formatCurrency(
+															parseFloat(checkBalance()).toFixed(2)
+														)}
 													</td>
 												</tr>
 											) : (

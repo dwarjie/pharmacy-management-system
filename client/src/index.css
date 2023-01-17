@@ -338,3 +338,43 @@ label {
 	text-decoration: none;
 	cursor: pointer;
 }
+
+.card-product {
+	width: 60px;
+	height: 60px;
+	background-color: #5cc5758f;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+}
+
+.card-handler {
+	width: 60px;
+	height: 60px;
+	background-color: #7cb5d89d;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+}
+
+.card-patient {
+	width: 60px;
+	height: 60px;
+	background-color: #f0757f88;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+}
+
+.card-invoice {
+	width: 60px;
+	height: 60px;
+	background-color: #81acc780;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+}

@@ -111,7 +111,9 @@ class ComponentToPrint extends React.Component {
 					<tr key={index}>
 						<td>{item.medicine.ProductName}</td>
 						<td className="text-center">{item.Quantity}</td>
-						<td className="text-center">{item.medicine.SupplierPrice}</td>
+						<td className="text-center">
+							{parseFloat(item.medicine.SupplierPrice).toFixed(2)}
+						</td>
 						<td className="text-right">{parseFloat(item.Total).toFixed(2)}</td>
 					</tr>
 				))
@@ -199,7 +201,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Total Amount</strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{parseFloat(purchase.Total).toFixed(2)}
+													{parseFloat(purchase.Total).toFixed(2)}
 												</td>
 											</tr>
 										</tbody>

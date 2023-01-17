@@ -19,6 +19,7 @@ import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 import { MdDelete } from "react-icons/md";
 import Loader from "../../../layout/Loader";
 import { useGlobalState } from "../../../../state";
+import { formatCurrency } from "../../../../helper/currencyFormat";
 
 const PurchaseOrder = (props) => {
 	let [currentUser] = useGlobalState("currentUser");
@@ -624,8 +625,8 @@ const ProductTable = (props) => {
 							}}
 						/>
 					</td>
-					<td>{order.UnitCost}</td>
-					<td>{getProductTotal(order)}</td>
+					<td>{parseFloat(order.UnitCost).toFixed(2)}</td>
+					<td>{formatCurrency(getProductTotal(order))}</td>
 					<td>
 						<span className="px-1">
 							<MdDelete
@@ -666,7 +667,9 @@ const ProductTable = (props) => {
 					<td className="no-line text-center">
 						<strong>Total:</strong>
 					</td>
-					<td className="no-line text-right">&#8369;{purchaseOrder.Total}</td>
+					<td className="no-line text-right">
+						{formatCurrency(purchaseOrder.Total)}
+					</td>
 				</tr>
 			</tbody>
 		</table>

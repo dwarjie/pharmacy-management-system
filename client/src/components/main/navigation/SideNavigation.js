@@ -462,7 +462,7 @@ const InventoryModule = () => {
 						}
 					>
 						Stock Adjustment
-				</Link>
+					</Link>
 				</li>
 			</ul>
 		</div>
@@ -536,13 +536,28 @@ const SalesModule = () => {
 						className="dropdown-item"
 						onClick={() =>
 							createAuditTrail(
-								"Return List is clicked in navigation",
+								"Return List (POS) is clicked in navigation",
 								"Click",
 								currentUser.id
 							)
 						}
 					>
-						Return
+						Return (POS)
+					</Link>
+				</li>
+				<li>
+					<Link
+						to={"/pharmacy/sales/return-invoice"}
+						className="dropdown-item"
+						onClick={() =>
+							createAuditTrail(
+								"Return List (Charge to Account) is clicked in navigation",
+								"Click",
+								currentUser.id
+							)
+						}
+					>
+						Return (Charge to Account)
 					</Link>
 				</li>
 			</ul>

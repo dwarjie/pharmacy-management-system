@@ -23,6 +23,7 @@ import Loader from "../../../layout/Loader";
 import { useGlobalState } from "../../../../state";
 import ModalDiscount from "../../../layout/ModalDiscount";
 import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import { formatCurrency } from "../../../../helper/currencyFormat";
 
 const POS = (props) => {
 	let [currentUser] = useGlobalState("currentUser");
@@ -160,7 +161,11 @@ const POS = (props) => {
 		let saleId = await createSale();
 		await createSalesDetails(saleId);
 		await decreaseProductStock();
-		await createAuditTrail(`Processed transaction ${sale.OrderNo} in POS.`, "Create", currentUser.id);
+		await createAuditTrail(
+			`Processed transaction ${sale.OrderNo} in POS.`,
+			"Create",
+			currentUser.id
+		);
 		printInvoice();
 	};
 
@@ -493,7 +498,7 @@ const OrderInformation = (props) => {
 			<div className="d-flex flex-column justify-content-evenly gap-3">
 				<div>
 					<h1 className="text-currency">
-						<strong>{parseFloat(sale.Total).toFixed(2)}</strong>
+						<strong>{formatCurrency(parseFloat(sale.Total).toFixed(2))}</strong>
 					</h1>
 				</div>
 				<div>
@@ -603,25 +608,31 @@ const OrderInformation = (props) => {
 					<div className="currency-container">
 						<h6>Disc.:</h6>
 						<h6>
-							<strong>{parseFloat(sale.Discount).toFixed(2)}</strong>
+							<strong>
+								{formatCurrency(parseFloat(sale.Discount).toFixed(2))}
+							</strong>
 						</h6>
 					</div>
 					<div className="currency-container">
-						<h6 className="text-weight-regular">Sub-Total:</h6>
+						<h6 className="text-weight-regular">VATable Sale:</h6>
 						<h6>
-							<strong>{parseFloat(sale.GrossAmount).toFixed(2)}</strong>
+							<strong>
+								{formatCurrency(parseFloat(sale.GrossAmount).toFixed(2))}
+							</strong>
 						</h6>
 					</div>
 					<div className="currency-container">
-						<h6>VATable:</h6>
+						<h6>VAT:</h6>
 						<h6>
-							<strong>{parseFloat(sale.VAT).toFixed(2)}</strong>
+							<strong>{formatCurrency(parseFloat(sale.VAT).toFixed(2))}</strong>
 						</h6>
 					</div>
 					<div className="currency-container">
-						<h6>Total Due:</h6>
+						<h6>Total Amount:</h6>
 						<h6>
-							<strong>{parseFloat(sale.Total).toFixed(2)}</strong>
+							<strong>
+								{formatCurrency(parseFloat(sale.Total).toFixed(2))}
+							</strong>
 						</h6>
 					</div>
 				</div>
@@ -646,7 +657,9 @@ const OrderInformation = (props) => {
 					<div className="currency-container">
 						<h6>Change:</h6>
 						<h6>
-							<strong>{parseFloat(sale.ChangeAmount).toFixed(2)}</strong>
+							<strong>
+								{formatCurrency(parseFloat(sale.ChangeAmount).toFixed(2))}
+							</strong>
 						</h6>
 					</div>
 					<div className="pt-3">
@@ -655,7 +668,7 @@ const OrderInformation = (props) => {
 							onClick={checkOut}
 							disabled={orderList.length > 0 && checkPayment() ? false : true}
 						>
-							Checkout
+							Process
 						</button>
 						<button
 							className="btn btn-secondary w-100"
@@ -680,7 +693,7 @@ const ProductTable = (props) => {
 					<th scope="col">Item</th>
 					<th scope="col">Generic Name</th>
 					<th scope="col">Desc.</th>
-					<th scope="col">Price</th>
+					<th scope="col">Unit Price</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -694,7 +707,9 @@ const ProductTable = (props) => {
 							<td>{product.ProductName}</td>
 							<td>{product.GenericName}</td>
 							<td>{product.ProductDetails}</td>
-							<td>{product.SellingPrice}</td>
+							<td>
+								{formatCurrency(parseFloat(product.SellingPrice).toFixed(2))}
+							</td>
 						</tr>
 					))}
 			</tbody>
@@ -728,7 +743,7 @@ const OrderTable = (props) => {
 			<thead>
 				<tr>
 					<th scope="col">Item</th>
-					<th scope="col">Price</th>
+					<th scope="col">Unit Price</th>
 					<th scope="col">Qty</th>
 					<th scope="col">Sub-Total</th>
 					<th scope="col">Action</th>
@@ -739,7 +754,7 @@ const OrderTable = (props) => {
 					orderList.map((order, index) => (
 						<tr key={index}>
 							<td>{order.name}</td>
-							<td>{order.UnitPrice}</td>
+							<td>{parseFloat(order.UnitPrice).toFixed(2)}</td>
 							<td>
 								<input
 									type="number"
@@ -755,7 +770,7 @@ const OrderTable = (props) => {
 									}}
 								/>
 							</td>
-							<td>{getProductTotal(order)}</td>
+							<td>{formatCurrency(getProductTotal(order))}</td>
 							<td>
 								{/* <span className="px-1">
 									<IoMdAddCircle

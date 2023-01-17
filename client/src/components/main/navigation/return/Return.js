@@ -9,6 +9,8 @@ import ReturnService from "../../../../services/ReturnService";
 import { useLocation, useParams } from "react-router-dom";
 import SalesDetailService from "../../../../services/SalesDetailService";
 import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
+import InvoiceDetailService from "../../../../services/InvoiceDetailService";
+import { formatCurrency } from "../../../../helper/currencyFormat";
 
 // create context API
 const AdjustmentContext = createContext();
@@ -18,11 +20,12 @@ const Return = () => {
 	let [currentUser] = useGlobalState("currentUser");
 	let location = useLocation();
 	let saleInformation = location.state.sale;
+	let orderNo = location.state.orderNo;
+	let type = location.state.type;
 	let { id } = useParams();
 
-	const initialReturn = {
-		id: null,
-		ReferenceNo: saleInformation.OrderNo,
+	let initialReturn = {
+		ReferenceNo: orderNo,
 		Quantity: 0,
 		DateCreated: getCurrentDate(),
 		Total: 0,
@@ -44,7 +47,11 @@ const Return = () => {
 	};
 
 	useEffect(() => {
-		getAllPurchaseItem();
+		if (type === "sale") {
+			getAllPurchaseItem();
+		} else {
+			getAllInvoiceItem();
+		}
 	}, []);
 
 	useEffect(() => {
@@ -53,6 +60,18 @@ const Return = () => {
 
 	const getAllPurchaseItem = async () => {
 		await SalesDetailService.getSaleItems(id)
+			.then((response) => {
+				console.log(response.data);
+				setProductList(response.data);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const getAllInvoiceItem = async () => {
+		await InvoiceDetailService.getAllInvoiceItems(id)
 			.then((response) => {
 				console.log(response.data);
 				setProductList(response.data);
@@ -84,7 +103,11 @@ const Return = () => {
 		await ReturnService.createReturn(returnInformation)
 			.then((response) => {
 				console.log(response.data);
-				createAuditTrail(`Created return process for Order ${saleInformation.OrderNo} for product ${selectedProduct.medicine.ProductName}.`, "Create	", currentUser.id)
+				createAuditTrail(
+					`Created return process for Order ${saleInformation.OrderNo} for product ${selectedProduct.medicine.ProductName}.`,
+					"Create	",
+					currentUser.id
+				);
 				setAlertMessage(response.data.message);
 			})
 			.catch((err) => {
@@ -132,7 +155,7 @@ const Return = () => {
 				<Provider value={contextValue}>
 					<div className="h-auto d-flex flex-column justify-content-between gap-1">
 						<div className="p-2">
-							<h4>Order #: {saleInformation.OrderNo}</h4>
+							<h4>Reference #: {saleInformation.OrderNo}</h4>
 							<hr />
 						</div>
 						{alertMessage ? (
@@ -207,14 +230,16 @@ const ProductDetails = ({ selectedProduct, adjustStock }) => {
 			</div>
 			<div className="row mt-3 col-12">
 				<div className="col-sm-12 col-md">
-					<label htmlFor="">Unit Prize:</label>
+					<label htmlFor="">Unit Price:</label>
 					<input
 						type="text"
 						className="form-control form-input"
 						disabled={true}
 						defaultValue={
 							selectedProduct.medicine
-								? selectedProduct.medicine.SellingPrice
+								? formatCurrency(
+										parseFloat(selectedProduct.medicine.SellingPrice).toFixed(2)
+								  )
 								: ""
 						}
 					/>
@@ -289,7 +314,7 @@ const ProductTable = ({ productList, setSelectedProduct }) => {
 					<td>{product.medicine.ProductCode}</td>
 					<td>{product.medicine.ProductName}</td>
 					<td>{product.Quantity}</td>
-					<td>{product.medicine.SellingPrice}</td>
+					<td>{formatCurrency(product.medicine.SellingPrice)}</td>
 				</tr>
 			))
 		);

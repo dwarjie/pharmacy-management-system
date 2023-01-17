@@ -18,13 +18,14 @@ import InvoiceDetailService from "../../../../services/InvoiceDetailService";
 import MedicineService from "../../../../services/MedicineService";
 import HandlerService from "../../../../services/HandlerService";
 import PatientService from "../../../../services/PatientService";
-import { createAuditTrail } from "../../../../helper/AuditTrailHelper"
+import { createAuditTrail } from "../../../../helper/AuditTrailHelper";
 
 // icons
 import { MdDelete } from "react-icons/md";
 import { getOR, incrementOR } from "../../../../helper/ORHelper";
 import ModalPatient from "../../../layout/ModalPatient";
 import ModalHandler from "../../../layout/ModalHandler";
+import { formatCurrency } from "../../../../helper/currencyFormat";
 
 // creating context API
 const InvoiceContext = createContext();
@@ -171,39 +172,62 @@ const ChargeToAccount = (props) => {
 
 	const createInvoice = async (event) => {
 		event.preventDefault();
-		if (activeDropDownValue.onHold) return alert("Handler's currently on hold from request!");
+		if (activeDropDownValue.onHold)
+			return alert("Handler's currently on hold from request!");
 
 		if (!AlertPrompt("Are you sure you want to create this invoice?")) return;
 
-		if (!canRequest()) return alert("Request total exceed from handler's credit limit.") 
+		if (!canRequest())
+			return alert("Request total exceed from handler's credit limit.");
 
 		setLoading(true);
 		await increaseBalance();
 		let invoiceId = await createChargeToAccount();
 		await createInvoiceDetails(invoiceId);
 		await decreaseProductStock();
-		await createAuditTrail(`Processed ${invoice.InvoiceNo} in Charge to Account`, "Create", currentUser.id);
+		await createAuditTrail(
+			`Processed ${invoice.InvoiceNo} in Charge to Account`,
+			"Create",
+			currentUser.id
+		);
 		navigate(`/pharmacy/sales/charge-to-account/print/${invoiceId}`);
 	};
 
 	const increaseBalance = async () => {
 		let data = {
-			amount: invoice.Total
-		}
+			amount: invoice.Total,
+		};
 		await HandlerService.increaseBalance(activeDropDownValue.handlerId, data)
-			.then(response => {
-				console.log(response.data)
+			.then((response) => {
+				console.log(response.data);
 			})
-			.catch(err => {
-				console.log(err)
+			.catch((err) => {
+				console.log(err);
 			});
-	}
+	};
+
+	const decreaseBalance = async () => {
+		let data = {
+			amount: invoice.Total,
+		};
+		await HandlerService.decreaseBalance(activeDropDownValue.handlerId, data)
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	const canRequest = () => {
-		if (parseFloat(activeDropDownValue.balance + invoice.Total) > activeDropDownValue.creditLimit) return false;
+		if (
+			parseFloat(activeDropDownValue.balance + invoice.Total) >
+			activeDropDownValue.creditLimit
+		)
+			return false;
 
 		return true;
-	}
+	};
 
 	const updateInvoiceItem = async (item) => {
 		await InvoiceDetailService.updateItem(item.id, item)
@@ -218,18 +242,17 @@ const ChargeToAccount = (props) => {
 	const updateInvoice = async (event) => {
 		event.preventDefault();
 		if (!AlertPrompt()) return;
-
 		setLoading(true);
 		await updateInvoiceRecord();
 		await updateInvoiceStatus();
+		await decreaseBalance();
+		printInvoice();
 	};
 
 	const updateInvoiceStatus = async () => {
-		// check if invoice is fully paid
-		if (!(invoice.PaidAmount >= invoice.Total)) return;
-
 		setLoading(true);
 		let data = {
+			PaidAmount: invoice.Total,
 			Status: "paid",
 			PaidDate: getCurrentDate(),
 		};
@@ -532,7 +555,7 @@ const ChargeToAccount = (props) => {
 											: false
 									}
 								>
-									{isUpdate() ? "Update" : "Create"}
+									{isUpdate() ? "Fully Paid" : "Create"}
 								</button>
 								<button
 									type="button"
@@ -640,7 +663,7 @@ const InvoiceInformation = ({
 								creditLimit: data.CreditLimit,
 								balance: data.Balance,
 								onHold: data.OnHold,
-								handlerId: data.id
+								handlerId: data.id,
 							}));
 							setInvoice((prevState) => ({ ...prevState, handlerId: data.id }));
 						}}
@@ -851,7 +874,7 @@ const ProductTable = ({
 						/>
 					</td>
 					<td>{parseFloat(order.UnitPrice).toFixed(2)}</td>
-					<td>{getProductTotal(order)}</td>
+					<td>{formatCurrency(getProductTotal(order))}</td>
 					{/* <td>
 						<span className="px-1">
 							<MdDelete
@@ -889,10 +912,10 @@ const ProductTable = ({
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line text-right">
-							<strong>Sub-Total:</strong>
+							<strong>VATable Sale:</strong>
 						</td>
-						<td className="no-line text-right">
-							&#8369;{parseFloat(invoice.GrossAmount).toFixed(2)}
+						<td className="no-line text-left">
+							{formatCurrency(parseFloat(invoice.GrossAmount).toFixed(2))}
 						</td>
 					</tr>
 					<tr>
@@ -901,10 +924,10 @@ const ProductTable = ({
 						<td className="no-line"></td>
 						<td className="no-line"></td>
 						<td className="no-line text-right">
-							<strong>VATable:</strong>
+							<strong>VAT:</strong>
 						</td>
-						<td className="no-line text-right">
-							&#8369;{parseFloat(invoice.VAT).toFixed(2)}
+						<td className="no-line text-left">
+							{formatCurrency(parseFloat(invoice.VAT).toFixed(2))}
 						</td>
 					</tr>
 					<tr>
@@ -915,8 +938,8 @@ const ProductTable = ({
 						<td className="no-line text-right">
 							<strong>Total Due:</strong>
 						</td>
-						<td className="no-line text-right">
-							&#8369;{parseFloat(invoice.Total).toFixed(2)}
+						<td className="no-line text-left">
+							{formatCurrency(parseFloat(invoice.Total).toFixed(2))}
 						</td>
 					</tr>
 					{isUpdate() ? (
@@ -928,8 +951,8 @@ const ProductTable = ({
 							<td className="no-line text-right">
 								<strong>Balance:</strong>
 							</td>
-							<td className="no-line text-right">
-								&#8369;{parseFloat(checkBalance()).toFixed(2)}
+							<td className="no-line text-left">
+								{formatCurrency(parseFloat(checkBalance()).toFixed(2))}
 							</td>
 						</tr>
 					) : (
@@ -948,10 +971,10 @@ const ProductTable = ({
 								<input
 									type="number"
 									min={1}
-									hidden={invoice.Status === "paid" ? true : false}
 									className="form-control form-input w-40 text-right m-0"
 									name="PaidAmount"
-									value={invoice.PaidAmount}
+									disabled
+									value={formatCurrency(invoice.PaidAmount)}
 									onChange={(event) => {
 										setInvoice((prevState) => ({
 											...prevState,

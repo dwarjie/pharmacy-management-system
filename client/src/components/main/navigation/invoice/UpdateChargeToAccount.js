@@ -28,6 +28,7 @@ const UpdateChargeToAccount = () => {
 	const initialDropDownValue = {
 		handler: oldInvoice.handler.FirstName,
 		patient: oldInvoice.patient.FirstName,
+		handlerId: oldInvoice.handler.id,
 		user: `${oldInvoice.user.FirstName} ${oldInvoice.user.LastName}`,
 	};
 

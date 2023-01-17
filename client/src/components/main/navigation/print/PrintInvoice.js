@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 
 import logo from "../../../../asset/logo.png";
+import { formatCurrency } from "../../../../helper/currencyFormat";
 import { formatDate } from "../../../../helper/dateHelper";
 
 const PrintInvoice = () => {
@@ -103,9 +104,13 @@ class ComponentToPrint extends React.Component {
 				items.map((item, index) => (
 					<tr key={index}>
 						<td>{item.name}</td>
-						<td className="text-center">{item.UnitPrice}</td>
+						<td className="text-center">
+							{formatCurrency(parseFloat(item.UnitPrice).toFixed(2))}
+						</td>
 						<td className="text-center">{item.Quantity}</td>
-						<td className="text-right">{parseFloat(item.Total).toFixed(2)}</td>
+						<td className="text-right">
+							{formatCurrency(parseFloat(item.Total).toFixed(2))}
+						</td>
 					</tr>
 				))
 			);
@@ -161,13 +166,13 @@ class ComponentToPrint extends React.Component {
 													<strong>Item</strong>
 												</td>
 												<td className="text-center">
-													<strong>Price</strong>
+													<strong>Unit Price</strong>
 												</td>
 												<td className="text-center">
 													<strong>Quantity</strong>
 												</td>
 												<td className="text-right">
-													<strong>Total</strong>
+													<strong>Sub-Total</strong>
 												</td>
 											</tr>
 										</thead>
@@ -178,10 +183,10 @@ class ComponentToPrint extends React.Component {
 												<td className="thick-line"></td>
 												<td className="thick-line"></td>
 												<td className="thick-line text-right">
-													<strong>Subtotal</strong>
+													<strong>VATable Sale</strong>
 												</td>
 												<td className="thick-line text-right">
-													&#8369;{sale.GrossAmount}
+													{formatCurrency(sale.GrossAmount)}
 												</td>
 											</tr>
 											<tr>
@@ -191,7 +196,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Discount</strong>
 												</td>
 												<td className="thick-line text-right">
-													&#8369;{sale.Discount}
+													{formatCurrency(sale.Discount)}
 												</td>
 											</tr>
 											<tr>
@@ -201,17 +206,17 @@ class ComponentToPrint extends React.Component {
 													<strong>VAT</strong>
 												</td>
 												<td className="thick-line text-right">
-													&#8369;{sale.VAT}
+													{formatCurrency(sale.VAT)}
 												</td>
 											</tr>
 											<tr>
 												<td className="no-line"></td>
 												<td className="no-line"></td>
 												<td className="no-line text-right">
-													<strong>Total</strong>
+													<strong>Total Amount</strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{sale.Total}
+													{formatCurrency(sale.Total)}
 												</td>
 											</tr>
 											<tr>
@@ -221,7 +226,9 @@ class ComponentToPrint extends React.Component {
 													<strong>Cash Tendered</strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{parseFloat(sale.CashTendered).toFixed(2)}
+													{formatCurrency(
+														parseFloat(sale.CashTendered).toFixed(2)
+													)}
 												</td>
 											</tr>
 											<tr>
@@ -231,7 +238,7 @@ class ComponentToPrint extends React.Component {
 													<strong>Change</strong>
 												</td>
 												<td className="no-line text-right">
-													&#8369;{sale.ChangeAmount}
+													{formatCurrency(sale.ChangeAmount)}
 												</td>
 											</tr>
 										</tbody>

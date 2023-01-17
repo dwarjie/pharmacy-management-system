@@ -8,6 +8,14 @@ const getAllInvoice = () => {
 	return http.get("/invoice");
 };
 
+const getAllPaidInvoice = () => {
+	return http.get("/invoice/manage-paid");
+};
+
+const getAllPendingInvoice = () => {
+	return http.get("/invoice/manage-pending/list");
+};
+
 const getOneInvoice = (id) => {
 	return http.get(`/invoice/${id}`);
 };
@@ -31,6 +39,8 @@ const InvoiceService = {
 	updateInvoice,
 	deleteInvoice,
 	getAllByDate,
+	getAllPaidInvoice,
+	getAllPendingInvoice,
 };
 
 export default InvoiceService;

@@ -45,6 +45,40 @@ exports.findAll = (req, res) => {
 		});
 };
 
+exports.findAllPending = (req, res) => {
+	Invoice.findAll({
+		where: {
+			Status: "pending",
+		},
+		include: ["patient", "handler", "user"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error retrieving all invoice`,
+			});
+		});
+};
+
+exports.findAllPaid = (req, res) => {
+	Invoice.findAll({
+		where: {
+			Status: "paid",
+		},
+		include: ["patient", "handler", "user"],
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: err.message || `Error retrieving all invoice`,
+			});
+		});
+};
+
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 

@@ -55,6 +55,7 @@ import InvoiceList from "./navigation/invoice/InvoiceList";
 import PrintChargeToAccount from "./navigation/print/PrintChargeToAccount";
 import SalesList from "./navigation/return/SalesList";
 import Return from "./navigation/return/Return";
+import InvoiceReturnList from "./navigation/return/InvoiceList";
 
 // Inventory Tab
 import OrderList from "./navigation/purchase_order/OrderList";
@@ -155,7 +156,7 @@ const ContentContainer = (props) => {
 						<Route path="/utilities/add-user" element={<AddUser />} />
 						<Route path="/utilities/user-list" element={<UserList />} />
 						<Route path="/utilities/:id" element={<UpdateUser />} />
-						<Route path="/utilities/backup-restore" element={<Backup/>} />
+						<Route path="/utilities/backup-restore" element={<Backup />} />
 					</Route>
 					<Route element={<ProtectedURL role={"sales"} />}>
 						<Route path="/sales/pos" element={<POS />} />
@@ -178,6 +179,10 @@ const ContentContainer = (props) => {
 							element={<PrintChargeToAccount />}
 						/>
 						<Route path="/sales/return" element={<SalesList />} />
+						<Route
+							path="/sales/return-invoice"
+							element={<InvoiceReturnList />}
+						/>
 						<Route path="/sales/return/:id" element={<Return />} />
 					</Route>
 					<Route element={<ProtectedURL role={"inventory"} />}>
