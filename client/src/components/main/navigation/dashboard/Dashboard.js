@@ -7,6 +7,9 @@ import "boxicons";
 
 import handlerImg from "../../../../asset/handler.png";
 import InvoiceService from "../../../../services/InvoiceService";
+import SalesDetailService from "../../../../services/SalesDetailService";
+import BarChart from "../../../charts/BarChart";
+import InvoiceDetailService from "../../../../services/InvoiceDetailService";
 
 const Dashboard = () => {
 	const [loading, setLoading] = useState(true);
@@ -14,6 +17,8 @@ const Dashboard = () => {
 	const [totalHandlers, setTotalHandlers] = useState(0);
 	const [totalPatients, setTotalPatients] = useState(0);
 	const [totalPending, setTotalPending] = useState(0);
+	const [productData, setProductData] = useState([]);
+	const [requestData, setRequestData] = useState([]);
 
 	useEffect(() => {
 		getAllInformation();
@@ -24,7 +29,31 @@ const Dashboard = () => {
 		await getAllHandlers();
 		await getAllPatient();
 		await getAllPendingInvoice();
+		await getBestSellingProducts();
+		await getBestRequestedProducts();
 		setLoading(false);
+	};
+
+	const getBestSellingProducts = async () => {
+		await SalesDetailService.getBestSellingProducts()
+			.then((response) => {
+				console.log(response.data);
+				setProductData(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	const getBestRequestedProducts = async () => {
+		await InvoiceDetailService.getBestRequestedProduct()
+			.then((response) => {
+				console.log(response.data);
+				setRequestData(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const getAllProduct = async () => {
@@ -157,6 +186,18 @@ const Dashboard = () => {
 									</div>
 								</div>
 							</div>
+						</div>
+						<div className="w-100 d-flex flex-row flex-wrap justify-content-between">
+							<BarChart
+								productData={productData}
+								title="Top Selling Products"
+								labelTitle={"# of purchased product"}
+							/>
+							<BarChart
+								productData={requestData}
+								title="Top Requested Products"
+								labelTitle={"# of requested product"}
+							/>
 						</div>
 					</div>
 				</div>

@@ -81,7 +81,9 @@ const PrintChargeToAccount = () => {
 								/>
 								<button
 									className="btn btn-secondary mx-2"
-									onClick={() => navigate(-1)}
+									onClick={() =>
+										navigate("/pharmacy/sales/charge-to-account-list")
+									}
 								>
 									Close
 								</button>

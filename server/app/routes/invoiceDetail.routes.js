@@ -8,6 +8,7 @@ module.exports = (app) => {
 	router.put("/:id", invoiceDetail.update);
 	router.delete("/:id", invoiceDetail.deleteItem);
 	router.delete("/invoice-item/:id", invoiceDetail.deleteInvoiceItem);
+	router.get("/best-request", invoiceDetail.findBestRequestedProd);
 
 	app.use("/api/invoice-detail", router);
 };

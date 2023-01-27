@@ -1,5 +1,6 @@
 // This module contains the controller for sales detail model
 const db = require("../models");
+const { sequelize } = db;
 const SalesDetail = db.salesDetail;
 
 exports.create = (req, res) => {
@@ -51,6 +52,40 @@ exports.findSaleItems = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error retrieving sales details`,
+			});
+		});
+};
+
+exports.findBestSellingProd = (req, res) => {
+	// UnitPrice: req.body.UnitPrice,
+	// Quantity: req.body.Quantity,
+	// DiscountedPrice: req.body.DiscountedPrice,
+	// Total: req.body.Total,
+	// medicineId: req.body.medicineId,
+	// saleId: req.body.saleId,
+	SalesDetail.findAll({
+		attributes: [
+			"medicineId",
+			[
+				SalesDetail.sequelize.fn("SUM", sequelize.col("sales_detail.Quantity")),
+				"totalQuantity",
+			],
+			[
+				SalesDetail.sequelize.fn("SUM", SalesDetail.sequelize.col("Total")),
+				"totalAmount",
+			],
+		],
+		group: ["medicineId"],
+		include: ["medicine"],
+		order: [[sequelize.col("totalQuantity"), "DESC"]],
+		limit: 10,
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || "Error getting best selling products.",
 			});
 		});
 };

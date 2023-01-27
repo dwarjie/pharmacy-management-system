@@ -5,6 +5,7 @@ module.exports = (app) => {
 
 	router.post("/", salesDetail.create);
 	router.get("/manage-sale", salesDetail.findSaleItems);
+	router.get("/best-seller", salesDetail.findBestSellingProd);
 
 	app.use("/api/sales-detail", router);
 };

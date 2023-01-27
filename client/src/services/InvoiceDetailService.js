@@ -8,6 +8,10 @@ const getAllInvoiceItems = (invoiceId) => {
 	return http.get(`/invoice-detail?invoiceId=${invoiceId}`);
 };
 
+const getBestRequestedProduct = () => {
+	return http.get("/invoice-detail/best-request");
+};
+
 const updateItem = (id, data) => {
 	return http.put(`/invoice-detail/${id}`, data);
 };
@@ -26,6 +30,7 @@ const InvoiceDetailService = {
 	updateItem,
 	deleteItem,
 	deleteAllInvoiceItems,
+	getBestRequestedProduct,
 };
 
 export default InvoiceDetailService;

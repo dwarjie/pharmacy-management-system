@@ -1,4 +1,5 @@
 const db = require("../models");
+const { sequelize } = db;
 const InvoiceDetail = db.invoiceDetail;
 
 exports.create = (req, res) => {
@@ -108,6 +109,31 @@ exports.deleteItem = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: err.message || `Error deleting item ${id}`,
+			});
+		});
+};
+
+exports.findBestRequestedProd = (req, res) => {
+	InvoiceDetail.findAll({
+		attributes: [
+			"medicineId",
+			[
+				sequelize.fn("SUM", sequelize.col("invoice_detail.Quantity")),
+				"totalQuantity",
+			],
+			[sequelize.fn("SUM", sequelize.col("Total")), "totalAmount"],
+		],
+		group: ["medicineId"],
+		include: ["medicine"],
+		order: [[sequelize.col("totalQuantity"), "DESC"]],
+		limit: 10,
+	})
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.send({
+				message: err.message || "Error getting best requested products.",
 			});
 		});
 };
