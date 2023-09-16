@@ -32,15 +32,15 @@ db.sequelize
 	});
 
 // FOR DEVELOPMENT ONLY, DROP THE DATABASE AND RE-SYNC THE DATABASE
-// db.sequelize.sync({ force: true }).then(() => {
-// 	console.log("Drop and re-sync database");
-// 	initialize.Run(db.or);
-// 	initialize.RoleGroup(db.role);
-// 	initialize.User(db.user);
-// 	initialize.VAT(db.vat);
-// 	initialize.Discount(db.discount);
-// });
-// db.sequelize.drop();
+db.sequelize.sync({ force: true }).then(() => {
+	console.log("Drop and re-sync database");
+	initialize.Run(db.or);
+	initialize.RoleGroup(db.role);
+	initialize.User(db.user);
+	initialize.VAT(db.vat);
+	initialize.Discount(db.discount);
+});
+db.sequelize.drop();
 
 // sample route
 app.get("/", function (req, res) {

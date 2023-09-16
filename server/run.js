@@ -68,8 +68,8 @@ exports.RoleGroup = async (roleGroup) => {
 
 exports.User = async (user) => {
 	user.create({
-		FirstName: "Mark Darius",
-		LastName: "Pagaduan",
+		FirstName: "Sample",
+		LastName: "User",
 		UserName: "admin",
 		Password: bcrypt.hashSync("administrator", 8),
 		Role: ["maintenance", "inventory", "sales", "reports", "utilities"],
